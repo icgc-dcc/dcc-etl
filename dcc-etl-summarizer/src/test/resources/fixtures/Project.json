@@ -1,0 +1,10 @@
+{
+  "_id":"1",
+  "_project_id":"project1",
+  "name":"Project 1 Name",
+  "primary_site":"Primary Site 1",
+  "pubmed_ids":[
+    "pubmed_id1",
+    "pubmed_id2"
+  ]
+}

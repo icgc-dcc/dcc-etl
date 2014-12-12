@@ -1,0 +1,59 @@
+{
+  "_id": "1",
+  "id": "REACT_1041",
+  "type": "pathway",
+  "name": "Inhibition of the proteolytic activity of APC/C required for the onset of anaphase by mitotic spindle checkpoint components",
+  "source": "Reactome",
+  "description": "The target of the mitotic checkpoint is the Anaphase Promoting Complex/Cyclosome (APC/C) an E3 ubiquitin ligase that targets proteins whose destruction is essential for mitotic exit. Currently, there are two proposed mechanism by which inhibition of the APC/C is achieved. These mechanisms differ depending on the mechanism of signal transduction. The APC/C may be inhibited directly by association with the Mitotic Checkpoint Complex (MCC) or through the sequestration of its activator, Cdc20. ",
+  "pathway": {
+    "species": "Homo sapiens",
+    "evidence_code": "TAS",
+    "diagrammed": false,
+    "hierarchy": [
+      [
+        {
+          "diagrammed": true,
+          "id": "REACT_115566",
+          "name": "Cell Cycle"
+        },
+        {
+          "diagrammed": true,
+          "id": "REACT_152",
+          "name": "Cell Cycle, Mitotic"
+        },
+        {
+          "diagrammed": true,
+          "id": "REACT_21279",
+          "name": "Regulation of mitotic cell cycle"
+        },
+        {
+          "diagrammed": true,
+          "id": "REACT_6828",
+          "name": "APC/C-mediated degradation of cell cycle proteins"
+        },
+        {
+          "diagrammed": false,
+          "id": "REACT_6837",
+          "name": "Regulation of APC/C activators between G1/S and early anaphase"
+        }
+      ],
+      [
+        {
+          "diagrammed": true,
+          "id": "REACT_115566",
+          "name": "Cell Cycle"
+        },
+        {
+          "diagrammed": true,
+          "id": "REACT_1538",
+          "name": "Cell Cycle Checkpoints"
+        },
+        {
+          "diagrammed": false,
+          "id": "REACT_2137",
+          "name": "Mitotic Spindle Checkpoint"
+        }
+      ]
+    ]
+  }
+}

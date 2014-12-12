@@ -1,0 +1,14 @@
+entrezGene.$: STRING
+entrezGene: ARRAY
+hgnc.$: STRING
+hgnc: ARRAY
+id: STRING
+name: STRING
+omimGene.$: STRING
+omimGene: ARRAY
+symbol: STRING
+synonyms.$: STRING
+synonyms: ARRAY
+type: STRING
+uniprotkbSwissprot.$: STRING
+uniprotkbSwissprot: ARRAY

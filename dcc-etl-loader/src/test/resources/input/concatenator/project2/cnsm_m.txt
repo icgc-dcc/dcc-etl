@@ -1,0 +1,6 @@
+analysis_id	analyzed_sample_id	matched_sample_id	assembly_version	platform	experimental_protocol	base_calling_algorithm	alignment_algorithm	variation_calling_algorithm	other_analysis_algorithm	sequencing_strategy	seq_coverage	raw_data_repository	raw_data_accession
+0040	00312	00351	9	24	http://www.icgc.org	-888	http://www.icgc.org	http://www.icgc.org	OccBJEfAiX	9	24.606119389718454	2	EGAD0
+0041	00322	00371	4	13	http://www.icgc.org	-888	http://www.icgc.org	-777	C JNLSR Iu	8	-888	3	EGAD0
+0042	00312	00371	3	42	http://www.icgc.org	http://www.icgc.org	http://www.icgc.org	http://www.icgc.org	ipUBJc Kvx	27	24.9038065651452	2	EGAD0
+0043	00322	00361	11	29	http://www.icgc.org	-888	http://www.icgc.org	http://www.icgc.org	-888	18	17.230443669048896	1	EGAD0
+0044	00322	00351	4	47	http://www.icgc.org	http://www.icgc.org	-888	http://www.icgc.org	rExp  GjcQ	1	20.410826836103407	4	EGAD0

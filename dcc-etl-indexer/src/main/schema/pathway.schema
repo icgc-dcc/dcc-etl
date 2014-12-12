@@ -1,0 +1,17 @@
+evidence_code: STRING
+gene_count: NUMBER
+has_diagram: STRING
+link_out.$: STRING
+link_out: ARRAY
+parent_pathways.$.$.hasDiagram: STRING
+parent_pathways.$.$.id: STRING
+parent_pathways.$.$.name: STRING
+parent_pathways.$.$.reactomeId: STRING
+parent_pathways.$: ARRAY
+parent_pathways: ARRAY
+pathway_id: STRING
+pathway_name: STRING
+projects: POJO
+source: STRING
+species: STRING
+summation: STRING

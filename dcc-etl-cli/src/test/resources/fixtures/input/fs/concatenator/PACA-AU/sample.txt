@@ -1,0 +1,17 @@
+analyzed_sample_id	specimen_id	analyzed_sample_interval	percentage_cellularity	level_of_cellularity	analyzed_sample_notes	study
+00301	0020	68	111	3	QbofOLnySK	
+00312	0020	102	171	2		
+00321	0021	194	40	2	 qGPsZBPNs	
+00332	0021	122	-777	5	LIPELC VWr	
+00341	0021	142	164	3	ajVVxDmBgy	
+00352	0021	14	-777	1	RQsVHhXPFP	
+00361	0022		61	-888		
+00372	0022		-777	-9999	gZGhcaaSlD	
+00381	0024	86	130	4		
+00392	0024	158	59	-9999		
+003101	0024		179	-9999		
+003112	0024	188	-777	3	ZjyQeMyakH	
+003121	0025		199	2	MJkS nBCnN	
+003132	0025	22	68	-888	nfAnMvKZmq	
+003141	0026		154	-888	Y  YmKYJOx	
+003152	0026		31	1	zPSzIvfHTC	

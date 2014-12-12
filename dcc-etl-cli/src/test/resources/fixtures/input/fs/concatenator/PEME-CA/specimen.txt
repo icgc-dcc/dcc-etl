@@ -1,0 +1,8 @@
+donor_id	specimen_id	specimen_type	specimen_type_other	specimen_interval	specimen_donor_treatment_type	specimen_donor_treatment_type_other	specimen_processing	specimen_processing_other	specimen_storage	specimen_storage_other	tumour_confirmed	specimen_biobank	specimen_biobank_id	specimen_available	tumour_histological_type	tumour_grading_system	tumour_grade	tumour_grade_supplemental	tumour_stage_system	tumour_stage	tumour_stage_supplemental	digital_image_of_stained_section	percentage_cellularity	level_of_cellularity	specimen_notes
+0010	0020	11	-888	128	4	-9999	1	tHIP zZtWd	1	tOBEkkVsxx	2	nkWLrmtLZM	-888	2	-888	mrECUXLEBH	qjP lNDuen	XApV nlKaZ	tKYEHqKleZ	-9999	-777	GZkCqZTmNm	69	2	
+0010	0021	5	gBAzd DUfG	-9999	-888	UYRujZQEdF	6	RmkWznhlyS	2	TldCZL EZI	1	OXdRZlBbiO	GQY pnweSG	2	-777	-777	RpcFDtqptM	-777	EJCgxCVkhw	-777	-9999	utRfYfxtP 	-777	3	XmWSbyu jU
+0010	0022	11	KEyRUWM Fu	13	2	jkGXSIilLv	3	F gB EBkB 	4	myUuONrSzK	2	zx VrAVVtW	-9999	1	CSzRQltV M	-777	-777	MghnLWaSxW	uvzpBfjobW	hPwMKh dcz	-888	UKlhwPXKTc	-777	1	
+0011	0023	-9999	EUyfyGTCJQ	26	2	-777	2	-9999	1	-888	1	iKxrApqnn 	YxsWn fGJY	-888	uFthmpAcNw	-888	YDSvznPceW	Cxouk eibo	z qolsqTc 	QsLK zlrky	-777	-777	133	3	uBqzBMLFaf
+0011	0024	5	CxdstBhfjr	150	-777	IbhqjQmfBg	-888	GtMVgvD qd	-888	JSFwgiunxz	-777	-888	-777	2	QzlEldZEIi	-9999	-888	  XlPWLlmr	avhqagy pY	zWZKzS PdB	cMedTJLWTh	XWCcofXuDx	-777	4	AYoGSAuNAx
+0012	0025	3	ExXhIa lCz	38	-888	ZEdlKLSPgC	-9999	-9999	7	tkcNcf zfG	1	mdeUvQrnno	cyioHGRCI 	2	-888	-777	EXHmEmwutk	pIaFRaTaNs	ubolqGImjm	wPwUWJeFFC	czqJWBrVAv	FgNDBNAAYV	64	4	
+0012	0026	11	-9999	101	5	MsglmWeRxx	-888	FafIoztMQY	-888	-888	-9999	-9999	CypcjEEchA	2	uagZyRMx h	-888	YyoDpNrM j	ysfQnzEmQO	-888	vm sjKlgzx	zVLUCsFPhC	 pTerOceSn	114	1	bljsUwI sB

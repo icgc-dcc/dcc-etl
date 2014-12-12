@@ -1,0 +1,17 @@
+Contains facades scripts (http://en.wikipedia.org/wiki/Facade_pattern) for overarching script components
+
+To run the ETL:
+- generate the etl jar with:
+
+  mvn clean install -DskipTests=true -pl dcc-etl/dcc-etl-cli -am # from the root of the repo
+
+- scp resulting jar to 
+
+  hproxy-{dev,dcc}:***REMOVED***/dcc-etl/lib
+
+- create two links in that directory (for now):
+
+  ln -s ${jar_name?} dcc-etl-cli.jar
+  ln -s ${jar_name?} concatenator.jar
+
+WIP

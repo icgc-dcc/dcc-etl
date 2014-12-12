@@ -1,0 +1,20 @@
+// Sample set of Release documents. Represents the output of the dcc-etl-summarizer
+{
+   // Release metadata
+   "_release_id": "ICGC13",
+   "name": "ICGC Data Portal Release 13",
+   "date": "2012-12-08T14:54:02.069Z",
+ 
+   // Project stats
+   "project_count": 49,
+   "primary_site_count": 19,
+ 
+   // Donor stats
+   "donor_count": 5123,
+   "specimen_count": 5123,
+   "sample_count": 5123,
+ 
+   // Observation stats
+   "ssm_count": 23522343,
+   "mutated_gene_count": 32521234
+}

@@ -1,0 +1,6 @@
+id: STRING
+name: STRING
+primarySite: STRING
+tumourSubtype: STRING
+tumourType: STRING
+type: STRING

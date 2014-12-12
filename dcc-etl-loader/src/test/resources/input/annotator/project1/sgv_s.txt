@@ -1,0 +1,4 @@
+consequence_type	aa_change	cds_change	protein_domain_affected	gene_affected	transcript_affected	gene_build_version	note	observation_id
+		0A>A	BFWKOPBJrA	ENSG00000176105	ENST00000584307	-888	HGllbVwgpr	v1
+	A0A	0A>A	IyMffRnagg	ENSG00000156976	ENST00000443963	kbZHPMXlzG		v1
+evrWpsMMeY	A0A	0A>A	AWtNcDxIBx	ENSG00000215529	ENST00000524882	jELkkNgBl 	HYukNjPaiv	v3

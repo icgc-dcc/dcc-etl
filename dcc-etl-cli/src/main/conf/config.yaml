@@ -1,0 +1,78 @@
+# FileSystem Scheme. This sets hadoop's fs.defaultFS
+fsUrl: "file:///"
+
+# URI to the submission system web app
+submissionWebAppUri: localhost
+
+# Whether to filter out CONTROLLED field for all outputs of the loader or simply for mongodb
+filterAllControlled: false
+
+# Specify compression type for the output of the loader to be consumed by the exporter
+fileSystemOutputCompression: NONE
+
+# Specifies the number of maximum concurrent flows in the loader phase 
+loaderMaxConcurrentFlows: 100
+
+# ElasticSearch URI
+esUri: "es://localhost:9300"
+
+# Submission MongoDB URI
+submissionMongoUri: "mongodb://localhost/icgc-local"
+
+# Release MongoDB URI (do not specify a database)
+releaseMongoUri: "mongodb://localhost"
+
+# Admin URI (necessary for mongoinit component to satisfy mongo splitVector's permissions in the ETL)
+etlAdminMongoUri: "mongodb://localhost"
+
+# DCC Identifier Service
+identifierServiceUri: "http://***REMOVED***"
+
+# Project MongoDB URI
+projectMongoUri: "mongodb://localhost/dcc-project"
+
+# Gene MongoDB URI
+geneMongoUri: "mongodb://localhost/dcc-genome"
+
+# CGHub BSON dump
+cghubFile: "target/cghub.bson"
+
+# rsmd.sh project donor summaries output directoy
+# summaryDir: "target/reports"
+
+# FASTA file for VCF generation
+fastaFile: "/tmp/GRCh37.fasta"
+
+# Fathmm Postgresql
+fathmmPostgresqlUri: "jdbc:postgresql://localhost:5432/fathmm"
+
+# Export mutation VCF file
+exportVCF: true
+
+# Hadoop configuration
+loaderHadoop:
+  fs.defaultFS: "file:///"
+  mapred.job.tracker : "localhost:8021"
+  #mapred.job.shuffle.input.buffer.percent: 0.5
+  #mongo.input.split.create_input_splits: "false"
+  #mongo.input.split_size: 256
+  #mapred.child.java.opts: "-Xmx1g"
+  #io.sort.mb: 500
+  #mapred.reduce.tasks=1
+indexerHadoop:
+  fs.defaultFS: "file:///"
+  #mapred.job.tracker: "***REMOVED***:8021"
+  #mapred.map.child.java.opts: "-Xmx31g -XX:MaxDirectMemorySize=31g"
+ 
+# ICGC Client configuration
+icgc:
+  cgpServiceUrl: ""
+  cudServiceUrl: ""
+  shortServiceUrl: ""
+  consumerKey: ""
+  consumerSecret: ""
+  accessToken: ""
+  accessSecret: ""
+  cudAppId: ""
+  strictSSLCertificates: true
+  requestLoggingEnabled: false

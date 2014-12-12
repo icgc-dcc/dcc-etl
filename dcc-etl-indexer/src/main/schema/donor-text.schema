@@ -1,0 +1,8 @@
+id: STRING
+projectId: STRING
+sampleIds: POJO
+specimenIds: POJO
+submittedId: STRING
+submittedSampleIds: POJO
+submittedSpecimenIds: POJO
+type: STRING

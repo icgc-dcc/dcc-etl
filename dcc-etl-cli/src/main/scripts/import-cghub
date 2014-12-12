@@ -1,0 +1,43 @@
+#!/bin/bash
+# Usage: ./import-cghub <mongodb_server> <mongodb_user> <mongo_password>
+
+# Mongo
+environment=${1?} && shift
+mongodb_server=${1?} && shift
+dcc_username=${1?} && shift
+dcc_passwd=${1?} && shift
+
+# Paths
+basedir=$(dirname $(readlink -m $(dirname $0)))
+bindir=$basedir/bin
+libdir=$basedir/lib
+datadir=$basedir/data
+logdir=$basedir/logs
+
+database_name="seq-meta"
+collection_name="seq_analysis"
+
+#echo 'Cleaning...'
+# TODO: put db name and collection in variables
+#mongo $mongodb_server/${database_name?} -u $dcc_username -p $dcc_passwd --eval "db.${collection_name?}.remove()"
+#rm $datadir/cghub.bson
+#rm $logdir/*
+
+# CGHub
+project=(BLCA BRCA CESC COAD GBM HNSC KIRC KIRP LAML LGG LIHC LUAD LUSC OV PAAD PRAD READ SKCM STAD THCA UCEC)
+for d in ${project[@]}
+do
+  echo "Downloading cghub xml for project ${d}"
+  java -cp \
+   $libdir/rawrepo-metadata-importer.jar \
+    org.icgc.dcc.importer.rawrepo_metadata_importer.MetadataXmlParser \
+   -d mongodb://${dcc_username?}:${dcc_passwd?}@${mongodb_server?}/${database_name?}.${collection_name?} \
+   -f $datadir/${d}.xml \
+   > $logdir/import-cghub.${d}.${environment?}.log 2>&1
+done
+
+#echo 'Exporting cghub dump...'
+#mongodump -h $mongodb_server -u $dcc_username -p $dcc_passwd -d seq-meta -c seq_analysis -o - > $datadir/cghub.bson
+
+echo 'Finished successfully!'
+

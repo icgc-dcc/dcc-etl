@@ -1,0 +1,11 @@
+donor_id	donor_sex	donor_region_of_residence	donor_vital_status	disease_status_last_followup	donor_relapse_type	donor_age_at_diagnosis	donor_age_at_enrollment	donor_age_at_last_followup	donor_relapse_interval	donor_diagnosis_icd10	donor_tumour_staging_system_at_diagnosis	donor_tumour_stage_at_diagnosis	donor_tumour_stage_at_diagnosis_supplemental	donor_survival_time	donor_interval_of_last_followup	donor_notes
+CPCG0001	1	CA-ON	1	1	-888	68	-888	78	-888	C61	TNM	T2b	-888	3297	3297	-888
+CPCG0003	1	CA-ON	1	4	-888	71	-888	80	-888	C61	TNM	T2a	-888	3148	3148	-888
+CPCG0006	1	CA-ON	1	4	1	73	-888	79	-888	C61	TNM	T2b	-888	2423	2423	Penile cancer 2007
+CPCG0020	1	CA-ON	1	4	1	70	-888	82	-888	C61	TNM	T1c	-888	4436	4436	-888
+CPCG0042	1	CA-ON	1	4	-888	75	-888	86	-888	C61	TNM	T2b	-888	4151	4151	-888
+CPCG0099	1	CA-ON	1	1	-888	65	-888	70	-888	C61	TNM	T1c	-888	1875	1875	-888
+CPCG0102	1	CA-ON	1	4	-888	57	-888	66	-888	C61	TNM	T2b	-888	3200	3200	-888
+CPCG0103	1	CA-ON	1	4	2	64	-888	76	-888	C61	TNM	T1c	-888	4164	4164	ketoconazole+hydrocortisone from 20-Jul-2011 to 18-Jul-2012
+CPCG0183	1	CA-ON	1	4	-888	64	-888	70	-888	C61	TNM	T2a	-888	2401	2401	-888
+CPCG0184	1	CA-ON	1	4	2	51	-888	60	-888	C61	TNM	T2b	-888	3059	3059	Local and distant non-bony met on radiology; no mention in clinical notes. Intermittent HT for years: we need to define what is one course of HT.

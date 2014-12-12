@@ -1,0 +1,52 @@
+{
+    "collection": "Observation", 
+    "fields": [
+        { "file_schema": "N/A", "file_schema_field": "_type", "name": "_type", "type": "text" }, 
+        { "file_schema": "N/A", "file_schema_field": "_project_id", "name": "_project_id", "type": "text" }, 
+        { "file_schema": "N/A", "file_schema_field": "_donor_id", "name": "_donor_id", "type": "text" },
+        { "file_schema": "N/A", "file_schema_field": "_specimen_id", "name": "_specimen_id", "type": "text" },
+        { "file_schema": "N/A", "file_schema_field": "_sample_id", "name": "_sample_id", "type": "text" },
+        { "file_schema": "N/A", "file_schema_field": "_matched_sample_id", "name": "_matched_sample_id", "type": "text" },
+        { "file_schema": "meth_m", "file_schema_field": "alignment_algorithm", "name": "alignment_algorithm", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "analysis_id", "name": "analysis_id", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "analyzed_sample_id", "name": "analyzed_sample_id", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "assembly_version", "name": "assembly_version", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "base_calling_algorithm", "name": "base_calling_algorithm", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "db_xref", "name": "meth_m_db_xref", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "experimental_protocol", "name": "experimental_protocol", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "matched_sample_id", "name": "matched_sample_id", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "other_analysis_algorithm", "name": "other_analysis_algorithm", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "platform", "name": "platform", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "raw_data_accession", "name": "raw_data_accession", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "raw_data_repository", "name": "raw_data_repository", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "uri", "name": "meth_m_uri", "type": "text" }, 
+        { "file_schema": "meth_m", "file_schema_field": "variation_calling_algorithm", "name": "variation_calling_algorithm", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "beta_value", "name": "beta_value", "type": "decimal" }, 
+        { "file_schema": "meth_p", "file_schema_field": "chromosome", "name": "chromosome", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "chromosome_end", "name": "chromosome_end", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "chromosome_start", "name": "chromosome_start", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "chromosome_strand", "name": "chromosome_strand", "type": "integer" }, 
+        { "file_schema": "meth_p", "file_schema_field": "db_xref", "name": "meth_p_db_xref", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "methylated_fragment_id", "name": "methylated_fragment_id", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "percent_methylation", "name": "percent_methylation", "type": "decimal" }, 
+        { "file_schema": "meth_p", "file_schema_field": "probability", "name": "probability", "type": "decimal" }, 
+        { "file_schema": "meth_p", "file_schema_field": "quality_score", "name": "quality_score", "type": "decimal" }, 
+        { "file_schema": "meth_p", "file_schema_field": "uri", "name": "meth_p_uri", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "verification_platform", "name": "verification_platform", "type": "text" }, 
+        { "file_schema": "meth_p", "file_schema_field": "verification_status", "name": "verification_status", "type": "text" }, 
+        { "items": {
+                "fields": [
+                    { "file_schema": "N/A", "file_schema_field": "_gene_id", "name": "_gene_id", "type": "text" }, 
+                    { "file_schema": "meth_s", "file_schema_field": "gene_affected", "name": "gene_affected", "type": "text" }, 
+                    { "file_schema": "meth_s", "file_schema_field": "gene_build_version", "name": "gene_build_version", "type": "text" }
+                ], 
+                "file_schema": "meth_s", 
+                "type": "record"
+            }, "name": "consequence", "type": "array" }
+    ], 
+    "file_schema": "meth_p", 
+    "metadata_schema": "meth_m", 
+    "name": "meth", 
+    "type": "record"
+}
+

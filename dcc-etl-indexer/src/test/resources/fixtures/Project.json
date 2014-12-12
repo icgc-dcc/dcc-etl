@@ -1,0 +1,29 @@
+// Sample set of Project documents. Represents the output of the dcc-etl-summarizer
+{
+  "_project_id":"PR1234",
+  "_release_id":"release11",
+  "project_key":"813_1",
+  "project_name":"Lymphocytic Leukemia - ISC/MICINN, ES",
+  "primary_site":"blood",
+  "countries":[
+    "Spain"
+  ],
+  "pubmed_ids":[
+    21642962,
+    22158541
+  ],
+  "_summary":{
+    "_available_data_type":[
+      "cnsm",
+      "meth",
+      "ssm"
+    ],
+    "_total_donor_count":109,
+    "_total_specimen_count":221,
+    "_total_sample_count":221,
+    "_ssm_tested_donor_count":109,
+    "_cnsm_tested_donor_count":4,
+    "_exp_tested_donor_count":0,
+    "_meth_tested_donor_count":56
+  }
+}

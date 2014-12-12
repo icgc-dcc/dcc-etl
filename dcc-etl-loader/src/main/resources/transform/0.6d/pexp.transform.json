@@ -1,0 +1,32 @@
+{
+    "collection": "Observation", 
+    "fields": [
+        { "file_schema": "N/A", "file_schema_field": "_type", "name": "_type", "type": "text" }, 
+        { "file_schema": "N/A", "file_schema_field": "_project_id", "name": "_project_id", "type": "text" },
+        { "file_schema": "N/A", "file_schema_field": "_donor_id", "name": "_donor_id", "type": "text" },
+        { "file_schema": "N/A", "file_schema_field": "_specimen_id", "name": "_specimen_id", "type": "text" },
+        { "file_schema": "N/A", "file_schema_field": "_sample_id", "name": "_sample_id", "type": "text" },
+        { "file_schema": "pexp_m", "file_schema_field": "analysis_id", "name": "analysis_id", "type": "text" }, 
+        { "file_schema": "pexp_m", "file_schema_field": "analyzed_sample_id", "name": "analyzed_sample_id", "type": "text" }, 
+        { "file_schema": "pexp_m", "file_schema_field": "db_xref", "name": "pexp_m_db_xref", "type": "text" }, 
+        { "file_schema": "pexp_m", "file_schema_field": "experimental_protocol", "name": "experimental_protocol", "type": "text" }, 
+        { "file_schema": "pexp_m", "file_schema_field": "platform", "name": "platform", "type": "text" }, 
+        { "file_schema": "pexp_m", "file_schema_field": "raw_data_accession", "name": "raw_data_accession", "type": "text" }, 
+        { "file_schema": "pexp_m", "file_schema_field": "raw_data_repository", "name": "raw_data_repository", "type": "text" }, 
+        { "file_schema": "pexp_m", "file_schema_field": "uri", "name": "pexp_m_uri", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "antibody_id", "name": "antibody_id", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "db_xref", "name": "pexp_p_db_xref", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "gene_build_version", "name": "gene_build_version", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "gene_name", "name": "gene_name", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "gene_stable_id", "name": "gene_stable_id", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "normalized_expression_level", "name": "normalized_expression_level", "type": "decimal" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "uri", "name": "pexp_p_uri", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "verification_platform", "name": "verification_platform", "type": "text" }, 
+        { "file_schema": "pexp_p", "file_schema_field": "verification_status", "name": "verification_status", "type": "text" }
+    ], 
+    "file_schema": "pexp_p", 
+    "metadata_schema": "pexp_m", 
+    "name": "pexp", 
+    "type": "record"
+}
+

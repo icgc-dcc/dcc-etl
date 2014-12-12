@@ -1,0 +1,34 @@
+donor_id	specimen_id	specimen_type	specimen_type_other	specimen_interval	specimen_donor_treatment_type	specimen_donor_treatment_type_other	specimen_processing	specimen_processing_other	specimen_storage	specimen_storage_other	tumour_confirmed	specimen_biobank	specimen_biobank_id	specimen_available	tumour_histological_type	tumour_grading_system	tumour_grade	tumour_grade_supplemental	tumour_stage_system	tumour_stage	tumour_stage_supplemental	digital_image_of_stained_section	percentage_cellularity	level_of_cellularity	specimen_notes
+EOPC-01	EOPC-01_normal	102	-888	33	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-01	EOPC-01_tumor	109	-888	33	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):80, Gleason:Gleason_4 (%):20, Gleason:Gleason_5 (%):	pTNM	T3aN0	-888	-888	-888	3	-888
+EOPC-02	EOPC-02_normal	102	-888	79	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-02	EOPC-02_tumor	109	-888	79	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):80, Gleason:Gleason_4 (%):20, Gleason:Gleason_5 (%):	pTNM	T2cN0	-888	-888	-888	3	-888
+EOPC-03	EOPC-03_normal	102	-888	30	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-03	EOPC-03_tumor	109	-888	30	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	5+4	Gleason:Gleason_3 (%):11, Gleason:Gleason_4 (%):39, Gleason:Gleason_5 (%):50	pTNM	T3aN0	-888	-888	-888	4	-888
+EOPC-04	EOPC-04_normal	102	-888	40	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-04	EOPC-04_tumor	109	-888	40	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	4+3	Gleason:Gleason_3 (%):25, Gleason:Gleason_4 (%):70, Gleason:Gleason_5 (%):5	pTNM	T3bN1	-888	-888	-888	4	-888
+EOPC-05	EOPC-05_normal	102	-888	49	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-05	EOPC-05_tumor	109	-888	49	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):90, Gleason:Gleason_4 (%):10, Gleason:Gleason_5 (%):	pTNM	T3aNX	-888	-888	-888	4	-888
+EOPC-06	EOPC-06_normal	102	-888	64	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-06	EOPC-06_tumor	109	-888	64	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):70, Gleason:Gleason_4 (%):30, Gleason:Gleason_5 (%):	pTNM	T3bN1	-888	-888	-888	4	-888
+EOPC-07	EOPC-07_normal	102	-888	58	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-07	EOPC-07_tumor	109	-888	58	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):90, Gleason:Gleason_4 (%):10, Gleason:Gleason_5 (%):	pTNM	T2cN0	-888	-888	-888	4	-888
+EOPC-08	EOPC-08_normal	102	-888	64	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-08	EOPC-08_tumor	109	-888	64	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):85, Gleason:Gleason_4 (%):15, Gleason:Gleason_5 (%):	pTNM	T2cN0	-888	-888	-888	4	-888
+EOPC-09	EOPC-09_normal	102	-888	46	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-09	EOPC-09_tumor	109	-888	46	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):95, Gleason:Gleason_4 (%):5, Gleason:Gleason_5 (%):	pTNM	T2cN0	-888	-888	-888	4	-888
+EOPC-010	EOPC-010_normal	102	-888	24	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-010	EOPC-010_tumor	109	-888	24	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):90, Gleason:Gleason_4 (%):10, Gleason:Gleason_5 (%):	pTNM	T2cNX	-888	-888	-888	4	-888
+EOPC-011	EOPC-011_normal	102	-888	18	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-011	EOPC-011_tumor	109	-888	18	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason-Score	3+4	Gleason:Gleason_3 (%):78, Gleason:Gleason_4 (%):20, Gleason:Gleason_5 (%):2	pTNM	T2cN0	-888	-888	-888	4	-888
+EOPC-N001	EOPC-Normal1_RNA_pool_N001	104	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-018	EOPC-018_tumor	109	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason_Score	3+3	-888	pTNM	T2c	-888	-888	-888	-888	-888
+EOPC-021	EOPC-021_tumor	109	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason_Score	3+4	-888	pTNM	T2c	-888	-888	-888	-888	-888
+EOPC-022	EOPC-022_tumor	109	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason_Score	3+4	-888	pTNM	T2c	-888	-888	-888	-888	-888
+EOPC-024	EOPC-024_tumor	109	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason_Score	3+4	-888	pTNM	T2c	-888	-888	-888	-888	-888
+EOPC-026	EOPC-026_tumor	109	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	Gleason_Score	3+3	-888	pTNM	T2c	-888	-888	-888	-888	-888
+EOPC-018	EOPC-018_normal	102	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-021	EOPC-021_normal	102	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-022	EOPC-022_normal	102	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-024	EOPC-024_normal	102	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888
+EOPC-026	EOPC-026_normal	102	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888	-888

@@ -1,0 +1,3 @@
+analysis_id	analyzed_sample_id	mutation_id	gene_affected	transcript_affected	gene_build_version
+0040	00372	0050	ENSG00000063978	ENST00000506706	wbNnSzYePQ
+0042	00352	0053	ENSG00000143502	ENST00000343846	eTFJQcs To

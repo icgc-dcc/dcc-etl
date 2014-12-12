@@ -1,0 +1,67 @@
+{
+  "_id":"515b327bb0c63b25e6da126d",
+  "_mutation_id":"MU1",
+  "_donor_id":"donor1",
+  "_type":"ssm",
+  "consequence":[
+    {
+      "_gene_id":"gene1",
+      "_transcript_id":"transcript1",
+      "consequence_type":"consequence_type1"
+    },
+    {
+      "_gene_id":"gene1",
+      "_transcript_id":"transcript1",
+      "consequence_type":"consequence_type1"
+    },    
+    {
+      "_gene_id":"gene2",
+      "_transcript_id":"transcript2",
+      "consequence_type":"consequence_type1"
+    }
+  ]
+}
+{
+  "_id":"515b327bb0c63b25e6da126e",
+  "_mutation_id":"MU1b",
+  "_donor_id":"donor1",
+  "_type":"ssm",
+  "consequence":[
+    {
+      "_gene_id":"gene1",
+      "_transcript_id":"transcript1",
+      "consequence_type":"consequence_type1"
+    },
+    {
+      "_gene_id":"gene1",
+      "_transcript_id":"transcript1",
+      "consequence_type":"consequence_type1"
+    },    
+    {
+      "_gene_id":"gene2",
+      "_transcript_id":"transcript2",
+      "consequence_type":"consequence_type1"
+    }
+  ]
+}
+{
+  "_id":"515b327bb0c63b25e6da126f",
+  "_mutation_id":"MU2",
+  "_donor_id":"donor1",
+  "_type":"cnsm",
+  "consequence":[
+    {
+      "consequence_type":"consequence_type0"
+    },
+    {
+      "_gene_id":"gene2",
+      "_transcript_id":"transcript2",
+      "consequence_type":"consequence_type1"
+    },
+    {
+      "_gene_id":"gene3",
+      "_transcript_id":"transcript3",
+      "consequence_type":"consequence_type1"
+    }
+  ]
+}

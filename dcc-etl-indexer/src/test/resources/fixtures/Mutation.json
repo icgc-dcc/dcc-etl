@@ -1,0 +1,31 @@
+// Sample set of Mutation documents. Represents the output of the dcc-etl-summarizer
+{
+  "_mutation_id":"MU12345678",
+  "mutation_type":"single base substitution",
+  "assembly_version":"GRCh37",
+  "chromosome":"17",
+  "chromosome_start":7574017,
+  "chromosome_end":7574017,
+  "mutation":"C>A",
+  "reference_genome_allele":"C"
+}
+{
+  "_mutation_id":"MU12345679",
+  "mutation_type":"single base substitution",
+  "assembly_version":"GRCh37",
+  "chromosome":"22",
+  "chromosome_start":17072407,
+  "chromosome_end":17072407,
+  "mutation":"C>G",
+  "reference_genome_allele":"C"
+}
+{
+  "_mutation_id":"MU12345680",
+  "mutation_type":"single base substitution",
+  "assembly_version":"GRCh37",
+  "chromosome":"2",
+  "chromosome_start":1230247,
+  "chromosome_end":1230247,
+  "mutation":"C>T",
+  "reference_genome_allele":"C"
+}

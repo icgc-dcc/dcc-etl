@@ -1,0 +1,76 @@
+{
+    "collection": "Donor", 
+    "fields": [
+        { "file_schema": "N/A", "file_schema_field": "_project_id", "name": "_project_id", "type": "text" }, 
+        { "file_schema": "N/A", "file_schema_field": "_donor_id", "name": "_donor_id", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "db_xref", "name": "donor_db_xref", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "disease_status_last_followup", "name": "disease_status_last_followup", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_age_at_diagnosis", "name": "donor_age_at_diagnosis", "type": "integer" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_age_at_enrollment", "name": "donor_age_at_enrollment", "type": "integer" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_age_at_last_followup", "name": "donor_age_at_last_followup", "type": "integer" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_diagnosis_icd10", "name": "donor_diagnosis_icd10", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_id", "name": "donor_id", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_interval_of_last_followup", "name": "donor_interval_of_last_followup", "type": "integer" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_relapse_interval", "name": "donor_relapse_interval", "type": "integer" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_relapse_type", "name": "donor_relapse_type", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_sex", "name": "donor_sex", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_survival_time", "name": "donor_survival_time", "type": "integer" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_tumour_stage_at_diagnosis", "name": "donor_tumour_stage_at_diagnosis", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_tumour_stage_at_diagnosis_supplemental", "name": "donor_tumour_stage_at_diagnosis_supplemental", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_tumour_staging_system_at_diagnosis", "name": "donor_tumour_staging_system_at_diagnosis", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "donor_vital_status", "name": "donor_vital_status", "type": "text" }, 
+        { "file_schema": "donor", "file_schema_field": "uri", "name": "donor_uri", "type": "text" }, 
+        { "items": {
+                "fields": [
+                    { "file_schema": "N/A", "file_schema_field": "_project_id", "name": "_project_id", "type": "text" }, 
+                    { "file_schema": "N/A", "file_schema_field": "_specimen_id", "name": "_specimen_id", "type": "text" },
+                    { "file_schema": "specimen", "file_schema_field": "db_xref", "name": "specimen_db_xref", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "digital_image_of_stained_section", "name": "digital_image_of_stained_section", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_available", "name": "specimen_available", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_biobank", "name": "specimen_biobank", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_biobank_id", "name": "specimen_biobank_id", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_donor_treatment_type", "name": "specimen_donor_treatment_type", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_donor_treatment_type_other", "name": "specimen_donor_treatment_type_other", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_id", "name": "specimen_id", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_interval", "name": "specimen_interval", "type": "integer" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_processing", "name": "specimen_processing", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_processing_other", "name": "specimen_processing_other", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_storage", "name": "specimen_storage", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_storage_other", "name": "specimen_storage_other", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_type", "name": "specimen_type", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "specimen_type_other", "name": "specimen_type_other", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_confirmed", "name": "tumour_confirmed", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_grade", "name": "tumour_grade", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_grade_supplemental", "name": "tumour_grade_supplemental", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_grading_system", "name": "tumour_grading_system", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_histological_type", "name": "tumour_histological_type", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_stage", "name": "tumour_stage", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_stage_supplemental", "name": "tumour_stage_supplemental", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "tumour_stage_system", "name": "tumour_stage_system", "type": "text" }, 
+                    { "file_schema": "specimen", "file_schema_field": "uri", "name": "specimen_uri", "type": "text" }, 
+                    { "items": {
+                            "fields": [
+                                { "file_schema": "N/A", "file_schema_field": "_project_id", "name": "_project_id", "type": "text" }, 
+                                { "file_schema": "N/A", "file_schema_field": "_sample_id", "name": "_sample_id", "type": "text" },
+                                { "file_schema": "sample", "file_schema_field": "analyzed_sample_id", "name": "analyzed_sample_id", "type": "text" }, 
+                                { "file_schema": "sample", "file_schema_field": "analyzed_sample_interval", "name": "analyzed_sample_interval", "type": "integer" }, 
+                                { "file_schema": "sample", "file_schema_field": "analyzed_sample_type", "name": "analyzed_sample_type", "type": "text" }, 
+                                { "file_schema": "sample", "file_schema_field": "analyzed_sample_type_other", "name": "analyzed_sample_type_other", "type": "text" }, 
+                                { "file_schema": "sample", "file_schema_field": "db_xref", "name": "sample_db_xref", "type": "text" }, 
+                                { "file_schema": "sample", "file_schema_field": "uri", "name": "sample_uri", "type": "text" }
+                            ], 
+                            "file_schema": "sample", 
+                            "name": "sample", 
+                            "type": "record"
+                        }, "name": "sample", "type": "array" }
+                ], 
+                "file_schema": "specimen", 
+                "name": "specimen", 
+                "type": "record"
+            }, "name": "specimen", "type": "array" }
+    ], 
+    "file_schema": "donor", 
+    "name": "donor", 
+    "type": "record"
+}
+

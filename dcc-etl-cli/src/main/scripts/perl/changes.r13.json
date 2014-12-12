@@ -1,0 +1,17 @@
+{
+   "mirna_m": {
+      "seq_coverage": {
+         "changed_from": "seq_verage"
+      }
+   },
+   "ssm_s": {
+      "cds_mutation": {
+         "changed_from": "cds-mutation"
+      }
+   },
+   "ssm_s": {
+      "protein_domain_affected": {
+         "changed_from": "Protein_domain_affected"
+      }
+   }
+}

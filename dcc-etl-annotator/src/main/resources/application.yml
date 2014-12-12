@@ -1,0 +1,28 @@
+#
+# DCC ETL Annotator - Configuration
+#
+
+# Spring
+spring:
+
+# SnpEff
+snpEff:
+   resourceDir: /tmp/dcc-etl-annotator
+   resourceUrl: https://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-dependencies/org/icgc/dcc
+   databaseVersion: 3.6c-GRCh37.75
+   referenceGenomeVersion: GRCh37.75.v1
+   geneBuildVersion: 75
+
+# Hadoop         
+hadoop:
+   username: hdfs
+   properties:
+      fs.defaultFS: file:///
+      mapred.min.split.size: 104857600
+      
+      # fs.defaultFS: hdfs://***REMOVED***
+      # mapred.job.tracker: ***REMOVED***:8021
+      
+      # dfs.client.use.legacy.blockreader: true
+      # hadoop.socks.server: localhost:1080
+      # hadoop.rpc.socket.factory.class.default: org.apache.hadoop.net.SocksSocketFactory

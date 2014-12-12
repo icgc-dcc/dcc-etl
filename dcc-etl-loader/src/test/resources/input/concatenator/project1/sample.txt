@@ -1,0 +1,10 @@
+analyzed_sample_id	specimen_id	analyzed_sample_interval	percentage_cellularity	level_of_cellularity	analyzed_sample_notes	study
+00301	0020	155	-888	-888	xitSlMzqmx	1
+00312	0020	33	-888	-888	MbvC gDaL 	1
+00322	0021	159	-888	-888	lrxkY rCZL	1
+00331	0022	45	-888	-888	lHBdMsdJc 	1
+00342	0022	30	-888	-888	wSsXZtZuTw	1
+00352	0023	155	-888	-888	-888	1
+00361	0023	75	-888	-888	WlITkjQZrS	1
+00372	0024	196	-888	-888	cKGQFu dDU	1
+00381	0024	177	-888	-888	-888	1

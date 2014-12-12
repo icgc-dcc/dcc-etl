@@ -1,0 +1,14 @@
+analysis_id	analyzed_sample_id	mutation_type	chromosome	chromosome_start	chromosome_end	chromosome_strand	reference_genome_allele	control_genotype	mutated_from_allele	mutated_to_allele	tumour_genotype	expressed_allele	quality_score	probability	total_read_count	mutant_allele_read_count	verification_status	verification_platform	biological_validation_status	biological_validation_platform	marking	mutation	observation_id
+0040	00312	4	83	0	0	1	OwgrpqceXK	A/T	A	A	A/T	A	-888	45.1	2	1	1	-888	1	1	OPEN	A>T	v1
+0040	00312	4	88	0	0	1	DVXanWXVHz	A/T	A	A	A/T	A	11.540134970311689	-888	2	1	2	67	1	1	CONTROLLED	A>T	v2
+0040	00312	1	119	0	0	1	EgoxSLFZxY	A/T	A	A	A/T	A	-888	42.50591240884771	2	1	1	3	1	1	OPEN	A>T	v3
+0041	00372	3	73	0	0	1	ObYNJRMTtV	A/T	A	A	A/T	A	33.09516450688263	1.3634016908219082	2	1	3	61	1	1	CONTROLLED	A>T	v4
+0044	00372	3	73	0	0	1	ObYNJRMTtV	A/T	A	A	A/T	A	33.09516450688263	1.3634016908219082	2	1	3	61	1	1	OPEN	A>T	v4b
+0041	00372	3	48	0	0	1	qzqbgUmWKG	-777	A	A	A/T	A	34.84291062544029	-888	2	1	2	50	1	1	OPEN	A>T	v5
+0041	00372	4	97	0	0	1	 gQqbtSUZW	A/T	A	A	A/T	A	0.32705134498968724	-888	2	1	4	-888	1	1	OPEN	A>T	v6
+0042	00312	1	2	0	0	1	lNR WRosxG	A/T	A	A	A/T	A	27.473750922349254	33.65119243056785	2	1	3	65	1	1	OPEN	A>T	v7
+0042	00312	4	38	0	0	1	XvTpudcWbW	A/T	A	A	A/T	A	27.092850425853527	-888	2	1	1	53	1	1	OPEN	A>T	v8
+0042	00312	4	121	0	0	1	ARxBSk tKe	A/T	A	A	A/T	A	35.75012481591537	4.387020257720703	2	1	3	19	1	1	MASKED	A>T	v9
+0043	00352	2	94	0	0	1	AlQZhVmuCo	A/T	A	A	A/T	A	30.334293459839976	27.859157314440946	2	1	1	13	1	1	MASKED	A>T	v10
+0043	00352	4	107	0	0	1	VHyoWIUCKv	-888	A	A	A/T	A	42.57364292355723	45.73972539228638	2	1	2	23	1	1	OPEN	A>T	v11
+0044	00312	4	83	0	0	1	OwgrpqceXK	A/T	A	A	A/T	A	-888	45.2	2	1	1	-888	1	1	OPEN	A>T	v1b

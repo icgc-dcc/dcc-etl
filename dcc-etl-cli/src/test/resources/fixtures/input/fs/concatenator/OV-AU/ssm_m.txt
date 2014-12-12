@@ -1,0 +1,29 @@
+analysis_id	analyzed_sample_id	matched_sample_id	assembly_version	platform	experimental_protocol	base_calling_algorithm	alignment_algorithm	variation_calling_algorithm	other_analysis_algorithm	sequencing_strategy	seq_coverage	raw_data_repository	raw_data_accession
+0040	003132	00361	1	45	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	vNlAmGXnC 	15	19.72000430211171	1	MhGyUvDPFi
+0041	00372	00301	1	38	-888	test_1 https://www.icgc.org	-888	test_1 https://www.icgc.org	n qAlcDI B	16		4	OJrNeztTNF
+0042	00392	003161	1	11	test_1 https://www.icgc.org	-888	test_1 https://www.icgc.org	test_1 https://www.icgc.org	dhgEqmCZel	30	21.681416904738764	4	GDDPV mL o
+0043	003192	00301	1	66	test_1 https://www.icgc.org	-777	-9999	-9999	DFvg wIKcH	24	45.462977419062085	2	XlJHKHAJrP
+0044	003132	00341	1	79	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org		11	44.447698266099074	2	KGFDtbpoAw
+0045	00392	003121	1	55	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	-9999	EIamVDe iu	6	39.99034295164128	5	LqTqLUDQMJ
+0046	003112	003101	1	47	test_1 https://www.icgc.org	-9999	-777	test_1 https://www.icgc.org		13	42.68880373948618	3	yFfAVgVTqD
+0047	00312	003121	1	9	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	ljPvHrEQjD	18		1	AhtggAmC f
+0048	00332	003141	1	6	test_1 https://www.icgc.org	test_1 https://www.icgc.org	-9999	-9999	zQblwJMjYD	23	44.762955321381106	5	kjYlk iIJr
+0049	003192	003121	1	54	test_1 https://www.icgc.org	-777	test_1 https://www.icgc.org	test_1 https://www.icgc.org	CybOmHuxLU	16	43.27144264080359	3	hHcpkJqHlQ
+00410	003192	00381	1	58	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	wpWJkoHNBh	13	22.38429064583215	1	UdSIJOAdMD
+00411	00392	00381	1	40	test_1 https://www.icgc.org	-9999	test_1 https://www.icgc.org	test_1 https://www.icgc.org	hVVqr TURp	18	25.886529510392155	4	  DV ulwLi
+00412	00332	003121	1	23	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	g CW mGsvy	1	48.467091016195226	5	uIZZJYUmmH
+00413	00312	003141	1	27	test_1 https://www.icgc.org	test_1 https://www.icgc.org	-888	test_1 https://www.icgc.org		26	41.589584364411415	3	MCyCCMFQXe
+00414	003112	00381	1	45	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	DATyEMZGys	18	4.967818083274827	2	tyeomBjWyf
+00415	003172	003161	1	23	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	ZFXTKmIghr	23	17.865336895307333	3	lmcIKwJOvd
+00416	003172	00341	1	17	-9999	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org		23	14.904987019145388	5	IP ktxhVCm
+00417	00312	00381	1	67	-9999	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	RUc ypkMXU	4	43.54154853450446	2	 RJRlH doS
+00418	003152	00321	1	36	test_1 https://www.icgc.org	-777	-888	-888	FUDLfoRtGW	30		2	Dja UxpQWo
+00419	003172	00361	1	16	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	tEsxPHqIOv	9	15.522610448510378	2	Y Uu qm rc
+00420	003132	003121	1	29	-9999	test_1 https://www.icgc.org	-888	test_1 https://www.icgc.org	EVWLpjispc	9	21.023009369971042	2	NOHyGCRVdi
+00421	00392	003121	1	31	-9999	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	BEfM rhNsS	1		1	l WZUYHZnG
+00422	00332	00341	1	45	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	fkhxdaHJBO	7	17.372428388809467	1	vQ UHmRbIH
+00423	00312	003141	1	63	test_1 https://www.icgc.org	-777	test_1 https://www.icgc.org	-888	THcMnRBpNK	1	8.1059987297472	5	d eFsRVRkv
+00424	003152	003161	1	26	test_1 https://www.icgc.org	-888	-888	test_1 https://www.icgc.org	Eom YLSzRC	25		2	QywSZHbvVt
+00425	003172	00361	1	37	test_1 https://www.icgc.org	test_1 https://www.icgc.org	-9999	test_1 https://www.icgc.org		19	34.01156837789766	2	rIEbAEMhMa
+00426	00332	003141	1	41	test_1 https://www.icgc.org	-777	test_1 https://www.icgc.org	test_1 https://www.icgc.org	GZUHUxKepf	4	25.478195778226354	3	E  Ff IhSJ
+00427	003132	00321	1	63	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	test_1 https://www.icgc.org	OPVHZiUObh	25	47.07746855591642	5	MzArt t en

@@ -1,0 +1,102 @@
+#
+# Copyright 2013(c) The Ontario Institute for Cancer Research. All rights reserved.
+#
+# DCC development cluster settings. Consult the guide at <http://elasticsearch.org/guide>.
+
+# Any element in the configuration can be replaced with environment variables
+# by placing them in ${...} notation. For example:
+#
+# node.rack: ${RACK_ENV_VAR}
+
+# See <http://elasticsearch.org/guide/reference/setup/configuration.html>
+# for information on supported formats and syntax for the configuration file.
+
+################################### Cluster ###################################
+
+# Cluster name identifies your cluster for auto-discovery. If you're running
+# multiple clusters on the same network, make sure you're using unique names.
+#
+cluster.name: elasticsearch
+
+
+#################################### Node #####################################
+
+# Node names are generated dynamically on startup, so you're relieved
+# from configuring them manually. You can tie this node to a specific name:
+#
+node.name: "hcn53"
+
+
+#################################### Paths ####################################
+
+# Can optionally include more than one location, causing data to be striped across
+# the locations (a la RAID 0) on a file level, favouring locations with most free
+# space on creation. For example:
+#
+path.data: /hadoop/1/dfs/elasticsearch,/hadoop/2/dfs/elasticsearch
+
+
+################################### Memory ####################################
+
+# ElasticSearch performs poorly when JVM starts swapping: you should ensure that
+# it _never_ swaps.
+#
+# Set this property to true to lock the memory:
+#
+bootstrap.mlockall: true
+
+############################## Network And HTTP ###############################
+
+# ElasticSearch, by default, binds itself to the 0.0.0.0 address, and listens
+# on port [9200-9300] for HTTP traffic and on port [9300-9400] for node-to-node
+# communication. (the range means that if the port is busy, it will automatically
+# try the next port).
+
+# Set a custom allowed content length:
+#
+# Set by Bob G.?
+http.max_content_length: 1500mb
+
+# Set by Bob G.?
+http.max_chunk_size: 1000kb
+http.max_header_size: 100kb
+http.max_initial_line_length: 1000kb
+
+################################### Gateway ###################################
+
+# The gateway allows for persisting the cluster state between full cluster
+# restarts. Every change to the state (such as adding an index) will be stored
+# in the gateway, and when the cluster starts up for the first time,
+# it will read its state from the gateway.
+
+# Allow recovery process after N nodes in a cluster are up:
+#
+gateway.recover_after_nodes: 5
+
+# Set the timeout to initiate the recovery process, once the N nodes
+# from previous setting are up (accepts time value):
+#
+gateway.recover_after_time: 5m
+
+# Set how many nodes are expected in this cluster. Once these N nodes
+# are up (and recover_after_nodes is met), begin recovery process immediately
+# (without waiting for recover_after_time to expire):
+#
+gateway.expected_nodes: 5
+
+################################## Discovery ##################################
+
+# Discovery infrastructure ensures nodes can be found within a cluster
+# and master node is elected. Multicast discovery is the default.
+
+# Set to ensure a node sees N other master eligible nodes to be considered
+# operational within the cluster. Set this option to a higher value (2-4)
+# for large clusters (>3 nodes):
+#
+discovery.zen.minimum_master_nodes: 3
+
+# Set the time to wait for ping responses from other nodes when discovering.
+# Set this option to a higher value on a slow or congested network
+# to minimize discovery failures:
+#
+discovery.zen.ping.timeout: 30s

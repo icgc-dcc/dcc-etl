@@ -1,0 +1,16 @@
+{
+   "evidence_code" : "IEA",
+   "uniprot_id" : "A1A4S6",
+   "species" : "Homo sapiens",
+   "name" : "Regulation of PAK-2p34 activity by PS-GAP/RHG10",
+   "_reactome_id" : "REACT_13528",
+   "url" : "#DIAGRAM=REACT_13648&ID=REACT_13528"
+}
+{
+   "evidence_code" : "TAS",
+   "uniprot_id" : "A1A4S6",
+   "species" : "Homo sapiens",
+   "name" : "Rho GTPase cycle",
+   "_reactome_id" : "REACT_11051",
+   "url" : "#DIAGRAM=REACT_11044&ID=REACT_11051"
+}

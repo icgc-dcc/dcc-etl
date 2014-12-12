@@ -1,0 +1,16 @@
+{
+   "meth_array_p": {
+      "probe_id": {
+         "changed_from": "methylated_fragment_id"
+      },
+      "array_platform": {
+         "default_value": 1
+      },
+      "methylation_value": {
+         "changed_from": "percent_methylation"
+      },
+      "metric_used": {
+         "default_value": 1
+      }
+   }
+}

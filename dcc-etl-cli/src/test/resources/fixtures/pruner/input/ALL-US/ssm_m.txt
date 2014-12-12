@@ -1,0 +1,3 @@
+analysis_id	analyzed_sample_id	matched_sample_id	assembly_version	platform	experimental_protocol	base_calling_algorithm	alignment_algorithm	variation_calling_algorithm	other_analysis_algorithm	sequencing_strategy	seq_coverage	raw_data_repository	raw_data_accession
+TARGET-ALL-SSM-3	TARGET-10-PAIXPH-03A-01D	TARGET-10-PAIXPH-10A-01D	1	60	Paired End	CASAVA	BWA	SNVMix2	-888	3	-777	4	27e629e7-b3c8-4d3b-8ddc-0ff89433e96d
+TARGET-ALL-SSM-80	TARGET-10-PALUAH-03A-01D	TARGET-10-PALUAH-14A-01D	1	60	Paired End	CASAVA	BWA	SNVMix2	-888	3	-777	4	ccb7ea3c-b678-4a45-a824-cb1c5432b671
