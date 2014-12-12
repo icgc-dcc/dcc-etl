@@ -72,6 +72,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RequiredArgsConstructor
 public class ReleaseRepository {
 
+  /**
+   * Constants.
+   */
+  // TODO: Move to FieldNames
+  public static final String DONOR_SAMPLE_STUDY = "study";
+  public static final String DONOR_SUMMARY_STUDIES = "_studies";
+
   @NonNull
   private final MongoCollection genes;
   @NonNull
@@ -168,6 +175,31 @@ public class ReleaseRepository {
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
         .with("{ $set: { " + field + ": # } }", textValues(repositories));
+  }
+
+  public List<JsonNode> getDonorStudies() {
+    String study =
+        DONOR_SPECIMEN + "." + DONOR_SAMPLE + "." + DONOR_SAMPLE_STUDY;
+
+    return donors
+        .aggregate(
+            "{ $project: { _id: 0, donorId: '$" + DONOR_ID + "', study: '$" + study + "' } }")
+        .and(
+            "{ $unwind: '$study' }")
+        .and(
+            "{ $unwind: '$study' }")
+        .and(
+            "{ $group: { _id: { donorId: '$donorId' }, study: { $addToSet : '$study' } } }")
+        .and(
+            "{ $project: { _id: 0, donorId: '$_id.donorId', study: 1 } }")
+        .as(JsonNode.class);
+  }
+
+  public void setDonorStudies(String donorId, JsonNode studies) {
+    String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_STUDIES;
+    donors
+        .update("{ " + DONOR_ID + ": # }", donorId)
+        .with("{ $set: { " + field + ": # } }", textValues(studies));
   }
 
   public void setDonorExperimentalAnalysis(String donorId, JsonNode analysisSampleCounts) {

@@ -28,6 +28,7 @@
       "sample":[
         {
           "_sample_id":"sample1",
+          "study":"study1",
           "available_raw_sequence_data":[
             {
               "repository":"CGHub",
@@ -73,6 +74,7 @@
       "sample":[
         {
           "_sample_id":"sample1",
+          "study":"study2",          
           "available_raw_sequence_data":[
             {
               "repository":"CGHub",

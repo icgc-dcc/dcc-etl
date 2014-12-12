@@ -102,6 +102,7 @@ import static org.icgc.dcc.common.test.Tests.getTestJobId;
 import static org.icgc.dcc.common.test.Tests.getTestReleasePrefix;
 import static org.icgc.dcc.common.test.fest.JsonNodeAssert.assertThat;
 import static org.icgc.dcc.common.test.json.JsonNodes.$;
+import static org.icgc.dcc.etl.summarizer.repository.ReleaseRepository.DONOR_SUMMARY_STUDIES;
 
 import java.io.File;
 import java.io.IOException;
@@ -251,6 +252,9 @@ public class SummarizerIntegrationTest {
           "}," +
           DONOR_SUMMARY_REPOSITORY + ":[" +        
             "'EGA','CGHub'" +
+          "]," +
+          DONOR_SUMMARY_STUDIES + ":[" +        
+          "'study1'" +
           "]" +
         "}," +
         
