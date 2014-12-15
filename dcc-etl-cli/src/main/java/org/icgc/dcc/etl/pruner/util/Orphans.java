@@ -38,7 +38,6 @@ import java.util.Set;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -57,7 +56,6 @@ import com.google.common.collect.Sets;
 /**
  * Common utilities for dealing with {@link Orphan}s.
  */
-@Slf4j
 @NoArgsConstructor(access = PRIVATE)
 public final class Orphans {
 

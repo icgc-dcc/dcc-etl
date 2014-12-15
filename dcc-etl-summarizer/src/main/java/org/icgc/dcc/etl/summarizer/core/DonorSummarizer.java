@@ -117,6 +117,7 @@ public class DonorSummarizer extends AbstractSummarizer {
     // Order is important:
     summarizeDonorGenes();
     summarizeDonorRepositories();
+    summarizeDonorStudies();
     summarizeDonorLibraryStrategies();
     summarizeDonorAgeGroups();
   }
@@ -216,8 +217,24 @@ public class DonorSummarizer extends AbstractSummarizer {
       try {
         repository.setDonorRepositories(donorId, repositories);
       } catch (Throwable t) {
-        log.error("Error setting donor experimental analysis with donorId '{}' and repositories '{}'", donorId,
+        log.error("Error setting donor repository with donorId '{}' and repositories '{}'", donorId,
             repositories);
+        throw new RuntimeException(t);
+      }
+    }
+  }
+
+  private void summarizeDonorStudies() {
+    val results = repository.getDonorStudies();
+    for (val result : results) {
+      String donorId = result.get("donorId").textValue();
+      ArrayNode studies = (ArrayNode) result.get("study");
+
+      try {
+        repository.setDonorStudies(donorId, studies);
+      } catch (Throwable t) {
+        log.error("Error setting donor study with donorId '{}' and studies '{}'", donorId,
+            studies);
         throw new RuntimeException(t);
       }
     }
