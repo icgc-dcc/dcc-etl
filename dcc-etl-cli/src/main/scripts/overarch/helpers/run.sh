@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Temporary script to help run the overarching script in different clusters (until it stabilizes)
 # usage: helpers/run.sh myrelease myjar myprojects > mylogs
 set -o nounset
