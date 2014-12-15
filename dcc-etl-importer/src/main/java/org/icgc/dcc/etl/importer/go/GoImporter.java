@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,11 +106,16 @@ public class GoImporter {
   private final URL owlUrl;
   @NonNull
   private final MongoClientURI mongoUri;
+  @NonNull
+  private final URL[] ontologies;
 
   public GoImporter(@NonNull MongoClientURI mongoUri) {
     this.oboUrl = DEFAULT_OBO_URL;
     this.gafUrl = DEFAULT_GAF_URL;
     this.owlUrl = DEFAULT_OWL_URL;
+    this.ontologies = new URL[] {
+        DEFAULT_OWL_URL
+    };
     this.mongoUri = mongoUri;
   }
 
@@ -118,7 +124,7 @@ public class GoImporter {
     val watch = createStarted();
 
     log.info("Reading inferred trees...");
-    val inferredTrees = readInferredTrees(oboUrl);
+    val inferredTrees = readInferredTrees(ontologies);
 
     log.info("Processing terms...");
     val terms = processTerms(oboUrl);
@@ -147,9 +153,32 @@ public class GoImporter {
         formatCount(terms), formatCount(associations), watch);
   }
 
-  private static Map<String, List<GoInferredTreeNode>> readInferredTrees(URL owlUrl) throws OBOFormatParserException,
+  private static Map<String, List<GoInferredTreeNode>> readInferredTree(URL owlUrl) throws OBOFormatParserException,
       OWLOntologyCreationException, IOException {
     return new GoInferredTreeReader(owlUrl).read();
+  }
+
+  private static Map<String, List<GoInferredTreeNode>> readInferredTrees(URL[] ontologyURLS)
+      throws OBOFormatParserException,
+      OWLOntologyCreationException, IOException {
+    val inferredTrees = new HashMap<String, List<GoInferredTreeNode>>();
+
+    for (val ontologyURL : ontologyURLS) {
+      val inferredTree = readInferredTree(ontologyURL);
+      for (val entry : inferredTree.entrySet()) {
+        val key = entry.getKey();
+        val value = entry.getValue();
+        if (inferredTrees.get(key) == null) {
+          inferredTrees.put(key, value);
+        } else {
+          value.addAll(inferredTrees.get(key));
+          inferredTrees.put(key, value);
+        }
+      }
+      inferredTrees.putAll(inferredTree);
+    }
+
+    return inferredTrees;
   }
 
   private static Iterable<GoTerm> processTerms(URL oboUrl) throws IOException, OBOFormatParserException {
