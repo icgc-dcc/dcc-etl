@@ -23,9 +23,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.val;
 
 import org.icgc.dcc.etl.importer.go.model.GoInferredTreeNode;
 
@@ -89,6 +91,16 @@ public final class GoInferredTrees {
     if (relations.contains("is_a")) return "is_a";
 
     return "unknown";
+  }
+
+  public static int inferredTreeNodeCount(Map<String, List<GoInferredTreeNode>> inferredTrees) {
+    int count = 0;
+    for (val goId : inferredTrees.keySet()) {
+      val inferredTree = inferredTrees.get(goId);
+      count += inferredTree.size();
+    }
+
+    return count;
   }
 
 }

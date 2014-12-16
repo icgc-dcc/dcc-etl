@@ -46,6 +46,7 @@ import org.icgc.dcc.etl.importer.go.model.GoTerm;
 import org.icgc.dcc.etl.importer.go.reader.GoAssociationReader;
 import org.icgc.dcc.etl.importer.go.reader.GoInferredTreeReader;
 import org.icgc.dcc.etl.importer.go.reader.GoTermReader;
+import org.icgc.dcc.etl.importer.go.util.GoInferredTrees;
 import org.icgc.dcc.etl.importer.go.writer.GoWriter;
 import org.obolibrary.oboformat.parser.OBOFormatParserException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -125,6 +126,7 @@ public class GoImporter {
 
     log.info("Reading inferred trees...");
     val inferredTrees = readInferredTrees(ontologies);
+    log.info("Number of nodes in inferred trees: {}", GoInferredTrees.inferredTreeNodeCount(inferredTrees));
 
     log.info("Processing terms...");
     val terms = processTerms(oboUrl);
