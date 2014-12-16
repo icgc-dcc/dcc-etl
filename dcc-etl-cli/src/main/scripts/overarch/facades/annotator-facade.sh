@@ -47,7 +47,7 @@ add_to_cmd "  --spring.config.location=${conf_file?}"
 add_to_cmd "  --working-dir ${working_dir?}"
 
 if [ -n "${project_names}" ]; then
-  add_to_cmd "  --project-names ${project_names}"
+  add_to_cmd "  --project-names \"${project_names}\""
 fi
 
 
