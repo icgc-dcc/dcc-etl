@@ -1,155 +1,43 @@
 {
-  "gene-centric": {
-    "_all": {
-      "enabled": "false"
-    },
-    "_source": {
-      "compress": "true"
-    },
-    "date_detection": "false",
-    "dynamic_templates": [
-      {
-        "template_1": {
-          "mapping": {
-            "index": "not_analyzed"
-          },
-          "match": "*",
-          "match_mapping_type": "string"
-        }
-      }
-    ],
-    "properties": {
-      "_gene_id": {
-        "fields": {
-          "_gene_id": {
-            "index": "not_analyzed",
-            "store": "yes",
-            "type": "string"
-          },
-          "_gene_id_": {
-            "index": "analyzed",
-            "index_analyzer": "id_index",
-            "search_analyzer": "id_search",
-            "type": "string"
-          },
-          "_gene_id_x": {
-            "analyzer": "id_search",
-            "index": "analyzed",
-            "type": "string"
-          }
+    "gene-centric": {
+        "_all": {
+            "enabled": "false"
         },
-        "type": "multi_field"
-      },
-      "donor": {
-        "type": "nested",
-        "properties": {
-          "ssm": {
-            "type": "nested",
-            "properties": {
-              "consequence": {
-                "type": "nested"
-              },
-              "observation": {
-                "type": "nested"
-              }
+        "_source": {
+            "compress": "true"
+        },
+        "date_detection": "false",
+        "dynamic_templates": [
+            {
+                "template_1": {
+                    "mapping": {
+                        "index": "not_analyzed"
+                    },
+                    "match": "*",
+                    "match_mapping_type": "string"
+                }
             }
-          }
-        }
-      },
-      "name": {
-        "fields": {
-          "name": {
-            "index": "not_analyzed",
-            "store": "yes",
-            "type": "string"
-          },
-          "name_": {
-            "index": "analyzed",
-            "index_analyzer": "id_index",
-            "search_analyzer": "id_search",
-            "type": "string"
-          },
-          "name_x": {
-            "analyzer": "id_search",
-            "index": "analyzed",
-            "type": "string"
-          }
-        },
-        "type": "multi_field"
-      },
-      "project": {
-        "type": "nested"
-      },
-      "pathways": {
-        "type": "nested"
-      },
-      "reactome_pathways": {
+        ],
         "properties": {
-          "name": {
-            "fields": {
-              "name": {
-                "index": "not_analyzed",
-                "store": "yes",
-                "type": "string"
-              },
-              "name_": {
-                "index": "analyzed",
-                "index_analyzer": "id_index",
-                "search_analyzer": "id_search",
-                "type": "string"
-              },
-              "name_x": {
-                "analyzer": "id_search",
-                "index": "analyzed",
-                "type": "string"
-              }
+            "donor": {
+                "type": "nested",
+                "properties": {
+                    "ssm": {
+                        "type": "nested",
+                        "properties": {
+                            "consequence": {
+                                "type": "nested"
+                            },
+                            "observation": {
+                                "type": "nested"
+                            }
+                        }
+                    }
+                }
             },
-            "type": "multi_field"
-          }
+            "project": {
+                "type": "nested"
+            }
         }
-      },
-      "symbol": {
-        "fields": {
-          "symbol": {
-            "index": "not_analyzed",
-            "store": "yes",
-            "type": "string"
-          },
-          "symbol_": {
-            "index": "analyzed",
-            "index_analyzer": "id_index",
-            "search_analyzer": "id_search",
-            "type": "string"
-          },
-          "symbol_x": {
-            "analyzer": "id_search",
-            "index": "analyzed",
-            "type": "string"
-          }
-        },
-        "type": "multi_field"
-      },
-      "synonyms": {
-        "fields": {
-          "synonyms": {
-            "index": "not_analyzed",
-            "store": "yes",
-            "type": "string"
-          },
-          "synonyms_": {
-            "index": "analyzed",
-            "index_analyzer": "id_index",
-            "search_analyzer": "id_search",
-            "type": "string"
-          },
-          "synonyms_x": {
-            "analyzer": "id_search",
-            "index": "analyzed",
-            "type": "string"
-          }
-        },
-        "type": "multi_field"
-      }
     }
-  }
 }
