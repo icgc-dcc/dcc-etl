@@ -21,7 +21,8 @@ job_tracker=${1?} && shift
 working_dir=${1?} && shift
 project_names=${1}
 
-project_names=$(echo ${project_names})
+# Separate project names with a coma instead of a space
+project_names=$(echo ${project_names} | tr ' ' ',')
 
 echo "working_dir=\"${working_dir?}\""
 echo "project_names=\"${project_names}\""
