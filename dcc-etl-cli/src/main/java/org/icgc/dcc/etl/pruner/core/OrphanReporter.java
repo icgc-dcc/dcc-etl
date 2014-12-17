@@ -23,6 +23,7 @@ import static org.icgc.dcc.etl.pruner.util.OrphanIndexes.groupOrphansByProject;
 import static org.icgc.dcc.etl.pruner.util.Orphans.getOrphanIds;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import org.icgc.dcc.etl.pruner.model.Orphan;
 import org.icgc.dcc.submission.dictionary.model.Dictionary;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Reports the number of {@link Orphan}s for projects.
@@ -50,8 +52,10 @@ public class OrphanReporter {
 
   public void report(@NonNull Iterable<Orphan> orphans) throws IOException {
     val orphansByProject = groupOrphansByProject(orphans);
+    val projectNames = Lists.<String> newArrayList(orphansByProject.keySet());
+    Collections.sort(projectNames);
     output("Project\tDonor\tSpecimen\tSample");
-    for (val projectName : orphansByProject.keySet()) {
+    for (val projectName : projectNames) {
       output("\n" + projectName);
       val orphansByFileType = groupOrphansByFileType(orphansByProject.get(projectName));
       for (val fileType : orphansByFileType.keySet()) {
@@ -63,6 +67,7 @@ public class OrphanReporter {
         }
       }
     }
+    output("\n");
   }
 
   private void output(String output) {
