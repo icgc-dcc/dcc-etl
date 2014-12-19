@@ -37,6 +37,19 @@ public final class GoInferredTrees {
   /**
    * Constants.
    */
+  private static final Comparator<GoInferredTreeNode> LABEL_DECENDING_COMPARATOR =
+      new Comparator<GoInferredTreeNode>() {
+
+        @Override
+        public int compare(GoInferredTreeNode a, GoInferredTreeNode b) {
+          return b.getName().compareTo(a.getName());
+        }
+      };
+
+  public static void sortLabelDescending(@NonNull List<GoInferredTreeNode> inferredTree) {
+    Collections.sort(inferredTree, LABEL_DECENDING_COMPARATOR);
+  }
+
   private static final Comparator<GoInferredTreeNode> LEVEL_DECENDING_COMPARATOR =
       new Comparator<GoInferredTreeNode>() {
 
@@ -81,8 +94,8 @@ public final class GoInferredTrees {
   }
 
   public static String getDominantRelation(@NonNull Collection<String> relations) {
-    if (relations.contains("unknown")) return "unknown";
-    if (relations.contains("occurs_in")) return "occurs_in";
+    // if (relations.contains("unknown")) return "unknown";
+    // if (relations.contains("occurs_in")) return "occurs_in";
     if (relations.contains("positively_regulates")) return "positively_regulates";
     if (relations.contains("negatively_regulates")) return "negatively_regulates";
     if (relations.contains("regulates")) return "regulates";

@@ -17,13 +17,16 @@
  */
 package org.icgc.dcc.etl.importer.go.util;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.icgc.dcc.etl.importer.go.util.GoInferredTrees.sortLevelDescending;
+import static org.icgc.dcc.etl.importer.go.util.GoInferredTrees.sortLabelDescending;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,10 +41,9 @@ import org.semanticweb.owlapi.model.OWLClass;
 
 import owltools.graph.OWLGraphWrapper;
 import owltools.graph.shunt.OWLShuntEdge;
+import owltools.graph.shunt.OWLShuntGraph;
 import owltools.graph.shunt.OWLShuntNode;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -50,13 +52,6 @@ import com.google.common.collect.Sets;
 @RequiredArgsConstructor
 public class GoInferredTreeBuilder {
 
-  /**
-   * Constants.
-   */
-  private static final String CHILD_TO_PARENT = "childToParent";
-  private static final String PARENT_TO_CHILD = "parentToChild";
-  private static final Set<String> NON_TRANSITIVE_PREDICATE = ImmutableSet.of(
-      "daughter_of", "daughter_of_in_hermaphrodite", "daughter_of_in_male", "develops_from", "exclusive_union_of");
   private static final PrintStream EMPTY_PRINT_STREAM = new PrintStream(new OutputStream() {
 
     @Override
@@ -78,55 +73,46 @@ public class GoInferredTreeBuilder {
   @NonNull
   private final List<String> relationIds;
 
+  /**
+   * Lookup helpers.
+   */
+  Map<String, Map<String, List<String>>> topologyGraphLookup;
+  Map<String, Map<String, List<String>>> transitivityGraphLookup;
+  Map<String, List<String>> subjectToObject;
+  Map<String, List<String>> objectToSubject;
+
   public List<GoInferredTreeNode> build(@NonNull OWLClass goTerm) {
-    val out = System.out;
+    PrintStream out = System.out;
     try {
       // Quite period because OWL doesn't know its not polite to pollute stdout
       System.setOut(EMPTY_PRINT_STREAM);
 
-      // This is the basis for the inferred tree
-      val regulatesTransitivityGraph = graph.getLineageShuntGraph(goTerm, relationIds);
-
-      // This may not be needed
-      val topologyGraph = graph.getSegmentShuntGraph(goTerm, relationIds);
+      OWLShuntGraph regulatesTransitivityGraph = graph.getLineageShuntGraph(goTerm, relationIds);
+      OWLShuntGraph topologyGraph = graph.getSegmentShuntGraph(goTerm, relationIds);
 
       // Quiet period over, resume sanity
       System.setOut(out);
 
-      log.debug("Topology graph: {}", topologyGraph);
-
       // 1) Get edge and node relations
-      val goTermId = graph.getIdentifier(goTerm);
-      val goTermName = graph.getLabel(goTerm);
-      val edges = topologyGraph.edges;
-      val nodes = regulatesTransitivityGraph.nodes;
+      String goTermId = graph.getIdentifier(goTerm);
+      String goTermName = graph.getLabel(goTerm) == null ? "No Label" : graph.getLabel(goTerm);
 
-      // 2) Build relation tables
-      val lookup = buildLookuptable(edges, goTermId);
-      val ancestors = getAncestors(goTermId, nodes);
+      // 2) Build lookup tables
+      buildLookupTable(topologyGraph.edges);
+      topologyGraphLookup = buildPredicateLookupTable(topologyGraph.edges);
+      transitivityGraphLookup = buildPredicateLookupTable(regulatesTransitivityGraph.edges);
 
-      // 3) For each of the go-term's ancestor, find the maximum traversal distance, find the most dominant relation
-      // between go-term and the ancestor node. Note the most dominant relation is not necessary on the longest path.
+      List<List<GoInferredTreeNode>> result = rich_bracket_layout(goTermId, topologyGraph, regulatesTransitivityGraph);
+      log.debug("InferredTree for {}: {}", goTermId, result);
+
       val inferredNodes = Lists.<GoInferredTreeNode> newArrayList();
-      for (val ancestor : ancestors) {
-        log.debug("Ancestor: {}", ancestor.id);
-        val inferredNode = getLongestPathAndTransivity(lookup, goTermId, ancestor.id, ancestor.lbl);
-        if (inferredNode.getLevel() < 0) {
-          // TODO: Determine why we are seeing these!
-          continue;
+      for (val level : result) {
+        for (val inferredNode : level) {
+          inferredNodes.add(inferredNode);
         }
-
-        inferredNodes.add(inferredNode);
       }
 
-      // 4) Add one-self to the inferred tree
-      val createSelfTreeNode = createSelfTreeNode(goTermId, goTermName);
-      inferredNodes.add(createSelfTreeNode);
-
-      // 5) Sort by steps in descending order in terms of distance, to store the tree in level-wise structure
-      sortLevelDescending(inferredNodes);
-
-      log.debug("{}", buildInferredTree(inferredNodes));
+      inferredNodes.add(createSelfTreeNode(goTermId, goTermName));
 
       return inferredNodes;
     } finally {
@@ -143,176 +129,221 @@ public class GoInferredTreeBuilder {
         .build();
   }
 
-  private Set<OWLShuntNode> getAncestors(String goId, Set<OWLShuntNode> nodes) {
-    val ancestors = Sets.<OWLShuntNode> newHashSet();
-    for (val node : nodes) {
-      val self = node.getId().equals(goId);
-      if (!self) {
-        ancestors.add(node);
+  private HashMap<String, Map<String, List<String>>> buildPredicateLookupTable(Set<OWLShuntEdge> edges) {
+    HashMap<String, Map<String, List<String>>> subjectToObjectToPredicate =
+        Maps.<String, Map<String, List<String>>> newHashMap();
+
+    for (OWLShuntEdge edge : edges) {
+      String subject = edge.sub;
+      String object = edge.obj;
+      String predicate = edge.pred.replace(" ", "_");
+
+      if (subjectToObjectToPredicate.get(subject) == null) {
+        Map<String, List<String>> temp = Maps.<String, List<String>> newHashMap();
+        subjectToObjectToPredicate.put(subject, temp);
+      }
+
+      if (subjectToObjectToPredicate.get(subject).get(object) == null) {
+        Map<String, List<String>> map = subjectToObjectToPredicate.get(subject);
+        List<String> predicates = map.get(predicate);
+        if (predicates == null) {
+          predicates = new ArrayList<String>();
+        }
+        predicates.add(predicate);
+        map.put(object, predicates);
+        subjectToObjectToPredicate.put(subject, map);
       }
     }
 
-    return ancestors;
+    return subjectToObjectToPredicate;
   }
 
-  /**
-   * Given an edge map, build a child-parent and parent-child lookup table
-   */
-  private Map<String, Map<String, Map<String, String>>> buildLookuptable(Set<OWLShuntEdge> edges, String id) {
-    val result = Maps.<String, Map<String, Map<String, String>>> newHashMap();
-    val children = Maps.<String, String> newHashMap();
-    val parents = Maps.<String, String> newHashMap();
+  private void buildLookupTable(Set<OWLShuntEdge> edges) {
+    Map<String, List<String>> subjectToObject = Maps.<String, List<String>> newHashMap();
+    Map<String, List<String>> objectToSubject = Maps.<String, List<String>> newHashMap();
 
-    // Get children and parent relations
-    //
+    for (OWLShuntEdge edge : edges) {
+      String subject = edge.sub;
+      String object = edge.obj;
 
-    for (val edge : edges) {
-      val subject = edge.sub;
-      val object = edge.obj;
-      // val predicate = edge.pred;
-      val predicate = edge.pred.replace(" ", "_");
-
-      if (!isNullOrEmpty(object) && object.equals(id)) {
-        children.put(subject, predicate);
+      if (subjectToObject.get(subject) == null) {
+        List<String> objects = new ArrayList<String>();
+        subjectToObject.put(subject, objects);
       }
-      if (!isNullOrEmpty(subject) && subject.equals(id)) {
-        parents.put(object, predicate);
+      List<String> objects = subjectToObject.get(subject);
+      objects.add(object);
+      subjectToObject.put(subject, objects);
+
+      if (objectToSubject.get(object) == null) {
+        List<String> subjects = new ArrayList<String>();
+        objectToSubject.put(object, subjects);
       }
+      List<String> subjects = objectToSubject.get(object);
+      subjects.add(subject);
+      objectToSubject.put(object, subjects);
+
     }
 
-    // Create a path map
-    // https://github.com/azurebrd/wobr/blob/master/amigo.cgi#L353
-    result.put(CHILD_TO_PARENT, Maps.<String, Map<String, String>> newHashMap());
-    result.put(PARENT_TO_CHILD, Maps.<String, Map<String, String>> newHashMap());
+    this.subjectToObject = subjectToObject;
+    this.objectToSubject = objectToSubject;
+  }
 
-    for (val edge : edges) {
-      val subject = edge.sub;
-      val object = edge.obj;
-      // val predicate = edge.pred;
-      val predicate = edge.pred.replaceAll(" ", "_");
+  private List<String> getParents(String goId) {
+    return this.subjectToObject.get(goId);
+  }
 
-      log.debug("Path {} {} {}", subject, object, predicate);
+  // private List<String> getChildren(String goId) {
+  // return this.objectToSubject.get(goId);
+  // }
 
-      if (isNullOrEmpty(subject) || isNullOrEmpty(object) || isNullOrEmpty(predicate)) {
-        continue;
+  private OWLShuntNode getNode(String nodeId, OWLShuntGraph graph) {
+    Iterator<OWLShuntNode> it = graph.nodes.iterator();
+    while (it.hasNext()) {
+      OWLShuntNode a = it.next();
+      if (a.id.equalsIgnoreCase(nodeId)) {
+        return a;
       }
-      if (children.containsKey(subject)) {
-        continue;
-      }
+    }
+    return null;
+  }
 
-      if (!result.get(CHILD_TO_PARENT).containsKey(subject)) {
-        result.get(CHILD_TO_PARENT).put(subject, Maps.<String, String> newHashMap());
-      }
-      result.get(CHILD_TO_PARENT).get(subject).put(object, predicate);
-
+  private List<String> getPredicates(String subjectId, String objectId,
+      Map<String, Map<String, List<String>>> lookup) {
+    Map<String, List<String>> table = lookup.get(subjectId);
+    if (table == null) {
+      return new ArrayList<String>();
+    }
+    List<String> result = lookup.get(subjectId).get(objectId);
+    if (result == null) {
+      return new ArrayList<String>();
     }
     return result;
   }
 
-  private String inferPathRelation(Map<String, Map<String, Map<String, String>>> lookup, List<String> path) {
-    log.debug("Inferring relation for {}", path);
+  private List<List<String>> bracket_layout(String term_acc) {
+    Map<String, Integer> max_node_dist_from_root = max_info_climber(term_acc);
+    Map<Integer, List<String>> lvl_lists = Maps.<Integer, List<String>> newHashMap();
 
-    String child = path.get(0);
-    String parent = path.get(1);
-    String relationOne = lookup.get(CHILD_TO_PARENT).get(child).get(parent);
-    String relationTwo = "";
-
-    for (int idx = 2; idx < path.size(); idx++) {
-      child = parent;
-      parent = path.get(idx);
-      relationTwo = lookup.get(CHILD_TO_PARENT).get(child).get(parent);
-
-      log.debug("> {} {}", relationOne, relationTwo);
-      relationOne = GoInferredTrees.getInferredRelationship(relationOne, relationTwo);
-
+    for (String node_id : max_node_dist_from_root.keySet()) {
+      Integer level = max_node_dist_from_root.get(node_id);
+      if (lvl_lists.get(level) == null) {
+        lvl_lists.put(level, new ArrayList<String>());
+      }
+      List<String> list = lvl_lists.get(level);
+      list.add(node_id);
+      lvl_lists.put(level, list);
     }
-    return relationOne;
+
+    List<List<String>> bracket_list = new ArrayList<List<String>>();
+
+    List<Integer> levels = Lists.<Integer> newArrayList(lvl_lists.keySet());
+    Collections.sort(levels);
+
+    for (Integer level : levels) {
+      List<String> bracket = new ArrayList<String>();
+      for (String item : lvl_lists.get(level)) {
+        bracket.add(item);
+      }
+      bracket_list.add(bracket);
+    }
+
+    List<List<String>> reversed_bracket_list = new ArrayList<List<String>>();
+
+    for (int i = bracket_list.size() - 1; i >= 0; i--) {
+      reversed_bracket_list.add(bracket_list.get(i));
+    }
+
+    // in ICGC we don't want the children in inferred tree.
+    // List<String> c_nodes = getChildren(term_acc);
+    // if (c_nodes != null && !c_nodes.isEmpty()) {
+    // ArrayList<String> kid_bracket = new ArrayList<String>();
+    // for (String c_id : c_nodes) {
+    // kid_bracket.add(c_id);
+    // }
+    // reversed_bracket_list.add(kid_bracket);
+    // }
+
+    return reversed_bracket_list;
   }
 
-  private GoInferredTreeNode getLongestPathAndTransivity(Map<String, Map<String, Map<String, String>>> lookup,
-      String goTermId, String ancestorId, String ancestorName) {
-    val current = Lists.<String> newArrayList(goTermId);
-    val finalPaths = Lists.<List<String>> newArrayList();
-    val aggregatedRelations = Sets.<String> newHashSet();
-
-    recurseLongestPath(
-        lookup, // Child-parent table
-        goTermId, goTermId, ancestorId, // Current node, start node, end node
-        current, // Current path
-        finalPaths); // All path resulting from start => end
-
-    log.debug("Looking for longest path in {}", finalPaths);
-
-    int maxNodes = 0;
-    for (val path : finalPaths) {
-      if (path.size() > maxNodes) {
-        maxNodes = path.size();
-      }
-
-      aggregatedRelations.add(inferPathRelation(lookup, path));
-    }
-
-    val maxSteps = maxNodes - 1;
-    val dominantInferredTransitivity = GoInferredTrees.getDominantRelation(aggregatedRelations);
-
-    return GoInferredTreeNode.builder()
-        .id(ancestorId)
-        .name(ancestorName)
-        .relation(dominantInferredTransitivity)
-        .level(maxSteps)
-        .build();
+  private Map<String, Integer> max_info_climber(String term_acc) {
+    Set<String> current = Sets.<String> newHashSet();
+    current.add(term_acc);
+    Map<String, Integer> in_max_hist = Maps.<String, Integer> newHashMap();
+    Map<String, Integer> in_enc_hist = Maps.<String, Integer> newHashMap();
+    return max_info_climber_helper(current, 0, in_max_hist, in_enc_hist);
   }
 
-  private void recurseLongestPath(Map<String, Map<String, Map<String, String>>> lookup, String current, String start,
-      String end, List<String> currentPath, List<List<String>> finalPath) {
+  private Map<String, Integer> max_info_climber_helper(Set<String> curr_list, int curr_term_distance,
+      Map<String, Integer> max_hist, Map<String, Integer> encounter_hist) {
 
-    if (!lookup.get(CHILD_TO_PARENT).containsKey(current)) {
-      return;
-    }
-
-    val parents = lookup.get(CHILD_TO_PARENT).get(current);
-
-    if (parents.size() <= 0) {
-      return;
-    }
-
-    for (val parentKey : parents.keySet()) {
-      if (NON_TRANSITIVE_PREDICATE.contains(lookup.get(CHILD_TO_PARENT).get(current).get(parentKey))) {
-        continue;
+    if (curr_list != null && curr_list.size() > 0) {
+      for (String item : curr_list) {
+        if (encounter_hist.get(item) == null) {
+          encounter_hist.put(item, new Integer(1));
+          max_hist.put(item, curr_term_distance);
+        } else {
+          if (max_hist.get(item) < curr_term_distance) {
+            max_hist.put(item, curr_term_distance);
+          }
+        }
       }
 
-      val currentPathCopy = Lists.newArrayList(currentPath);
-      currentPathCopy.add(parentKey);
+      Set<String> next_round = new HashSet<String>();
 
-      if (parentKey.equals(end)) {
-        finalPath.add(currentPathCopy);
-      } else {
-        recurseLongestPath(lookup, parentKey, start, end, currentPathCopy, finalPath);
+      for (String item : curr_list) {
+        List<String> parents = getParents(item);
+        if (parents != null) {
+          for (String parent_id : parents) {
+            next_round.add(parent_id);
+          }
+        }
       }
+
+      curr_term_distance++;
+      max_info_climber_helper(next_round, curr_term_distance, max_hist, encounter_hist);
     }
+
+    return max_hist;
   }
 
-  private List<List<Map<String, String>>> buildInferredTree(List<GoInferredTreeNode> list) {
-    val result = ImmutableList.<List<Map<String, String>>> builder();
+  private List<List<GoInferredTreeNode>> rich_bracket_layout(String term_acc, OWLShuntGraph topology_graph,
+      OWLShuntGraph transitivity_graph) {
 
-    List<Map<String, String>> levelList = Collections.emptyList();
-    int current = -1;
-    for (val node : list) {
-      val map = Maps.<String, String> newHashMap();
-      map.put("id", node.getId());
-      map.put("name", node.getName());
-      map.put("relation", node.getRelation());
+    List<List<String>> layout = bracket_layout(term_acc);
+    List<List<GoInferredTreeNode>> bracket_list = new ArrayList<List<GoInferredTreeNode>>();
 
-      if (current != node.getLevel()) {
-        current = node.getLevel();
-        levelList = Lists.<Map<String, String>> newArrayList();
-        result.add(levelList);
+    for (int level = 0; level < layout.size(); level++) {
+      List<String> layout_level = layout.get(level);
+      List<GoInferredTreeNode> bracket = new ArrayList<GoInferredTreeNode>();
+      for (String layout_item : layout_level) {
+        String curr_acc = layout_item;
+        String pred_id = "is_a";
+        OWLShuntNode curr_node = getNode(curr_acc, topology_graph);
+        String label = curr_node.lbl == null ? layout_item : curr_node.lbl;
+
+        if (!curr_acc.equalsIgnoreCase(term_acc)) {
+          List<String> trels = getPredicates(term_acc, curr_acc, this.transitivityGraphLookup);
+          if (trels != null && !trels.isEmpty()) {
+            pred_id = GoInferredTrees.getDominantRelation(trels);
+          } else {
+            List<String> drels = getPredicates(curr_acc, term_acc, this.topologyGraphLookup);
+            pred_id = GoInferredTrees.getDominantRelation(drels);
+          }
+          GoInferredTreeNode node = GoInferredTreeNode.builder()
+              .name(label)
+              .level(level)
+              .relation(pred_id)
+              .id(curr_acc)
+              .build();
+          bracket.add(node);
+        }
       }
-
-      levelList.add(map);
+      sortLabelDescending(bracket);
+      bracket_list.add(bracket);
     }
 
-    return result.build();
+    return bracket_list;
   }
 
 }
