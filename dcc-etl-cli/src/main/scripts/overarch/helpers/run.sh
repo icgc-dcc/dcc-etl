@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Temporary script to help run the overarching script in different clusters (until it stabilizes)
 # usage: helpers/run.sh myrelease myjar myprojects > mylogs
 set -o nounset
@@ -59,7 +59,7 @@ if $use_docker; then
   }
 fi
 
-release_number=17
+release_number=18
 patch_number=0
 dictionary_version="0.10a"
 release_name="${release_prefix?}${release_number?}"
