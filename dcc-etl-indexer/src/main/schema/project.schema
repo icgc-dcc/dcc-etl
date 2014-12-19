@@ -22,8 +22,6 @@ _summary.available_experimental_analysis_performed: ARRAY
 _summary.experimental_analysis_performed_donor_count.AMPLICON: NUMBER
 _summary.experimental_analysis_performed_donor_count.Bisulfite-Seq: NUMBER
 _summary.experimental_analysis_performed_donor_count.RNA-Seq: NUMBER
-_summary.experimental_analysis_performed_donor_count.Unknown: NUMBER
-_summary.experimental_analysis_performed_donor_count.VALIDATION: NUMBER
 _summary.experimental_analysis_performed_donor_count.WGA: NUMBER
 _summary.experimental_analysis_performed_donor_count.WGS: NUMBER
 _summary.experimental_analysis_performed_donor_count.WXS: NUMBER
@@ -32,8 +30,6 @@ _summary.experimental_analysis_performed_donor_count.non-NGS: NUMBER
 _summary.experimental_analysis_performed_sample_count.AMPLICON: NUMBER
 _summary.experimental_analysis_performed_sample_count.Bisulfite-Seq: NUMBER
 _summary.experimental_analysis_performed_sample_count.RNA-Seq: NUMBER
-_summary.experimental_analysis_performed_sample_count.Unknown: NUMBER
-_summary.experimental_analysis_performed_sample_count.VALIDATION: NUMBER
 _summary.experimental_analysis_performed_sample_count.WGA: NUMBER
 _summary.experimental_analysis_performed_sample_count.WGS: NUMBER
 _summary.experimental_analysis_performed_sample_count.WXS: NUMBER
@@ -42,7 +38,6 @@ _summary.experimental_analysis_performed_sample_count.non-NGS: NUMBER
 _summary.repository.$: STRING
 _summary.repository: ARRAY
 alias: STRING
-former_submission_id: STRING
 icgc_id: STRING
 partner_countries.$: STRING
 partner_countries: ARRAY

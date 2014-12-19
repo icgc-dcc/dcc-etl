@@ -140,10 +140,10 @@ public class ElasticSearchReverseSchemaGenerator {
   public static void main(String[] args) {
     // Config
     int i = 0;
-    val schemaDir = new File(args.length < i++ ? "target" : args[i - 1]);
-    val esUri = args.length < i++ ? "es://localhost:9300" : args[i - 1];
-    val indexName = args.length < i++ ? "dcc-release-load-prod-08d-49-icgc16-6" : args[i - 1];
-    val limit = args.length < i++ ? 100 : Integer.valueOf(args[i - 1]);
+    val schemaDir = new File(args.length < ++i ? "target" : args[i - 1]);
+    val esUri = args.length < ++i ? "es://***REMOVED***.oicr.on.ca:9300" : args[i - 1];
+    val indexName = args.length < ++i ? "test17-trim" : args[i - 1];
+    val limit = args.length < ++i ? 100 : Integer.valueOf(args[i - 1]);
 
     val watch = Stopwatch.createStarted();
     val generator = new ElasticSearchReverseSchemaGenerator(esUri, indexName, limit);
