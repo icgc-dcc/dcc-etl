@@ -102,7 +102,7 @@ public class GoInferredTreeBuilder {
       topologyGraphLookup = buildPredicateLookupTable(topologyGraph.edges);
       transitivityGraphLookup = buildPredicateLookupTable(regulatesTransitivityGraph.edges);
 
-      List<List<GoInferredTreeNode>> result = rich_bracket_layout(goTermId, topologyGraph, regulatesTransitivityGraph);
+      List<List<GoInferredTreeNode>> result = richBracketLayout(goTermId, topologyGraph, regulatesTransitivityGraph);
       log.debug("InferredTree for {}: {}", goTermId, result);
 
       val inferredNodes = Lists.<GoInferredTreeNode> newArrayList();
@@ -192,10 +192,6 @@ public class GoInferredTreeBuilder {
     return this.subjectToObject.get(goId);
   }
 
-  // private List<String> getChildren(String goId) {
-  // return this.objectToSubject.get(goId);
-  // }
-
   private OWLShuntNode getNode(String nodeId, OWLShuntGraph graph) {
     Iterator<OWLShuntNode> it = graph.nodes.iterator();
     while (it.hasNext()) {
@@ -220,130 +216,109 @@ public class GoInferredTreeBuilder {
     return result;
   }
 
-  private List<List<String>> bracket_layout(String term_acc) {
-    Map<String, Integer> max_node_dist_from_root = max_info_climber(term_acc);
-    Map<Integer, List<String>> lvl_lists = Maps.<Integer, List<String>> newHashMap();
+  private List<List<String>> bracketLayout(String term_acc) {
+    Map<String, Integer> maxNodeDistanceFromRoot = maxInfoClimber(term_acc);
+    Map<Integer, List<String>> levelLists = Maps.<Integer, List<String>> newHashMap();
 
-    for (String node_id : max_node_dist_from_root.keySet()) {
-      Integer level = max_node_dist_from_root.get(node_id);
-      if (lvl_lists.get(level) == null) {
-        lvl_lists.put(level, new ArrayList<String>());
+    for (String goId : maxNodeDistanceFromRoot.keySet()) {
+      Integer level = maxNodeDistanceFromRoot.get(goId);
+      if (levelLists.get(level) == null) {
+        levelLists.put(level, new ArrayList<String>());
       }
-      List<String> list = lvl_lists.get(level);
-      list.add(node_id);
-      lvl_lists.put(level, list);
+      List<String> list = levelLists.get(level);
+      list.add(goId);
+      levelLists.put(level, list);
     }
 
-    List<List<String>> bracket_list = new ArrayList<List<String>>();
-
-    List<Integer> levels = Lists.<Integer> newArrayList(lvl_lists.keySet());
+    List<List<String>> bracketList = new ArrayList<List<String>>();
+    List<Integer> levels = Lists.<Integer> newArrayList(levelLists.keySet());
     Collections.sort(levels);
 
     for (Integer level : levels) {
       List<String> bracket = new ArrayList<String>();
-      for (String item : lvl_lists.get(level)) {
+      for (String item : levelLists.get(level)) {
         bracket.add(item);
       }
-      bracket_list.add(bracket);
+      bracketList.add(bracket);
     }
 
-    List<List<String>> reversed_bracket_list = new ArrayList<List<String>>();
+    Collections.reverse(bracketList);
 
-    for (int i = bracket_list.size() - 1; i >= 0; i--) {
-      reversed_bracket_list.add(bracket_list.get(i));
-    }
-
-    // in ICGC we don't want the children in inferred tree.
-    // List<String> c_nodes = getChildren(term_acc);
-    // if (c_nodes != null && !c_nodes.isEmpty()) {
-    // ArrayList<String> kid_bracket = new ArrayList<String>();
-    // for (String c_id : c_nodes) {
-    // kid_bracket.add(c_id);
-    // }
-    // reversed_bracket_list.add(kid_bracket);
-    // }
-
-    return reversed_bracket_list;
+    return bracketList;
   }
 
-  private Map<String, Integer> max_info_climber(String term_acc) {
-    Set<String> current = Sets.<String> newHashSet();
-    current.add(term_acc);
-    Map<String, Integer> in_max_hist = Maps.<String, Integer> newHashMap();
-    Map<String, Integer> in_enc_hist = Maps.<String, Integer> newHashMap();
-    return max_info_climber_helper(current, 0, in_max_hist, in_enc_hist);
+  private Map<String, Integer> maxInfoClimber(String goId) {
+    Set<String> currentSet = Sets.<String> newHashSet();
+    currentSet.add(goId);
+    return maxInfoClimberHelper(currentSet, 0, Maps.<String, Integer> newHashMap(), Maps.<String, Integer> newHashMap());
   }
 
-  private Map<String, Integer> max_info_climber_helper(Set<String> curr_list, int curr_term_distance,
-      Map<String, Integer> max_hist, Map<String, Integer> encounter_hist) {
+  private Map<String, Integer> maxInfoClimberHelper(Set<String> currentSet, int currentTermDistance,
+      Map<String, Integer> completeHistory, Map<String, Integer> encounteredHistory) {
 
-    if (curr_list != null && curr_list.size() > 0) {
-      for (String item : curr_list) {
-        if (encounter_hist.get(item) == null) {
-          encounter_hist.put(item, new Integer(1));
-          max_hist.put(item, curr_term_distance);
+    if (!currentSet.isEmpty()) {
+      for (String item : currentSet) {
+        if (encounteredHistory.get(item) == null) {
+          encounteredHistory.put(item, new Integer(1));
+          completeHistory.put(item, currentTermDistance);
         } else {
-          if (max_hist.get(item) < curr_term_distance) {
-            max_hist.put(item, curr_term_distance);
+          if (completeHistory.get(item) < currentTermDistance) {
+            completeHistory.put(item, currentTermDistance);
           }
         }
       }
-
-      Set<String> next_round = new HashSet<String>();
-
-      for (String item : curr_list) {
+      Set<String> nextSet = new HashSet<String>();
+      for (String item : currentSet) {
         List<String> parents = getParents(item);
         if (parents != null) {
-          for (String parent_id : parents) {
-            next_round.add(parent_id);
+          for (String parentId : parents) {
+            nextSet.add(parentId);
           }
         }
       }
-
-      curr_term_distance++;
-      max_info_climber_helper(next_round, curr_term_distance, max_hist, encounter_hist);
+      currentTermDistance++;
+      maxInfoClimberHelper(nextSet, currentTermDistance, completeHistory, encounteredHistory);
     }
 
-    return max_hist;
+    return completeHistory;
   }
 
-  private List<List<GoInferredTreeNode>> rich_bracket_layout(String term_acc, OWLShuntGraph topology_graph,
-      OWLShuntGraph transitivity_graph) {
+  private List<List<GoInferredTreeNode>> richBracketLayout(String goId, OWLShuntGraph topologyGraph,
+      OWLShuntGraph transitivityGraph) {
 
-    List<List<String>> layout = bracket_layout(term_acc);
-    List<List<GoInferredTreeNode>> bracket_list = new ArrayList<List<GoInferredTreeNode>>();
+    List<List<String>> layout = bracketLayout(goId);
+    List<List<GoInferredTreeNode>> bracketList = new ArrayList<List<GoInferredTreeNode>>();
 
     for (int level = 0; level < layout.size(); level++) {
-      List<String> layout_level = layout.get(level);
+      List<String> layoutLevel = layout.get(level);
       List<GoInferredTreeNode> bracket = new ArrayList<GoInferredTreeNode>();
-      for (String layout_item : layout_level) {
-        String curr_acc = layout_item;
-        String pred_id = "is_a";
-        OWLShuntNode curr_node = getNode(curr_acc, topology_graph);
-        String label = curr_node.lbl == null ? layout_item : curr_node.lbl;
-
-        if (!curr_acc.equalsIgnoreCase(term_acc)) {
-          List<String> trels = getPredicates(term_acc, curr_acc, this.transitivityGraphLookup);
+      for (String layoutItem : layoutLevel) {
+        String currentGoId = layoutItem;
+        String predicate = "is_a";
+        OWLShuntNode currentNode = getNode(currentGoId, topologyGraph);
+        String label = currentNode.lbl == null ? layoutItem : currentNode.lbl;
+        if (!currentGoId.equalsIgnoreCase(goId)) {
+          List<String> trels = getPredicates(goId, currentGoId, this.transitivityGraphLookup);
           if (trels != null && !trels.isEmpty()) {
-            pred_id = GoInferredTrees.getDominantRelation(trels);
+            predicate = GoInferredTrees.getDominantRelation(trels);
           } else {
-            List<String> drels = getPredicates(curr_acc, term_acc, this.topologyGraphLookup);
-            pred_id = GoInferredTrees.getDominantRelation(drels);
+            List<String> drels = getPredicates(currentGoId, goId, this.topologyGraphLookup);
+            predicate = GoInferredTrees.getDominantRelation(drels);
           }
           GoInferredTreeNode node = GoInferredTreeNode.builder()
               .name(label)
               .level(level)
-              .relation(pred_id)
-              .id(curr_acc)
+              .relation(predicate)
+              .id(currentGoId)
               .build();
           bracket.add(node);
         }
       }
       sortLabelDescending(bracket);
-      bracket_list.add(bracket);
+      bracketList.add(bracket);
     }
 
-    return bracket_list;
+    return bracketList;
   }
 
 }
