@@ -20,8 +20,8 @@ package org.icgc.dcc.etl.loader.cascading;
 import static cascading.tuple.Fields.ARGS;
 import static cascading.tuple.Fields.REPLACE;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_DIGITAL_IMAGE_OF_STAINED_SECTION;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FileTypes.FileType.SPECIMEN_TYPE;
@@ -39,8 +39,6 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
-import org.jdom2.Document;
-import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 
 import cascading.flow.FlowProcess;
@@ -52,22 +50,42 @@ import cascading.pipe.SubAssembly;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 /**
  * This modifies the digital_image_of_stained_section field in donor specimen to a real URL, if applicable;
  */
 @Slf4j
 public class StainedSectionImageUpdate extends SubAssembly {
 
-  private static final String IMG_URL = "http://cancer.digitalslidearchive.net/index_mskcc.php";
-  private static final String SLIDE_LIST_URL =
-      "http://cancer.digitalslidearchive.net/local_php/get_slide_list_from_db.php";
-  private static final String TYPE_URL =
-      "http://cancer.digitalslidearchive.net/local_php/datagroup_combo_connector.php";
+  /**
+   * URLS.
+   */
+  private static final String BASE_URL = "http://cancer.digitalslidearchive.net";
+  private static final String IMG_URL = BASE_URL + "/index_mskcc.php";
+  private static final String SLIDE_LIST_URL = BASE_URL + "/local_php/get_slide_list_from_db.php";
+  private static final String TYPE_URL = BASE_URL + "/local_php/datagroup_combo_connector.php";
+
+  /**
+   * Parameters.
+   */
   private static final String SLIDE_NAME_PARAMETER = "slide_name";
+
+  /**
+   * Values.
+   */
   private static final String NO_MATCH_REPLACEMENT_VALUE = null;
 
-  private static final List<String> DISEASE_TYPES = getDiseasesType();
-  private static final Set<String> LOOKUP = buildSlideImageLookup(DISEASE_TYPES);
+  /**
+   * State.
+   */
+  private static boolean validate = false;
+  private static final Set<String> SPECIMEN_IDS = readAvailableSpecimenIds();
+
+  /**
+   * Fields.
+   */
   private static final Fields SPECIMEN_ID_FIELD =
       prefixedFields(SPECIMEN_TYPE, SUBMISSION_SPECIMEN_ID);
   private static final Fields DIGITAL_IMAGE_OF_STAINED_SECTION_FIELD =
@@ -86,77 +104,87 @@ public class StainedSectionImageUpdate extends SubAssembly {
     return new BaseFunction<Void>(2, ARGS) {
 
       @Override
-      public void operate(
-          @SuppressWarnings("rawtypes") FlowProcess flowProcess,
-          FunctionCall<Void> functionCall) {
-        val specimenId = functionCall.getArguments().getString(SPECIMEN_ID_FIELD);
+      public void operate(@SuppressWarnings("rawtypes") FlowProcess flowProcess, FunctionCall<Void> call) {
+        val specimenId = call.getArguments().getString(SPECIMEN_ID_FIELD);
+        val specimenUrl = resolveSpecimenUrl(specimenId);
 
-        functionCall
-            .getOutputCollector()
-            .add(new Tuple(
-                specimenId,
-                LOOKUP.contains(specimenId) ?
-                    getMatch(specimenId) :
-                    NO_MATCH_REPLACEMENT_VALUE));
+        // Append field
+        call.getOutputCollector().add(new Tuple(specimenId, specimenUrl));
       }
 
     };
   }
 
-  private static String getMatch(
-      @NonNull final String specimenId) {
+  private static String resolveSpecimenUrl(String specimenId) {
+    if (validate) {
+      // Create if value is available
+      return SPECIMEN_IDS.contains(specimenId) ? formatSpecimenUrl(specimenId) : NO_MATCH_REPLACEMENT_VALUE;
+    } else {
+      // Assume availble
+      return formatSpecimenUrl(specimenId);
+    }
+  }
 
+  private static String formatSpecimenUrl(@NonNull String specimenId) {
     return _("%s?%s=%s", IMG_URL, SLIDE_NAME_PARAMETER, specimenId);
   }
 
-  /**
-   * Ported almost as-is from dchang's code.
-   */
   @SneakyThrows
-  private static Set<String> buildSlideImageLookup(List<String> typeList) {
-    Set<String> lookup = newHashSet();
+  private static Set<String> readAvailableSpecimenIds() {
+    if (!validate) {
+      log.warn("**** Not reading available specimen ids. Some resulting URLs may not be valid and thus not available!");
+      return emptySet();
+    }
 
-    for (String type : typeList) {
-      SAXBuilder saxBuilder = new SAXBuilder();
-      Document document = saxBuilder.build(new URL(SLIDE_LIST_URL + "?tumor_type=" + type));
+    val availableSpecimenIds = Sets.<String> newHashSet();
+    for (val diseaseType : readDiseaseTypes()) {
+      val diseaseTypeUrl = new URL(SLIDE_LIST_URL + "?tumor_type=" + diseaseType);
 
-      Element root = document.getRootElement();
-      List<Element> items = root.getChildren("item");
-      log.info("{} found {} items", type, formatCount(items));
-      for (Element item : items) {
-        String pyramidFilename = item.getChild("pyramid_filename").getText();
+      val saxBuilder = new SAXBuilder();
+      val document = saxBuilder.build(diseaseTypeUrl);
+      val root = document.getRootElement();
+
+      val items = root.getChildren("item");
+      log.info("{} found {} items", diseaseType, formatCount(items));
+      for (val item : items) {
+        val pyramidFilename = item.getChild("pyramid_filename").getText();
 
         if (isNullOrEmpty(pyramidFilename)) continue;
 
         // Chop of the last two parts to get sample/specimen
         String sample = pyramidFilename.substring(0, pyramidFilename.lastIndexOf("-"));
         sample = sample.substring(0, sample.lastIndexOf("-"));
+
         if (isNullOrEmpty(sample)) continue;
-        lookup.add(sample);
+        availableSpecimenIds.add(sample);
       }
     }
 
-    log.info("Lookup size: {}", lookup.size());
-    return lookup;
+    log.info("Read specimen ids size: {}", availableSpecimenIds);
+    return availableSpecimenIds;
   }
 
-  /**
-   * Ported almost as-is from dchang's code.
-   */
   @SneakyThrows
-  private static List<String> getDiseasesType() {
-    List<String> result = newArrayList();
-    SAXBuilder saxBuilder = new SAXBuilder();
-    Document document = saxBuilder.build(new URL(TYPE_URL));
-
-    Element root = document.getRootElement();
-    List<Element> items = root.getChildren("option");
-    for (Element item : items) {
-      String val = item.getAttributeValue("value");
-      result.add(val);
+  private static List<String> readDiseaseTypes() {
+    if (!validate) {
+      log.warn("**** Not reading disease types!");
+      return emptyList();
     }
-    log.info("Found {} disease type", result);
-    return result;
+
+    val saxBuilder = new SAXBuilder();
+    val document = saxBuilder.build(new URL(TYPE_URL));
+    val diseaseTypes = Lists.<String> newArrayList();
+
+    val root = document.getRootElement();
+    val items = root.getChildren("option");
+    for (val item : items) {
+      val diseaseType = item.getAttributeValue("value");
+
+      diseaseTypes.add(diseaseType);
+    }
+
+    log.info("Read disease types: {}", diseaseTypes);
+    return diseaseTypes;
   }
 
 }
