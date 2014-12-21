@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.importer.fathmm.writer;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import lombok.val;
 
+import org.icgc.dcc.common.core.model.ConsequenceType;
 import org.icgc.dcc.etl.importer.fathmm.core.FathmmPredictor;
 import org.icgc.dcc.etl.importer.util.AbstractJongoComponent;
 import org.jongo.MongoCollection;
@@ -56,7 +57,8 @@ public class FathmmObservationWriter extends AbstractJongoComponent {
         val transcriptId = consequence.get("_transcript_id");
         val consequenceType = consequence.get("consequence_type");
 
-        if (null == aaMutation || null == transcriptId || !consequenceType.textValue().equals("missense")) {
+        if (null == aaMutation || null == transcriptId
+            || !consequenceType.textValue().equals(ConsequenceType.MISSENSE_VARIANT.getId())) {
           continue;
         }
 
