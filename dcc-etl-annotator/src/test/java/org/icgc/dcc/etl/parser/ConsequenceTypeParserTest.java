@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.parser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.etl.annotator.parser.ConsequenceTypeParser.parse;
 
+import org.icgc.dcc.etl.annotator.model.ConsequenceType;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -45,6 +46,12 @@ public class ConsequenceTypeParserTest {
   @Test(expected = IllegalStateException.class)
   public void nullArgumentTest() {
     parse(null);
+  }
+
+  @Test
+  public void exonLostTest() {
+    assertThat(parse("3_prime_UTR_truncation+exon_loss")).isEqualTo(
+        ImmutableList.of("3_prime_UTR_truncation", ConsequenceType.EXON_LOSS_VARIANT.getId()));
   }
 
 }
