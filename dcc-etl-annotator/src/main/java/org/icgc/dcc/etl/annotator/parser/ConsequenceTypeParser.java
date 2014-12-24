@@ -43,7 +43,7 @@ public final class ConsequenceTypeParser {
   private static final Splitter SPLITTER = Splitter.on('+');
   private static final int EFFECTS_QUANTITY = 2;
   private static final int EFFECT_LAST_INDEX = 1;
-  private static final String EXON_LOST_CONSEQUENCE_NAME = "exon_loss";
+  private static final String EXON_LOSS_CONSEQUENCE_NAME = "exon_loss";
 
   public static List<String> parse(String effectName) {
     checkState(!isNullOrEmpty(effectName), "Null or empty consequence type");
@@ -53,7 +53,7 @@ public final class ConsequenceTypeParser {
       val result = Lists.newArrayList(SPLITTER.split(effectName));
       checkState(result.size() == EFFECTS_QUANTITY, "Invalid number of effects %s, should be %s", result.size(),
           EFFECTS_QUANTITY);
-      correctExonLost(result);
+      remapExonLoss(result);
 
       return result;
     }
@@ -62,8 +62,8 @@ public final class ConsequenceTypeParser {
   }
 
   // Re-mapping according to https://jira.oicr.on.ca/browse/DCC-2770
-  private static void correctExonLost(List<String> consequences) {
-    if (consequences.get(EFFECT_LAST_INDEX).equals(EXON_LOST_CONSEQUENCE_NAME)) {
+  private static void remapExonLoss(List<String> consequences) {
+    if (consequences.get(EFFECT_LAST_INDEX).equals(EXON_LOSS_CONSEQUENCE_NAME)) {
       consequences.set(EFFECT_LAST_INDEX, ConsequenceType.EXON_LOSS_VARIANT.getId());
     }
   }

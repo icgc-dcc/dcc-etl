@@ -49,7 +49,7 @@ public class ConsequenceTypeParserTest {
   }
 
   @Test
-  public void exonLostTest() {
+  public void exonLossTest() {
     assertThat(parse("3_prime_UTR_truncation+exon_loss")).isEqualTo(
         ImmutableList.of("3_prime_UTR_truncation", ConsequenceType.EXON_LOSS_VARIANT.getId()));
   }
