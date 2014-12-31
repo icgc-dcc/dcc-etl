@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.importer.go.util;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Iterables.transform;
 import static lombok.AccessLevel.PRIVATE;
@@ -38,7 +39,7 @@ public final class GoAssociationAggregator {
   public static Iterable<GoAssociation> aggregateAssociations(@NonNull Iterable<GoAssociation> associations) {
     val assocationKeyIndex = indexAssociationKey(associations);
 
-    return transform(assocationKeyIndex.keySet(), new Function<GoAssociationKey, GoAssociation>() {
+    return copyOf(transform(assocationKeyIndex.keySet(), new Function<GoAssociationKey, GoAssociation>() {
 
       @Override
       public GoAssociation apply(GoAssociationKey associationKey) {
@@ -47,10 +48,11 @@ public final class GoAssociationAggregator {
         return aggregateKeyAssociations(associationKey, associations);
       }
 
-    });
+    }));
   }
 
-  private static GoAssociation aggregateKeyAssociations(GoAssociationKey associationKey, Iterable<GoAssociation> associations) {
+  private static GoAssociation aggregateKeyAssociations(GoAssociationKey associationKey,
+      Iterable<GoAssociation> associations) {
     val uniqueQualifiers = Sets.<String> newTreeSet();
     val uniqueGeneSymbols = Sets.<String> newHashSet();
     val uniqueNegated = Sets.<Boolean> newHashSet();

@@ -127,7 +127,7 @@ public final class ProjectConverter {
     }
 
     val result = new ImmutableList.Builder<String>();
-    for (val countryCode : countries.split("_")) {
+    for (String countryCode : countries.split("_")) {
       result.add(convertCountryName(countryCode));
     }
 
@@ -153,7 +153,7 @@ public final class ProjectConverter {
 
     val separator = getSeparator(source);
     val result = new ImmutableList.Builder<String>();
-    for (val id : source.split(separator)) {
+    for (String id : source.split(separator)) {
       result.add(id);
     }
 

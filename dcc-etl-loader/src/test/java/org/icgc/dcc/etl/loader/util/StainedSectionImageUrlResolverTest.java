@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,43 +15,35 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.parser;
+package org.icgc.dcc.etl.loader.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.etl.annotator.parser.ConsequenceTypeParser.parse;
+import lombok.val;
 
-import org.icgc.dcc.etl.annotator.model.ConsequenceType;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
-public class ConsequenceTypeParserTest {
+public class StainedSectionImageUrlResolverTest {
 
   @Test
-  public void parseTest() {
-    assertThat(parse("5_codon")).isEqualTo(ImmutableList.of("5_codon"));
-    assertThat(parse("5_codon+exon_change")).isEqualTo(ImmutableList.of("5_codon", "exon_change"));
-  }
+  public void testResolveUrlWithValidation() {
+    val validate = true;
+    val resolver = new StainedSectionImageUrlResolver(validate);
 
-  @Test(expected = IllegalStateException.class)
-  public void incorrectEffectsQuantityTest() {
-    parse("5_codon+exon_change+extra_effect");
-  }
+    val validSpecimenId = "TCGA-OL-A97C-01Z";
+    val url = resolver.resolveUrl(validSpecimenId);
 
-  @Test(expected = IllegalStateException.class)
-  public void emptyArgumentTest() {
-    parse("");
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void nullArgumentTest() {
-    parse(null);
+    assertThat(url).isEqualTo("http://cancer.digitalslidearchive.net/index_mskcc.php?slide_name=" + validSpecimenId);
   }
 
   @Test
-  public void exonLossTest() {
-    assertThat(parse("3_prime_UTR_truncation+exon_loss")).isEqualTo(
-        ImmutableList.of("3_prime_UTR_truncation", ConsequenceType.EXON_LOSS_VARIANT.getId()));
+  public void testResolveUrlWithoutValidation() {
+    val validate = false;
+    val resolver = new StainedSectionImageUrlResolver(validate);
+
+    val invalidSpecimenId = "SP123";
+    val url = resolver.resolveUrl(invalidSpecimenId);
+
+    assertThat(url).isEqualTo("http://cancer.digitalslidearchive.net/index_mskcc.php?slide_name=" + invalidSpecimenId);
   }
 
 }

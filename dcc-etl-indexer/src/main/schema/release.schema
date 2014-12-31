@@ -3,6 +3,7 @@ date: STRING
 donor_count: NUMBER
 mutated_gene_count: NUMBER
 name: STRING
+number: NUMBER
 primary_site_count: NUMBER
 project_count: NUMBER
 sample_count: NUMBER

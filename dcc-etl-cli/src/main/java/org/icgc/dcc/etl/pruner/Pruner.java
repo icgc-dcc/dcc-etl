@@ -30,6 +30,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.hadoop.dcc.SubmissionInputData;
 import org.icgc.dcc.etl.pruner.core.OrphanAnalyzer;
 import org.icgc.dcc.etl.pruner.core.OrphanRemover;
+import org.icgc.dcc.etl.pruner.core.OrphanReporter;
 import org.icgc.dcc.submission.dictionary.model.Dictionary;
 
 import com.google.common.base.Stopwatch;
@@ -60,6 +61,7 @@ public class Pruner {
         dictionary.getPatterns()).keySet();
 
     val orphans = new OrphanAnalyzer(fileSystem, dictionary).analyze(inputDirectory, projectNames);
+    new OrphanReporter(fileSystem, dictionary).report(orphans);
     new OrphanRemover(fileSystem, dictionary).remove(orphans);
 
     log.info("Pruning {} orphans took: {}", formatCount(Iterables.size(orphans)), timer.stop());

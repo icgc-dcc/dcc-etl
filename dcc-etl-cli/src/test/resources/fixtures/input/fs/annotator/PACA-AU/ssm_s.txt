@@ -1,6 +1,6 @@
 consequence_type	aa_mutation	cds_mutation	protein_domain_affected	gene_affected	transcript_affected	gene_build_version	note	observation_id
-missense		0A>A	BFWKOPBJrA	ENSG00000176105	ENST00000584307	-888	HGllbVwgpr	v1
-missense	A0A	0A>A	IyMffRnagg	ENSG00000156976	ENST00000443963	kbZHPMXlzG	v1
+missense_variant		0A>A	BFWKOPBJrA	ENSG00000176105	ENST00000584307	-888	HGllbVwgpr	v1
+missense_variant	A0A	0A>A	IyMffRnagg	ENSG00000156976	ENST00000443963	kbZHPMXlzG	v1
 intergenic_region	A0A	0A>A	AWtNcDxIBx	ENSG00000215529	ENST00000524882	jELkkNgBl 	HYukNjPaiv	v3
 intergenic_region  tl	A0A	0A>A		ENSG00000262329	ENST00000576481	fHBwrTRbfn	v7
 intergenic_region 				ENSG00000204099	ENST00000405370	XAJeSrtRhV	cDNGDozdLw	v10

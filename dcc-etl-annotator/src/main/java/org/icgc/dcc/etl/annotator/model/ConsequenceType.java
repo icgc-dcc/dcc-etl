@@ -72,7 +72,6 @@ public enum ConsequenceType implements Identifiable {
   SPLICE_DONOR_VARIANT("splice_donor_variant"),
   SPLICE_ACCEPTOR_VARIANT("splice_acceptor_variant"),
   EXON_LOSS_VARIANT("exon_loss_variant"),
-  EXON_LOST("exon_lost"),
   STOP_LOST("stop_lost"),
   STOP_GAINED("stop_gained"),
   INITIATOR_CODON_VARIANT("initiator_codon_variant"),

@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.annotator.service;
 
 import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.isDirectory;
+import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.lsAll;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.lsDir;
 import static org.icgc.dcc.etl.core.model.Component.NORMALIZER;
 
@@ -32,6 +33,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
 import org.icgc.dcc.etl.annotator.model.AnnotatedFileType;
 import org.icgc.dcc.etl.annotator.model.AnnotatorJob;
@@ -51,8 +53,16 @@ public class AnnotatorJobFactory {
   public AnnotatorJob createAnnotatorJob(String workingDir, Iterable<String> projectNames,
       Iterable<AnnotatedFileType> fileTypes) {
 
+    if (isLocal(fileSystem)) {
+      log.debug("Resolving annotation files on [LOCAL] filesystem.");
+    } else {
+      log.debug("Resolving annotation files on [DISTRIBUTED] filesystem.");
+    }
+
     if (isEmpty(projectNames)) {
+      log.debug("Received an empty projects list. Resolving projects.");
       projectNames = resolveProjectNames(workingDir);
+      log.debug("Resolved project names: {}", projectNames);
     }
 
     return AnnotatorJob.builder()
@@ -67,6 +77,7 @@ public class AnnotatorJobFactory {
   private Iterable<String> resolveProjectNames(String workingDir) {
     val projectsDir = new Path(workingDir, NORMALIZER.getDirName());
     val projectNames = lsDir(fileSystem, projectsDir);
+    log.debug("Projects directory '{}' contents: '{}'", projectsDir, projectNames);
     val result = new ImmutableList.Builder<String>();
 
     for (val projectName : projectNames) {
@@ -87,6 +98,8 @@ public class AnnotatorJobFactory {
     val result = new ImmutableList.Builder<Path>();
     for (val projectName : projectNames) {
       val projectDir = new Path(workingDir, projectName);
+      val dirContents = lsAll(fileSystem, projectDir);
+      log.debug("Contents of [{}] project directory: '{}'", projectName, dirContents);
       result.addAll(resolveProjectFiles(projectDir, fileTypes));
     }
 
@@ -99,11 +112,18 @@ public class AnnotatorJobFactory {
     for (val fileType : fileTypes) {
       val filePath = new Path(projectDir, fileType.getInputFileName());
       if (fileSystem.exists(filePath)) {
+        log.debug("Adding '{}' for annotation.", filePath);
         result.add(filePath);
+      } else {
+        log.debug("'{}' does not exist. Skipping.", filePath);
       }
     }
 
     return result.build();
+  }
+
+  private static boolean isLocal(FileSystem fileSystem) {
+    return fileSystem instanceof LocalFileSystem;
   }
 
 }

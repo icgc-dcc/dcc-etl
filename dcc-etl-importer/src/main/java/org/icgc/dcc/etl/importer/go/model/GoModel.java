@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.etl.importer.go.model;
 
+import static com.google.common.base.Stopwatch.createStarted;
+
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +55,9 @@ public class GoModel {
   }
 
   public void prune() {
+    log.info("Pruning started....");
+    val watch = createStarted();
+
     val goIdsInAssociations = GoAssociationIndexer.indexGoId(associations).keySet();
     log.info("Number of goIds in associations: {}", goIdsInAssociations.size());
 
@@ -64,6 +69,8 @@ public class GoModel {
     log.info("Number of terms before pruning: {}", Iterables.size(terms));
     this.terms = GoTermFilter.filterGoTermByGoTermIds(terms, directAndInferredGoIds);
     log.info("Number of terms after pruning: {}", Iterables.size(terms));
+
+    log.info("Pruning finished in {}.", watch);
   }
 
 }
