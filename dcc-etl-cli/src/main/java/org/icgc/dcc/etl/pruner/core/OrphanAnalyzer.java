@@ -50,6 +50,7 @@ import org.icgc.dcc.submission.dictionary.model.Dictionary;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
 /**
@@ -83,7 +84,7 @@ public class OrphanAnalyzer {
       try {
         projectOrphans = processProject(fileSystem, dictionary, projectKey, fileTypeToFiles);
       } catch (IllegalStateException e) {
-        log.info("Failed Processing Project '{}', skipping... ", projectKey);
+        log.warn("Failed Processing Project '{}', skipping... ", projectKey);
         continue;
       }
       orphans.addAll(projectOrphans);
@@ -98,46 +99,58 @@ public class OrphanAnalyzer {
       String projectName, Map<FileType, List<Path>> fileTypeToFiles) {
     val orphans = ImmutableSet.<Orphan> builder();
 
-    log.info("Reading {}", FileType.DONOR_TYPE);
+    log.debug("Reading {}", FileType.DONOR_TYPE);
     val donorInputFiles = fileTypeToFiles.get(FileType.DONOR_TYPE);
     checkState(!donorInputFiles.isEmpty(), "donor input file is missing.");
     val donorLines = parseDonorFiles(fileSystem, dictionary, donorInputFiles);
     val donorIds = donorLines.keySet();
-    log.info("Finished reading {}", FileType.DONOR_TYPE);
+    log.debug("Finished reading {}", FileType.DONOR_TYPE);
 
-    log.info("Reading {}", FileType.SPECIMEN_TYPE);
+    log.debug("Reading {}", FileType.SPECIMEN_TYPE);
     val specimenInputFiles = fileTypeToFiles.get(FileType.SPECIMEN_TYPE);
     checkState(!specimenInputFiles.isEmpty(), "specimen input file is missing.");
     val specimenLines = parseSpecimenFiles(fileSystem, dictionary, specimenInputFiles);
     val specimenIdToDonorIdMapping = getLineMapping(specimenLines);
-    log.info("Finished reading {}", FileType.SPECIMEN_TYPE);
+    log.debug("Finished reading {}", FileType.SPECIMEN_TYPE);
 
-    log.info("Reading {}", FileType.SAMPLE_TYPE);
+    log.debug("Reading {}", FileType.SAMPLE_TYPE);
     val sampleInputFiles = fileTypeToFiles.get(FileType.SAMPLE_TYPE);
     checkState(!sampleInputFiles.isEmpty(), "sample input file is missing.");
     val sampleLines = parseSampleFiles(fileSystem, dictionary, sampleInputFiles);
     val sampleIdToSpecimenIdMapping = getLineMapping(sampleLines);
-    log.info("Finished reading {}", FileType.SAMPLE_TYPE);
+    log.debug("Finished reading {}", FileType.SAMPLE_TYPE);
 
-    log.info("Reading {}", FileSubType.META_SUBTYPE);
+    log.debug("Reading {}", FileSubType.META_SUBTYPE);
     val metaLines = parseMetaFiles(fileSystem, dictionary, fileTypeToFiles);
     val metaSampleIds = metaLines.keySet();
-    log.info("Finished reading {}", FileSubType.META_SUBTYPE);
+    log.debug("Finished reading {}", FileSubType.META_SUBTYPE);
 
-    log.info("Finding valid ids");
+    log.debug("Finding valid ids");
     val validSampleIdToSpecimenIdMappings =
         ImmutableMap.copyOf(filterKeys(sampleIdToSpecimenIdMapping, in(metaSampleIds)));
-    val validSpecimenIds = validSampleIdToSpecimenIdMappings.values();
+    val validSpecimenIds = Sets.<String> newHashSet(validSampleIdToSpecimenIdMappings.values());
     val validSpecimenIdToDonorIdMappings =
         ImmutableMap.copyOf(filterKeys(specimenIdToDonorIdMapping, in(validSpecimenIds)));
-    val validDonorIdsSet = validSpecimenIdToDonorIdMappings.values();
-    log.info("Finished finding valid ids");
+    val validDonorIdsSet = Sets.<String> newHashSet(validSpecimenIdToDonorIdMappings.values());
+    log.debug("Finished finding valid ids");
 
     val orphanedDonorIds = ImmutableSet.copyOf(filter(donorIds, not(in(validDonorIdsSet))));
+    log.info("Total donors: {}, total valid: {}, total orphans: {}", Iterables.size(donorIds),
+        Iterables.size(validDonorIdsSet), Iterables.size(orphanedDonorIds));
+
     val orphanedSpecimenIds =
         ImmutableMap.copyOf(filterValues(specimenIdToDonorIdMapping, in(orphanedDonorIds))).keySet();
+    log.info("Total Specimen: {}, total valid: {}, total orphans: {}",
+        Iterables.size(specimenIdToDonorIdMapping.keySet()),
+        Iterables.size(specimenIdToDonorIdMapping.keySet()) - Iterables.size(orphanedSpecimenIds),
+        Iterables.size(orphanedSpecimenIds));
+
     val orphanedSampleIds =
         ImmutableMap.copyOf(filterValues(sampleIdToSpecimenIdMapping, in(orphanedSpecimenIds))).keySet();
+    log.info("Total Samples: {}, total valid: {}, total orphans: {}",
+        Iterables.size(sampleIdToSpecimenIdMapping.keySet()),
+        Iterables.size(sampleIdToSpecimenIdMapping.keySet()) - Iterables.size(orphanedSampleIds),
+        Iterables.size(orphanedSampleIds));
 
     val donorOrphans = getOrphans(projectName, FileType.DONOR_TYPE, donorLines, orphanedDonorIds);
     val specimenOrphans = getOrphans(projectName, FileType.SPECIMEN_TYPE, specimenLines, orphanedSpecimenIds);
