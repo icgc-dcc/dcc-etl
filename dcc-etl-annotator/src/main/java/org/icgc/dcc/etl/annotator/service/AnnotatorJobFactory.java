@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.annotator.service;
 
 import static com.google.common.collect.Iterables.isEmpty;
+import static com.google.common.collect.Sets.intersection;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.isDirectory;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.lsAll;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.lsDir;
@@ -41,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @Slf4j
 @Service
@@ -52,29 +54,38 @@ public class AnnotatorJobFactory {
 
   public AnnotatorJob createAnnotatorJob(String workingDir, Iterable<String> projectNames,
       Iterable<AnnotatedFileType> fileTypes) {
-
     if (isLocal(fileSystem)) {
       log.debug("Resolving annotation files on [LOCAL] filesystem.");
     } else {
       log.debug("Resolving annotation files on [DISTRIBUTED] filesystem.");
     }
 
-    if (isEmpty(projectNames)) {
-      log.debug("Received an empty projects list. Resolving projects.");
-      projectNames = resolveProjectNames(workingDir);
-      log.debug("Resolved project names: {}", projectNames);
-    }
+    val effectiveProjectNames = resolveEffectiveProjectNames(workingDir, projectNames);
+    log.info("Resolved the following effective projects given the specified and available projects: {}",
+        effectiveProjectNames);
 
     return AnnotatorJob.builder()
-        .projectNames(projectNames)
+        .projectNames(effectiveProjectNames)
         .fileTypes(fileTypes)
-        .files(resolveFiles(workingDir, projectNames, fileTypes))
+        .files(resolveFiles(workingDir, effectiveProjectNames, fileTypes))
         .workingDir(workingDir)
         .build();
-
   }
 
-  private Iterable<String> resolveProjectNames(String workingDir) {
+  private Iterable<String> resolveEffectiveProjectNames(String workingDir, Iterable<String> projectNames) {
+    val availableProjectNames = resolveAvailableProjectNames(workingDir);
+    log.debug("Resolved available project names: {}", projectNames);
+
+    if (isEmpty(projectNames)) {
+      log.debug("Received an empty projects list. Using all available projects");
+      return availableProjectNames;
+    } else {
+      log.debug("Received a non-empty projects list. Using the intersection of specified and available projects");
+      return intersection(ImmutableSet.copyOf(availableProjectNames), ImmutableSet.copyOf(projectNames));
+    }
+  }
+
+  private Iterable<String> resolveAvailableProjectNames(String workingDir) {
     val projectsDir = new Path(workingDir, NORMALIZER.getDirName());
     val projectNames = lsDir(fileSystem, projectsDir);
     log.debug("Projects directory '{}' contents: '{}'", projectsDir, projectNames);
@@ -91,7 +102,6 @@ public class AnnotatorJobFactory {
 
   private Collection<Path> resolveFiles(String rootDir, Iterable<String> projectNames,
       Iterable<AnnotatedFileType> fileTypes) {
-
     log.info("Creating files. Initial params: {}, {}, {}", new Object[] { rootDir, projectNames, fileTypes });
     val workingDir = new Path(rootDir, NORMALIZER.getDirName());
 

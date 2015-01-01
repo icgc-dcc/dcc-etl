@@ -18,8 +18,15 @@
 package org.icgc.dcc.etl.loader.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import lombok.val;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class StainedSectionImageUrlResolverTest {
@@ -44,6 +51,19 @@ public class StainedSectionImageUrlResolverTest {
     val url = resolver.resolveUrl(invalidSpecimenId);
 
     assertThat(url).isEqualTo("http://cancer.digitalslidearchive.net/index_mskcc.php?slide_name=" + invalidSpecimenId);
+  }
+
+  @Test
+  @Ignore("Useful for generating all valid urls")
+  public void testResolveUrlAllValid() throws FileNotFoundException, IOException {
+    val validate = true;
+    val resolver = new StainedSectionImageUrlResolver(validate);
+
+    val urls = resolver.resolveUrls();
+
+    val properties = new Properties();
+    properties.putAll(urls);
+    properties.store(new FileOutputStream("target/stained-image-urls.properties"), "Stained image urls");
   }
 
 }

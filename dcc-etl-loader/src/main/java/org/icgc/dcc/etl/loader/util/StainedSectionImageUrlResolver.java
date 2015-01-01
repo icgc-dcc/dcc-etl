@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.loader.util;
 
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.emptySet;
@@ -26,8 +27,10 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -38,6 +41,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -63,7 +67,7 @@ public class StainedSectionImageUrlResolver {
   /**
    * Constants.
    */
-  private static final int URL_TIMEOUT_VALUE = 5000;
+  private static final int URL_TIMEOUT_VALUE = 10 * 1000; // Milliseconds;
 
   /**
    * Values.
@@ -78,6 +82,7 @@ public class StainedSectionImageUrlResolver {
   /**
    * State.
    */
+  @Getter
   private final Set<String> availableSpecimenIds;
 
   /**
@@ -105,6 +110,20 @@ public class StainedSectionImageUrlResolver {
       // Assume available
       return formatSpecimenImageUrl(specimenId);
     }
+  }
+
+  public Map<String, String> resolveUrls() {
+    checkState(validate, "Cannot resolve urls unless validation is enabled.");
+
+    val builder = ImmutableMap.<String, String> builder();
+    for (val specimenId : availableSpecimenIds) {
+      builder.put(specimenId, resolveUrl(specimenId));
+    }
+
+    val urls = builder.build();
+    log.info("Resolved {} urls for {} samples", formatCount(urls.size()), formatCount(availableSpecimenIds.size()));
+
+    return urls;
   }
 
   @SneakyThrows
