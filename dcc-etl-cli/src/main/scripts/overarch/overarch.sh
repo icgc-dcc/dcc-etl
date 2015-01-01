@@ -69,10 +69,10 @@ function eval_cmd_if_component_to_run() {
     echo "Evaluating '${component?}'"
     echo ${log_file?}
     eval_cmd "${cmd?}" 2>&1 | tee ${log_file?}
+    declare -i code=${PIPESTATUS[0]}
     end=$(date +%s)
     runtime=$((end-start))
     duration="$(($runtime / 60)) minutes and $(($runtime % 60)) seconds"
-    declare -i code=${PIPESTATUS[0]}
     if [ ${code?} != 0 ]; then
       email ${config_file?} "failed at the '${component?}' level after ${duration}: '${code?}'"
       echo "ERROR: '${code?}'"
