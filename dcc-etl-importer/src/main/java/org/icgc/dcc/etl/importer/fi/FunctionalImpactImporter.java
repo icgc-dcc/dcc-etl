@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.etl.importer.fi;
 
-import static com.mongodb.Bytes.QUERYOPTION_NOTIMEOUT;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.importer.fi.core.FunctionalImpactCalculator.calculateImpact;
@@ -31,16 +30,15 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.core.fi.CompositeImpactCategory;
+import org.icgc.dcc.etl.importer.util.LongBatchQueryModifier;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
-import org.jongo.QueryModifier;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Sets;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -50,6 +48,11 @@ import com.mongodb.MongoClientURI;
 @Slf4j
 @RequiredArgsConstructor
 public class FunctionalImpactImporter {
+
+  private static final String CONSEQUENCE = "consequence";
+  private static final String CONSEQUENCE_TYPE = "consequence_type";
+  private static final String FUNCTIONAL_IMPACT_PREDICTION = "functional_impact_prediction";
+  private static final String FUNCTIONAL_IMPACT_PREDICTION_SUMMARY = "functional_impact_prediction_summary";
 
   @NonNull
   private final MongoClientURI mongoUri;
@@ -62,9 +65,10 @@ public class FunctionalImpactImporter {
     val observations = readObservations(observationCollection);
 
     writeObservations(observationCollection, observations);
+    observations.close();
   }
 
-  private void writeObservations(MongoCollection observationCollection, Iterable<ObjectNode> observations) {
+  private void writeObservations(MongoCollection observationCollection, MongoCursor<ObjectNode> observations) {
     long observationCounter = 0;
     long consequenceCounter = 0;
 
@@ -72,18 +76,18 @@ public class FunctionalImpactImporter {
     for (val observation : observations) {
       observationCounter++;
 
-      val consequences = (ArrayNode) observation.get("consequence");
+      val consequences = (ArrayNode) observation.get(CONSEQUENCE);
       val impactSummary = Sets.<String> newHashSet();
 
       if (null != consequences && consequences.isArray() && consequences.size() > 0) {
         for (val consequence : consequences) {
           consequenceCounter++;
-          val fiNode = consequence.get("functional_impact_prediction");
+          val fiNode = consequence.get(FUNCTIONAL_IMPACT_PREDICTION);
 
-          val functionalImpactPredictionSummary = calculateImpact(consequence.get("consequence_type").asText(), fiNode);
+          val functionalImpactPredictionSummary = calculateImpact(consequence.get(CONSEQUENCE_TYPE).asText(), fiNode);
 
           impactSummary.add(functionalImpactPredictionSummary);
-          ((ObjectNode) consequence).put("functional_impact_prediction_summary", functionalImpactPredictionSummary);
+          ((ObjectNode) consequence).put(FUNCTIONAL_IMPACT_PREDICTION_SUMMARY, functionalImpactPredictionSummary);
         }
       } else {
         impactSummary.add(CompositeImpactCategory.UNKNOWN.name());
@@ -95,10 +99,10 @@ public class FunctionalImpactImporter {
           summaryNode.add(item.toString());
         }
 
-        observation.put("functional_impact_prediction_summary", summaryNode);
+        observation.put(FUNCTIONAL_IMPACT_PREDICTION_SUMMARY, summaryNode);
+        observationCollection.save(observation);
       }
 
-      observationCollection.save(observation);
       if (observationCounter % 50000 == 0) {
         log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
             formatCount(consequenceCounter));
@@ -110,19 +114,12 @@ public class FunctionalImpactImporter {
   }
 
   private MongoCursor<ObjectNode> readObservations(MongoCollection observationCollection) {
-    return observationCollection.find().with(new QueryModifier() {
 
-      @Override
-      public void modify(DBCursor cursor) {
-        // Prevent time outs due to idle cursors after an inactivity period (10 minutes)
-        cursor.setOptions(QUERYOPTION_NOTIMEOUT);
-        cursor.batchSize(Integer.MAX_VALUE);
+    return observationCollection
+        .find()
+        .with(new LongBatchQueryModifier())
+        .as(ObjectNode.class);
 
-        // Prevent a document from being retrieved multiple times because of update during iteration
-        cursor.snapshot();
-      }
-
-    }).as(ObjectNode.class);
   }
 
   private Jongo createJongo() throws UnknownHostException {
