@@ -22,6 +22,7 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.importer.fi.core.FunctionalImpactCalculator.calculateImpact;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ import org.jongo.MongoCursor;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -71,6 +73,7 @@ public class FunctionalImpactImporter {
   private void writeObservations(MongoCollection observationCollection, MongoCursor<ObjectNode> observations) {
     long observationCounter = 0;
     long consequenceCounter = 0;
+    val modifiedObservations = Lists.<ObjectNode> newArrayList();
 
     log.info("Calculating functional impact predictions");
     for (val observation : observations) {
@@ -100,15 +103,18 @@ public class FunctionalImpactImporter {
         }
 
         observation.put(FUNCTIONAL_IMPACT_PREDICTION_SUMMARY, summaryNode);
-        observationCollection.save(observation);
+        modifiedObservations.add(observation);
       }
 
       if (observationCounter % 50000 == 0) {
+        write(observationCollection, modifiedObservations);
+        modifiedObservations.clear();
         log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
             formatCount(consequenceCounter));
       }
     }
 
+    write(observationCollection, modifiedObservations);
     log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
         formatCount(consequenceCounter));
   }
@@ -119,7 +125,6 @@ public class FunctionalImpactImporter {
         .find()
         .with(new LongBatchQueryModifier())
         .as(ObjectNode.class);
-
   }
 
   private Jongo createJongo() throws UnknownHostException {
@@ -128,6 +133,12 @@ public class FunctionalImpactImporter {
     val mongoDB = mongo.getDB(database);
 
     return new Jongo(mongoDB);
+  }
+
+  private static void write(MongoCollection observationCollection, ArrayList<ObjectNode> observations) {
+    for (val observation : observations) {
+      observationCollection.save(observation);
+    }
   }
 
 }
