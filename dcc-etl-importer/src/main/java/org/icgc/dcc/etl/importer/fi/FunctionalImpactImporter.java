@@ -17,8 +17,11 @@
  */
 package org.icgc.dcc.etl.importer.fi;
 
+import static com.google.common.base.Joiner.on;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.etl.importer.fi.core.FunctionalImpactCalculator.calculateImpact;
 
 import java.net.UnknownHostException;
@@ -30,14 +33,14 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.bson.types.ObjectId;
 import org.icgc.dcc.common.core.fi.CompositeImpactCategory;
+import org.icgc.dcc.common.core.model.FieldNames.IdentifierFieldNames;
+import org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames;
 import org.icgc.dcc.etl.importer.util.LongBatchQueryModifier;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -45,6 +48,9 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -68,12 +74,44 @@ public class FunctionalImpactImporter {
     val jongo = createJongo();
     val observationCollection = jongo.getCollection(OBSERVATION_COLLECTION.getId());
     val observations = readObservations(observationCollection);
-    val modifiedObservations = processObservations(observationCollection, observations);
-    write(observationCollection, modifiedObservations);
+
+    val db = jongo.getDatabase();
+    val oldCollection = db.getCollection(OBSERVATION_COLLECTION.getId());
+    val existingIndices = oldCollection.getIndexInfo();
+    for (DBObject o : existingIndices) {
+      System.out.println(o.get("key"));
+    }
+
+    val newCollectionName = OBSERVATION_COLLECTION.getId() + "_new";
+    val newMongoCollection = db.createCollection(newCollectionName, null);
+    val newJongoCollection = jongo.getCollection(newCollectionName);
+
+    writeObservations(jongo, newJongoCollection, observationCollection, observations);
     observations.close();
+
+    newMongoCollection.rename(OBSERVATION_COLLECTION.getId(), true);
+
+    // see org.icgc.dcc.etl.loader.mongodb.MongoDbProcessing.index
+    ensureUniqueIndex(
+        newMongoCollection,
+        OBSERVATION_COLLECTION.getPrimaryKey(),
+        "pk");
+    ensureNonUniqueIndex(
+        newMongoCollection,
+        newArrayList(IdentifierFieldNames.SURROGATE_DONOR_ID),
+        "fk");
+    ensureNonUniqueIndex(
+        newMongoCollection,
+        newArrayList(IdentifierFieldNames.SURROGATE_MUTATION_ID),
+        "mut");
+    ensureNonUniqueIndex(
+        newMongoCollection,
+        newArrayList(DOT.join(LoaderFieldNames.CONSEQUENCE_ARRAY_NAME, LoaderFieldNames.GENE_ID)),
+        "gene");
+
   }
 
-  private List<ObjectNode> processObservations(MongoCollection observationCollection,
+  private void writeObservations(Jongo jongo, MongoCollection newCollection, MongoCollection observationCollection,
       MongoCursor<ObjectNode> observations) {
     long observationCounter = 0;
     long consequenceCounter = 0;
@@ -82,7 +120,6 @@ public class FunctionalImpactImporter {
     log.info("Calculating functional impact predictions");
     for (val observation : observations) {
       observationCounter++;
-
       val consequences = (ArrayNode) observation.get(CONSEQUENCE);
       val impactSummary = Sets.<String> newHashSet();
 
@@ -111,14 +148,16 @@ public class FunctionalImpactImporter {
       }
 
       if (observationCounter % 50000 == 0) {
+        insert(newCollection, modifiedObservations);
+        modifiedObservations.clear();
         log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
             formatCount(consequenceCounter));
       }
     }
 
+    insert(newCollection, modifiedObservations);
     log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
         formatCount(consequenceCounter));
-    return modifiedObservations;
   }
 
   private MongoCursor<ObjectNode> readObservations(MongoCollection observationCollection) {
@@ -137,32 +176,60 @@ public class FunctionalImpactImporter {
     return new Jongo(mongoDB);
   }
 
-  private static void write(MongoCollection observationCollection, List<ObjectNode> observations) {
-    log.info("Writing back to database...");
+  private void insert(MongoCollection observationCollection, List<ObjectNode> observations) {
     val watch = Stopwatch.createStarted();
-    for (val observation : observations) {
-      observationCollection.save(observation);
-    }
-    log.info("Wrote {} observations in {} ", formatCount(observations.size()), watch);
+    observationCollection.insert(observations.toArray());
+    log.info("Inserted {} observations in {} ", formatCount(observations.size()), watch.stop());
   }
 
-  private static void bulkWrite(Jongo jongo, List<ObjectNode> observations) {
-    log.info("Bulk writing back to database...");
-    val watch = Stopwatch.createStarted();
-    val db = jongo.getDatabase();
-    val collection = db.getCollection(OBSERVATION_COLLECTION.getId());
-    val objectMapper = new ObjectMapper();
-    val bulkWriteOperation = collection.initializeUnorderedBulkOperation();
+  /*
+   * Taken almost verbatim from MongoIndexer in package org.icgc.dcc.etl.loader.mongodb, just using the createIndex
+   * method instead of deprecated ensureIndex and also make indexing happen in background.
+   */
 
-    for (val observation : observations) {
-      val id = observation.get("_id").toString();
-      BasicDBObject dbObject = objectMapper.convertValue(observation, BasicDBObject.class);
-      bulkWriteOperation.find(new BasicDBObject("_id", new ObjectId(id))).replaceOne(dbObject);
+  private static final String INDEX_NAME_SEPARATOR = "_";
+
+  private static final String INDEX_NAME_SUFFIX = "idx";
+
+  private static void ensureUniqueIndex(DBCollection dbCollection, List<String> keys, String... desc) {
+    ensureIndex(dbCollection, keys, true, desc);
+  }
+
+  private static void ensureNonUniqueIndex(DBCollection dbCollection, List<String> keys, String... desc) {
+    ensureIndex(dbCollection, keys, false, desc);
+  }
+
+  private static void ensureIndex(DBCollection dbCollection, List<String> keys, boolean unique, String... desc) {
+    String databaseName = dbCollection.getDB().getName();
+    String collectionName = dbCollection.getName();
+    DBObject businessKeySelector = jsonSelector(keys);
+    String indexName = indexName(collectionName, desc);
+
+    val options = new BasicDBObject();
+    options.put("background", true);
+    options.put("unique", unique);
+    options.put("name", indexName);
+
+    log.info("Ensuring " + (unique ? "" : "non-") + "unique index '{}' exists for '{}' in '{}.{}'",
+        new Object[] { indexName, businessKeySelector, databaseName, collectionName });
+    dbCollection.createIndex(businessKeySelector, options);
+  }
+
+  private static String indexName(String collectionName, String... desc) {
+    return on(INDEX_NAME_SEPARATOR)
+        .join(
+            collectionName,
+            on(INDEX_NAME_SEPARATOR)
+                .join(desc),
+            INDEX_NAME_SUFFIX);
+  }
+
+  private static DBObject jsonSelector(List<String> fieldNames) {
+    BasicDBObjectBuilder builder = new BasicDBObjectBuilder();
+    for (String fieldName : fieldNames) {
+      builder.add(fieldName, 1);
     }
-
-    val result = bulkWriteOperation.execute();
-    log.info("Wrote {} observations in {}, result: {} ", formatCount(observations.size()), watch.stop(),
-        result.toString());
+    return builder.get();
   }
 
 }
