@@ -22,7 +22,7 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.importer.fi.core.FunctionalImpactCalculator.calculateImpact;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.List;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +39,7 @@ import org.jongo.MongoCursor;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.MongoClient;
@@ -63,14 +64,14 @@ public class FunctionalImpactImporter {
   public void execute() {
     val jongo = createJongo();
     val observationCollection = jongo.getCollection(OBSERVATION_COLLECTION.getId());
-
     val observations = readObservations(observationCollection);
-
-    writeObservations(observationCollection, observations);
+    val modifiedObservations = processObservations(observationCollection, observations);
+    write(observationCollection, modifiedObservations);
     observations.close();
   }
 
-  private void writeObservations(MongoCollection observationCollection, MongoCursor<ObjectNode> observations) {
+  private List<ObjectNode> processObservations(MongoCollection observationCollection,
+      MongoCursor<ObjectNode> observations) {
     long observationCounter = 0;
     long consequenceCounter = 0;
     val modifiedObservations = Lists.<ObjectNode> newArrayList();
@@ -107,16 +108,14 @@ public class FunctionalImpactImporter {
       }
 
       if (observationCounter % 50000 == 0) {
-        write(observationCollection, modifiedObservations);
-        modifiedObservations.clear();
         log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
             formatCount(consequenceCounter));
       }
     }
 
-    write(observationCollection, modifiedObservations);
     log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
         formatCount(consequenceCounter));
+    return modifiedObservations;
   }
 
   private MongoCursor<ObjectNode> readObservations(MongoCollection observationCollection) {
@@ -135,10 +134,13 @@ public class FunctionalImpactImporter {
     return new Jongo(mongoDB);
   }
 
-  private static void write(MongoCollection observationCollection, ArrayList<ObjectNode> observations) {
+  private static void write(MongoCollection observationCollection, List<ObjectNode> observations) {
+    log.info("Writing back to database...");
+    val watch = Stopwatch.createStarted();
     for (val observation : observations) {
       observationCollection.save(observation);
     }
+    log.info("Wrote {} observations in {} ", formatCount(observations.size()), watch);
   }
 
 }
