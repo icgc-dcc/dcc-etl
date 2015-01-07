@@ -30,18 +30,21 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.bson.types.ObjectId;
 import org.icgc.dcc.common.core.fi.CompositeImpactCategory;
 import org.icgc.dcc.etl.importer.util.LongBatchQueryModifier;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -141,6 +144,25 @@ public class FunctionalImpactImporter {
       observationCollection.save(observation);
     }
     log.info("Wrote {} observations in {} ", formatCount(observations.size()), watch);
+  }
+
+  private static void bulkWrite(Jongo jongo, List<ObjectNode> observations) {
+    log.info("Bulk writing back to database...");
+    val watch = Stopwatch.createStarted();
+    val db = jongo.getDatabase();
+    val collection = db.getCollection(OBSERVATION_COLLECTION.getId());
+    val objectMapper = new ObjectMapper();
+    val bulkWriteOperation = collection.initializeUnorderedBulkOperation();
+
+    for (val observation : observations) {
+      val id = observation.get("_id").toString();
+      BasicDBObject dbObject = objectMapper.convertValue(observation, BasicDBObject.class);
+      bulkWriteOperation.find(new BasicDBObject("_id", new ObjectId(id))).replaceOne(dbObject);
+    }
+
+    val result = bulkWriteOperation.execute();
+    log.info("Wrote {} observations in {}, result: {} ", formatCount(observations.size()), watch.stop(),
+        result.toString());
   }
 
 }
