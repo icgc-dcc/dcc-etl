@@ -206,7 +206,7 @@ public class FunctionalImpactImporter {
     String indexName = indexName(collectionName, desc);
 
     val options = new BasicDBObject();
-    options.put("background", true);
+    options.put("background", false);
     options.put("unique", unique);
     options.put("name", indexName);
 
