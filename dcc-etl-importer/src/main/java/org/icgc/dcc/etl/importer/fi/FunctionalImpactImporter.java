@@ -78,40 +78,51 @@ public class FunctionalImpactImporter {
     val db = jongo.getDatabase();
     val oldCollection = db.getCollection(OBSERVATION_COLLECTION.getId());
     val existingIndices = oldCollection.getIndexInfo();
+    log.info("Existing indices on DB:");
     for (DBObject o : existingIndices) {
-      System.out.println(o.get("key"));
+      log.info("{}", o.toString());
     }
 
-    val newCollectionName = OBSERVATION_COLLECTION.getId() + "_new";
-    val newMongoCollection = db.createCollection(newCollectionName, null);
-    val newJongoCollection = jongo.getCollection(newCollectionName);
+    val tempCollectionName = OBSERVATION_COLLECTION.getId() + "_temp";
+    db.getCollection(tempCollectionName).drop();
+    val tempMongoCollection = db.createCollection(tempCollectionName, new BasicDBObject("autoIndexId", false));
+    val tempJongoCollection = jongo.getCollection(tempCollectionName);
 
-    writeObservations(jongo, newJongoCollection, observationCollection, observations);
+    writeObservations(jongo, tempJongoCollection, observationCollection, observations);
     observations.close();
 
-    newMongoCollection.rename(OBSERVATION_COLLECTION.getId(), true);
+    // turn on the index on _id
+    tempMongoCollection.createIndex(new BasicDBObject("_id", 1));
 
     // see org.icgc.dcc.etl.loader.mongodb.MongoDbProcessing.index
     ensureUniqueIndex(
-        newMongoCollection,
+        tempMongoCollection,
         OBSERVATION_COLLECTION.getPrimaryKey(),
         "pk");
     ensureNonUniqueIndex(
-        newMongoCollection,
+        tempMongoCollection,
         newArrayList(IdentifierFieldNames.SURROGATE_DONOR_ID),
         "fk");
     ensureNonUniqueIndex(
-        newMongoCollection,
+        tempMongoCollection,
         newArrayList(IdentifierFieldNames.SURROGATE_MUTATION_ID),
         "mut");
     ensureNonUniqueIndex(
-        newMongoCollection,
+        tempMongoCollection,
         newArrayList(DOT.join(LoaderFieldNames.CONSEQUENCE_ARRAY_NAME, LoaderFieldNames.GENE_ID)),
         "gene");
 
+    val newIndices = tempMongoCollection.getIndexInfo();
+    log.info("Newly created indices on DB:");
+    for (DBObject o : newIndices) {
+      log.info("{}", o.toString());
+    }
+
+    tempMongoCollection.rename(OBSERVATION_COLLECTION.getId(), true);
+
   }
 
-  private void writeObservations(Jongo jongo, MongoCollection newCollection, MongoCollection observationCollection,
+  private void writeObservations(Jongo jongo, MongoCollection tempCollection, MongoCollection observationCollection,
       MongoCursor<ObjectNode> observations) {
     long observationCounter = 0;
     long consequenceCounter = 0;
@@ -148,14 +159,14 @@ public class FunctionalImpactImporter {
       }
 
       if (observationCounter % 50000 == 0) {
-        insert(newCollection, modifiedObservations);
+        insert(tempCollection, modifiedObservations);
         modifiedObservations.clear();
         log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
             formatCount(consequenceCounter));
       }
     }
 
-    insert(newCollection, modifiedObservations);
+    insert(tempCollection, modifiedObservations);
     log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
         formatCount(consequenceCounter));
   }
@@ -183,8 +194,9 @@ public class FunctionalImpactImporter {
   }
 
   /*
-   * Taken almost verbatim from MongoIndexer in package org.icgc.dcc.etl.loader.mongodb, just using the createIndex
-   * method instead of deprecated ensureIndex and also make indexing happen in background.
+   * This section is taken almost verbatim from MongoIndexer in package org.icgc.dcc.etl.loader.mongodb.
+   * 
+   * //TODO factor MongoIndexer to etl core to make it reusable across projects.
    */
 
   private static final String INDEX_NAME_SEPARATOR = "_";
@@ -205,14 +217,9 @@ public class FunctionalImpactImporter {
     DBObject businessKeySelector = jsonSelector(keys);
     String indexName = indexName(collectionName, desc);
 
-    val options = new BasicDBObject();
-    options.put("background", false);
-    options.put("unique", unique);
-    options.put("name", indexName);
-
     log.info("Ensuring " + (unique ? "" : "non-") + "unique index '{}' exists for '{}' in '{}.{}'",
         new Object[] { indexName, businessKeySelector, databaseName, collectionName });
-    dbCollection.createIndex(businessKeySelector, options);
+    dbCollection.ensureIndex(businessKeySelector, indexName, unique);
   }
 
   private static String indexName(String collectionName, String... desc) {
