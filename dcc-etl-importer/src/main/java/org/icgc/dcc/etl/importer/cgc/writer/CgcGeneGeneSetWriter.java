@@ -57,10 +57,10 @@ public class CgcGeneGeneSetWriter extends AbstractGeneGeneSetWriter {
     for (val cgcGene : cgc) {
       val geneSymbol = cgcGene.get(CGC_GENE_SYMBOL_FIELD_NAME);
       checkNotNull(geneSymbol, "gene symbol is missing.");
-      geneCollection.update("{ " + GENE_SYMBOL + ": # }", geneSymbol)
+      val result = geneCollection.update("{ " + GENE_SYMBOL + ": # }", geneSymbol)
           .multi()
           .with("{ $addToSet: { " + type.getFieldName() + ": # } }", geneGeneSet);
-      count++;
+      count += result.getN();
     }
 
     return count;
