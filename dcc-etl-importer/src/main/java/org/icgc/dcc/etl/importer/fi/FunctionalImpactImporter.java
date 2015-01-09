@@ -19,6 +19,9 @@ package org.icgc.dcc.etl.importer.fi;
 
 import static com.google.common.base.Joiner.on;
 import static com.google.common.collect.Lists.newArrayList;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION_SUMMARY;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCE_TYPES;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
@@ -60,11 +63,6 @@ import com.mongodb.MongoClientURI;
 @Slf4j
 @RequiredArgsConstructor
 public class FunctionalImpactImporter {
-
-  private static final String CONSEQUENCE = "consequence";
-  private static final String CONSEQUENCE_TYPE = "consequence_type";
-  private static final String FUNCTIONAL_IMPACT_PREDICTION = "functional_impact_prediction";
-  private static final String FUNCTIONAL_IMPACT_PREDICTION_SUMMARY = "functional_impact_prediction_summary";
 
   @NonNull
   private final MongoClientURI mongoUri;
@@ -131,18 +129,20 @@ public class FunctionalImpactImporter {
     log.info("Calculating functional impact predictions");
     for (val observation : observations) {
       observationCounter++;
-      val consequences = (ArrayNode) observation.get(CONSEQUENCE);
+      val consequences = (ArrayNode) observation.get(LoaderFieldNames.CONSEQUENCE_ARRAY_NAME);
       val impactSummary = Sets.<String> newHashSet();
 
       if (null != consequences && consequences.isArray() && consequences.size() > 0) {
         for (val consequence : consequences) {
           consequenceCounter++;
-          val fiNode = consequence.get(FUNCTIONAL_IMPACT_PREDICTION);
+          val fiNode = consequence.get(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION);
 
-          val functionalImpactPredictionSummary = calculateImpact(consequence.get(CONSEQUENCE_TYPE).asText(), fiNode);
+          val functionalImpactPredictionSummary =
+              calculateImpact(consequence.get(OBSERVATION_CONSEQUENCE_TYPES).asText(), fiNode);
 
           impactSummary.add(functionalImpactPredictionSummary);
-          ((ObjectNode) consequence).put(FUNCTIONAL_IMPACT_PREDICTION_SUMMARY, functionalImpactPredictionSummary);
+          ((ObjectNode) consequence).put(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION_SUMMARY,
+              functionalImpactPredictionSummary);
         }
       } else {
         impactSummary.add(CompositeImpactCategory.UNKNOWN.name());
@@ -154,7 +154,7 @@ public class FunctionalImpactImporter {
           summaryNode.add(item.toString());
         }
 
-        observation.put(FUNCTIONAL_IMPACT_PREDICTION_SUMMARY, summaryNode);
+        observation.put(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION_SUMMARY, summaryNode);
         modifiedObservations.add(observation);
       }
 
