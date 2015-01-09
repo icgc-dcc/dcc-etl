@@ -17,12 +17,18 @@
  */
 package org.icgc.dcc.etl.importer.fi;
 
-import static com.mongodb.Bytes.QUERYOPTION_NOTIMEOUT;
+import static com.google.common.base.Joiner.on;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION_SUMMARY;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCE_TYPES;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.etl.importer.fi.core.FunctionalImpactCalculator.calculateImpact;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -31,16 +37,23 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.core.fi.CompositeImpactCategory;
+import org.icgc.dcc.common.core.model.FieldNames.IdentifierFieldNames;
+import org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames;
+import org.icgc.dcc.etl.importer.util.LongBatchQueryModifier;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
-import org.jongo.QueryModifier;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.mongodb.DBCursor;
+import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -58,32 +71,78 @@ public class FunctionalImpactImporter {
   public void execute() {
     val jongo = createJongo();
     val observationCollection = jongo.getCollection(OBSERVATION_COLLECTION.getId());
-
     val observations = readObservations(observationCollection);
 
-    writeObservations(observationCollection, observations);
+    val db = jongo.getDatabase();
+    val oldCollection = db.getCollection(OBSERVATION_COLLECTION.getId());
+    val existingIndices = oldCollection.getIndexInfo();
+    log.info("Existing indices on DB:");
+    for (DBObject o : existingIndices) {
+      log.info("{}", o.toString());
+    }
+
+    val tempCollectionName = OBSERVATION_COLLECTION.getId() + "_temp";
+    db.getCollection(tempCollectionName).drop();
+    val tempMongoCollection = db.createCollection(tempCollectionName, new BasicDBObject("autoIndexId", false));
+    val tempJongoCollection = jongo.getCollection(tempCollectionName);
+
+    writeObservations(jongo, tempJongoCollection, observationCollection, observations);
+    observations.close();
+
+    // turn on the index on _id
+    tempMongoCollection.createIndex(new BasicDBObject("_id", 1));
+
+    // see org.icgc.dcc.etl.loader.mongodb.MongoDbProcessing.index
+    ensureUniqueIndex(
+        tempMongoCollection,
+        OBSERVATION_COLLECTION.getPrimaryKey(),
+        "pk");
+    ensureNonUniqueIndex(
+        tempMongoCollection,
+        newArrayList(IdentifierFieldNames.SURROGATE_DONOR_ID),
+        "fk");
+    ensureNonUniqueIndex(
+        tempMongoCollection,
+        newArrayList(IdentifierFieldNames.SURROGATE_MUTATION_ID),
+        "mut");
+    ensureNonUniqueIndex(
+        tempMongoCollection,
+        newArrayList(DOT.join(LoaderFieldNames.CONSEQUENCE_ARRAY_NAME, LoaderFieldNames.GENE_ID)),
+        "gene");
+
+    val newIndices = tempMongoCollection.getIndexInfo();
+    log.info("Newly created indices on DB:");
+    for (DBObject o : newIndices) {
+      log.info("{}", o.toString());
+    }
+
+    tempMongoCollection.rename(OBSERVATION_COLLECTION.getId(), true);
+
   }
 
-  private void writeObservations(MongoCollection observationCollection, Iterable<ObjectNode> observations) {
+  private void writeObservations(Jongo jongo, MongoCollection tempCollection, MongoCollection observationCollection,
+      MongoCursor<ObjectNode> observations) {
     long observationCounter = 0;
     long consequenceCounter = 0;
+    val modifiedObservations = Lists.<ObjectNode> newArrayList();
 
     log.info("Calculating functional impact predictions");
     for (val observation : observations) {
       observationCounter++;
-
-      val consequences = (ArrayNode) observation.get("consequence");
+      val consequences = (ArrayNode) observation.get(LoaderFieldNames.CONSEQUENCE_ARRAY_NAME);
       val impactSummary = Sets.<String> newHashSet();
 
       if (null != consequences && consequences.isArray() && consequences.size() > 0) {
         for (val consequence : consequences) {
           consequenceCounter++;
-          val fiNode = consequence.get("functional_impact_prediction");
+          val fiNode = consequence.get(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION);
 
-          val functionalImpactPredictionSummary = calculateImpact(consequence.get("consequence_type").asText(), fiNode);
+          val functionalImpactPredictionSummary =
+              calculateImpact(consequence.get(OBSERVATION_CONSEQUENCE_TYPES).asText(), fiNode);
 
           impactSummary.add(functionalImpactPredictionSummary);
-          ((ObjectNode) consequence).put("functional_impact_prediction_summary", functionalImpactPredictionSummary);
+          ((ObjectNode) consequence).put(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION_SUMMARY,
+              functionalImpactPredictionSummary);
         }
       } else {
         impactSummary.add(CompositeImpactCategory.UNKNOWN.name());
@@ -95,34 +154,29 @@ public class FunctionalImpactImporter {
           summaryNode.add(item.toString());
         }
 
-        observation.put("functional_impact_prediction_summary", summaryNode);
+        observation.put(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION_SUMMARY, summaryNode);
+        modifiedObservations.add(observation);
       }
 
-      observationCollection.save(observation);
       if (observationCounter % 50000 == 0) {
+        insert(tempCollection, modifiedObservations);
+        modifiedObservations.clear();
         log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
             formatCount(consequenceCounter));
       }
     }
 
+    insert(tempCollection, modifiedObservations);
     log.info("Processed {} observations, {} consequences", formatCount(observationCounter),
         formatCount(consequenceCounter));
   }
 
   private MongoCursor<ObjectNode> readObservations(MongoCollection observationCollection) {
-    return observationCollection.find().with(new QueryModifier() {
 
-      @Override
-      public void modify(DBCursor cursor) {
-        // Prevent time outs due to idle cursors after an inactivity period (10 minutes)
-        cursor.setOptions(QUERYOPTION_NOTIMEOUT);
-        cursor.batchSize(Integer.MAX_VALUE);
-
-        // Prevent a document from being retrieved multiple times because of update during iteration
-        cursor.snapshot();
-      }
-
-    }).as(ObjectNode.class);
+    return observationCollection
+        .find()
+        .with(new LongBatchQueryModifier())
+        .as(ObjectNode.class);
   }
 
   private Jongo createJongo() throws UnknownHostException {
@@ -131,6 +185,58 @@ public class FunctionalImpactImporter {
     val mongoDB = mongo.getDB(database);
 
     return new Jongo(mongoDB);
+  }
+
+  private void insert(MongoCollection observationCollection, List<ObjectNode> observations) {
+    val watch = Stopwatch.createStarted();
+    observationCollection.insert(observations.toArray());
+    log.info("Inserted {} observations in {} ", formatCount(observations.size()), watch.stop());
+  }
+
+  /*
+   * This section is taken almost verbatim from MongoIndexer in package org.icgc.dcc.etl.loader.mongodb.
+   * 
+   * //TODO factor MongoIndexer to etl core to make it reusable across projects.
+   */
+
+  private static final String INDEX_NAME_SEPARATOR = "_";
+
+  private static final String INDEX_NAME_SUFFIX = "idx";
+
+  private static void ensureUniqueIndex(DBCollection dbCollection, List<String> keys, String... desc) {
+    ensureIndex(dbCollection, keys, true, desc);
+  }
+
+  private static void ensureNonUniqueIndex(DBCollection dbCollection, List<String> keys, String... desc) {
+    ensureIndex(dbCollection, keys, false, desc);
+  }
+
+  private static void ensureIndex(DBCollection dbCollection, List<String> keys, boolean unique, String... desc) {
+    String databaseName = dbCollection.getDB().getName();
+    String collectionName = dbCollection.getName();
+    DBObject businessKeySelector = jsonSelector(keys);
+    String indexName = indexName(collectionName, desc);
+
+    log.info("Ensuring " + (unique ? "" : "non-") + "unique index '{}' exists for '{}' in '{}.{}'",
+        new Object[] { indexName, businessKeySelector, databaseName, collectionName });
+    dbCollection.ensureIndex(businessKeySelector, indexName, unique);
+  }
+
+  private static String indexName(String collectionName, String... desc) {
+    return on(INDEX_NAME_SEPARATOR)
+        .join(
+            collectionName,
+            on(INDEX_NAME_SEPARATOR)
+                .join(desc),
+            INDEX_NAME_SUFFIX);
+  }
+
+  private static DBObject jsonSelector(List<String> fieldNames) {
+    BasicDBObjectBuilder builder = new BasicDBObjectBuilder();
+    for (String fieldName : fieldNames) {
+      builder.add(fieldName, 1);
+    }
+    return builder.get();
   }
 
 }

@@ -17,6 +17,13 @@
  */
 package org.icgc.dcc.etl.importer.fathmm.writer;
 
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_AA_MUTATION;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCE_TYPES;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_MUTATION_ID;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import lombok.val;
 
@@ -44,7 +51,7 @@ public class FathmmObservationWriter extends AbstractJongoComponent {
   }
 
   public int write(BiMap<String, String> transcripts, FathmmPredictor predictor, ObjectNode observation) {
-    val consequences = (ArrayNode) observation.get("consequence");
+    val consequences = (ArrayNode) observation.get(OBSERVATION_CONSEQUENCES);
     val consequenceList = Lists.<JsonNode> newArrayList();
     int consequenceCounter = 0;
 
@@ -53,9 +60,9 @@ public class FathmmObservationWriter extends AbstractJongoComponent {
       for (val consequence : consequences) {
         consequenceList.add(consequence);
 
-        val aaMutation = consequence.get("aa_mutation");
-        val transcriptId = consequence.get("_transcript_id");
-        val consequenceType = consequence.get("consequence_type");
+        val aaMutation = consequence.get(OBSERVATION_CONSEQUENCES_AA_MUTATION);
+        val transcriptId = consequence.get(OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID);
+        val consequenceType = consequence.get(OBSERVATION_CONSEQUENCE_TYPES);
 
         if (null == aaMutation || null == transcriptId
             || !consequenceType.textValue().equals(ConsequenceType.MISSENSE_VARIANT.getId())) {
@@ -71,8 +78,9 @@ public class FathmmObservationWriter extends AbstractJongoComponent {
         val result = predictor.predict(translationIdStr, aaMutationStr);
         if (!result.isEmpty() && result.get("Score") != null) {
 
-          if (consequence.get("functional_impact_prediction") == null) {
-            ((ObjectNode) consequence).put("functional_impact_prediction", JsonNodeFactory.instance.objectNode());
+          if (consequence.get(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION) == null) {
+            ((ObjectNode) consequence).put(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION,
+                JsonNodeFactory.instance.objectNode());
           }
 
           val fathmmNode = JsonNodeFactory.instance.objectNode();
@@ -80,7 +88,8 @@ public class FathmmObservationWriter extends AbstractJongoComponent {
           fathmmNode.put("prediction", result.get("Prediction"));
           fathmmNode.put("algorithm", "fathmm");
 
-          ((ObjectNode) consequence.get("functional_impact_prediction")).put("fathmm", fathmmNode);
+          ((ObjectNode) consequence.get(OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION)).put(
+              "fathmm", fathmmNode);
 
           hasFathmmScore = true;
         }
@@ -88,8 +97,8 @@ public class FathmmObservationWriter extends AbstractJongoComponent {
       }
 
       if (hasFathmmScore) {
-        val donorId = observation.get("_donor_id").textValue();
-        val mutationId = observation.get("_mutation_id").textValue();
+        val donorId = observation.get(OBSERVATION_DONOR_ID).textValue();
+        val mutationId = observation.get(OBSERVATION_MUTATION_ID).textValue();
 
         observationCollection
             .update("{_donor_id:#, _mutation_id:#}", donorId, mutationId)

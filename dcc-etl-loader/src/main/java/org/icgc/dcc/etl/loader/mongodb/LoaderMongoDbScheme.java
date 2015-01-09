@@ -21,11 +21,11 @@ import static org.icgc.dcc.common.core.model.DataType.DataTypes.isAggregatedType
 import static org.icgc.dcc.common.core.model.FileTypes.FileType.SSM_M_TYPE;
 import static org.icgc.dcc.common.core.model.FileTypes.FileType.SSM_P_TYPE;
 import static org.icgc.dcc.common.core.model.TransformFileInfo.MUTATION_COLLECTION;
+import static org.icgc.dcc.common.hadoop.cascading.Fields2.getFieldNames;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.generatedFields;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.unprefixFieldName;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.getCollection;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.getFieldNames;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +34,10 @@ import org.icgc.dcc.common.core.model.BusinessKeys;
 import org.icgc.dcc.common.core.model.DataType;
 import org.icgc.dcc.common.core.model.FieldNames.IdentifierFieldNames;
 import org.icgc.dcc.common.core.model.SubmissionModel;
+import org.icgc.dcc.common.hadoop.cascading.taps.MongoDbTap.MongoDbScheme;
 import org.icgc.dcc.etl.loader.mongodb.LoaderHandler.HandlingType;
 import org.icgc.dcc.etl.loader.mongodb.LoaderHandler.Nesting;
 import org.icgc.dcc.etl.loader.mongodb.LoaderHandler.Redacting;
-import org.icgc.dcc.common.hadoop.cascading.taps.MongoDbTap.MongoDbScheme;
 
 import cascading.flow.FlowProcess;
 import cascading.scheme.SinkCall;
@@ -80,7 +80,7 @@ public class LoaderMongoDbScheme extends MongoDbScheme {
   @Override
   protected void preSinkHook(SinkCall<Void, Object> sinkCall) {
     if (isAggregatedType(dataType)) {
-      log.info("Setting collection '{}'", MUTATION_COLLECTION);
+      log.debug("Setting collection '{}'", MUTATION_COLLECTION);
       this.mutationDbCollection = getDbCollection(sinkCall, databaseName, MUTATION_COLLECTION);
     }
   }

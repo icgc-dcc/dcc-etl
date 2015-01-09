@@ -112,21 +112,19 @@ public class GoInferredTreeBuilder {
         }
       }
 
-      inferredNodes.add(createSelfTreeNode(goTermId, goTermName));
+      val self = GoInferredTreeNode.builder()
+          .name(goTermName)
+          .level(result.size())
+          .relation("self")
+          .id(goTermId)
+          .build();
+
+      inferredNodes.add(self);
 
       return inferredNodes;
     } finally {
       System.setOut(out);
     }
-  }
-
-  private GoInferredTreeNode createSelfTreeNode(String goTermId, String goTermName) {
-    return GoInferredTreeNode.builder()
-        .name(goTermName)
-        .level(0)
-        .relation("self")
-        .id(goTermId)
-        .build();
   }
 
   private HashMap<String, Map<String, List<String>>> buildPredicateLookupTable(Set<OWLShuntEdge> edges) {

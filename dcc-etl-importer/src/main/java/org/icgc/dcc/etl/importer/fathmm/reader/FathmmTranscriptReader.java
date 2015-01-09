@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.importer.fathmm.reader;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.icgc.dcc.common.core.model.FieldNames.GENE_TRANSCRIPTS;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
 import lombok.NonNull;
 import lombok.val;
@@ -47,7 +48,7 @@ public class FathmmTranscriptReader extends AbstractJongoComponent {
         .as(ObjectNode.class);
 
     for (val geneNode : geneNodes) {
-      val transcripts = geneNode.get("transcripts");
+      val transcripts = geneNode.get(GENE_TRANSCRIPTS);
       if (transcripts.isArray()) {
         for (val transcript : transcripts) {
           // 1-to-1 relation
