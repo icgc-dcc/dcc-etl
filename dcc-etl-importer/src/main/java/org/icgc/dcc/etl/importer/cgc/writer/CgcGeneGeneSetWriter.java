@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.importer.cgc.writer;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SYMBOL;
 import static org.icgc.dcc.etl.importer.cgc.model.CgcGene.CGC_GENE_SYMBOL_FIELD_NAME;
 import static org.icgc.dcc.etl.importer.cgc.writer.CgcGeneSetWriter.CGS_GENE_SET_ID;
@@ -46,16 +47,23 @@ public class CgcGeneGeneSetWriter extends AbstractGeneGeneSetWriter {
     clearGeneGeneSets();
 
     log.info("Updating gene CGC gene sets...");
-    updateGeneGeneSets(cgc, geneCollection);
+    val count = updateGeneGeneSets(cgc, geneCollection);
+    log.info("Updated {} gene CGC gene sets...", count);
   }
 
-  private void updateGeneGeneSets(Iterable<Map<String, String>> cgc, MongoCollection geneCollection) {
+  private int updateGeneGeneSets(Iterable<Map<String, String>> cgc, MongoCollection geneCollection) {
     val geneGeneSet = createGeneGeneSet();
+    int count = 0;
     for (val cgcGene : cgc) {
-      geneCollection.update("{ " + GENE_SYMBOL + ": # }", cgcGene.get(CGC_GENE_SYMBOL_FIELD_NAME))
+      val geneSymbol = cgcGene.get(CGC_GENE_SYMBOL_FIELD_NAME);
+      checkNotNull(geneSymbol, "gene symbol is missing.");
+      geneCollection.update("{ " + GENE_SYMBOL + ": # }", geneSymbol)
           .multi()
           .with("{ $addToSet: { " + type.getFieldName() + ": # } }", geneGeneSet);
+      count++;
     }
+
+    return count;
   }
 
   private static GeneGeneSet createGeneGeneSet() {
