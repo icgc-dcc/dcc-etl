@@ -69,6 +69,7 @@ public class FunctionalImpactImporter {
 
   @SneakyThrows
   public void execute() {
+    val watch = Stopwatch.createStarted();
     val jongo = createJongo();
     val observationCollection = jongo.getCollection(OBSERVATION_COLLECTION.getId());
     val observations = readObservations(observationCollection);
@@ -89,34 +90,43 @@ public class FunctionalImpactImporter {
     writeObservations(jongo, tempJongoCollection, observationCollection, observations);
     observations.close();
 
-    // turn on the index on _id
-    tempMongoCollection.createIndex(new BasicDBObject("_id", 1));
+    log.info("Finished writing observations in {} ...", watch);
+    watch.reset().start();
 
-    // see org.icgc.dcc.etl.loader.mongodb.MongoDbProcessing.index
+    tempMongoCollection.rename(OBSERVATION_COLLECTION.getId(), true);
+    val newObservationCollection = db.getCollection(OBSERVATION_COLLECTION.getId());
+
+    // turn on the index on _id
     ensureUniqueIndex(
-        tempMongoCollection,
+        newObservationCollection,
+        newArrayList("_id"),
+        "id");
+
+    // Create the rest of the indices, see org.icgc.dcc.etl.loader.mongodb.MongoDbProcessing.index
+    ensureUniqueIndex(
+        newObservationCollection,
         OBSERVATION_COLLECTION.getPrimaryKey(),
         "pk");
     ensureNonUniqueIndex(
-        tempMongoCollection,
+        newObservationCollection,
         newArrayList(IdentifierFieldNames.SURROGATE_DONOR_ID),
         "fk");
     ensureNonUniqueIndex(
-        tempMongoCollection,
+        newObservationCollection,
         newArrayList(IdentifierFieldNames.SURROGATE_MUTATION_ID),
         "mut");
     ensureNonUniqueIndex(
-        tempMongoCollection,
+        newObservationCollection,
         newArrayList(DOT.join(LoaderFieldNames.CONSEQUENCE_ARRAY_NAME, LoaderFieldNames.GENE_ID)),
         "gene");
 
-    val newIndices = tempMongoCollection.getIndexInfo();
+    val newIndices = newObservationCollection.getIndexInfo();
     log.info("Newly created indices on DB:");
     for (DBObject o : newIndices) {
       log.info("{}", o.toString());
     }
 
-    tempMongoCollection.rename(OBSERVATION_COLLECTION.getId(), true);
+    log.info("Finished switching collection in {} ...", watch);
 
   }
 
@@ -208,7 +218,9 @@ public class FunctionalImpactImporter {
   }
 
   private static void ensureNonUniqueIndex(DBCollection dbCollection, List<String> keys, String... desc) {
+    val watch = Stopwatch.createStarted();
     ensureIndex(dbCollection, keys, false, desc);
+    log.info("Finished indexing in {} ...", watch);
   }
 
   private static void ensureIndex(DBCollection dbCollection, List<String> keys, boolean unique, String... desc) {
