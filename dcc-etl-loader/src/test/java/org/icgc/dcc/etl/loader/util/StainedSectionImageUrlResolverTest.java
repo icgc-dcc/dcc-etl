@@ -54,6 +54,17 @@ public class StainedSectionImageUrlResolverTest {
   }
 
   @Test
+  public void testResolveUrlWithValidationInvalidSpecimenId() {
+    val validate = true;
+    val resolver = new StainedSectionImageUrlResolver(validate);
+
+    val validSpecimenId = "dummy";
+    val url = resolver.resolveUrl(validSpecimenId);
+
+    assertThat(url).isEqualTo(StainedSectionImageUrlResolver.NO_MATCH_REPLACEMENT_VALUE);
+  }
+
+  @Test
   @Ignore("Useful for generating all valid urls")
   public void testResolveUrlAllValid() throws FileNotFoundException, IOException {
     val validate = true;

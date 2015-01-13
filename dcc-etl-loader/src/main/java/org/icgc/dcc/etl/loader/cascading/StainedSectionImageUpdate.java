@@ -23,10 +23,13 @@ import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUB
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FileTypes.FileType.SPECIMEN_TYPE;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
+
+import java.util.Properties;
+
+import lombok.SneakyThrows;
 import lombok.val;
 
 import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
-import org.icgc.dcc.etl.loader.util.StainedSectionImageUrlResolver;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.Function;
@@ -37,6 +40,8 @@ import cascading.pipe.SubAssembly;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 
+import com.google.common.io.Resources;
+
 /**
  * This modifies the digital_image_of_stained_section field in donor specimen to a real URL, if applicable;
  */
@@ -45,8 +50,7 @@ public class StainedSectionImageUpdate extends SubAssembly {
   /**
    * State.
    */
-  private static final StainedSectionImageUrlResolver STAINED_IMAGE_URL_RESOLVER =
-      new StainedSectionImageUrlResolver(true); // False means do not validate because the server is currently unstable
+  private static final Properties SPECIMEN_URLS = getSpecimenUrls();
 
   /**
    * Fields.
@@ -68,13 +72,22 @@ public class StainedSectionImageUpdate extends SubAssembly {
       @Override
       public void operate(@SuppressWarnings("rawtypes") FlowProcess flowProcess, FunctionCall<Void> call) {
         val specimenId = call.getArguments().getString(SPECIMEN_ID_FIELD);
-        val specimenUrl = STAINED_IMAGE_URL_RESOLVER.resolveUrl(specimenId);
+        val specimenUrl = SPECIMEN_URLS.get(specimenId);
 
         // Append field
         call.getOutputCollector().add(new Tuple(specimenId, specimenUrl));
       }
 
     };
+  }
+
+  @SneakyThrows
+  private static Properties getSpecimenUrls() {
+    // TODO: Get dynamically!!!!!
+    val specimenUrls = new Properties();
+    specimenUrls.load(Resources.getResource("stained-image-urls.properties").openStream());
+
+    return specimenUrls;
   }
 
 }

@@ -72,7 +72,7 @@ public class StainedSectionImageUrlResolver {
   /**
    * Values.
    */
-  private static final String NO_MATCH_REPLACEMENT_VALUE = null;
+  public static final String NO_MATCH_REPLACEMENT_VALUE = null;
 
   /**
    * Configuration
