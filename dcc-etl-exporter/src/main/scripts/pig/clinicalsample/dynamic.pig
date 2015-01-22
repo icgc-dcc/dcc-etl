@@ -40,7 +40,10 @@ keys = FOREACH (ORDER (GROUP selected_donor BY donor_id) BY group) {
                                                           icgc_donor_id,
                                                           s#'analyzed_sample_id' as submitted_sample_id,
                                                           submitted_specimen_id, 
-                                                          s#'analyzed_sample_interval' as analyzed_sample_interval;
+                                                          s#'analyzed_sample_interval' as analyzed_sample_interval,
+                                                          s#'percentage_cellularity' as percentage_cellularity,
+                                                          s#'level_of_cellularity' as level_of_cellularity,
+                                                          s#'study' as study;
 
               GENERATE FLATTEN(TOHFILE(group, selected_content)) as key;
 };

@@ -37,6 +37,8 @@ static_out = FOREACH content
                       icgc_donor_id,
                       s#'analyzed_sample_id' as submitted_sample_id,
                       submitted_specimen_id,
-                      s#'analyzed_sample_interval' as analyzed_sample_interval;
+                      s#'percentage_cellularity' as percentage_cellularity,
+                      s#'level_of_cellularity' as level_of_cellularity,
+                      s#'study' as study;
 
 STORE static_out INTO '$TMP_STATIC_DIR' USING org.icgc.dcc.etl.exporter.pig.udf.StaticMultiStorage('$TMP_STATIC_DIR', 'clinicalsample', 'project_code', 'gz', '\\t');

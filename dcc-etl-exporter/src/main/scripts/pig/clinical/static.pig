@@ -44,6 +44,8 @@ static_out = FOREACH content GENERATE icgc_donor_id..donor_interval_of_last_foll
                                       specimen#'tumour_stage_system' as tumour_stage_system,
                                       specimen#'tumour_stage' as tumour_stage,
                                       specimen#'tumour_stage_supplemental' as tumour_stage_supplemental,
-                                      specimen#'digital_image_of_stained_section' as digital_image_of_stained_section;
+                                      specimen#'digital_image_of_stained_section' as digital_image_of_stained_section,
+                                      specimen#'percentage_cellularity' as percentage_cellularity,
+                                      specimen#'level_of_cellularity' as level_of_cellularity;
 
 STORE static_out INTO '$TMP_STATIC_DIR' USING org.icgc.dcc.etl.exporter.pig.udf.StaticMultiStorage('$TMP_STATIC_DIR', 'clinical', 'project_code', 'gz', '\\t');
