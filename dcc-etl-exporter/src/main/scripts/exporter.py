@@ -3,7 +3,7 @@ from org.apache.pig.scripting import *
 from org.icgc.dcc.downloader.core import SchemaUtil
 from org.icgc.dcc.etl.exporter.pig.udf import StaticMultiStorage
 from subprocess import call
-import os.path, sys
+import os, os.path, sys
 import getopt
 sys.path.append(os.path.dirname(sys.argv[0]))
 ########CONTROL SETTINGS###########
@@ -29,6 +29,14 @@ Pig.set("mapred.output.compression.type","BLOCK")
 ########HADOOP MAPREDUCE ###########
 Pig.set("io.sort.mb", "500")
 Pig.set("io.sort.factor", "50")
+
+######## Utility ##################
+def touch(fname, times=None):
+    fhandle = open(fname, 'a')
+    try:
+        os.utime(fname, times)
+    finally:
+        fhandle.close()
 
 ####### DATA PROCESSING ###########
 def exportDynamicData(type):
@@ -65,6 +73,7 @@ def exportDynamicData(type):
   bound = P.bind(params)
   stats = bound.runSingle()
   if not stats.isSuccessful():
+    touch(logfile)
     for errMsg in stats.getAllErrorMessages():
             print errMsg
     raise 'failed'
@@ -103,6 +112,7 @@ def exportStaticData(type):
   bound = P.bind(params)
   stats = bound.runSingle()
   if not stats.isSuccessful():
+    touch(logfile)
     for errMsg in stats.getAllErrorMessages():
             print errMsg
     raise 'failed'
@@ -122,6 +132,7 @@ if __name__ == "__main__":
   dataTypes = []
   isStatic = False;
   isDynamic = False;
+  logfile = "/tmp/exporter.ec"
   for opt, arg in opts:
     if opt == '-h':
       print 'exporter.py -d <data type separated by comma> [-i <data source directory>] [-e <pig script directory>] [-r <release>]' 
@@ -133,6 +144,8 @@ if __name__ == "__main__":
       default_exporter_src = arg
     elif opt in ("-r", "--release"):
       release = arg
+    elif opt in ("-l", "--log"):
+      logfile = arg
     elif opt == '-s':
       isStatic = True
     elif opt == '-b':
