@@ -124,7 +124,7 @@ def exportStaticData(type):
   
 if __name__ == "__main__":
   try:
-    opts, args = getopt.getopt(sys.argv[1:],"hsbd:i:e:r:u:",["type=","source=","exporter=","release="])
+    opts, args = getopt.getopt(sys.argv[1:],"hsbd:i:e:r:u:l:",["type=","source=","exporter=","release="])
   except getopt.GetoptError:
     print 'exporter.py -d <data type separated by comma> [-i <data source directory>] [-e <pig script directory>] [-r <release>]'
     sys.exit(2)
