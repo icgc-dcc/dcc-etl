@@ -1,6 +1,8 @@
 package org.icgc.dcc.etl.exporter.pig.udf;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.apache.hadoop.io.DataInputBuffer;
 import org.apache.pig.ResourceSchema.ResourceFieldSchema;
@@ -52,4 +54,28 @@ public class StreamingOutputBytesWritableConverter extends AbstractWritableConve
   protected StreamingOutputBytesWritable toWritable(DataByteArray value) throws IOException {
     return new StreamingOutputBytesWritable(value.get());
   }
+
+@Override
+public BigDecimal bytesToBigDecimal(byte[] arg0) throws IOException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public BigInteger bytesToBigInteger(byte[] arg0) throws IOException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public byte[] toBytes(BigInteger arg0) throws IOException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public byte[] toBytes(BigDecimal arg0) throws IOException {
+	// TODO Auto-generated method stub
+	return null;
+}
 }
