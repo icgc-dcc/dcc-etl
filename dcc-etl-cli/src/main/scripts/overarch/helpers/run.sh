@@ -34,6 +34,12 @@ if [ "$host" == "***REMOVED***" ]; then
  valid_host=true
 fi
 
+if [ "$host" == "dcc-etl-main" ]; then
+ cluster="dev"
+ use_docker=false
+ valid_host=true
+fi
+
 if ! $valid_host; then
  echo "ERROR: invalid host: ${host?}"
  exit 1
@@ -63,8 +69,7 @@ release_number=18
 patch_number=0
 dictionary_version="0.10a"
 release_name="${release_prefix?}${release_number?}"
-extra=$([ "${cluster?}" == "prod" ] && echo "" || echo "prod/")
-default_parent_dir="/icgc/${extra?}submission/ICGC${release_number?}"
+default_parent_dir="/icgc/submission/ICGC${release_number?}"
 overarch_command="${overarch_dir?}/overarch.sh ${etl_dir?} ${release_prefix?} ${release_number?} ${patch_number?} ${default_parent_dir?} ${etl_dir?}/conf/projects/${projects_file_name?} ${etl_dir?}/lib/${jar_file_name?} ${etl_dir?}/conf/etl_${cluster?}.yaml ${etl_dir?}/conf/dictionaries/${dictionary_version?}.json ${etl_dir?}/conf/codelists.json ${components_to_run?}"
 echo $overarch_command
 
