@@ -218,7 +218,7 @@
     <!-- Testing - HBase -->
     <dependency>
       <groupId>org.apache.hbase</groupId>
-      <artifactId>hbase-client</artifactId>
+      <artifactId>hbase-testing-util</artifactId>
       <version>${hbase-cdh.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
