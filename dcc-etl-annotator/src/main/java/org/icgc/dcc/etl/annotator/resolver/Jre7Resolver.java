@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -109,8 +109,11 @@ public class Jre7Resolver extends DirectoryResourceResolver<File> {
         val name = entry.getName();
         val file = new File(downloadDir, entry.getName());
 
+        @Cleanup
+        val output = new FileOutputStream(file);
+
         log.info("Extracting '{}' to '{}'...", name, file);
-        tar.copyEntryContents(new FileOutputStream(file));
+        tar.copyEntryContents(output);
 
         if (JAVA_BINARY_NAME.equals(file.getName())) {
           file.setExecutable(true);

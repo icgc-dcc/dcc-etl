@@ -179,7 +179,7 @@
     <commons-lang.version>2.6</commons-lang.version>
     
     <!-- Versions - Resources -->
-    <dcc-heliotrope.version>11</dcc-heliotrope.version>
+    <dcc-heliotrope.version>12</dcc-heliotrope.version>
   </properties>
 
 </project>
