@@ -83,8 +83,11 @@ public class ReferenceGenomeResolver extends DirectoryResourceResolver<File> {
       val name = entry.getName();
       val file = new File(dir, entry.getName());
 
+      @Cleanup
+      val output = new FileOutputStream(file);
+
       log.info("Extracting '{}' to '{}'...", name, file);
-      tar.copyEntryContents(new FileOutputStream(file));
+      tar.copyEntryContents(output);
       log.info("Finished extracting '{}' to '{}'...", name, file);
     }
   }
