@@ -21,20 +21,22 @@ ensure_pwd "overarch"
 
 job_id=${1?} && shift
 parent_cluster_output_dir=${1?} && shift
+etl_dir=${1?} && shift
 echo "job_id=\"${job_id?}\""
 echo "parent_cluster_output_dir=\"${parent_cluster_output_dir?}\""
+echo "etl_dir=\"${etl_dir?}\""
 
 # ---------------------------------------------------------------------------
 
-exporter_bin_dir="/nfs/hadoop/oozie/jlam/dcc-downloader-export/bin"
+exporter_bin_dir="${etl_dir?}/dcc-exporter/bin/export.sh"
 echo "exporter_bin_dir=\"${exporter_bin_dir?}\""
 
 echo
 # ===========================================================================
 
 # Determine JAVA HOME
-java_home="$(dirname $(readlink -m $(which java)))/../.."
-ls ${java_home?}/jre/bin/java || { echo "ERROR: invalid JAVA_HOME '${java_home?}'"; exit 1; }
+java_home=$((echo $JAVA_HOME) || echo "$(dirname $(readlink -m $(which java)))/..")
+ls ${java_home?}/bin/java || { echo "ERROR: invalid JAVA_HOME '${java_home?}'"; exit 1; }
 echo "java_home=\"${java_home?}\""
 echo 
 

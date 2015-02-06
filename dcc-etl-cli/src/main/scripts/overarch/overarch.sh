@@ -395,6 +395,7 @@ new_cmd_builder
 add_to_cmd "facades/${component?}-facade.sh"
 add_to_cmd "  ${job_id?}"
 add_to_cmd "  ${run_cluster_output_dir?}"
+add_to_cmd "  ${etl_dir?}"
 eval_cmd_if_component_to_run "$(build_cmd)" "${components_to_run?}" "${component?}" "${component_log_file?}"
 
 echo
