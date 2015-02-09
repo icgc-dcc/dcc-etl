@@ -13,10 +13,10 @@ fi
 
 releaseName=$1
 
-export HBASE_HOME=/usr/lib/hbase
+#export HBASE_HOME=/usr/lib/hbase
 export HADOOP_USER_NAME=${JOB_USER}
-export HADOOP_CLASSPATH=”`/usr/lib/hbase/bin/hbase classpath`:$HADOOP_CLASSPATH”
-export PIG_CLASSPATH="`/usr/lib/hbase/bin/hbase classpath`:${EXPORTHOMEDIR}/lib/dcc-etl-exporter.jar"
+export HADOOP_CLASSPATH=”`hbase classpath`:$HADOOP_CLASSPATH”
+export PIG_CLASSPATH="`hbase classpath`:${EXPORTHOMEDIR}/lib/dcc-etl-exporter.jar"
 
 if [ $# -eq 2 ]
 then

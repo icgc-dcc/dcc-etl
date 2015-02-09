@@ -405,7 +405,7 @@ echo
 original_vcf_file="${run_cluster_output_dir?}/${indexer_component?}/*.vcf.*"
 if [ -f ${fuse_mount_point?}/${original_vcf_file?} ]; then
 	summary_dir="/tmp/download/static/${job_id?}/Summary"
-	command="hadoop fs -mkdir ${summary_dir?}" && echo ${command?} && eval ${command?} || : # Should already exist but just in case
+	command="hadoop fs -mkdir -p ${summary_dir?}" && echo ${command?} && eval ${command?} || : # Should already exist but just in case
 	command="hadoop fs -cp ${original_vcf_file?} ${summary_dir?}/" && echo ${command?} && eval ${command?}
 	command="hadoop fs -put ./VCF_READ_ME ${summary_dir?}/README.txt" && echo ${command?} && eval ${command?}
 else
