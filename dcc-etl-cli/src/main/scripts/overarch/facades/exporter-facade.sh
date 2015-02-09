@@ -28,14 +28,14 @@ echo "etl_dir=\"${etl_dir?}\""
 
 # ---------------------------------------------------------------------------
 
-exporter_bin_dir="${etl_dir?}/dcc-exporter/bin/export.sh"
+exporter_bin_dir="${etl_dir?}/../dcc-exporter/bin"
 echo "exporter_bin_dir=\"${exporter_bin_dir?}\""
 
 echo
 # ===========================================================================
 
 # Determine JAVA HOME
-java_home=$((echo $JAVA_HOME) || echo "$(dirname $(readlink -m $(which java)))/..")
+java_home="$(dirname $(readlink -m $(which java)))/../.."
 ls ${java_home?}/bin/java || { echo "ERROR: invalid JAVA_HOME '${java_home?}'"; exit 1; }
 echo "java_home=\"${java_home?}\""
 echo 
