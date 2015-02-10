@@ -47,8 +47,9 @@ keys = foreach (GROUP selected_donor BY donor_id) {
                                                               specimen#'tumour_stage_system' as tumour_stage_system,
                                                               specimen#'tumour_stage' as tumour_stage,
                                                               specimen#'tumour_stage_supplemental' as tumour_stage_supplemental,
-                                                              specimen#'digital_image_of_stained_section' as digital_image_of_stained_section;
-                               -- key = (group.project_code, group.icgc_donor_id, 'tsv', '$DATATYPE');
+                                                              specimen#'digital_image_of_stained_section' as digital_image_of_stained_section,
+                                                              specimen#'percentage_cellularity' as percentage_cellularity,
+                                                              specimen#'level_of_cellularity' as level_of_cellularity;
              GENERATE FLATTEN(TOHFILE(group, selected_content)) as key;
 }
 STORE keys INTO '$TMP_DYNAMIC_DIR' USING com.twitter.elephantbird.pig.store.LzoRawBytesStorage();

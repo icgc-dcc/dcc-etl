@@ -25,6 +25,7 @@ part = '/*/part-*'
 # loader = 'com.twitter.elephantbird.pig.load.JsonLoader'
 loader = 'com.twitter.elephantbird.pig.load.LzoJsonLoader'
 
+Pig.set("io.compression.codecs","org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.BZip2Codec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec,org.apache.hadoop.io.compress.SnappyCodec")
 # Pig.set("pig.splitCombination","false")
 Pig.set("mapreduce.task.classpath.user.precedence", "true")
 Pig.set("dfs.client.read.shortcircuit", "true")
