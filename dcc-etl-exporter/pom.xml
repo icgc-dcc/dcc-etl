@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-etl</artifactId>
-    <version>3.7.7.0-SNAPSHOT</version>
+    <version>10-cdh-java8</version>
   </parent>
 
   <artifactId>dcc-etl-exporter</artifactId>
@@ -323,7 +323,7 @@
 
   <properties>
     <!-- Versions -->
-    <dcc-downloader.version>3.7.7.0-SNAPSHOT</dcc-downloader.version>
+    <dcc-downloader.version>10-cdh-java8</dcc-downloader.version>
     <pig-cdh.version>0.12.0-${cdh.version}</pig-cdh.version>
     <hbase-cdh.version>0.98.6-${cdh.version}</hbase-cdh.version>
     <oozie-cdh.version>4.0.0-${cdh.version}</oozie-cdh.version>
