@@ -1,15 +1,20 @@
 #!/bin/bash
 
 EXPORTHOMEDIR=`dirname $0`/..; export EXPORTHOMEDIR
+
+logfile=${EXPORTHOMEDIR}/logs/exporter.ec
+touch $logfile
+before=`stat -c %Y $logfile`
+
 nohup ${EXPORTHOMEDIR}/bin/static-export.sh "$@" &
 static_pid=$!
 
 ${EXPORTHOMEDIR}/bin/dynamic-export.sh "$@"
-dynamic_code=$?
 wait $static_pid
-static_code=$?
 
-if [ $static_code -eq 0 -a $dynamic_code -eq 0 ]; then
+after=`stat -c %Y $logfile`
+
+if [ "$before" -eq "$after" ]; then
     exit 0
 else
     exit 1

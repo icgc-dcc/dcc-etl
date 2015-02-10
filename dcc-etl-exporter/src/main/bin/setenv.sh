@@ -42,6 +42,8 @@ then
   datatypes=$3
 fi
 
+logfile=${EXPORTHOMEDIR}/logs/exporter.ec
+
 IFS=',' read -a types <<< "$datatypes"
 
 datatypes=""
