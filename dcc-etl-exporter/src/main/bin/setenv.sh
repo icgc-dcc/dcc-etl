@@ -55,12 +55,22 @@ done
 datatypes=${datatypes:1}
 IFS=',' read -a types <<< "$datatypes"
 
+datatypes=""
+for type in "${types[@]}"
+do
+	datatypes="${datatypes},${typeMappings["${type//[[:blank:]]/}"]}"
+done
+
+datatypes=${datatypes:1}
+IFS=',' read -a types <<< "$datatypes"
+
 #export HBASE_HOME=/usr/lib/hbase
 export HADOOP_USER_NAME=${JOB_USER}
 #export HADOOP_CLASSPATH=”`/usr/lib/hbase/bin/hbase classpath`:$HADOOP_CLASSPATH”
 export HBASE_CONF_DIR="/etc/hbase/conf"
 export PIG_USER_CLASSPATH_FIRST=true
 export PIG_CLASSPATH="${HBASE_CONF_DIR}:${EXPORTHOMEDIR}/lib/dcc-etl-exporter.jar:`hbase classpath`"
+
 
 #logging
 umask 002
