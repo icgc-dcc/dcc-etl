@@ -35,7 +35,7 @@ echo
 # ===========================================================================
 
 # Determine JAVA HOME
-java_home="$(dirname $(readlink -m $(which java)))/../.."
+java_home="$(dirname $(readlink -m $(which java)))/.."
 ls ${java_home?}/bin/java || { echo "ERROR: invalid JAVA_HOME '${java_home?}'"; exit 1; }
 echo "java_home=\"${java_home?}\""
 echo 
