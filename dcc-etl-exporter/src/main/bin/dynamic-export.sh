@@ -6,10 +6,10 @@ source ${EXPORTHOMEDIR}/bin/setenv.sh
 start_time=`date +%s`
 
 # Extract
-${EXPORTHOMEDIR}/bin/parallel -r -j ${#types[@]} "pig -l ${EXPORTHOMEDIR}/logs/*.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/scripts/exporter.py -b -d * -e ${EXPORTHOMEDIR}/scripts -i ${source} -r ${release} -l ${logfile}" ${types[@]}
+${EXPORTHOMEDIR}/bin/parallel -r -j ${#types[@]} "${EXPORTHOMEDIR}/pig/bin/pig -l ${EXPORTHOMEDIR}/logs/*.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/scripts/exporter.py -b -d * -e ${EXPORTHOMEDIR}/scripts -i ${source} -r ${release} -l ${logfile}" ${types[@]}
 
 # Bulkload
-pig -l ${EXPORTHOMEDIR}/logs/bulkloader.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/scripts/bulkloader.py -e ${EXPORTHOMEDIR}/scripts -r ${release} -d $datatypes
+${EXPORTHOMEDIR}/pig/bin/pig -l ${EXPORTHOMEDIR}/logs/bulkloader.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/scripts/bulkloader.py -e ${EXPORTHOMEDIR}/scripts -r ${release} -d $datatypes
 
 end_time=`date +%s`
 echo Total export time was `expr $end_time - $start_time` s.
