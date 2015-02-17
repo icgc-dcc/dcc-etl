@@ -4,7 +4,7 @@
       <pattern>%date %n [%thread] %level %logger{35} - %n %msg</pattern>
     </encoder>
   </appender>
-  <root level="INFO">
+  <root level="ERROR">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration> 

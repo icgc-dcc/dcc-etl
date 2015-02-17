@@ -1,4 +1,4 @@
-package org.icgc.dcc.etl.exporter.test;
+package org.icgc.dcc.etl.exporter;
 
 import java.io.File;
 
