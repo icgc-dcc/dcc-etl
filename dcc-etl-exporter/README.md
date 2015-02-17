@@ -84,7 +84,8 @@ To run exporter, use bin/export.sh. This is the script that exports both static 
 
 	bin/export.sh release_name loader_output_directory <data_types_to_export>
 
-The release_name 
-The data_types_to_export is optional. If it is not specified, it is currently assumed to be all data types.
+The release_name is the release name that is assigned by the run.
+The loader_output_directory is the directory which contains the output from the loader (e.g. /icgc/overarch/ICGC18/0/3/loader)
+The data_types_to_export is optional. The current supported data types are: ssm_open,ssm_controlled,sgv_controlled,pexp,mirna_seq,meth_seq,meth_array,jcn,exp_seq,exp_array,clinical,clinicalsample,cnsm and stsm. If it is not specified, it is currently assumed to be all data types.
 
 The script will then execute static_export.sh and dynamic_export.sh in parallel and then each of the script will launch pig concurrently. For convenience, pig is ran via python/jython integration. All other java classes can be called via Pig UDF. 
