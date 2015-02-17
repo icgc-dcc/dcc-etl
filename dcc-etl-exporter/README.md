@@ -10,6 +10,8 @@ From the command line:
 
 	mvn package
 
+This will create a tarball which contains the executables for running exporter.
+
 System Requirements
 ---
 - CDH 4.1.3 (Hadoop HDFS and MapReduce)
@@ -21,11 +23,7 @@ Configurations
 
 CDH Configurations
 ----
-- enable dfs.client.read.shortcircuit via Cloudera Manager 
-
-Add the following users into dfs.block.local-path-access.user
-hbase, downloader
-enable dfs.client.read.shortcircuit
+For performance reasons, HDFS should have dfs.client.read.shortcircuit enabled via Cloudera Manager and adding users (hbase and downloader) to the list of dfs.block.local-path-access.user
 
 HBase Configurations
 ----
@@ -33,19 +31,17 @@ HBase Configurations
 HBase client configuration should be deployed via Cloudera Manager to the node that is going to execute the exporter. 
 From Cloudera Manager, add the following in the hbase-site.xml under the HBase Service Configuration Safety Valve:
 
-<property>
-	<name>dfs.client.read.shortcircuit</name>
-	<value>true</value>
-</property>
+	<property>
+		<name>dfs.client.read.shortcircuit</name>
+		<value>true</value>
+	</property>
+	
+	<property>
+		<name>hbase.regionserver.checksum.verify</name>
+		<value>true</value>
+	</property>
 
-<property>
-	<name>hbase.regionserver.checksum.verify</name>
-	<value>true</value>
-</property>
-increase all regionservers to have 8GB of RAM
-
-Add filter.jar to hbase path:
-HBASE_CLASSPATH="/nfs/oozie/jlam/dcc-downloader/hbase-lib/filter.jar”
+HBase should be configured with all regionservers to have 8GB of RAM.
 
 Pig Configurations
 ----
