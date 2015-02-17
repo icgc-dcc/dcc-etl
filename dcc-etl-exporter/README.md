@@ -43,13 +43,32 @@ From Cloudera Manager, add the following in the hbase-site.xml under the HBase S
 
 HBase should be configured with all regionservers to have 8GB of RAM.
 
+Also, set the following parameters to the specified value:
+	hbase.regionserver.handler.count: 50
+	hbase.hregion.max.filesize: 1GB
+	hbase.hregion.majorcompaction: 0
+
 Pig Configurations
 ----
-Since Pig included in CDH has jars that has a version of Guava that conflicts with the one used by the exporter, it is currently built by the exporter developer and uploaded to Artifactory. The exporter will bundled Pig in the distribution. 
+Since Pig included in CDH has jars that has a version of Guava that conflicts with the one that is used by the exporter, it is currently built by the exporter developer and uploaded to Artifactory. The exporter will bundled Pig from the artifactory into the distribution. 
 
 
 Exporter Configurations
 ----
+Configurations for exporter 
 core.py
 setenv.sh
-hbase-site.xml
+
+Exporter Runtime Environment
+--- 
+Before to start exporter, please ensure the system has HBase, HDFS, MapReduce and Pig working. Please do the dryrun of using the following commands:
+
+For HBase: 
+	hbase shell
+
+For HDFS:
+	hdfs dfs -ls /
+
+For Pig:
+	${exporter-home-dir}/pig/bin/pig
+
