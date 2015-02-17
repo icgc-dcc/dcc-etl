@@ -59,6 +59,7 @@ Exporter Configurations
 The core.py contains all the configuration parameters to execute the exporter. They override the default values in the scripts. For example root is the directory where exporter will use to export the static and dynamic downloads to (e.g. default to "/tmp/download"). 
 
 There are some important configurations that are needed to modify when running it in a different cluster:
+
 	hbase.zookeeper.quorum: the hostname which has zookeeper quorum installed
 	loader: The Loader class that is used to read the input files from. (default to com.twitter.elephantbird.pig.load.LzoJsonLoader)
 
@@ -77,3 +78,13 @@ For HDFS:
 For Pig:
 	${exporter-home-dir}/pig/bin/pig
 
+Run
+---
+To run exporter, use bin/export.sh. This is the script that exports both static and dynamic downloads. The syntax for running the script is as follows:
+
+	bin/export.sh release_name loader_output_directory <data_types_to_export>
+
+The release_name 
+The data_types_to_export is optional. If it is not specified, it is currently assumed to be all data types.
+
+The script will then execute static_export.sh and dynamic_export.sh in parallel and then each of the script will launch pig concurrently. For convenience, pig is ran via python/jython integration. All other java classes can be called via Pig UDF. 
