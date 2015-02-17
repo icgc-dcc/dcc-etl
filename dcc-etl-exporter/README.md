@@ -90,10 +90,12 @@ The data_types_to_export is optional. The current supported data types are: ssm_
 
 The script will then execute static_export.sh and dynamic_export.sh in parallel and then each of the script will launch pig concurrently. For convenience, pig is ran via python/jython integration. All other java classes can be called via Pig UDF. 
 
-Adding new data types
+Development
 ---
 To add a new data type to be exported, modify the setenv.sh by adding the new data types to the datatypes variable:
 
 	declare -a datatypes="ssm_open,ssm_controlled,sgv_controlled,pexp,mirna_seq,meth_seq,meth_array,jcn,exp_seq,exp_array,clinical,clinicalsample,cnsm,stsm,<new_data_type>"
 
 Also make sure the associated pig scripts for the new data types are implemented and are check-in into the correct directory under pig/<new_data_type>. It is currently assumed that two pig scripts are provided for each new data types, static.pig and dynamic.pig under pig/<new_data_type>
+
+
