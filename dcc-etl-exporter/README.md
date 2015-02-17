@@ -25,6 +25,8 @@ CDH Configurations
 ----
 For performance reasons, HDFS should have dfs.client.read.shortcircuit enabled via Cloudera Manager and adding users (hbase and downloader) to the list of dfs.block.local-path-access.user
 
+In order to run exporter under the user downloader, 
+
 HBase Configurations
 ----
 
@@ -52,12 +54,15 @@ Pig Configurations
 ----
 Since Pig included in CDH has jars that has a version of Guava that conflicts with the one that is used by the exporter, it is currently built by the exporter developer and uploaded to Artifactory. The exporter will bundled Pig from the artifactory into the distribution. 
 
-
 Exporter Configurations
 ----
-Configurations for exporter 
-core.py
-setenv.sh
+The core.py contains all the configuration parameters to execute the exporter. They override the default values in the scripts. For example root is the directory where exporter will use to export the static and dynamic downloads to (e.g. default to "/tmp/download"). 
+
+There are some important configurations that are needed to modify when running it in a different cluster:
+	hbase.zookeeper.quorum: the hostname which has zookeeper quorum installed
+	loader: The Loader class that is used to read the input files from. (default to com.twitter.elephantbird.pig.load.LzoJsonLoader)
+
+If for any reason, exporter is needed to run under a different user than downloader, you can specify that in the JOB_USER in the setenv.sh
 
 Exporter Runtime Environment
 --- 
