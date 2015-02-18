@@ -1,4 +1,14 @@
 #!/bin/bash
+#
+# Copyright 2014(c) The Ontario Institute for Cancer Research. All rights reserved.
+#
+# Description:
+#   internal use for the other scripts for setting the environment
+#
+
+# Prolog
+set -o nounset
+set -o errexit
 
 EXPORTHOMEDIR=`dirname $0`/..; export EXPORTHOMEDIR
 
