@@ -314,6 +314,11 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/pig</directory>
+      </resource>
+    </resources>
     <plugins>
       <!-- Test -->
       <plugin>
@@ -393,7 +398,7 @@
   <properties>
     <!-- Versions -->
     <dcc-downloader.version>3.6.1.2</dcc-downloader.version>
-    <!--  this is the only version that includes 0.12 which is what we used -->
+    <!-- this is the only version that includes 0.12 which is what we used -->
     <pig-cdh.version>0.12.0-cdh5.3.1</pig-cdh.version>
     <!-- <pig-cdh.version>0.10.0-${cdh.version}</pig-cdh.version> -->
     <hbase-cdh.version>0.92.1-${cdh.version}</hbase-cdh.version>
