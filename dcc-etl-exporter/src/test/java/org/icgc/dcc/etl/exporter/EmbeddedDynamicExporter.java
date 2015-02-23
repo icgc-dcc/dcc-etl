@@ -32,7 +32,7 @@ import org.icgc.dcc.downloader.core.ArchiveMetaManager;
 import org.icgc.dcc.downloader.core.ArchiverConstant;
 import org.icgc.dcc.downloader.core.SchemaUtil;
 import org.icgc.dcc.etl.exporter.pig.storage.StaticMultiStorage;
-import org.icgc.dcc.etl.exporter.pig.udf.ToHFile;
+import org.icgc.dcc.etl.exporter.pig.util.ToHFile;
 import org.icgc.dcc.etl.exporter.test.hbase.EmbeddedHBase;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
