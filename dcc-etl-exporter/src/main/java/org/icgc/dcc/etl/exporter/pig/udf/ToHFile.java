@@ -16,7 +16,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.icgc.dcc.etl.exporter.pig.util;
+package org.icgc.dcc.etl.exporter.pig.udf;
 
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static org.icgc.dcc.downloader.core.ArchiverConstant.DATA_CONTENT_FAMILY;
