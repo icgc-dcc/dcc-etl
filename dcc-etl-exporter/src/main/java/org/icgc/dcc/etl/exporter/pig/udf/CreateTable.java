@@ -40,6 +40,10 @@ import com.google.common.collect.Range;
 import com.google.common.collect.RangeMap;
 import com.google.common.collect.TreeRangeMap;
 
+/**
+ * It is used for bucket.pig for load-balancing purposes
+ *
+ */
 public class CreateTable extends EvalFunc<Long> {
 
   private final int numRegions;

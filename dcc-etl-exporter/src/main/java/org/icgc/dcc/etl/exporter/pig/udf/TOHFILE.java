@@ -15,6 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package org.icgc.dcc.etl.exporter.pig.udf;
 
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
@@ -52,10 +53,15 @@ import org.icgc.dcc.downloader.core.SchemaUtil;
 
 import com.google.common.base.Preconditions;
 
-public class TOHFILE extends EvalFunc<DataBag> {
+/**
+ * 
+ * This class is used for generating HFiles for dynamic download
+ * 
+ */
+public class ToHFile extends EvalFunc<DataBag> {
 
   private static int BLOCKSIZE = 5 * 1048576;
-  private static String COMPRESSION = Compression.Algorithm.SNAPPY.getName();
+  public static String COMPRESSION = Compression.Algorithm.SNAPPY.getName();
   private String[] headers;
   private final String destDir;
   private final String tablename;
@@ -66,7 +72,7 @@ public class TOHFILE extends EvalFunc<DataBag> {
   private final String metaTablename;
   private final boolean isPerGroupOutput;
 
-  public TOHFILE(String dataType, String releaseName, String destDir,
+  public ToHFile(String dataType, String releaseName, String destDir,
       String isPerDonorOutputFile) throws IOException {
     super();
     this.destDir = destDir;
@@ -79,7 +85,7 @@ public class TOHFILE extends EvalFunc<DataBag> {
     }
   }
 
-  public TOHFILE(String dataType, String releaseName, String destDir)
+  public ToHFile(String dataType, String releaseName, String destDir)
       throws IOException {
     this(dataType, releaseName, destDir, "false");
   }

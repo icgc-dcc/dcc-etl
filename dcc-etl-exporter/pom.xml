@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -296,6 +297,12 @@
       <version>${pig-cdh.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-complete</artifactId>
+      <version>3.5.2</version>
+    </dependency>
+
 
     <!-- Testing - Benchmarking -->
     <dependency>
@@ -314,9 +321,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <reuseForks>false</reuseForks>
-          <excludes>
-            <exclude>**/DownloaderBenchmark.java</exclude>
-          </excludes>
+          <argLine>-Xmx2G</argLine>
         </configuration>
       </plugin>
 
@@ -388,7 +393,9 @@
   <properties>
     <!-- Versions -->
     <dcc-downloader.version>3.6.1.2</dcc-downloader.version>
-    <pig-cdh.version>0.10.1-${cdh.version}</pig-cdh.version>
+    <!--  this is the only version that includes 0.12 which is what we used -->
+    <pig-cdh.version>0.12.0-cdh5.3.1</pig-cdh.version>
+    <!-- <pig-cdh.version>0.10.0-${cdh.version}</pig-cdh.version> -->
     <hbase-cdh.version>0.92.1-${cdh.version}</hbase-cdh.version>
     <oozie-cdh.version>3.2.0-${cdh.version}</oozie-cdh.version>
     <mrunit.version>0.9.0-incubating</mrunit.version>

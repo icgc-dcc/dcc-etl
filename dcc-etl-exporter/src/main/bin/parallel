@@ -1,4 +1,15 @@
 #!/bin/bash
+#
+# Copyright 2014(c) The Ontario Institute for Cancer Research. All rights reserved.
+#
+# Description:
+#   internal use for parallel execution of processes in bash
+#
+ 
+# Prolog
+set -o nounset
+set -o errexit
+
 NUM=0
 QUEUE=""
 MAX_NPROC=2 # default

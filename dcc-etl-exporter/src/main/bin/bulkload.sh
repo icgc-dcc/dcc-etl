@@ -21,7 +21,7 @@ source ${EXPORTHOMEDIR}/bin/setenv.sh
 start_time=`date +%s`
 
 # Bulkload
-${EXPORTHOMEDIR}/pig/bin/pig -l ${EXPORTHOMEDIR}/logs/bulkloader.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/scripts/bulkloader.py -e ${EXPORTHOMEDIR}/scripts -r ${release} -d $datatypes
+${EXPORTHOMEDIR}/lib/pig/bin/pig -l ${EXPORTHOMEDIR}/logs/bulkloader.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/python/bulkloader.py -e ${EXPORTHOMEDIR}/pig -r ${release} -l ${logfile} -d $datatypes
 
 end_time=`date +%s`
 echo Total export time was `expr $end_time - $start_time` s.

@@ -36,6 +36,10 @@ public class EmbeddedHBase {
     utility.shutdownMiniCluster();
     log.info("Finished shutting down mini-cluster");
   }
+  
+  public Configuration getConfiguration() {
+	 return utility.getConfiguration(); 
+  }
 
   private Configuration createConfiguration() {
     log.info("Creating configuation with zkConnect = '{}'", zkConnect);
