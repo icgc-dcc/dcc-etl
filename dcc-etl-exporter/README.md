@@ -10,12 +10,20 @@ From the command line:
 
 	mvn package
 
-This will create a tarball which contains the executables for running exporter.
+This will create a tarball which contains the executables for running exporter. Inside the tarball, the directory structure is as follows:
+	bin/       #contains some helper scripts for executing exporter
+	conf/      #contains logback and log4j configurations
+	lib/       #contains pig runtime and exporter udfs
+	logs/      #contains log files
+	pig/       #contains the pig scripts for the exporter
+	python/    #contains the python scripts for the exporter
+
+lib/dcc-etl-exporter.jar is registered into the pig scripts during the runtime by the python scripts via parameter substitution under the variable name LIB. If by any reason you need to modify the name of the jar, you need to update it in the python scripts (exporter.py and bulkloader.py).
 
 System Requirements
 ---
 - CDH 4.1.3 (Hadoop HDFS and MapReduce)
-- HBase 0.93
+- HBase 0.92.1
 - Pig 0.12.1 (Bundled)
 
 Configurations
@@ -52,7 +60,7 @@ Also, set the following parameters to the specified value:
 
 Pig Configurations
 ----
-Since Pig included in CDH has jars that has a version of Guava that conflicts with the one that is used by the exporter, it is currently built by the exporter developer and uploaded to Artifactory. The exporter will bundled Pig from the artifactory into the distribution. 
+Since Pig included in CDH has jars that has a version of Guava that conflicts with the one that is used by the exporter, it is currently built by the exporter developer and uploaded to Artifactory. The exporter will bundled Pig from the artifactory into the distribution. The bundled pig can be found under lib/pig of the distribution. 
 
 Exporter Configurations
 ----
