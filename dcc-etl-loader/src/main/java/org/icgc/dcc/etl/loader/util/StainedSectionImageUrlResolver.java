@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.emptySet;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 
 import java.io.IOException;
@@ -198,7 +198,7 @@ public class StainedSectionImageUrlResolver {
   }
 
   private static String formatSpecimenImageUrl(String specimenId) {
-    return _("%s?%s=%s", IMAGE_URL, SLIDE_NAME_PARAM_NAME, specimenId);
+    return String.format("%s?%s=%s", IMAGE_URL, SLIDE_NAME_PARAM_NAME, specimenId);
   }
 
 }

@@ -17,8 +17,6 @@
  */
 package org.icgc.dcc.etl.annotator.model;
 
-import static org.icgc.dcc.common.core.util.FormatUtils._;
-
 import java.util.List;
 
 import lombok.NonNull;
@@ -49,7 +47,7 @@ public class ParseState {
 
   public ParseState(@NonNull ParseNotification errorCode, @NonNull String errorMessageTemplate, @NonNull Object... args) {
     this.errorCodes = Lists.newArrayList(errorCode);
-    this.errorMessages = Lists.newArrayList(_(errorMessageTemplate, args));
+    this.errorMessages = Lists.newArrayList(String.format(errorMessageTemplate, args));
   }
 
   public ParseState(@NonNull List<ParseNotification> errorCodes, @NonNull List<String> errorMessages) {
@@ -81,7 +79,7 @@ public class ParseState {
   public void addErrorAndMessage(@NonNull ParseNotification errorCode, @NonNull String errorMessageTemplate,
       @NonNull Object... args) {
     errorCodes.add(errorCode);
-    errorMessages.add(_(errorMessageTemplate, args));
+    errorMessages.add(String.format(errorMessageTemplate, args));
   }
 
   public boolean hasError() {

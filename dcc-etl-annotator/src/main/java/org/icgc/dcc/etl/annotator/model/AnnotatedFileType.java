@@ -25,7 +25,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUB
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_MUTATION_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_REFERENCE_GENOME_ALLELE;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_VARIANT_TYPE;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +106,7 @@ public enum AnnotatedFileType implements Identifiable {
       }
     }
 
-    throw new IllegalArgumentException(_("No '%s' with name '%s' found", AnnotatedFileType.class.getName(), name));
+    throw new IllegalArgumentException(String.format("No '%s' with name '%s' found", AnnotatedFileType.class.getName(), name));
   }
 
   public static AnnotatedFileType byPath(@NonNull Path path) {
@@ -117,7 +117,7 @@ public enum AnnotatedFileType implements Identifiable {
       }
     }
 
-    throw new IllegalArgumentException(_("No '%s' with inputFileName '%s' found", AnnotatedFileType.class.getName(),
+    throw new IllegalArgumentException(String.format("No '%s' with inputFileName '%s' found", AnnotatedFileType.class.getName(),
         inputFileName));
   }
 

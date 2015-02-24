@@ -21,7 +21,7 @@ import static com.google.common.io.Resources.getResource;
 import static org.apache.commons.io.FileUtils.copyDirectory;
 import static org.apache.commons.io.FileUtils.listFiles;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.common.core.util.Joiners.INDENT;
 
 import java.io.File;
@@ -70,8 +70,8 @@ public class OrphanRemoverTest {
 
   private static void copyTestDataToTemp(File tempFolder) throws IOException {
     for (val projectName : PROJECTS_ORPHANED_DONORS_COUNT.keySet()) {
-      String projectInputDir = _("%s/input/%s", PARENT_DIR, projectName);
-      String targetDirectory = _("%s/%s", tempFolder.getAbsolutePath(), projectName);
+      String projectInputDir = String.format("%s/input/%s", PARENT_DIR, projectName);
+      String targetDirectory = String.format("%s/%s", tempFolder.getAbsolutePath(), projectName);
       copyDirectory(
           new File(projectInputDir),
           new File(targetDirectory));

@@ -23,7 +23,7 @@ import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.generatedFieldName;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixFieldNames;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFieldName;
@@ -142,7 +142,7 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
       }
 
       else {
-        throw new IllegalStateException(_("Unknown field: '%s' for '%s': '%s', '%s'",
+        throw new IllegalStateException(String.format("Unknown field: '%s' for '%s': '%s', '%s'",
             prefixedLoaderFieldName, handlingType, submissionFieldNames, entry.getFields()));
       }
     }
