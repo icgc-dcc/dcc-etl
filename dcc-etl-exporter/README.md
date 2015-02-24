@@ -11,6 +11,7 @@ From the command line:
 	mvn package
 
 This will create a tarball which contains the executables for running exporter. Inside the tarball, the directory structure is as follows:
+
 	bin/       #contains some helper scripts for executing exporter
 	conf/      #contains logback and log4j configurations
 	lib/       #contains pig runtime and exporter udfs
