@@ -21,7 +21,7 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 import org.icgc.dcc.etl.importer.go.model.GoInferredTreeNode;
 

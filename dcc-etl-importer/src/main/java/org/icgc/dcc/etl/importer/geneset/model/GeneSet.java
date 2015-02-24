@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.importer.geneset.model;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import lombok.Data;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 import org.bson.types.ObjectId;
 

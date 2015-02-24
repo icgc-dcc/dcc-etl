@@ -25,7 +25,7 @@ import java.util.Map;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.Builder;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.importer.go.util.GoAssociationIndexer;

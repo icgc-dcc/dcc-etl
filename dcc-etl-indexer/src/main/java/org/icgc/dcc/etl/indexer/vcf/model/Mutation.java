@@ -20,7 +20,7 @@ package org.icgc.dcc.etl.indexer.vcf.model;
 import java.util.List;
 
 import lombok.Data;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 @Data
 @Builder

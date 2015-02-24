@@ -24,7 +24,7 @@ import java.util.Collection;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 import org.apache.hadoop.fs.Path;
 

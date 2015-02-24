@@ -25,7 +25,7 @@ import java.util.Set;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Optional;
