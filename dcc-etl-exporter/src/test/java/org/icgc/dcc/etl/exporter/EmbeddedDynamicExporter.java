@@ -49,8 +49,8 @@ public class EmbeddedDynamicExporter {
 
   static EmbeddedHBase hbase;
 
-  final private static String LIB_PATH = StaticMultiStorage.class
-      .getProtectionDomain().getCodeSource().getLocation().getPath();
+  final private static String LIB_PATH = StaticMultiStorage.class.getProtectionDomain().getCodeSource().getLocation()
+      .getPath();
 
   private final static String RELEASE = "r5";
 
@@ -91,8 +91,7 @@ public class EmbeddedDynamicExporter {
     PigServer pigServer = new PigServer(ExecType.LOCAL, conf);
     try {
       Map<String, String> params = Maps.newHashMap();
-      CodeSource extSource = StaticMultiStorage.class
-          .getProtectionDomain().getCodeSource();
+      CodeSource extSource = StaticMultiStorage.class.getProtectionDomain().getCodeSource();
       if (extSource != null) params.put("LIB", extSource.getLocation().getPath());
 
       params.put("RELEASE_OUT", RELEASE);
@@ -100,19 +99,16 @@ public class EmbeddedDynamicExporter {
       String tmpDirHFile = tmp.getRoot() + "/hfile/" + exporter;
       params.put("TMP_DYNAMIC_DIR", tmpDirDynamic);
       params.put("TMP_HFILE_DIR", tmpDirHFile);
-      params.put("JSON_LOADER",
-          "com.twitter.elephantbird.pig.load.JsonLoader");
+      params.put("JSON_LOADER", "com.twitter.elephantbird.pig.load.JsonLoader");
       params.put("OBSERVATION", observation);
       params.put("RAW_STORAGE", "PigStorage");
 
       Properties pigProperty = pigServer.getPigContext().getProperties();
-      pigProperty.setProperty("pig.import.search.path", LIB_PATH + "/"
-          + exporter);
+      pigProperty.setProperty("pig.import.search.path", LIB_PATH + "/" + exporter);
       // ScriptState.start("", pigServer.getPigContext());
       ScriptState.get().setPigContext(pigServer.getPigContext());
       SchemaUtil.createDataTable(exporter, conf, false);
-      pigServer.registerScript(
-          LIB_PATH + "/" + exporter + "/dynamic.pig", params);
+      pigServer.registerScript(LIB_PATH + "/" + exporter + "/dynamic.pig", params);
 
       @Cleanup
       HTable table = new HTable(conf, exporter);

@@ -51,8 +51,8 @@ import org.junit.Test;
 
 public class SSMOpenExporterTest extends EmbeddedDynamicExporter {
 
-  final private static String LIB_PATH = StaticMultiStorage.class
-      .getProtectionDomain().getCodeSource().getLocation().getPath();
+  final private static String LIB_PATH = StaticMultiStorage.class.getProtectionDomain().getCodeSource().getLocation()
+      .getPath();
 
   final String[] SSM_TSV_SCHEMA = { "icgc_mutation_id", //
   "icgc_donor_id", //
@@ -189,8 +189,7 @@ public class SSMOpenExporterTest extends EmbeddedDynamicExporter {
     }
     @Cleanup
     HTable table = new HTable(conf, DATA_TYPE);
-    ResultScanner scan = table
-        .getScanner(ArchiverConstant.DATA_CONTENT_FAMILY);
+    ResultScanner scan = table.getScanner(ArchiverConstant.DATA_CONTENT_FAMILY);
     Iterator<Result> itr = scan.iterator();
     long lines = 0;
     while (itr.hasNext()) {
@@ -201,35 +200,28 @@ public class SSMOpenExporterTest extends EmbeddedDynamicExporter {
   }
 
   @Test
-  public void basicNoConsequenceSSMTest() throws IOException, ParseException,
-      org.json.simple.parser.ParseException {
+  public void basicNoConsequenceSSMTest() throws IOException, ParseException, org.json.simple.parser.ParseException {
 
     PigServer pig = new PigServer(ExecType.LOCAL);
-    pig.getPigContext().getProperties()
-        .setProperty("pig.import.search.path", LIB_PATH + "/ssm_open");
+    pig.getPigContext().getProperties().setProperty("pig.import.search.path", LIB_PATH + "/ssm_open");
     Cluster cluster = new Cluster(pig.getPigContext());
     ScriptState.start("", pig.getPigContext());
 
-    PigTest ssmTest = new PigTest(LIB_PATH + "/ssm_open/static.pig",
-        new String[] { "OBSERVATION=src/test/data/ssm_open_nc.json",
-            "LIB=" + LIB_PATH }, pig, cluster);
+    PigTest ssmTest =
+        new PigTest(LIB_PATH + "/ssm_open/static.pig",
+            new String[] { "OBSERVATION=src/test/data/ssm_open_nc.json", "LIB=" + LIB_PATH }, pig, cluster);
 
     JSONParser parser = new JSONParser();
-    JSONObject json = (JSONObject) parser.parse(new FileReader(
-        "src/test/data/ssm_open_nc.json"));
+    JSONObject json = (JSONObject) parser.parse(new FileReader("src/test/data/ssm_open_nc.json"));
 
-    ArrayList<Tuple> staticTuples = newArrayList(ssmTest
-        .getAlias("static_out"));
+    ArrayList<Tuple> staticTuples = newArrayList(ssmTest.getAlias("static_out"));
 
-    assertEquals("expect only 1 tuple in the result", 1,
-        staticTuples.size());
-    assertEquals("expect number columns", SSM_TSV_SCHEMA.length,
-        staticTuples.get(0).size());
+    assertEquals("expect only 1 tuple in the result", 1, staticTuples.size());
+    assertEquals("expect number columns", SSM_TSV_SCHEMA.length, staticTuples.get(0).size());
 
     for (int i = 0; i < staticTuples.get(0).size(); ++i) {
       Object field = staticTuples.get(0).get(i);
-      String fieldValue = field == null ? null : (field.equals("") ? null
-          : (String) field);
+      String fieldValue = field == null ? null : (field.equals("") ? null : (String) field);
 
       Object result = null;
       if (!CONSEQUENCES.contains(SSM_JSON_SCHEMA[i])) {
@@ -239,40 +231,31 @@ public class SSMOpenExporterTest extends EmbeddedDynamicExporter {
         result = json.get(SSM_JSON_SCHEMA[i]);
       }
 
-      String expectedValue = result == null ? null : String
-          .valueOf(result);
-      assertEquals("Field: " + SSM_JSON_SCHEMA[i], expectedValue,
-          fieldValue);
+      String expectedValue = result == null ? null : String.valueOf(result);
+      assertEquals("Field: " + SSM_JSON_SCHEMA[i], expectedValue, fieldValue);
     }
 
   }
 
   @Test
-  public void basicMultiConsequenceSSMTest() throws IOException,
-      ParseException, org.json.simple.parser.ParseException {
+  public void basicMultiConsequenceSSMTest() throws IOException, ParseException, org.json.simple.parser.ParseException {
     PigServer pig = new PigServer(ExecType.LOCAL);
-    pig.getPigContext().getProperties()
-        .setProperty("pig.import.search.path", LIB_PATH + "/ssm_open");
+    pig.getPigContext().getProperties().setProperty("pig.import.search.path", LIB_PATH + "/ssm_open");
     Cluster cluster = new Cluster(pig.getPigContext());
     ScriptState.start("", pig.getPigContext());
 
-    PigTest ssmTest = new PigTest(LIB_PATH + "/ssm_open/static.pig",
-        new String[] { "OBSERVATION=src/test/data/ssm_open_mc.json",
-            "LIB=" + LIB_PATH }, pig, cluster);
+    PigTest ssmTest =
+        new PigTest(LIB_PATH + "/ssm_open/static.pig",
+            new String[] { "OBSERVATION=src/test/data/ssm_open_mc.json", "LIB=" + LIB_PATH }, pig, cluster);
 
     JSONParser parser = new JSONParser();
-    JSONObject json = (JSONObject) parser.parse(new FileReader(
-        "src/test/data/ssm_open_mc.json"));
+    JSONObject json = (JSONObject) parser.parse(new FileReader("src/test/data/ssm_open_mc.json"));
 
-    ArrayList<Tuple> staticTuples = newArrayList(ssmTest
-        .getAlias("static_out"));
+    ArrayList<Tuple> staticTuples = newArrayList(ssmTest.getAlias("static_out"));
 
-    assertEquals("expect only 1 tuple in the result", 2,
-        staticTuples.size());
-    assertEquals("expect number columns", SSM_TSV_SCHEMA.length,
-        staticTuples.get(0).size());
-    assertEquals("expect number columns", SSM_TSV_SCHEMA.length,
-        staticTuples.get(1).size());
+    assertEquals("expect only 1 tuple in the result", 2, staticTuples.size());
+    assertEquals("expect number columns", SSM_TSV_SCHEMA.length, staticTuples.get(0).size());
+    assertEquals("expect number columns", SSM_TSV_SCHEMA.length, staticTuples.get(1).size());
 
     JSONArray consequences = ((JSONArray) json.get("consequence"));
     for (int i = 0; i < consequences.size(); ++i) {
@@ -280,14 +263,11 @@ public class SSMOpenExporterTest extends EmbeddedDynamicExporter {
       Tuple tuple = staticTuples.get(i);
       for (int j = 0; j < tuple.size(); ++j) {
         Object field = tuple.get(j);
-        String fieldValue = field == null ? null
-            : (field.equals("") ? null : (String) field);
+        String fieldValue = field == null ? null : (field.equals("") ? null : (String) field);
         if (CONSEQUENCES.contains(SSM_JSON_SCHEMA[j])) {
           Object result = consequence.get(SSM_JSON_SCHEMA[j]);
-          String expectedValue = result == null ? null : String
-              .valueOf(result);
-          assertEquals("Field: " + SSM_JSON_SCHEMA[j], expectedValue,
-              fieldValue);
+          String expectedValue = result == null ? null : String.valueOf(result);
+          assertEquals("Field: " + SSM_JSON_SCHEMA[j], expectedValue, fieldValue);
 
         }
       }
@@ -299,15 +279,12 @@ public class SSMOpenExporterTest extends EmbeddedDynamicExporter {
       Tuple tuple = staticTuples.get(i);
       for (int j = 0; j < tuple.size(); ++j) {
         Object field = tuple.get(j);
-        String fieldValue = field == null ? null
-            : (field.equals("") ? null : (String) field);
+        String fieldValue = field == null ? null : (field.equals("") ? null : (String) field);
 
         if (OBSERVATIONS.contains(SSM_JSON_SCHEMA[j])) {
           Object result = observation.get(SSM_JSON_SCHEMA[j]);
-          String expectedValue = result == null ? null : String
-              .valueOf(result);
-          assertEquals("Field: " + SSM_JSON_SCHEMA[j], expectedValue,
-              fieldValue);
+          String expectedValue = result == null ? null : String.valueOf(result);
+          assertEquals("Field: " + SSM_JSON_SCHEMA[j], expectedValue, fieldValue);
         }
       }
 

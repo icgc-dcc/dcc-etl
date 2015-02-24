@@ -72,8 +72,7 @@ public class ToHFile extends EvalFunc<DataBag> {
   private final String metaTablename;
   private final boolean isPerGroupOutput;
 
-  public ToHFile(String dataType, String releaseName, String destDir,
-      String isPerDonorOutputFile) throws IOException {
+  public ToHFile(String dataType, String releaseName, String destDir, String isPerDonorOutputFile) throws IOException {
     super();
     this.destDir = destDir;
     this.tablename = dataType;
@@ -85,20 +84,17 @@ public class ToHFile extends EvalFunc<DataBag> {
     }
   }
 
-  public ToHFile(String dataType, String releaseName, String destDir)
-      throws IOException {
+  public ToHFile(String dataType, String releaseName, String destDir) throws IOException {
     this(dataType, releaseName, destDir, "false");
   }
 
-  private Writer createWriter(String donorId, UDFContext context)
-      throws IOException {
+  private Writer createWriter(String donorId, UDFContext context) throws IOException {
     Configuration conf = UDFContext.getUDFContext().getJobConf();
     getLogger().info("Initializing a new HFile Writer...");
     FileSystem fs = FileSystem.get(conf);
     Path destPath = new Path(destDir, Bytes.toString(DATA_CONTENT_FAMILY));
-    return HFile.getWriterFactory(conf, new CacheConfig(conf))
-        .createWriter(fs, new Path(destPath, donorId), BLOCKSIZE,
-            COMPRESSION, KeyValue.KEY_COMPARATOR);
+    return HFile.getWriterFactory(conf, new CacheConfig(conf)).createWriter(fs, new Path(destPath, donorId), BLOCKSIZE,
+        COMPRESSION, KeyValue.KEY_COMPARATOR);
   }
 
   private void closeWriter(Writer writer) {
@@ -121,8 +117,7 @@ public class ToHFile extends EvalFunc<DataBag> {
     int id = Integer.valueOf(donorId);
     if (writer == null) {
       FileSystem fs = FileSystem.get(conf);
-      Path destPath = new Path(destDir,
-          Bytes.toString(DATA_CONTENT_FAMILY));
+      Path destPath = new Path(destDir, Bytes.toString(DATA_CONTENT_FAMILY));
       if (!fs.exists(destPath)) fs.mkdirs(destPath);
 
       writer = createWriter(donorId, UDFContext.getUDFContext());
@@ -133,8 +128,7 @@ public class ToHFile extends EvalFunc<DataBag> {
       writer = createWriter(donorId, UDFContext.getUDFContext());
     }
 
-    Properties props = UDFContext.getUDFContext().getUDFProperties(
-        this.getClass());
+    Properties props = UDFContext.getUDFContext().getUDFProperties(this.getClass());
     String headerline = props.getProperty("headerline");
     Preconditions.checkNotNull(headerline);
     headers = headerline.split(HEADER_SEPARATOR);
@@ -156,8 +150,7 @@ public class ToHFile extends EvalFunc<DataBag> {
         String value = (String) cellValue;
         if (value.trim().isEmpty()) continue;
         byte[] bytes = Bytes.toBytes(value);
-        KeyValue kv = new KeyValue(rowKey, DATA_CONTENT_FAMILY,
-            new byte[] { i }, now, bytes);
+        KeyValue kv = new KeyValue(rowKey, DATA_CONTENT_FAMILY, new byte[] { i }, now, bytes);
         totalBytes = totalBytes + bytes.length;
         writer.append(kv);
       }
@@ -166,8 +159,7 @@ public class ToHFile extends EvalFunc<DataBag> {
     }
 
     if (n == 1) {
-      RuntimeException ex = new RuntimeException(
-          "No mutations for donor id: " + donorId);
+      RuntimeException ex = new RuntimeException("No mutations for donor id: " + donorId);
       getLogger().warn("No mutations for donor id: " + donorId, ex);
       throw ex;
     }
@@ -196,8 +188,7 @@ public class ToHFile extends EvalFunc<DataBag> {
     outputFields.add(new FieldSchema(null, DataType.BYTEARRAY));
     StringBuilder sb = new StringBuilder();
     try {
-      for (FieldSchema field : input.getField(1).schema.getField(0).schema
-          .getFields()) {
+      for (FieldSchema field : input.getField(1).schema.getField(0).schema.getFields()) {
         sb.append(field.alias);
         sb.append(HEADER_SEPARATOR);
       }
