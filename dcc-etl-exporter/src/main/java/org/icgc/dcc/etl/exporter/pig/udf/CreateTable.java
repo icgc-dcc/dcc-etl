@@ -40,6 +40,10 @@ import com.google.common.collect.Range;
 import com.google.common.collect.RangeMap;
 import com.google.common.collect.TreeRangeMap;
 
+/**
+ * It is used for bucket.pig for load-balancing purposes
+ * 
+ */
 public class CreateTable extends EvalFunc<Long> {
 
   private final int numRegions;
@@ -57,14 +61,11 @@ public class CreateTable extends EvalFunc<Long> {
 
   private void initializeLocalJobConfig() {
     localConf = new Configuration();
-    Properties udfProps = UDFContext.getUDFContext().getUDFProperties(
-        this.getClass());
+    Properties udfProps = UDFContext.getUDFContext().getUDFProperties(this.getClass());
     if (udfProps.containsKey(HBASE_CONFIG_SET)) {
       for (Entry<Object, Object> entry : udfProps.entrySet()) {
-        if ((entry.getKey() instanceof String)
-            && (entry.getValue() instanceof String)) {
-          localConf.set((String) entry.getKey(),
-              (String) entry.getValue());
+        if ((entry.getKey() instanceof String) && (entry.getValue() instanceof String)) {
+          localConf.set((String) entry.getKey(), (String) entry.getValue());
         }
       }
     } else {
@@ -118,12 +119,11 @@ public class CreateTable extends EvalFunc<Long> {
 
       for (int i = 1; i < numRegions; ++i) {
         long splitPoint = i * keysPerRS;
-        Entry<Range<Long>, ArchiveCompositeKey> rangeEntry = rangeMap
-            .getEntry(splitPoint);
+        Entry<Range<Long>, ArchiveCompositeKey> rangeEntry = rangeMap.getEntry(splitPoint);
         if (rangeEntry == null) break;
         Range<Long> range = rangeEntry.getKey();
-        byte[] split = SchemaUtil.encodedArchiveRowKey(rangeEntry
-            .getValue().getDonorId(), splitPoint - range.lowerEndpoint());
+        byte[] split =
+            SchemaUtil.encodedArchiveRowKey(rangeEntry.getValue().getDonorId(), splitPoint - range.lowerEndpoint());
 
         getLogger().info("Split #: " + i + ", CompositeKey: " + rangeEntry.getValue() + ", Range: " + range.toString());
 
@@ -134,6 +134,5 @@ public class CreateTable extends EvalFunc<Long> {
       SchemaUtil.createDataTable(tablename, builder.build(), localConf);
       return keysPerRS;
     }
-
   }
 }

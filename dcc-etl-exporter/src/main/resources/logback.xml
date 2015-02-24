@@ -4,7 +4,9 @@
       <pattern>%date %n [%thread] %level %logger{35} - %n %msg</pattern>
     </encoder>
   </appender>
-  <root level="ERROR">
+  <logger name="org.icgc.dcc.etl.exporter" level="INFO" />
+  <logger name="org.apache.pig" level="INFO" />
+  <root level="WARN">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration> 
