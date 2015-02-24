@@ -1,4 +1,5 @@
 package org.icgc.dcc.etl.exporter.test.hbase;
+
 import static org.apache.hadoop.hbase.HConstants.ZOOKEEPER_CLIENT_PORT;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -36,9 +37,9 @@ public class EmbeddedHBase {
     utility.shutdownMiniCluster();
     log.info("Finished shutting down mini-cluster");
   }
-  
+
   public Configuration getConfiguration() {
-	 return utility.getConfiguration(); 
+    return utility.getConfiguration();
   }
 
   private Configuration createConfiguration() {

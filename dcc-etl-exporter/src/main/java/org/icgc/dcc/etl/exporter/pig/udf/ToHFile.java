@@ -121,7 +121,8 @@ public class ToHFile extends EvalFunc<DataBag> {
     int id = Integer.valueOf(donorId);
     if (writer == null) {
       FileSystem fs = FileSystem.get(conf);
-      Path destPath = new Path(destDir, Bytes.toString(DATA_CONTENT_FAMILY));
+      Path destPath = new Path(destDir,
+          Bytes.toString(DATA_CONTENT_FAMILY));
       if (!fs.exists(destPath)) fs.mkdirs(destPath);
 
       writer = createWriter(donorId, UDFContext.getUDFContext());

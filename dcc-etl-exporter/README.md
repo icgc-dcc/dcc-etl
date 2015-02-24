@@ -18,7 +18,7 @@ This will create a tarball which contains the executables for running exporter. 
 	pig/       #contains the pig scripts for the exporter
 	python/    #contains the python scripts for the exporter
 
-lib/dcc-etl-exporter.jar is registered into the pig scripts during the runtime by the python scripts via parameter substitution under the variable name LIB. If by any reason you need to modify the name of the jar, you need to update it in the python scripts (exporter.py and bulkloader.py).
+`lib/dcc-etl-exporter.jar` is registered into the pig scripts during the runtime by the python scripts via parameter substitution under the variable name LIB. If by any reason you need to modify the name of the jar, you need to update it in the python scripts (exporter.py and bulkloader.py).
 
 System Requirements
 ---

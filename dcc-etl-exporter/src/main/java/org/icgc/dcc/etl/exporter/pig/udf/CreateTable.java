@@ -42,7 +42,7 @@ import com.google.common.collect.TreeRangeMap;
 
 /**
  * It is used for bucket.pig for load-balancing purposes
- *
+ * 
  */
 public class CreateTable extends EvalFunc<Long> {
 
@@ -104,7 +104,8 @@ public class CreateTable extends EvalFunc<Long> {
         throw new RuntimeException("The key has to be sorted.");
       }
 
-      ArchiveCompositeKey key = SchemaUtil.decodeArchiveRowKey(currentKey);
+      ArchiveCompositeKey key = SchemaUtil
+          .decodeArchiveRowKey(currentKey);
       long openRange = total;
       total = total + key.getLineNum();
       rangeMap.put(Range.openClosed(openRange, total), key);
@@ -127,9 +128,13 @@ public class CreateTable extends EvalFunc<Long> {
         if (rangeEntry == null) break;
         Range<Long> range = rangeEntry.getKey();
         byte[] split = SchemaUtil.encodedArchiveRowKey(rangeEntry
-            .getValue().getDonorId(), splitPoint - range.lowerEndpoint());
+            .getValue().getDonorId(),
+            splitPoint - range.lowerEndpoint());
 
-        getLogger().info("Split #: " + i + ", CompositeKey: " + rangeEntry.getValue() + ", Range: " + range.toString());
+        getLogger().info(
+            "Split #: " + i + ", CompositeKey: "
+                + rangeEntry.getValue() + ", Range: "
+                + range.toString());
 
         builder.add(split);
       }

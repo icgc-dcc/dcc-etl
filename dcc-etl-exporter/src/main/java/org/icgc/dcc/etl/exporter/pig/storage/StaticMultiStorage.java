@@ -94,8 +94,8 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
    * @param compression 'bz2', 'bz', 'gz' or 'none'
    * @param fieldDel Output record field delimiter.
    */
-  public StaticMultiStorage(String parentPathStr, String dataTypeLongName, String splitFieldKey,
-      String compression, String fieldDel) {
+  public StaticMultiStorage(String parentPathStr, String dataTypeLongName,
+      String splitFieldKey, String compression, String fieldDel) {
     this.outputPath = new Path(parentPathStr);
     this.splitFieldKey = splitFieldKey;
     this.fieldDel = fieldDel;
@@ -153,12 +153,14 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
       }
     }
     if (this.splitFieldIndex == -1) {
-      throw new RuntimeException("Key :" + this.splitFieldKey + " not found in: " + schema);
+      throw new RuntimeException("Key :" + this.splitFieldKey
+          + " not found in: " + schema);
     }
     UDFContext context = UDFContext.getUDFContext();
-    Properties p =
-        context.getUDFProperties(this.getClass(), new String[] { udfcSignature });
-    p.setProperty(DOWNLOADER_FIELD_KEY_INDEX_PROPERTY, String.valueOf(splitFieldIndex));
+    Properties p = context.getUDFProperties(this.getClass(),
+        new String[] { udfcSignature });
+    p.setProperty(DOWNLOADER_FIELD_KEY_INDEX_PROPERTY,
+        String.valueOf(splitFieldIndex));
   }
 
   @Override
@@ -170,12 +172,14 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
   @Override
   public void prepareToWrite(RecordWriter writer) throws IOException {
     UDFContext context = UDFContext.getUDFContext();
-    Properties prop =
-        context.getUDFProperties(this.getClass(), new String[] { udfcSignature });
-    this.splitFieldIndex =
-        Integer.valueOf(prop.getProperty(DOWNLOADER_FIELD_KEY_INDEX_PROPERTY, String.valueOf(splitFieldIndex)));
+    Properties prop = context.getUDFProperties(this.getClass(),
+        new String[] { udfcSignature });
+    this.splitFieldIndex = Integer.valueOf(prop.getProperty(
+        DOWNLOADER_FIELD_KEY_INDEX_PROPERTY,
+        String.valueOf(splitFieldIndex)));
     if (splitFieldIndex < 0) {
-      RuntimeException e = new RuntimeException("Key index is not set: " + splitFieldIndex);
+      RuntimeException e = new RuntimeException("Key index is not set: "
+          + splitFieldIndex);
       log.error("Failed", e);
       throw e;
     }
@@ -210,21 +214,20 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
     private byte fieldDel = '\t';
 
     @Override
-    public RecordWriter<String, Tuple>
-        getRecordWriter(TaskAttemptContext context
-        ) throws IOException, InterruptedException {
+    public RecordWriter<String, Tuple> getRecordWriter(
+        TaskAttemptContext context) throws IOException,
+        InterruptedException {
 
       final TaskAttemptContext ctx = context;
 
       return new RecordWriter<String, Tuple>() {
 
-        private Map<String, MyLineRecordWriter> storeMap =
-            new HashMap<String, MyLineRecordWriter>();
+        private Map<String, MyLineRecordWriter> storeMap = new HashMap<String, MyLineRecordWriter>();
 
         private static final int BUFFER_SIZE = 1024;
 
-        private ByteArrayOutputStream mOut =
-            new ByteArrayOutputStream(BUFFER_SIZE);
+        private ByteArrayOutputStream mOut = new ByteArrayOutputStream(
+            BUFFER_SIZE);
 
         @Override
         public void write(String key, Tuple val) throws IOException {
@@ -250,13 +253,15 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
         }
 
         @Override
-        public void close(TaskAttemptContext context) throws IOException {
+        public void close(TaskAttemptContext context)
+            throws IOException {
           for (MyLineRecordWriter out : storeMap.values()) {
             out.close(context);
           }
         }
 
-        private MyLineRecordWriter getStore(String fieldValue) throws IOException {
+        private MyLineRecordWriter getStore(String fieldValue)
+            throws IOException {
           MyLineRecordWriter store = storeMap.get(fieldValue);
           if (store == null) {
             DataOutputStream os = createOutputStream(fieldValue);
@@ -266,36 +271,43 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
           return store;
         }
 
-        private DataOutputStream createOutputStream(String fieldValue) throws IOException {
+        private DataOutputStream createOutputStream(String fieldValue)
+            throws IOException {
           Configuration conf = ctx.getConfiguration();
           TaskID taskId = ctx.getTaskAttemptID().getTaskID();
 
-          // Check whether compression is enabled, if so get the extension and add them to the path
+          // Check whether compression is enabled, if so get the
+          // extension and add them to the path
           boolean isCompressed = getCompressOutput(ctx);
           CompressionCodec codec = null;
           String extension = "";
           if (isCompressed) {
-            Class<? extends CompressionCodec> codecClass =
-                getOutputCompressorClass(ctx, GzipCodec.class);
-            codec = ReflectionUtils.newInstance(codecClass, ctx.getConfiguration());
+            Class<? extends CompressionCodec> codecClass = getOutputCompressorClass(
+                ctx, GzipCodec.class);
+            codec = ReflectionUtils.newInstance(codecClass,
+                ctx.getConfiguration());
             extension = codec.getDefaultExtension();
           }
 
           NumberFormat nf = NumberFormat.getInstance();
           nf.setMinimumIntegerDigits(4);
 
-          Path path = new Path(PREFIX + fieldValue + extension, fieldValue + '-'
-              + nf.format(taskId.getId()) + extension);
-          Path workOutputPath = ((FileOutputCommitter) getOutputCommitter(ctx)).getWorkPath();
+          Path path = new Path(PREFIX + fieldValue + extension,
+              fieldValue + '-' + nf.format(taskId.getId())
+                  + extension);
+          Path workOutputPath = ((FileOutputCommitter) getOutputCommitter(ctx))
+              .getWorkPath();
           Path file = new Path(workOutputPath, path);
           FileSystem fs = file.getFileSystem(conf);
           FSDataOutputStream fileOut = fs.create(file, false);
 
           if (isCompressed) {
-            return new DataOutputStream(
-                new BufferedOutputStream(codec.createOutputStream(fileOut), DEFAULT_BUFFER_SIZE));
+            return new DataOutputStream(new BufferedOutputStream(
+                codec.createOutputStream(fileOut),
+                DEFAULT_BUFFER_SIZE));
           } else {
-            return new DataOutputStream(new BufferedOutputStream(fileOut, DEFAULT_BUFFER_SIZE));
+            return new DataOutputStream(new BufferedOutputStream(
+                fileOut, DEFAULT_BUFFER_SIZE));
           }
         }
 
@@ -311,23 +323,26 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
     //
 
     @SuppressWarnings("rawtypes")
-    protected static class MyLineRecordWriter
-        extends TextOutputFormat.LineRecordWriter<WritableComparable, Text> {
+    protected static class MyLineRecordWriter extends
+        TextOutputFormat.LineRecordWriter<WritableComparable, Text> {
 
-      public MyLineRecordWriter(DataOutputStream out, String keyValueSeparator) {
+      public MyLineRecordWriter(DataOutputStream out,
+          String keyValueSeparator) {
         super(out, keyValueSeparator);
       }
     }
   }
 
   @Override
-  public void storeSchema(ResourceSchema schema, String location, Job job) throws IOException {
+  public void storeSchema(ResourceSchema schema, String location, Job job)
+      throws IOException {
     String[] fieldNames = schema.fieldNames();
     Preconditions.checkNotNull(fieldNames);
 
     // save the header to hdfs
     FileSystem fs = FileSystem.get(job.getConfiguration());
-    FSDataOutputStream headerWriter = fs.create(new Path(outputPath.getParent(), dataTypeLongName + HEADER));
+    FSDataOutputStream headerWriter = fs.create(new Path(outputPath
+        .getParent(), dataTypeLongName + HEADER));
     @Cleanup
     OutputStream os = headerWriter;
     if (comp == Compression.bz2 || comp == Compression.bz) {
@@ -346,18 +361,20 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
   }
 
   @Override
-  public void storeStatistics(ResourceStatistics arg0, String arg1, Job arg2) throws IOException {
+  public void storeStatistics(ResourceStatistics arg0, String arg1, Job arg2)
+      throws IOException {
     // NO IMPLEMENTATION
   }
 
-  public static void concatenate(String dataTypeLongName, String inputDir, String outputDir, String extension)
-      throws IOException {
+  public static void concatenate(String dataTypeLongName, String inputDir,
+      String outputDir, String extension) throws IOException {
     Path inputPath = new Path(inputDir);
     Configuration conf = new Configuration();
     FileSystem fs = FileSystem.get(conf);
 
     log.info("Concatenating from : {}", inputDir);
-    FSDataInputStream headerReader = fs.open(new Path(inputPath.getParent(), dataTypeLongName + HEADER));
+    FSDataInputStream headerReader = fs.open(new Path(
+        inputPath.getParent(), dataTypeLongName + HEADER));
     ByteArrayOutputStream hos = new ByteArrayOutputStream(512000);
     IOUtils.copy(headerReader, hos);
     byte[] header = hos.toByteArray();
@@ -369,16 +386,20 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
         log.info("Directory found: {}", file.getPath());
         String dirname = file.getPath().getName();
         if (dirname.startsWith(PREFIX)) {
-          String projectCode = StringUtils.removeEnd(StringUtils.strip(dirname, PREFIX), extension);
+          String projectCode = StringUtils.removeEnd(
+              StringUtils.strip(dirname, PREFIX), extension);
           Path projectPath = file.getPath();
-          RemoteIterator<LocatedFileStatus> partItr = fs.listFiles(projectPath, false);
+          RemoteIterator<LocatedFileStatus> partItr = fs.listFiles(
+              projectPath, false);
           if (partItr.hasNext()) {
-            log.info("Creating archive for project code: {}", projectCode);
+            log.info("Creating archive for project code: {}",
+                projectCode);
             Path outputPath = new Path(outputDir, projectCode);
             fs.mkdirs(outputPath);
             @Cleanup
-            FSDataOutputStream os = fs.create(new Path(outputPath, dataTypeLongName + '.'
-                + projectCode + ".tsv" + extension));
+            FSDataOutputStream os = fs.create(new Path(outputPath,
+                dataTypeLongName + '.' + projectCode + ".tsv"
+                    + extension));
 
             IOUtils.write(header, os);
             while (partItr.hasNext()) {
