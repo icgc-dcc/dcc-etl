@@ -29,8 +29,6 @@ import org.apache.pig.pigunit.pig.PigServer;
 import org.apache.pig.tools.pigstats.ScriptState;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

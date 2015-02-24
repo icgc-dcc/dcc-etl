@@ -1,12 +1,8 @@
 package org.icgc.dcc.etl.exporter;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.CodeSource;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -14,22 +10,14 @@ import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.io.hfile.Compression;
 import org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles;
 import org.apache.pig.ExecType;
 import org.apache.pig.PigServer;
 import org.apache.pig.tools.pigstats.ScriptState;
-import org.icgc.dcc.downloader.core.ArchiveMetaManager;
-import org.icgc.dcc.downloader.core.ArchiverConstant;
 import org.icgc.dcc.downloader.core.SchemaUtil;
 import org.icgc.dcc.etl.exporter.pig.storage.StaticMultiStorage;
 import org.icgc.dcc.etl.exporter.pig.udf.ToHFile;
@@ -37,10 +25,8 @@ import org.icgc.dcc.etl.exporter.test.hbase.EmbeddedHBase;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 /**

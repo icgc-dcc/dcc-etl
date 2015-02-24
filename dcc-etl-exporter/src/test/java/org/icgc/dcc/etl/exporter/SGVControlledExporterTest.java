@@ -20,8 +20,6 @@ package org.icgc.dcc.etl.exporter;
 import static com.google.common.collect.Lists.newArrayList;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

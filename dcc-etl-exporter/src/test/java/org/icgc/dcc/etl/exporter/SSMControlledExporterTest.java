@@ -28,7 +28,6 @@ import org.apache.pig.pigunit.Cluster;
 import org.apache.pig.pigunit.pig.PigServer;
 import org.apache.pig.tools.pigstats.ScriptState;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileReader;
