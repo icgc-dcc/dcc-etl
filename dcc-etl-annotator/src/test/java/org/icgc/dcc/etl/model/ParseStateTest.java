@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import lombok.val;
 
 import org.icgc.dcc.etl.annotator.model.ParseNotification;
@@ -57,7 +57,7 @@ public class ParseStateTest {
   public void templateConstuctorTest() {
     val object = new ParseState(ERROR_CODE, "This is %s", ERROR_MESSAGE);
     assertThat(object.getErrorCodes().get(0)).isEqualTo(ERROR_CODE);
-    assertThat(object.getErrorMessages().get(0)).isEqualTo(_("This is %s", ERROR_MESSAGE));
+    assertThat(object.getErrorMessages().get(0)).isEqualTo(String.format("This is %s", ERROR_MESSAGE));
   }
 
   @Test
@@ -108,7 +108,7 @@ public class ParseStateTest {
     val object = new ParseState();
     object.addErrorAndMessage(ERROR_CODE, "This is %s", ERROR_MESSAGE);
     assertThat(object.getErrorCodes()).containsOnly(ERROR_CODE);
-    assertThat(object.getErrorMessages()).containsOnly(_("This is %s", ERROR_MESSAGE));
+    assertThat(object.getErrorMessages()).containsOnly(String.format("This is %s", ERROR_MESSAGE));
   }
 
   @Test

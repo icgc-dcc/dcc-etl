@@ -46,7 +46,7 @@ import com.google.common.collect.ImmutableSet;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @_(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AnnotatorJobFactory {
 
   @NonNull

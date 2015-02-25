@@ -3,7 +3,7 @@ package org.icgc.dcc.etl.annotator.model;
 import static com.google.common.base.Preconditions.checkState;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 /**
  * A snpEff 3.6 representation.

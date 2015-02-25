@@ -29,7 +29,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;

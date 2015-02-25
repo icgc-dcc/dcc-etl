@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_CORE_TYPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.withRawSequenceData;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getRawSequenceDataInfoPipeName;
 
 import java.util.Set;
@@ -101,7 +101,7 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
               availableFeatureTypes));
 
     default:
-      throw new IllegalStateException(_("Unexpected file type: '%s'", currentFileType));
+      throw new IllegalStateException(String.format("Unexpected file type: '%s'", currentFileType));
     }
 
   }

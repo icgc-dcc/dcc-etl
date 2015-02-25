@@ -22,10 +22,10 @@ import static com.google.common.io.Resources.getResource;
 
 import java.io.File;
 
-import lombok.Delegate;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.io.Files;

@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.indexer.vcf.util;
 
 import static com.google.common.base.Preconditions.checkState;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.etl.indexer.vcf.model.MutationType.DELETION;
 import static org.icgc.dcc.etl.indexer.vcf.model.MutationType.INSERTION;
 import static org.icgc.dcc.etl.indexer.vcf.model.MutationType.MUTLTIPLE_BASE_SUBSTITUTION;
@@ -69,7 +69,7 @@ public class ICGCToVCFMutationConverter {
         result.alt.add(result.ref + mutationTo);
       }
 
-      result.mutation = _("%s>%s", result.ref, result.alt.get(0));
+      result.mutation = String.format("%s>%s", result.ref, result.alt.get(0));
     } else if (type == DELETION) {
 
       /*
@@ -86,7 +86,7 @@ public class ICGCToVCFMutationConverter {
         result.alt.add(getReference(chromosome, start - 1));
       }
 
-      result.mutation = _("%s>%s", result.ref, result.alt.get(0));
+      result.mutation = String.format("%s>%s", result.ref, result.alt.get(0));
     } else if (type == MUTLTIPLE_BASE_SUBSTITUTION || type == SINGLE_BASE_SUBSTITUTION) {
 
       /*

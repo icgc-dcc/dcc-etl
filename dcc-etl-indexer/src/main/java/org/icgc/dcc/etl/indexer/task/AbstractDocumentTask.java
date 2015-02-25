@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.indexer.task;
 
 import static com.google.common.io.Closeables.close;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.exists;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.rm;
 import static org.icgc.dcc.etl.indexer.factory.JongoFactory.newJongo;
@@ -137,7 +137,7 @@ public abstract class AbstractDocumentTask implements DocumentTask {
     // Config
     val bufferSize = 8 * 1024;
 
-    val archiveName = _("%s-%s.tar.gz", config.getIndexName(), type.getName());
+    val archiveName = String.format("%s-%s.tar.gz", config.getIndexName(), type.getName());
     val archivePath = new Path(config.getOutputDir(), archiveName);
     if (exists(fileSystem, archivePath)) {
       log.info("Removing archive '{}'...", archivePath);

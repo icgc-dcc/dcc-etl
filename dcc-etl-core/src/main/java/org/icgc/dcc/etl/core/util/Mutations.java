@@ -18,7 +18,6 @@
 package org.icgc.dcc.etl.core.util;
 
 import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -27,7 +26,7 @@ public final class Mutations {
   private static final String MUTATION_FORMAT = "%s>%s";
 
   public static String createMutation(String mutatedFrom, String mutatedTo) {
-    return _(MUTATION_FORMAT, mutatedFrom, mutatedTo);
+    return String.format(MUTATION_FORMAT, mutatedFrom, mutatedTo);
   }
 
 }

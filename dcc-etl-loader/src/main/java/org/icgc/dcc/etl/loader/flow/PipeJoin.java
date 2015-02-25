@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.loader.flow;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
 
 import java.util.List;
@@ -138,7 +138,7 @@ public class PipeJoin extends SubAssembly {
    * TODO: move to {@link SubmissionModel}?
    */
   private String describeRelation() {
-    return _("'%s': '%s' ('%s') -> '%s' ('%s')",
+    return String.format("'%s': '%s' ('%s') -> '%s' ('%s')",
         getJoiner(), referencingFileType, fks, referencedFileType, pks);
   }
 

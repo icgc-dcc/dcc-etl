@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.indexer.service;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.etl.indexer.factory.TransportClientFactory.newTransportClient;
 
 import java.io.File;
@@ -102,7 +102,7 @@ public abstract class AbstractDocumentServiceTest {
   }
 
   static String getMongoUri(String mongoUri, String databaseName) {
-    return _("%s/%s", mongoUri, databaseName);
+    return String.format("%s/%s", mongoUri, databaseName);
   }
 
 }

@@ -30,7 +30,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.GENE_PROJECT_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
 
@@ -118,7 +118,7 @@ public class GeneSummarizer extends AbstractSummarizer {
       try {
         updateTableCounts(observation, table);
       } catch (Exception e) {
-        log.error(_("Error processing observation: '{}'", observation), e);
+        log.error(String.format("Error processing observation: '{}'", observation), e);
         throw new RuntimeException(e);
       }
     }

@@ -21,7 +21,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.Long.parseLong;
 import static java.util.regex.Pattern.compile;
 import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
 import static org.icgc.dcc.etl.annotator.model.InfoHeaderField.AMINO_ACID_CHANGE_KEY;
 
 import java.util.regex.Pattern;
@@ -79,7 +78,7 @@ public final class AminoAcidChangeParser {
     }
 
     if (aminoAcidChange.trim().startsWith("-")) {
-      return _(FRAMESHIFT_VARIANT_FORMAT, aminoAcidPosition + 1L);
+      return String.format(FRAMESHIFT_VARIANT_FORMAT, aminoAcidPosition + 1L);
     } else {
       log.warn("Incorrectly formated aa_change encountered: {}", aminoAcidChange);
 
