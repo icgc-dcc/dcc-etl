@@ -15,12 +15,12 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.importer.util;
+package org.icgc.dcc.etl.db.importer.util;
 
 import static com.google.common.collect.Iterables.size;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.DONOR_COLLECTION;
-import static org.icgc.dcc.etl.importer.util.Importers.getLocalMongoClientUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
 
 import java.io.File;
 
@@ -61,9 +61,9 @@ public class CollectionImporterTest {
   @SneakyThrows
   public void testExecute() {
     CollectionImporter importer =
-        new CollectionImporter(getTargetDatabaseUri(), getTargetDatabaseUri(),
+        new CollectionImporter(DONOR_COLLECTION.getId(), getTargetDatabaseUri(), getTargetDatabaseUri(),
             Optional.<ValuesWrapper> absent(), Optional.<ValuesWrapper> absent());
-    importer.import_(DONOR_COLLECTION.getId());
+    importer.execute();
 
     assertThat(size(getDonors())).isEqualTo(0);
   }

@@ -180,6 +180,7 @@ public class EtlService {
   private void imports(String releaseName, Set<String> projects) {
     val importer = new Importer(
         config.getReleaseMongoUri(),
+        config.getGeneMongoUri(),
         config.getCacheDir(),
         config.getFathmmPostgresqlUri(),
         createICGCConfig(config));

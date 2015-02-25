@@ -1,0 +1,15 @@
+# Gene MongoDB URI
+geneMongoUri: "mongodb://localhost/dcc-genome"
+
+# ICGC Client configuration
+icgc:
+  cgpServiceUrl: ""
+  cudServiceUrl: ""
+  shortServiceUrl: ""
+  consumerKey: ""
+  consumerSecret: ""
+  accessToken: ""
+  accessSecret: ""
+  cudAppId: ""
+  strictSSLCertificates: true
+  requestLoggingEnabled: false

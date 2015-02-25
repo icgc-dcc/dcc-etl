@@ -15,9 +15,9 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.importer.util;
+package org.icgc.dcc.etl.db.importer.util;
 
-import static org.icgc.dcc.etl.importer.util.ValuesWrapper.ABSENT_VALUES_WRAPPER;
+import static org.icgc.dcc.etl.db.importer.util.ValuesWrapper.ABSENT_VALUES_WRAPPER;
 
 import java.net.UnknownHostException;
 
@@ -44,6 +44,8 @@ import com.mongodb.MongoClientURI;
 public class CollectionImporter {
 
   @NonNull
+  private final String collectionName;
+  @NonNull
   private final MongoClientURI sourceMongoUri;
   @NonNull
   private final MongoClientURI targetMongoUri;
@@ -62,8 +64,9 @@ public class CollectionImporter {
   @NonNull
   private final Optional<ValuesWrapper> exclusionValues;
 
-  public CollectionImporter(@NonNull MongoClientURI sourceMongoUri,
+  public CollectionImporter(@NonNull String collectionName, @NonNull MongoClientURI sourceMongoUri,
       @NonNull MongoClientURI targetMongoUri) {
+    this.collectionName = collectionName;
     this.sourceMongoUri = sourceMongoUri;
     this.targetMongoUri = targetMongoUri;
 
@@ -71,9 +74,8 @@ public class CollectionImporter {
     this.exclusionValues = ABSENT_VALUES_WRAPPER;
   }
 
-  public void import_(String collectionName) {
-    log.info("Importing {} from {} into {} in {}", collectionName, sourceMongoUri, collectionName,
-        targetMongoUri);
+  public void execute() {
+    log.info("Importing {} into release {}", collectionName, targetMongoUri);
 
     log.info("  Reading from: {}", sourceMongoUri);
     Jongo sourceJongo = getSourceJongo();

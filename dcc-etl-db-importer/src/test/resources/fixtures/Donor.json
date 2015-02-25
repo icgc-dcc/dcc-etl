@@ -1,0 +1,191 @@
+{
+  "_donor_id":"DO17172",
+  "_project_id":"KIRC-US",
+  "_summary":{
+    "_age_at_diagnosis_group":"30 - 39",
+    "_available_data_type":[
+      "cnsm",
+      "mirna_seq",
+      "exp_seq",
+      "pexp"
+    ],
+    "_cngv_exists":false,
+    "_cnsm_exists":true,
+    "_exp_seq_exists":true,
+    "_exp_array_exists":false,
+    "_jcn_exists":false,
+    "_meth_seq_exists":false,
+    "_meth_array_exists":false,
+    "_mirna_seq_exists":true,
+    "_pexp_exists":true,
+    "_sgv_exists":false,
+    "_ssm_count":0,
+    "_stgv_exists":false,
+    "_stsm_exists":false,
+    "experimental_analysis_performed":[
+      "WXS",
+      "miRNA-Seq",
+      "RNA-Seq"
+    ],
+    "experimental_analysis_performed_sample_count":{
+      "RNA-Seq":1,
+      "WXS":2,
+      "miRNA-Seq":1
+    }
+  },
+  "disease_status_last_followup":"progression",
+  "donor_age_at_diagnosis":33,
+  "donor_age_at_last_followup":33,
+  "donor_diagnosis_icd10":"C64.1",
+  "donor_id":"TCGA-B0-5084",
+  "donor_interval_of_last_followup":221,
+  "donor_sex":"male",
+  "donor_survival_time":129,
+  "donor_vital_status":"deceased",
+  "specimen":[
+    {
+      "_project_id":"KIRC-US",
+      "_specimen_id":"SP37421",
+      "digital_image_of_stained_section":"http://REPLACE_WITH_REAL_URL/56e0bdc9-f7b6-4b5f-85c5-31c4f592bc9f,9299daa7-2f37-44ac-b92d-580fda04d21c",
+      "specimen_id":"TCGA-B0-5084-01A",
+      "specimen_processing_other":"All TCGA cases 1 or 2",
+      "specimen_storage_other":"All TCGA cases 1, 2, or 3",
+      "specimen_type":"primary tumour",
+      "tumour_confirmed":"no",
+      "sample":[
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265319",
+          "analyzed_sample_id":"TCGA-A3-3324-01A-01D-0966-08",
+          "analyzed_sample_type":"Primary tumour",
+          "available_raw_sequence_data": ["@@@TARGET@@@"]
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265286",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01X-1390-10",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265351",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01D-2100-10",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265324",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01D-1330-02",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265313",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01R-1762-13",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265307",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01R-1333-13",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265296",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01R-1334-07",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265291",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01W-1388-10",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265342",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01D-1331-01",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265338",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01D-1392-10",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265331",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-01D-1462-08",
+          "analyzed_sample_type":"Primary tumour"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA259498",
+          "analyzed_sample_id":"TCGA-B0-5084-01A-21-1740-20",
+          "analyzed_sample_type":"Primary tumour"
+        }
+      ]
+    },
+    {
+      "_project_id":"KIRC-US",
+      "_specimen_id":"SP37422",
+      "digital_image_of_stained_section":"http://REPLACE_WITH_REAL_URL/b9fe1ffd-fd04-4b0d-a16c-6746d4a8a536",
+      "specimen_id":"TCGA-B0-5084-11A",
+      "specimen_processing_other":"All TCGA cases 1 or 2",
+      "specimen_storage_other":"All TCGA cases 1, 2, or 3",
+      "specimen_type":"normal control (tissue adjacent to primary)",
+      "sample":[
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265385",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01D-1331-01",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265372",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01D-2100-10",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265366",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01X-1390-10",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265361",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01W-1388-10",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265379",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01D-1462-08",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265405",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01D-1392-10",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265397",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01D-1330-02",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        },
+        {
+          "_project_id":"KIRC-US",
+          "_sample_id":"SA265390",
+          "analyzed_sample_id":"TCGA-B0-5084-11A-01D-1332-05",
+          "analyzed_sample_type":"Normal control adjacent to primary"
+        }
+      ]
+    }
+  ]
+}
