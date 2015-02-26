@@ -19,11 +19,11 @@ package org.icgc.dcc.etl.db.importer.cli;
 
 import com.beust.jcommander.IStringConverter;
 
-public class ComponentTypeConverter implements IStringConverter<ComponentType> {
+public class CollectionNameConverter implements IStringConverter<CollectionName> {
 
   @Override
-  public ComponentType convert(String value) {
-    return ComponentType.byName(value);
+  public CollectionName convert(String value) {
+    return CollectionName.byName(value);
   }
 
 }

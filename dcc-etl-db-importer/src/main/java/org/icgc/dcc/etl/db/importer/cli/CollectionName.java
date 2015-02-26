@@ -22,11 +22,11 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Types of Components for DB Import, corresponds to collections in MongoDB
+ * Types of Collections for DB Import, corresponds to collections in MongoDB
  */
 
 @Getter
-public enum ComponentType {
+public enum CollectionName {
 
   PROJECTS,
   CGC,
@@ -34,14 +34,14 @@ public enum ComponentType {
   PATHWAYS,
   GENES;
 
-  public static ComponentType byName(@NonNull String name) {
+  public static CollectionName byName(@NonNull String name) {
     for (val value : values()) {
       if (name.equals(value)) {
         return value;
       }
     }
 
-    throw new IllegalArgumentException("No '" + ComponentType.class.getName() + "' value with name '" + name
+    throw new IllegalArgumentException("No '" + CollectionName.class.getName() + "' value with name '" + name
         + "' found");
   }
 

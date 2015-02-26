@@ -36,8 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.etl.db.importer.cgc.CgcImporter;
-import org.icgc.dcc.etl.db.importer.cli.ComponentType;
-import org.icgc.dcc.etl.db.importer.cli.ComponentTypeConverter;
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.cli.CollectionNameConverter;
 import org.icgc.dcc.etl.db.importer.gene.GeneImporter;
 import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
@@ -69,34 +69,34 @@ public class DBImporter {
 
     val watch = Stopwatch.createStarted();
 
-    if (collections.contains(ComponentType.PROJECTS)) {
+    if (collections.contains(CollectionName.PROJECTS)) {
       log.info("Importing projects...");
       importProjects(icgcConfig, mongoUri);
       log.info("Finished importing projects in {} ...", watch);
     }
 
-    if (collections.contains(ComponentType.GENES)) {
+    if (collections.contains(CollectionName.GENES)) {
       watch.reset().start();
       log.info("Importing genes...");
       importGenes(mongoUri);
       log.info("Finished importing genes in {} ...", watch);
     }
 
-    if (collections.contains(ComponentType.CGC)) {
+    if (collections.contains(CollectionName.CGC)) {
       watch.reset().start();
       log.info("Importing CGC...");
       importCgc(mongoUri);
       log.info("Finished importing CGC in {} ...", watch);
     }
 
-    if (collections.contains(ComponentType.PATHWAYS)) {
+    if (collections.contains(CollectionName.PATHWAYS)) {
       watch.reset().start();
       log.info("Importing pathways...");
       importPathways(mongoUri);
       log.info("Finished importing pathways in {} ...", watch);
     }
 
-    if (collections.contains(ComponentType.GO)) {
+    if (collections.contains(CollectionName.GO)) {
       watch.reset().start();
       log.info("Importing GO...");
       importGo(mongoUri);
@@ -155,8 +155,8 @@ public class DBImporter {
     @Parameter(names = { "-u", "--uri" }, required = true, description = "MongoDB uri")
     public String mongoURI;
 
-    @Parameter(names = { "-c", "--collections" }, converter = ComponentTypeConverter.class, description = "Components to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
-    public List<ComponentType> collections = newArrayList(ComponentType.values());
+    @Parameter(names = { "-c", "--collections" }, converter = CollectionNameConverter.class, description = "Components to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
+    public List<CollectionName> collections = newArrayList(CollectionName.values());
 
   }
 }
