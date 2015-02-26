@@ -30,50 +30,6 @@
       <artifactId>dcc-common-client</artifactId>
     </dependency>
 
-    <!-- GO -->
-    <dependency>
-      <groupId>org.bbop</groupId>
-      <artifactId>oboformat</artifactId>
-      <version>${oboformat.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.bbop</groupId>
-      <artifactId>OWLTools-Annotation</artifactId>
-      <version>${owltools-annotation.version}</version>
-      <exclusions>
-    	<exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-	<dependency>
-	  <groupId>org.bbop</groupId>
-	  <artifactId>OWLTools-Core</artifactId>
-	  <version>${owltools-core.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>net.sourceforge.owlapi</groupId>
-		<artifactId>owlapi-api</artifactId>
-		<version>${owlapi.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>net.sourceforge.owlapi</groupId>
-		<artifactId>owlapi-apibinding</artifactId>
-		<version>${owlapi.version}</version>
-	</dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>log4j-over-slf4j</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-
     <!-- Mongo -->
     <dependency>
       <groupId>org.jongo</groupId>
@@ -164,11 +120,6 @@
   </build>
 
   <properties>
-    <!-- Versions - GO -->
-    <oboformat.version>0.5.5-SNAPSHOT</oboformat.version>
-    <owltools-annotation.version>0.2.1-SNAPSHOT</owltools-annotation.version>
-    <owltools-core.version>0.2.1-SNAPSHOT</owltools-core.version>
-    <owlapi.version>3.4.8</owlapi.version>
 
     <!-- Versions - DB -->
     <jdbi.version>2.53</jdbi.version>
