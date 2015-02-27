@@ -44,8 +44,6 @@ import com.mongodb.MongoClientURI;
 public class CollectionImporter {
 
   @NonNull
-  private final String collectionName;
-  @NonNull
   private final MongoClientURI sourceMongoUri;
   @NonNull
   private final MongoClientURI targetMongoUri;
@@ -64,9 +62,8 @@ public class CollectionImporter {
   @NonNull
   private final Optional<ValuesWrapper> exclusionValues;
 
-  public CollectionImporter(@NonNull String collectionName, @NonNull MongoClientURI sourceMongoUri,
+  public CollectionImporter(@NonNull MongoClientURI sourceMongoUri,
       @NonNull MongoClientURI targetMongoUri) {
-    this.collectionName = collectionName;
     this.sourceMongoUri = sourceMongoUri;
     this.targetMongoUri = targetMongoUri;
 
@@ -74,8 +71,9 @@ public class CollectionImporter {
     this.exclusionValues = ABSENT_VALUES_WRAPPER;
   }
 
-  public void execute() {
-    log.info("Importing {} into release {}", collectionName, targetMongoUri);
+  public void import_(String collectionName) {
+    log.info("Importing {} from {} into {} in {}", collectionName, sourceMongoUri, collectionName,
+        targetMongoUri);
 
     log.info("  Reading from: {}", sourceMongoUri);
     Jongo sourceJongo = getSourceJongo();

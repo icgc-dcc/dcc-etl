@@ -17,15 +17,11 @@
  */
 package org.icgc.dcc.etl.importer;
 
-import static com.google.common.base.Optional.fromNullable;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.icgc.dcc.common.core.util.Splitters.COMMA;
-import static org.icgc.dcc.etl.importer.gene.util.InGeneFilter.in;
-import static org.icgc.dcc.etl.importer.util.Importers.getRemoteCgsUri;
-import static org.icgc.dcc.etl.importer.util.Importers.getRemoteGenesBsonUri;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.PATHWAY_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -34,16 +30,13 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
-import org.icgc.dcc.etl.importer.cgc.CgcImporter;
 import org.icgc.dcc.etl.importer.fathmm.FathmmImporter;
 import org.icgc.dcc.etl.importer.fi.FunctionalImpactImporter;
-import org.icgc.dcc.etl.importer.gene.GeneImporter;
-import org.icgc.dcc.etl.importer.go.GoImporter;
-import org.icgc.dcc.etl.importer.pathway.PathwayImporter;
-import org.icgc.dcc.etl.importer.project.ProjectImporter;
+import org.icgc.dcc.etl.importer.util.CollectionImporter;
+import org.icgc.dcc.etl.importer.util.ValuesWrapper;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableSet;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
@@ -61,6 +54,8 @@ public class Importer {
   @NonNull
   private final String releaseMongoUri;
   @NonNull
+  private final String geneMongoUri;
+  @NonNull
   private final File cacheDir;
   @NonNull
   private final String fathmmPostgresqlUri;
@@ -74,28 +69,35 @@ public class Importer {
     val releaseUri = new MongoClientURI(releaseUri(releaseName));
     val watch = Stopwatch.createStarted();
 
+    val collectionImporter = new CollectionImporter(new MongoClientURI(geneMongoUri),
+        new MongoClientURI(releaseMongoUri),
+        Optional.<ValuesWrapper> absent(), Optional.<ValuesWrapper> absent());
+
     log.info("Importing projects...");
-    importProjects(icgcConfig, releaseUri, projectKeys);
+    // TODO filter by projectKeys
+    collectionImporter.import_(PROJECT_COLLECTION.getId());
     log.info("Finished importing projects in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing genes...");
-    importGenes(releaseUri);
+    collectionImporter.import_(GENE_COLLECTION.getId());
     log.info("Finished importing genes in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing CGC...");
-    importCgc(releaseUri);
+    // TODO add CGC Collection to dcc.common.core.model.ReleaseCollection
+    collectionImporter.import_("CGC");
     log.info("Finished importing CGC in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing pathways...");
-    importPathways(releaseUri);
+    collectionImporter.import_(PATHWAY_COLLECTION.getId());
     log.info("Finished importing pathways in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing GO...");
-    importGo(releaseUri);
+    // TODO add CGC Collection to dcc.common.core.model.ReleaseCollection
+    collectionImporter.import_("GO");
     log.info("Finished importing GO in {} ...", watch);
 
     watch.reset().start();
@@ -107,39 +109,6 @@ public class Importer {
     log.info("Importing functional impact predictions");
     importFunctionalImpact(releaseUri);
     log.info("Finished importing functional impact predictions {} ...", watch);
-  }
-
-  private void importProjects(ICGCClientConfig config, MongoClientURI releaseUri, Set<String> projectKeys) {
-    val projectImporter = new ProjectImporter(config, fromNullable(projectKeys), releaseUri);
-    projectImporter.execute();
-  }
-
-  private void importGenes(MongoClientURI releaseUri) {
-    val geneImporter = new GeneImporter(releaseUri, getRemoteGenesBsonUri());
-
-    val includedGeneIds = getIncludedGeneIds();
-    val all = includedGeneIds.isEmpty();
-    if (all) {
-      geneImporter.execute();
-    } else {
-      log.warn("*** Only importing the following genes: {}", includedGeneIds);
-      geneImporter.execute(in(includedGeneIds));
-    }
-  }
-
-  private void importCgc(MongoClientURI releaseUri) {
-    val cgcImporter = new CgcImporter(releaseUri, getRemoteCgsUri());
-    cgcImporter.execute();
-  }
-
-  private void importPathways(MongoClientURI releaseUri) {
-    val pathwayImporter = new PathwayImporter(releaseUri);
-    pathwayImporter.execute();
-  }
-
-  private void importGo(MongoClientURI releaseUri) {
-    val goImporter = new GoImporter(releaseUri);
-    goImporter.execute();
   }
 
   private void importFunctionalImpact(MongoClientURI releaseUri) {
@@ -154,17 +123,6 @@ public class Importer {
 
   private String releaseUri(String releaseName) {
     return releaseMongoUri + (releaseMongoUri.charAt(releaseMongoUri.length() - 1) == '/' ? "" : "/") + releaseName;
-  }
-
-  private static Set<String> getIncludedGeneIds() {
-    val geneIds = System.getProperty(INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME);
-    if (isNullOrEmpty(geneIds)) {
-      // All
-      return Collections.emptySet();
-    } else {
-      // Subset
-      return ImmutableSet.copyOf(COMMA.split(geneIds));
-    }
   }
 
 }

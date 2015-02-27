@@ -28,8 +28,8 @@ import lombok.val;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
-import org.icgc.dcc.etl.config.EtlConfigFile;
 import org.icgc.dcc.common.hadoop.fs.FileSystems;
+import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.submission.dictionary.model.Dictionary;
 
 import com.beust.jcommander.JCommander;

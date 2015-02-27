@@ -41,8 +41,8 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.config.EtlConfig;
-import org.icgc.dcc.etl.config.EtlConfigFile;
+import org.icgc.dcc.etl.core.config.EtlConfig;
+import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.indexer.model.DocumentType;
 import org.icgc.dcc.etl.service.EtlService;
 import org.slf4j.bridge.SLF4JBridgeHandler;
