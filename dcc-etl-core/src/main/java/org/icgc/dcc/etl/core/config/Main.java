@@ -15,22 +15,22 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.config;
+package org.icgc.dcc.etl.core.config;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.common.core.util.Strings2.EMPTY_STRING;
-import static org.icgc.dcc.etl.config.ConfigInfoExtractor.getInfo2;
+import static org.icgc.dcc.etl.core.config.ConfigInfoExtractor.getInfo2;
 
 import java.io.File;
 
 import lombok.NoArgsConstructor;
 import lombok.val;
 
-import org.icgc.dcc.etl.config.ConfigInfoExtractor.SubType;
-import org.icgc.dcc.etl.config.ConfigInfoExtractor.Type;
+import org.icgc.dcc.etl.core.config.ConfigInfoExtractor.SubType;
+import org.icgc.dcc.etl.core.config.ConfigInfoExtractor.Type;
 
 @NoArgsConstructor(access = PRIVATE)
 public class Main {

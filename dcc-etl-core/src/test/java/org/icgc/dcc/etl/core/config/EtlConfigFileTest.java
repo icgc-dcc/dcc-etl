@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,52 +15,43 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.config;
+package org.icgc.dcc.etl.core.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING;
-import static org.icgc.dcc.etl.config.ConfigInfoExtractor.getInfo2;
-import static org.icgc.dcc.common.test.Tests.LOCALHOST;
 
 import java.io.File;
 
-import org.icgc.dcc.etl.EtlIntegrationTest;
-import org.icgc.dcc.etl.config.ConfigInfoExtractor.SubType;
-import org.icgc.dcc.etl.config.ConfigInfoExtractor.Type;
+import lombok.val;
+
+import org.junit.After;
 import org.junit.Test;
 
-import com.google.common.base.Optional;
+public class EtlConfigFileTest {
 
-public class ConfigInfoExtractorTest {
+  /**
+   * Test configuration file.
+   */
+  private static final String TEST_CONFIG_FILE = "src/test/conf/config.yaml";
 
-  private static final File TEST_CONFIG_FILE = new File(EtlIntegrationTest.TEST_CONFIG_FILE);
+  @After
+  public void tearDown() {
+    System.clearProperty(getOverrideName());
+  }
 
   @Test
-  public void test_config_info_extractor() {
-    assertThat(getInfo2(
-        TEST_CONFIG_FILE,
-        Type.MONGO_ETL_ADMIN,
-        SubType.USERNAME))
-        .isEqualTo(ABSENT_STRING);
-    assertThat(getInfo2(
-        TEST_CONFIG_FILE,
-        Type.MONGO_ETL_ADMIN,
-        SubType.HOST))
-        .isEqualTo(Optional.of(LOCALHOST));
-    assertThat(getInfo2(
-        TEST_CONFIG_FILE,
-        Type.NAMENODE,
-        SubType.HOST))
-        .isEqualTo(ABSENT_STRING);
-    assertThat(getInfo2(
-        TEST_CONFIG_FILE,
-        Type.NAMENODE,
-        SubType.HOST))
-        .isEqualTo(ABSENT_STRING);
-    assertThat(getInfo2(
-        TEST_CONFIG_FILE,
-        Type.JOBTRACKER,
-        SubType.HOST))
-        .isEqualTo(Optional.of(LOCALHOST));
+  public void testConfigOverride() {
+    val overrideName = getOverrideName();
+    val overrideValue = "override-" + System.currentTimeMillis();
+    System.setProperty(overrideName, overrideValue);
+
+    EtlConfig config = new EtlConfigFile(new File(TEST_CONFIG_FILE)).read();
+
+    assertThat(config.getEsUri()).isEqualTo(overrideValue);
+    assertThat(config.isFilterAllControlled()).isTrue();
   }
+
+  private String getOverrideName() {
+    return EtlConfigFile.PROPERTY_PREFIX + "esUri";
+  }
+
 }

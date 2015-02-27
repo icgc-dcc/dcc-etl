@@ -1,4 +1,4 @@
-package org.icgc.dcc.etl.config;
+package org.icgc.dcc.etl.core.config;
 
 /*
  * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             

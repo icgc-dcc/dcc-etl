@@ -51,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.common.core.model.Identifiable;
-import org.icgc.dcc.etl.config.EtlConfig;
+import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.importer.Importer;
 import org.icgc.dcc.etl.indexer.core.Config;
 import org.icgc.dcc.etl.indexer.model.DocumentType;
