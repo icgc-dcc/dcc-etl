@@ -34,7 +34,7 @@ CDH Configurations
 ----
 For performance reasons, HDFS should have dfs.client.read.shortcircuit enabled via Cloudera Manager and adding users (hbase and downloader) to the list of dfs.block.local-path-access.user
 
-In order to run exporter under the user downloader, 
+In order to run exporter under the user downloader, a downloader directory under /user/ directory is needed to be created with the ownership assigned to "downloader".
 
 HBase Configurations
 ----
