@@ -18,38 +18,36 @@
 package org.icgc.dcc.etl.db.importer;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.icgc.dcc.common.core.util.Splitters.COMMA;
 import static org.icgc.dcc.etl.db.importer.gene.util.InGeneFilter.in;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import lombok.NonNull;
-import lombok.ToString;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.etl.db.importer.cgc.CgcImporter;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
-import org.icgc.dcc.etl.db.importer.cli.CollectionNameConverter;
 import org.icgc.dcc.etl.db.importer.gene.GeneImporter;
 import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
 import org.icgc.dcc.etl.db.importer.project.ProjectImporter;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
+@RequiredArgsConstructor
 public class DBImporter {
 
   /**
@@ -57,19 +55,23 @@ public class DBImporter {
    */
   public static final String INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME = DBImporter.class + ".geneIds";
 
+  /**
+   * Configuration
+   */
   @NonNull
-  private final static ICGCClientConfig icgcConfig = null;
+  private final MongoClientURI mongoUri;
+  @NonNull
+  private final ICGCClientConfig icgcConfig;
 
-  public static void main(String[] args) throws IOException {
-    val options = new Options();
-    new JCommander(options, args);
-
-    val collections = options.collections;
-    val mongoUri = new MongoClientURI(options.mongoURI);
-
+  public void import_(List<CollectionName> collections) throws IOException {
     val watch = Stopwatch.createStarted();
 
+    if (collections.isEmpty()) {
+      collections.addAll(Arrays.asList(CollectionName.values()));
+    }
+
     if (collections.contains(CollectionName.PROJECTS)) {
+      watch.reset().start();
       log.info("Importing projects...");
       importProjects(icgcConfig, mongoUri);
       log.info("Finished importing projects in {} ...", watch);
@@ -149,14 +151,4 @@ public class DBImporter {
     }
   }
 
-  @ToString
-  public static class Options {
-
-    @Parameter(names = { "-u", "--uri" }, required = true, description = "MongoDB uri")
-    public String mongoURI;
-
-    @Parameter(names = { "-c", "--collections" }, converter = CollectionNameConverter.class, description = "Components to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
-    public List<CollectionName> collections = newArrayList(CollectionName.values());
-
-  }
 }
