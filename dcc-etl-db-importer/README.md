@@ -1,7 +1,7 @@
-ICGC DCC - ETL Importer
-===
+ICGC DCC - ETL DB Importer
 
-Imports collections from persistent MongoDB databases to transient release databases.
+Imports collections of data from external sources into a MongoDB databases which is later imported into release databases during ETL run.
+
 
 Build
 ---

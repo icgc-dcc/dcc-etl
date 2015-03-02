@@ -24,7 +24,6 @@ import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -64,14 +63,10 @@ public class DBImporter {
   private final ICGCClientConfig icgcConfig;
 
   public void import_(List<CollectionName> collections) throws IOException {
+    
     val watch = Stopwatch.createStarted();
 
-    if (collections.isEmpty()) {
-      collections.addAll(Arrays.asList(CollectionName.values()));
-    }
-
     if (collections.contains(CollectionName.PROJECTS)) {
-      watch.reset().start();
       log.info("Importing projects...");
       importProjects(icgcConfig, mongoUri);
       log.info("Finished importing projects in {} ...", watch);
