@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.db.importer.geneset.model;
 
 import lombok.Data;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 @Data
 @Builder

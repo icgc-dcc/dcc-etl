@@ -1,7 +1,7 @@
 package org.icgc.dcc.etl.annotator.model;
 
 import lombok.Value;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 /**
  * Represents a record in the ssm_s.txt or sgv_s.txt file.<br>

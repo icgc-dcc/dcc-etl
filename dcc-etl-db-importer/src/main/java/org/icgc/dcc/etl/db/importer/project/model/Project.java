@@ -20,7 +20,7 @@ package org.icgc.dcc.etl.db.importer.project.model;
 import java.util.List;
 
 import lombok.Value;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 @Value
 @Builder

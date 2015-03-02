@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.io.hfile.Compression;
+import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles;
 import org.apache.pig.ExecType;
 import org.apache.pig.PigServer;
@@ -70,7 +70,7 @@ public class EmbeddedDynamicExporter {
     hbase.startUp();
     log.info("< Started embedded HBase");
 
-    ToHFile.COMPRESSION = Compression.Algorithm.NONE.getName();
+    ToHFile.COMPRESSION = Compression.Algorithm.NONE;
     Configuration conf = hbase.getConfiguration();
     SchemaUtil.createMetaTable("meta", conf, false);
     SchemaUtil.createArchiveTable(conf, false);

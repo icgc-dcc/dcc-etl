@@ -22,7 +22,7 @@ import static com.google.common.io.Resources.getResource;
 import static org.apache.commons.io.FileUtils.listFiles;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Files.contentOf;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.common.core.util.Joiners.INDENT;
 
 import java.io.File;
@@ -44,21 +44,21 @@ import org.junit.rules.TemporaryFolder;
 public class ConcatenatorTest {
 
   private static final String PARENT_DIR = getResource("fixtures/concatenator").getFile();
-  private static final String PROJECTS_FILE = _("%s/%s", PARENT_DIR, "concatenator_projects.json");
-  private static final String PROJECT1_INPUT_DIR = _("%s/input/%s", PARENT_DIR, "project1");
-  private static final String PROJECT2_INPUT_DIR = _("%s/input/%s", PARENT_DIR, "project2");
-  private static final String PROJECT1_REF_DIR = _("%s/ref/%s", PARENT_DIR, "project1");
-  private static final String PROJECT2_REF_DIR = _("%s/ref/%s", PARENT_DIR, "project2");
+  private static final String PROJECTS_FILE = String.format("%s/%s", PARENT_DIR, "concatenator_projects.json");
+  private static final String PROJECT1_INPUT_DIR = String.format("%s/input/%s", PARENT_DIR, "project1");
+  private static final String PROJECT2_INPUT_DIR = String.format("%s/input/%s", PARENT_DIR, "project2");
+  private static final String PROJECT1_REF_DIR = String.format("%s/ref/%s", PARENT_DIR, "project1");
+  private static final String PROJECT2_REF_DIR = String.format("%s/ref/%s", PARENT_DIR, "project2");
 
   /**
    * We can't use an actual {@link TemporaryFolder} because the above projects.json file must be able to point to
    * locations in it (it needs to be predictable).
    */
   private static final String TEMPORARY_DIR = "/tmp/dcc/concatenator";
-  private static final String TEMPORARY_INPUT_DIR = _("%s/%s", TEMPORARY_DIR, "input");
-  private static final String TEMPORARY_OUTPUT_DIR = _("%s/%s", TEMPORARY_DIR, "output");
-  private static final String TEMPORARY_PROJECT1_OUTPUT_DIR = _("%s/%s", TEMPORARY_OUTPUT_DIR, "project1");
-  private static final String TEMPORARY_PROJECT2_OUTPUT_DIR = _("%s/%s", TEMPORARY_OUTPUT_DIR, "project2");
+  private static final String TEMPORARY_INPUT_DIR = String.format("%s/%s", TEMPORARY_DIR, "input");
+  private static final String TEMPORARY_OUTPUT_DIR = String.format("%s/%s", TEMPORARY_DIR, "output");
+  private static final String TEMPORARY_PROJECT1_OUTPUT_DIR = String.format("%s/%s", TEMPORARY_OUTPUT_DIR, "project1");
+  private static final String TEMPORARY_PROJECT2_OUTPUT_DIR = String.format("%s/%s", TEMPORARY_OUTPUT_DIR, "project2");
 
   @Before
   public void setUp() throws IOException {
@@ -68,10 +68,10 @@ public class ConcatenatorTest {
     new File(TEMPORARY_OUTPUT_DIR).mkdir();
     FileUtils.copyDirectory(
         new File(PROJECT1_INPUT_DIR),
-        new File(_("%s/%s", TEMPORARY_INPUT_DIR, "project1")));
+        new File(String.format("%s/%s", TEMPORARY_INPUT_DIR, "project1")));
     FileUtils.copyDirectory(
         new File(PROJECT2_INPUT_DIR),
-        new File(_("%s/%s", TEMPORARY_INPUT_DIR, "project2")));
+        new File(String.format("%s/%s", TEMPORARY_INPUT_DIR, "project2")));
     log.info("Content: \n\t{}", INDENT.join(listFiles(new File(TEMPORARY_DIR), null, true)));
   }
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 import org.icgc.dcc.etl.db.importer.pathway.model.PathwaySegment;
 

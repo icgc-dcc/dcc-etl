@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.db.importer.go.model;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.Builder;
+import lombok.Builder;
 
 @Value
 @Builder

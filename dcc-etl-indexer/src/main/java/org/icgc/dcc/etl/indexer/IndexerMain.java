@@ -28,7 +28,7 @@ import static java.lang.System.out;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang.StringUtils.join;
 import static org.apache.commons.lang.StringUtils.repeat;
-import static org.icgc.dcc.common.core.util.FormatUtils._;
+
 import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newDistributedService;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newLocalService;
@@ -178,7 +178,7 @@ public class IndexerMain {
   }
 
   private String getMongoUri(String mongoUri, String databaseName) {
-    return _("%s/%s", mongoUri, databaseName);
+    return String.format("%s/%s", mongoUri, databaseName);
   }
 
   private String getProgramName() {

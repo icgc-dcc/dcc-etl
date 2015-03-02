@@ -18,9 +18,9 @@
 package org.icgc.dcc.etl.indexer.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.etl.indexer.util.JsonNodes.defaultNull;
 import static org.icgc.dcc.common.test.json.JsonNodes.$;
-import static org.icgc.dcc.common.test.json.JsonNodes._;
+import static org.icgc.dcc.common.test.json.JsonNodes.convertToString;
+import static org.icgc.dcc.etl.indexer.util.JsonNodes.defaultNull;
 import lombok.val;
 
 import org.icgc.dcc.common.core.fi.CompositeImpactCategory;
@@ -78,7 +78,7 @@ public class JsonNodesTest {
     objectNode.putPOJO("ma", MutationAssessorImpactCategory.HIGH);
     objectNode.putPOJO("fathmm", FathmmImpactCategory.DAMAGING);
 
-    System.out.println(_(objectNode));
+    System.out.println(convertToString(objectNode));
   }
 
 }
