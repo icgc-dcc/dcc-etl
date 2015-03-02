@@ -61,9 +61,9 @@ public class CollectionImporterTest {
   @SneakyThrows
   public void testExecute() {
     CollectionImporter importer =
-        new CollectionImporter(DONOR_COLLECTION.getId(), getTargetDatabaseUri(), getTargetDatabaseUri(),
+        new CollectionImporter(getTargetDatabaseUri(), getTargetDatabaseUri(),
             Optional.<ValuesWrapper> absent(), Optional.<ValuesWrapper> absent());
-    importer.execute();
+    importer.import_(DONOR_COLLECTION.getId());
 
     assertThat(size(getDonors())).isEqualTo(0);
   }

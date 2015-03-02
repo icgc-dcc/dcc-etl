@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.icgc.dcc</groupId>
+    <artifactId>dcc-etl</artifactId>
+    <version>3.7.5.2-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>dcc-etl-db-importer</artifactId>
+
+  <name>${project.artifactId}</name>
+  <description>${project.name}</description>
+
+  <dependencies>
+    <!-- DCC -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-etl-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-client</artifactId>
+    </dependency>
+
+    <!-- GO -->
+    <dependency>
+      <groupId>org.bbop</groupId>
+      <artifactId>oboformat</artifactId>
+      <version>${oboformat.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.bbop</groupId>
+      <artifactId>OWLTools-Annotation</artifactId>
+      <version>${owltools-annotation.version}</version>
+      <exclusions>
+    	<exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+	<dependency>
+	  <groupId>org.bbop</groupId>
+	  <artifactId>OWLTools-Core</artifactId>
+	  <version>${owltools-core.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>net.sourceforge.owlapi</groupId>
+		<artifactId>owlapi-api</artifactId>
+		<version>${owlapi.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>net.sourceforge.owlapi</groupId>
+		<artifactId>owlapi-apibinding</artifactId>
+		<version>${owlapi.version}</version>
+	</dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    
+    <!-- Command line -->
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+    </dependency>
+
+    <!-- Mongo -->
+    <dependency>
+      <groupId>org.jongo</groupId>
+      <artifactId>jongo</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+    </dependency>
+
+    <!-- REST -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>1.17.1</version>
+    </dependency>
+
+    <!-- JSON -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.fge</groupId>
+      <artifactId>json-schema-validator</artifactId>
+      <version>${json-schema-validator.version}</version>
+    </dependency>
+
+    <!-- Sandbox -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang3.version}</version>
+    </dependency>
+
+    <!-- CSV -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-csv</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.supercsv</groupId>
+      <artifactId>super-csv</artifactId>
+    </dependency>
+
+    <!-- JDBC -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jdbi</groupId>
+      <artifactId>jdbi</artifactId>
+      <version>${jdbi.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
+    </dependency>
+
+    <!-- Testing - DCC -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Test -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>-Xmx2G</argLine>
+          <excludes>
+            <exclude>**/*IntegrationTest.java</exclude>
+            <exclude>**/*ProjectImporterTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <properties>
+    <!-- Versions - GO -->
+    <oboformat.version>0.5.5-SNAPSHOT</oboformat.version>
+    <owltools-annotation.version>0.2.1-SNAPSHOT</owltools-annotation.version>
+    <owltools-core.version>0.2.1-SNAPSHOT</owltools-core.version>
+    <owlapi.version>3.4.8</owlapi.version>
+
+    <!-- Versions - DB -->
+    <jdbi.version>2.53</jdbi.version>
+    <h2.version>1.3.173</h2.version>
+
+    <json-schema-validator.version>1.5.3</json-schema-validator.version>
+    <commons-lang3.version>3.3.2</commons-lang3.version>
+  </properties>
+
+</project>
