@@ -70,7 +70,7 @@ public class Importer {
     val watch = Stopwatch.createStarted();
 
     val collectionImporter = new CollectionImporter(new MongoClientURI(geneMongoUri),
-        new MongoClientURI(releaseMongoUri),
+        releaseUri,
         Optional.<ValuesWrapper> absent(), Optional.<ValuesWrapper> absent());
 
     log.info("Importing projects...");
@@ -96,7 +96,7 @@ public class Importer {
 
     watch.reset().start();
     log.info("Importing GO...");
-    // TODO add CGC Collection to dcc.common.core.model.ReleaseCollection
+    // TODO add GO Collection to dcc.common.core.model.ReleaseCollection
     collectionImporter.import_("GO");
     log.info("Finished importing GO in {} ...", watch);
 

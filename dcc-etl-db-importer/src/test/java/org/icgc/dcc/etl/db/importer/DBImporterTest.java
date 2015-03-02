@@ -18,7 +18,6 @@
 package org.icgc.dcc.etl.db.importer;
 
 import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
 
 import java.io.File;
 import java.util.Arrays;
@@ -65,7 +64,7 @@ public class DBImporterTest {
 
     val mongoUri = config.getGeneMongoUri();
 
-    val dbImporter = new DBImporter(getLocalMongoClientUri(mongoUri),
+    val dbImporter = new DBImporter(mongoUri,
         createICGCConfig(config));
 
     val collections = Arrays.asList(CollectionName.values());

@@ -20,6 +20,11 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-core</artifactId>
     </dependency>
+        <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-etl-db-importer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-etl-importer</artifactId>

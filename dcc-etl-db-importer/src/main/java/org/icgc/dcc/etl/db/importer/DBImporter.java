@@ -23,7 +23,6 @@ import static org.icgc.dcc.etl.db.importer.gene.util.InGeneFilter.in;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -58,13 +57,14 @@ public class DBImporter {
    * Configuration
    */
   @NonNull
-  private final MongoClientURI mongoUri;
+  private final String geneMongoUri;
   @NonNull
   private final ICGCClientConfig icgcConfig;
 
-  public void import_(List<CollectionName> collections) throws IOException {
-    
+  public void import_(List<CollectionName> collections) {
+
     val watch = Stopwatch.createStarted();
+    val mongoUri = new MongoClientURI(geneMongoUri);
 
     if (collections.contains(CollectionName.PROJECTS)) {
       log.info("Importing projects...");
