@@ -47,33 +47,33 @@
       <artifactId>OWLTools-Annotation</artifactId>
       <version>${owltools-annotation.version}</version>
       <exclusions>
-    	<exclusion>
+        <exclusion>
           <groupId>*</groupId>
           <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
-	<dependency>
-	  <groupId>org.bbop</groupId>
-	  <artifactId>OWLTools-Core</artifactId>
-	  <version>${owltools-core.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>net.sourceforge.owlapi</groupId>
-		<artifactId>owlapi-api</artifactId>
-		<version>${owlapi.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>net.sourceforge.owlapi</groupId>
-		<artifactId>owlapi-apibinding</artifactId>
-		<version>${owlapi.version}</version>
-	</dependency>
+    <dependency>
+      <groupId>org.bbop</groupId>
+      <artifactId>OWLTools-Core</artifactId>
+      <version>${owltools-core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.owlapi</groupId>
+      <artifactId>owlapi-api</artifactId>
+      <version>${owlapi.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.owlapi</groupId>
+      <artifactId>owlapi-apibinding</artifactId>
+      <version>${owlapi.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>log4j-over-slf4j</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
-    
+
     <!-- Command line -->
     <dependency>
       <groupId>com.beust</groupId>
