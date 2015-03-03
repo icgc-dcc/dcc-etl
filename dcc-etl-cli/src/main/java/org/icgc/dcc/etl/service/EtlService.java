@@ -35,6 +35,7 @@ import static org.icgc.dcc.common.core.util.URLs.getUrlFromPath;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newDistributedService;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newLocalService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +53,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.common.core.model.Identifiable;
 import org.icgc.dcc.etl.core.config.EtlConfig;
+import org.icgc.dcc.etl.db.importer.DBImporter;
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.importer.Importer;
 import org.icgc.dcc.etl.indexer.core.Config;
 import org.icgc.dcc.etl.indexer.model.DocumentType;
@@ -178,6 +181,13 @@ public class EtlService {
   }
 
   private void imports(String releaseName, Set<String> projects) {
+    val dbImporter = new DBImporter(
+        config.getGeneMongoUri(),
+        createICGCConfig(config));
+
+    val collections = Arrays.asList(CollectionName.values());
+    dbImporter.import_(collections);
+
     val importer = new Importer(
         config.getReleaseMongoUri(),
         config.getGeneMongoUri(),

@@ -31,7 +31,6 @@ import org.icgc.dcc.etl.db.importer.cli.Options;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import com.mongodb.MongoClientURI;
 
 /**
  * Entry point for the {@link DBImporter}.
@@ -81,8 +80,7 @@ public class DBImporterMain {
 
     EtlConfig config = EtlConfigFile.read(new File(configFilePath));
 
-    val mongoUri = config.getGeneMongoUri();
-    val geneMongoUri = new MongoClientURI(mongoUri);
+    val geneMongoUri = config.getGeneMongoUri();
     val dbImporter = new DBImporter(geneMongoUri, createICGCConfig(config));
 
     dbImporter.import_(collections);
