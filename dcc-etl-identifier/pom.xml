@@ -70,6 +70,11 @@
         <artifactId>maven-shade-plugin</artifactId>
         <configuration>
           <createDependencyReducedPom>false</createDependencyReducedPom>
+          <!-- Fixes bug https://jira.codehaus.org/browse/MSHADE-183 -->
+          <transformers>
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+            </transformer>
+          </transformers>
         </configuration>
       </plugin>
       <plugin>
