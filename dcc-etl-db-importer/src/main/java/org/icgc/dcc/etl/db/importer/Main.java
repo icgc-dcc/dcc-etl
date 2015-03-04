@@ -17,24 +17,19 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Boolean.valueOf;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-import lombok.ToString;
 import lombok.val;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
-import org.icgc.dcc.etl.db.importer.cli.CollectionName;
-import org.icgc.dcc.etl.db.importer.cli.CollectionNameConverter;
+import org.icgc.dcc.etl.db.importer.cli.Options;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 
 /**
  * Entry point for the {@link DBImporter}.
@@ -67,16 +62,6 @@ public class Main {
         .strictSSLCertificates(valueOf(config.getIcgc().get("strictSSLCertificates")))
         .requestLoggingEnabled(valueOf(config.getIcgc().get("requestLoggingEnabled")))
         .build();
-  }
-
-  @ToString
-  public static class Options {
-
-    @Parameter(names = { "-c", "--collections" }, converter = CollectionNameConverter.class, description = "Collections to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
-    public List<CollectionName> collections = newArrayList(CollectionName.values());
-
-    @Parameter(names = { "-c", "--config" }, required = true, description = "Path to the ETL config file")
-    public String configFilePath;
   }
 
 }

@@ -31,10 +31,10 @@ import com.beust.jcommander.Parameter;
 @ToString
 public class Options {
 
-  @Parameter(names = { "-c", "--collections" }, converter = CollectionNameConverter.class, description = "Components to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
+  @Parameter(names = { "--collections" }, converter = CollectionNameConverter.class, description = "Components to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
   public List<CollectionName> collections = newArrayList(CollectionName.values());
 
-  @Parameter(names = { "-c", "--config" }, required = true, description = "Path to the ETL config file")
+  @Parameter(names = { "--config" }, required = true, description = "Path to the ETL config file")
   public String configFilePath;
 
 }

@@ -78,6 +78,9 @@ public class DBImporterMain {
     val collections = options.collections;
     val configFilePath = options.configFilePath;
 
+    log.info("         collections    - {}", options.collections);
+    log.info("         config file    - {}", options.configFilePath);
+
     EtlConfig config = EtlConfigFile.read(new File(configFilePath));
 
     val geneMongoUri = config.getGeneMongoUri();
@@ -86,8 +89,8 @@ public class DBImporterMain {
     dbImporter.import_(collections);
   }
 
-  private static String usage(JCommander cli) {
-    return "";
+  private static void usage(JCommander cli) {
+    cli.usage();
   }
 
 }

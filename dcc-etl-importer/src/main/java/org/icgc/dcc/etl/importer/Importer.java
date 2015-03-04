@@ -17,7 +17,9 @@
  */
 package org.icgc.dcc.etl.importer;
 
+import static org.icgc.dcc.common.core.model.ReleaseCollection.CGC_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.GO_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PATHWAY_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 
@@ -69,24 +71,25 @@ public class Importer {
     val releaseUri = new MongoClientURI(releaseUri(releaseName));
     val watch = Stopwatch.createStarted();
 
-    val collectionImporter = new CollectionImporter(new MongoClientURI(geneMongoUri),
-        releaseUri,
-        Optional.<ValuesWrapper> absent(), Optional.<ValuesWrapper> absent());
-
     log.info("Importing projects...");
-    // TODO filter by projectKeys
-    collectionImporter.import_(PROJECT_COLLECTION.getId());
+    val projectKeysWrapper = ValuesWrapper.builder().surrogateKey("").values(projectKeys).build();
+    val projectCollectionImporter =
+        new CollectionImporter(new MongoClientURI(geneMongoUri), releaseUri, Optional.of(projectKeysWrapper),
+            Optional.<ValuesWrapper> absent());
+    projectCollectionImporter.import_(PROJECT_COLLECTION.getId());
     log.info("Finished importing projects in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing genes...");
+    val collectionImporter = new CollectionImporter(new MongoClientURI(geneMongoUri),
+        releaseUri,
+        Optional.<ValuesWrapper> absent(), Optional.<ValuesWrapper> absent());
     collectionImporter.import_(GENE_COLLECTION.getId());
     log.info("Finished importing genes in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing CGC...");
-    // TODO add CGC Collection to dcc.common.core.model.ReleaseCollection
-    collectionImporter.import_("CGC");
+    collectionImporter.import_(CGC_COLLECTION.getId());
     log.info("Finished importing CGC in {} ...", watch);
 
     watch.reset().start();
@@ -96,8 +99,7 @@ public class Importer {
 
     watch.reset().start();
     log.info("Importing GO...");
-    // TODO add GO Collection to dcc.common.core.model.ReleaseCollection
-    collectionImporter.import_("GO");
+    collectionImporter.import_(GO_COLLECTION.getId());
     log.info("Finished importing GO in {} ...", watch);
 
     watch.reset().start();
