@@ -15,56 +15,18 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer;
+package org.icgc.dcc.etl.db.importer.project.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_SET_COLLECTION;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
-import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
-import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
-
-import java.io.File;
-import java.util.Arrays;
-
-import lombok.val;
-
-import org.icgc.dcc.etl.core.config.EtlConfig;
-import org.icgc.dcc.etl.core.config.EtlConfigFile;
-import org.icgc.dcc.etl.db.importer.cli.CollectionName;
-import org.jongo.Jongo;
-import org.junit.Test;
+import lombok.NonNull;
 
 import com.mongodb.MongoClientURI;
 
-public class DBImporterTest {
+public abstract class AbstractJongoWriter<T> extends AbstractJongoComponent {
 
-  /**
-   * Test settings.
-   */
-  private static final String TEST_CONFIG_FILE = "src/test/conf/config.yaml";
-  private static final EtlConfig CONFIG = EtlConfigFile.read(new File(TEST_CONFIG_FILE));
-
-  /**
-   * Test environment.
-   */
-  private final Jongo jongo = createJongo(new MongoClientURI(CONFIG.getGeneMongoUri()));
-
-  @Test
-  public void testExecute() {
-
-    val dbImporter = new DBImporter(CONFIG.getGeneMongoUri(), createICGCConfig(CONFIG));
-    val collections = Arrays.asList(CollectionName.values());
-    dbImporter.import_(collections);
-
-    assertThat(getCollectionSize(PROJECT_COLLECTION.getId())).isGreaterThan(0);
-    assertThat(getCollectionSize(GENE_COLLECTION.getId())).isGreaterThan(0);
-    assertThat(getCollectionSize(GENE_SET_COLLECTION.getId())).isGreaterThan(0);
-
+  public AbstractJongoWriter(@NonNull MongoClientURI mongoUri) {
+    super(mongoUri);
   }
 
-  private long getCollectionSize(String collectionName) {
-    return jongo.getCollection(collectionName).count();
-  }
+  abstract public void write(T value);
 
 }
