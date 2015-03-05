@@ -26,6 +26,9 @@ readonly mount=$base:/app
 readonly command="hadoop-fuse-dfs ro dfs://***REMOVED***:8020 /hdfs/dcc &> /dev/null ; cd /app ; $execute" # TODO: get NN from config
 readonly etl_dir=***REMOVED***/dcc-etl
 
+# Pull/ Update Docker image
+docker pull $image
+
 # Execute $command in the Docker image
 docker run \
  --privileged=true -ti --rm \
