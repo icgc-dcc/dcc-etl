@@ -15,10 +15,10 @@
       <fileMode>0755</fileMode>
     </fileSet>
     <fileSet>
-      <directory>src/main/resources</directory>
+      <directory>src/main/conf</directory>
       <outputDirectory>conf</outputDirectory>
       <includes>
-        <include>config.yaml</include>
+        <include>**/*</include>
       </includes>
     </fileSet>
     <fileSet>
