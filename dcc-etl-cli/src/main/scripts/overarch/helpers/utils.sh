@@ -69,7 +69,7 @@ function get_config_info() {
 
  java \
    -cp ${jar_file?} \
-   org.icgc.dcc.etl.config.Main \
+   org.icgc.dcc.etl.core.config.Main \
    ${config_file?} \
    ${type?} \
    ${sub_type?}
