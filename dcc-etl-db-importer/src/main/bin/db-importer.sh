@@ -15,6 +15,6 @@ base_dir=$(dirname $0)/..
 java_opts="-Xmx4g -Xms4g"
 
 java \
-  ${java_opts} \
--jar ${base_dir}/lib/dcc-etl-db-importer.jar --config ${base_dir}/conf/config.yaml "$@" \
--Dlogback.configurationFile=${base_dir}/conf/logback.xml
+	${java_opts} \
+	-jar ${base_dir}/lib/dcc-etl-db-importer.jar --config ${base_dir}/conf/config.yaml "$@" \
+	-Dlogback.configurationFile=${base_dir}/conf/logback.xml

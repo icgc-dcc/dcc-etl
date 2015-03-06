@@ -52,7 +52,6 @@ public class DBImporterTest {
 
   @Test
   public void testExecute() {
-
     val dbImporter = new DBImporter(CONFIG.getGeneMongoUri(), createICGCConfig(CONFIG));
     val collections = Arrays.asList(CollectionName.values());
     dbImporter.import_(collections);
@@ -60,7 +59,6 @@ public class DBImporterTest {
     assertThat(getCollectionSize(PROJECT_COLLECTION.getId())).isGreaterThan(0);
     assertThat(getCollectionSize(GENE_COLLECTION.getId())).isGreaterThan(0);
     assertThat(getCollectionSize(GENE_SET_COLLECTION.getId())).isGreaterThan(0);
-
   }
 
   private long getCollectionSize(String collectionName) {
