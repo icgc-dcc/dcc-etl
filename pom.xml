@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>12</version>
+    <version>13</version>
   </parent>
 
   <artifactId>dcc-etl</artifactId>
@@ -178,7 +178,7 @@
 
     <!-- Versions - Utilities -->
     <commons-lang.version>2.6</commons-lang.version>
-    
+
     <!-- Versions - Resources -->
     <dcc-heliotrope.version>12</dcc-heliotrope.version>
   </properties>
