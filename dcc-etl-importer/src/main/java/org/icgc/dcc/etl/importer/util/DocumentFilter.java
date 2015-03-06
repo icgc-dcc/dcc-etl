@@ -23,27 +23,27 @@ import static com.google.common.collect.Iterables.limit;
 
 import java.util.Set;
 
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.Builder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Optional;
 
 /**
- * Represents a wrapper for values that are explicitly specified to be included or excluded in the import.
+ * Represents a filter for values that are explicitly specified to be included or excluded in the import.
  */
 @Value
 @Builder
-public class ValuesWrapper {
+public class DocumentFilter {
 
-  public static final Optional<ValuesWrapper> ABSENT_VALUES_WRAPPER = Optional.absent();
+  public static final Optional<DocumentFilter> ABSENT_DOCUMENT_FILTER = Optional.absent();
 
   /**
-   * Surrogate key that identifies the documents.
+   * filed that identifies the documents.
    */
   @NonNull
-  private final String surrogateKey;
+  private final String idField;
 
   /**
    * Values to act upon.
@@ -52,20 +52,20 @@ public class ValuesWrapper {
   private final Set<String> values;
 
   /**
-   * Determines if a document has a match in the values specified and for the given surrogate key.
+   * Determines if a document has a match in the values specified and for the given id filed.
    */
   public boolean isMatch(JsonNode sourceDocument) {
-    JsonNode value = sourceDocument.path(surrogateKey);
+    JsonNode value = sourceDocument.path(idField);
     checkState(!value.isMissingNode() && value.isTextual(),
-        "Expecting a field '{}' in document '{}'", surrogateKey, sourceDocument);
+        "Expecting a field '%s' in document '%s'", idField, sourceDocument);
     return values.contains(value.asText());
   }
 
   @Override
   public String toString() {
     int displayThreshold = 100;
-    return toStringHelper(ValuesWrapper.class)
-        .add("surrogateKey", surrogateKey)
+    return toStringHelper(DocumentFilter.class)
+        .add("idField", idField)
         .add(
             "values",
             values.size() < displayThreshold ?

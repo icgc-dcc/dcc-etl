@@ -17,15 +17,10 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.icgc.dcc.common.core.util.Splitters.COMMA;
-import static org.icgc.dcc.etl.db.importer.gene.util.InGeneFilter.in;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -41,17 +36,11 @@ import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
 import org.icgc.dcc.etl.db.importer.project.ProjectImporter;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableSet;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
 @RequiredArgsConstructor
 public class DBImporter {
-
-  /**
-   * Constants.
-   */
-  public static final String INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME = DBImporter.class + ".geneIds";
 
   /**
    * Configuration
@@ -109,15 +98,7 @@ public class DBImporter {
 
   private static void importGenes(MongoClientURI releaseUri) {
     val geneImporter = new GeneImporter(releaseUri, getRemoteGenesBsonUri());
-
-    val includedGeneIds = getIncludedGeneIds();
-    val all = includedGeneIds.isEmpty();
-    if (all) {
-      geneImporter.execute();
-    } else {
-      log.warn("*** Only importing the following genes: {}", includedGeneIds);
-      geneImporter.execute(in(includedGeneIds));
-    }
+    geneImporter.execute();
   }
 
   private static void importCgc(MongoClientURI releaseUri) {
@@ -133,17 +114,6 @@ public class DBImporter {
   private static void importGo(MongoClientURI releaseUri) {
     val goImporter = new GoImporter(releaseUri);
     goImporter.execute();
-  }
-
-  private static Set<String> getIncludedGeneIds() {
-    val geneIds = System.getProperty(INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME);
-    if (isNullOrEmpty(geneIds)) {
-      // All
-      return Collections.emptySet();
-    } else {
-      // Subset
-      return ImmutableSet.copyOf(COMMA.split(geneIds));
-    }
   }
 
 }

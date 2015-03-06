@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.importer.util;
 
-import static org.icgc.dcc.etl.importer.util.ValuesWrapper.ABSENT_VALUES_WRAPPER;
+import static org.icgc.dcc.etl.importer.util.DocumentFilter.ABSENT_DOCUMENT_FILTER;
 
 import java.net.UnknownHostException;
 
@@ -53,22 +53,22 @@ public class CollectionImporter {
    * {@link #exclusionValues}).
    */
   @NonNull
-  private final Optional<ValuesWrapper> inclusionValues;
+  private final Optional<DocumentFilter> inclusionValues;
 
   /**
    * Values to exclude in the import. If absent, all values are included. {@link #inclusionValues} trumps this
    * mechanism.
    */
   @NonNull
-  private final Optional<ValuesWrapper> exclusionValues;
+  private final Optional<DocumentFilter> exclusionValues;
 
   public CollectionImporter(@NonNull MongoClientURI sourceMongoUri,
       @NonNull MongoClientURI targetMongoUri) {
     this.sourceMongoUri = sourceMongoUri;
     this.targetMongoUri = targetMongoUri;
 
-    this.inclusionValues = ABSENT_VALUES_WRAPPER;
-    this.exclusionValues = ABSENT_VALUES_WRAPPER;
+    this.inclusionValues = ABSENT_DOCUMENT_FILTER;
+    this.exclusionValues = ABSENT_DOCUMENT_FILTER;
   }
 
   public void import_(String collectionName) {

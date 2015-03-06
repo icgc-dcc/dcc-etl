@@ -33,7 +33,7 @@ import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.jongo.Jongo;
-import org.junit.Test;
+import org.junit.Ignore;
 
 import com.mongodb.MongoClientURI;
 
@@ -50,7 +50,10 @@ public class DBImporterTest {
    */
   private final Jongo jongo = createJongo(new MongoClientURI(CONFIG.getGeneMongoUri()));
 
-  @Test
+  /**
+   * This is tested in ETLIntegration.
+   */
+  @Ignore
   public void testExecute() {
     val dbImporter = new DBImporter(CONFIG.getGeneMongoUri(), createICGCConfig(CONFIG));
     val collections = Arrays.asList(CollectionName.values());
