@@ -295,10 +295,6 @@ public class EtlIntegrationTest {
     return getIdentificationUri().getDatabase();
   }
 
-  private String getGenomeDbName() {
-    return getGenomeUri().getDatabase();
-  }
-
   private MongoClientURI getIdentificationUri() {
     return getMongoUri(IDENTIFICATION.getId());
   }
