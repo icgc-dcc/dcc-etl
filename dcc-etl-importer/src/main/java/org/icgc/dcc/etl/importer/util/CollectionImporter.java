@@ -109,14 +109,17 @@ public class CollectionImporter {
   }
 
   private void execute(MongoCollection sourceCollection, MongoCollection targetCollection) {
+    int count = 0;
     Iterable<JsonNode> sourceDocuments = sourceCollection.find().as(JsonNode.class);
     for (JsonNode sourceDocument : sourceDocuments) {
       if ((!inclusionValues.isPresent() && !exclusionValues.isPresent()) ||
           (inclusionValues.isPresent() && inclusionValues.get().isMatch(sourceDocument)) || // Trumps the exclusion list
           (exclusionValues.isPresent() && !exclusionValues.get().isMatch(sourceDocument))) {
         targetCollection.save(sourceDocument);
+        count++;
       }
     }
+    log.info("Finished importing {} documents.", count);
   }
 
   private Jongo getSourceJongo() {

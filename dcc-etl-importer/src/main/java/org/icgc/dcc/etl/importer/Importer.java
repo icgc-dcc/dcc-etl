@@ -20,10 +20,8 @@ package org.icgc.dcc.etl.importer;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames.GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames.PROJECT_ID;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.CGC_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.GO_COLLECTION;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.PATHWAY_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_SET_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 import static org.icgc.dcc.common.core.util.Splitters.COMMA;
 
@@ -93,24 +91,13 @@ public class Importer {
     geneCollectionImporter.import_(GENE_COLLECTION.getId());
     log.info("Finished importing genes in {} ...", watch);
 
-    val collectionImporter =
+    watch.reset().start();
+    log.info("Importing gene sets...");
+    val geneSetCollectionImporter =
         new CollectionImporter(new MongoClientURI(geneMongoUri), releaseUri, Optional.<DocumentFilter> absent(),
             Optional.<DocumentFilter> absent());
-
-    watch.reset().start();
-    log.info("Importing CGC...");
-    collectionImporter.import_(CGC_COLLECTION.getId());
-    log.info("Finished importing CGC in {} ...", watch);
-
-    watch.reset().start();
-    log.info("Importing pathways...");
-    collectionImporter.import_(PATHWAY_COLLECTION.getId());
-    log.info("Finished importing pathways in {} ...", watch);
-
-    watch.reset().start();
-    log.info("Importing GO...");
-    collectionImporter.import_(GO_COLLECTION.getId());
-    log.info("Finished importing GO in {} ...", watch);
+    geneSetCollectionImporter.import_(GENE_SET_COLLECTION.getId());
+    log.info("Finished importing gene sets in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing Fathmm predictions...");
