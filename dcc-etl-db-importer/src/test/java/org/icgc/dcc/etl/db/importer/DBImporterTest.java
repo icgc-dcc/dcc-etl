@@ -17,80 +17,55 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_SET_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
+import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
 import java.io.File;
+import java.util.Arrays;
 
-import lombok.SneakyThrows;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
-import org.icgc.dcc.etl.db.importer.cli.Options;
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.jongo.Jongo;
+import org.junit.Ignore;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
+import com.mongodb.MongoClientURI;
 
-/**
- * Entry point for the {@link DBImporter}.
- */
-@Slf4j
-public class DBImporterMain {
+public class DBImporterTest {
 
   /**
-   * Constants.
+   * Test settings.
    */
-  public static final String APPLICATION_NAME = "dcc-etl-db-importer";
-  public static final int SUCCESS_STATUS_CODE = 0;
-  public static final int FAILURE_STATUS_CODE = 1;
+  private static final String TEST_CONFIG_FILE = "src/test/conf/config.yaml";
+  private static final EtlConfig CONFIG = EtlConfigFile.read(new File(TEST_CONFIG_FILE));
 
   /**
-   * Entry point into the application.
-   * 
-   * @param args command line arguments
+   * Test environment.
    */
-  public static void main(String... args) {
+  private final Jongo jongo = createJongo(new MongoClientURI(CONFIG.getGeneMongoUri()));
 
-    val options = new Options();
-    val cli = new JCommander(options);
-    cli.setAcceptUnknownOptions(true);
-    cli.setProgramName(APPLICATION_NAME);
-
-    try {
-      cli.parse(args);
-      run(options);
-      System.exit(SUCCESS_STATUS_CODE);
-    } catch (ParameterException e) {
-      System.err.println("Missing parameters: " + e.getMessage());
-      usage(cli);
-      System.exit(FAILURE_STATUS_CODE);
-    } catch (Exception e) {
-      log.error("Unknown error: ", e);
-      System.err.println("Command error. Please check the log for detailed error messages: " + e.getMessage());
-      usage(cli);
-      System.exit(FAILURE_STATUS_CODE);
-    }
-  }
-
-  @SneakyThrows
-  private static void run(Options options) {
-    val collections = options.collections;
-    val configFilePath = options.configFilePath;
-
-    log.info("         collections    - {}", options.collections);
-    log.info("         config file    - {}", options.configFilePath);
-
-    EtlConfig config = EtlConfigFile.read(new File(configFilePath));
-
-    val geneMongoUri = config.getGeneMongoUri();
-    val dbImporter = new DBImporter(geneMongoUri, createICGCConfig(config));
-
+  /**
+   * This is tested in ETLIntegration.
+   */
+  @Ignore
+  public void testExecute() {
+    val dbImporter = new DBImporter(CONFIG.getGeneMongoUri(), createICGCConfig(CONFIG));
+    val collections = Arrays.asList(CollectionName.values());
     dbImporter.import_(collections);
+
+    assertThat(getCollectionSize(PROJECT_COLLECTION.getId())).isGreaterThan(0);
+    assertThat(getCollectionSize(GENE_COLLECTION.getId())).isGreaterThan(0);
+    assertThat(getCollectionSize(GENE_SET_COLLECTION.getId())).isGreaterThan(0);
   }
 
-  private static void usage(JCommander cli) {
-    cli.usage();
+  private long getCollectionSize(String collectionName) {
+    return jongo.getCollection(collectionName).count();
   }
 
 }

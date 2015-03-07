@@ -36,7 +36,7 @@ public enum CollectionName {
 
   public static CollectionName byName(@NonNull String name) {
     for (val value : values()) {
-      if (name.equals(value)) {
+      if (name.equalsIgnoreCase(value.name())) {
         return value;
       }
     }

@@ -15,26 +15,62 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.cli;
+package org.icgc.dcc.etl.importer.util;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.base.Objects.toStringHelper;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.limit;
 
-import java.util.List;
+import java.util.Set;
 
-import lombok.ToString;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 
-import com.beust.jcommander.Parameter;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.base.Optional;
 
 /**
- * Command line options.
+ * Represents a filter for values that are explicitly specified to be included or excluded in the import.
  */
-@ToString
-public class Options {
+@Value
+@Builder
+public class DocumentFilter {
 
-  @Parameter(names = { "--collections" }, converter = CollectionNameConverter.class, description = "Components to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
-  public List<CollectionName> collections = newArrayList(CollectionName.values());
+  public static final Optional<DocumentFilter> ABSENT_DOCUMENT_FILTER = Optional.absent();
 
-  @Parameter(names = { "--config" }, required = true, description = "Path to the ETL config file")
-  public String configFilePath;
+  /**
+   * filed that identifies the documents.
+   */
+  @NonNull
+  private final String idField;
 
+  /**
+   * Values to act upon.
+   */
+  @NonNull
+  private final Set<String> values;
+
+  /**
+   * Determines if a document has a match in the values specified and for the given id filed.
+   */
+  public boolean isMatch(JsonNode sourceDocument) {
+    JsonNode value = sourceDocument.path(idField);
+    checkState(!value.isMissingNode() && value.isTextual(),
+        "Expecting a field '%s' in document '%s'", idField, sourceDocument);
+    return values.contains(value.asText());
+  }
+
+  @Override
+  public String toString() {
+    int displayThreshold = 100;
+    return toStringHelper(DocumentFilter.class)
+        .add("idField", idField)
+        .add(
+            "values",
+            values.size() < displayThreshold ?
+                values :
+                limit(values, displayThreshold) + " [...]")
+        .toString();
+  }
 }

@@ -27,6 +27,7 @@ import static org.icgc.dcc.common.core.DccResources.getDictionaryDccResource;
 import static org.icgc.dcc.common.core.model.IndexType.DONOR_CENTRIC_TYPE;
 import static org.icgc.dcc.common.core.model.IndexType.DONOR_TYPE;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseDatabase.GENOME;
 import static org.icgc.dcc.common.core.model.ReleaseDatabase.IDENTIFICATION;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.Joiners.PATH;
@@ -45,10 +46,12 @@ import static org.icgc.dcc.common.test.Tests.TEST_RUN_NUMBER;
 import static org.icgc.dcc.common.test.Tests.getTestJobId;
 import static org.icgc.dcc.common.test.Tests.getTestReleasePrefix;
 import static org.icgc.dcc.common.test.Tests.getTestWorkingDir;
+import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
 import static org.icgc.dcc.etl.service.EtlService.EtlAction.IMPORT;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -68,6 +71,10 @@ import org.icgc.dcc.common.core.util.URLs;
 import org.icgc.dcc.common.hadoop.fs.FileSystems;
 import org.icgc.dcc.common.test.es.ElasticSearchExporter;
 import org.icgc.dcc.etl.cli.Main;
+import org.icgc.dcc.etl.core.config.EtlConfig;
+import org.icgc.dcc.etl.core.config.EtlConfigFile;
+import org.icgc.dcc.etl.db.importer.DBImporter;
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.identifier.IdentifierMain;
 import org.icgc.dcc.etl.importer.Importer;
 import org.junit.After;
@@ -135,6 +142,7 @@ public class EtlIntegrationTest {
   public void setup() {
     startIdentifier();
     seedFathmmDB();
+    seedGenomeDB();
 
     importSubmissionFileSystemStructure();
 
@@ -189,6 +197,18 @@ public class EtlIntegrationTest {
   @After
   public void tearDown() {
     exportIndex();
+  }
+
+  private void seedGenomeDB() {
+
+    EtlConfig config = EtlConfigFile.read(new File(TEST_CONFIG_FILE));
+    val dbImporter = new DBImporter(
+        getGenomeUri().getURI(),
+        createICGCConfig(config));
+
+    val collections = Arrays.asList(CollectionName.values());
+    dbImporter.import_(collections);
+
   }
 
   @SneakyThrows
@@ -277,6 +297,10 @@ public class EtlIntegrationTest {
 
   private MongoClientURI getIdentificationUri() {
     return getMongoUri(IDENTIFICATION.getId());
+  }
+
+  private MongoClientURI getGenomeUri() {
+    return getMongoUri(GENOME.getId());
   }
 
   private static String getIndexName() {
