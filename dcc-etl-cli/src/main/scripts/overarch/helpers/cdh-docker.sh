@@ -37,12 +37,7 @@ docker run \
  -v $etl_dir:/etl \
  -v /tmp:/tmp \
  \
- -v ***REMOVED***/dcc-etl/data:***REMOVED***/dcc-etl/data \
- -v ***REMOVED***/dcc-annotator:***REMOVED***/dcc-annotator \
- -v /nfs/hadoop/workspace/annotator:/nfs/hadoop/workspace/annotator \
- -v /nfs/hadoop/workspace/annotator-fs-hack:/nfs/hadoop/workspace/annotator-fs-hack \
- \
- -v /nfs/hadoop/oozie/jlam/dcc-downloader-export:/nfs/hadoop/oozie/jlam/dcc-downloader-export \
+ -v ***REMOVED***/dcc-exporter/:/dcc-exporter \
  -v ***REMOVED***/dcc-exporter/hadoop/conf:/etc/hadoop/conf \
  -v ***REMOVED***/dcc-exporter/hbase/conf:/etc/hbase/conf \
  \
