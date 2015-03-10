@@ -18,17 +18,9 @@
 package org.icgc.dcc.etl.exporter;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.pig.ExecType;
-import org.apache.pig.pigunit.Cluster;
-import org.apache.pig.pigunit.pig.PigServer;
-import org.apache.pig.tools.pigstats.ScriptState;
-
-import static org.junit.Assert.*;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,9 +30,17 @@ import java.util.List;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.pig.ExecType;
 import org.apache.pig.data.Tuple;
+import org.apache.pig.pigunit.Cluster;
 import org.apache.pig.pigunit.PigTest;
+import org.apache.pig.pigunit.pig.PigServer;
 import org.apache.pig.tools.parameters.ParseException;
+import org.apache.pig.tools.pigstats.ScriptState;
 import org.icgc.dcc.downloader.core.ArchiveMetaManager;
 import org.icgc.dcc.downloader.core.ArchiverConstant;
 import org.icgc.dcc.etl.exporter.pig.storage.StaticMultiStorage;
