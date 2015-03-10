@@ -63,15 +63,7 @@ do
 done
 
 datatypes=${datatypes:1}
-IFS=',' read -a types <<< "$datatypes"
 
-datatypes=""
-for type in "${types[@]}"
-do
-	datatypes="${datatypes},${typeMappings["${type//[[:blank:]]/}"]}"
-done
-
-datatypes=${datatypes:1}
 IFS=',' read -a types <<< "$datatypes"
 
 #export HBASE_HOME=/usr/lib/hbase

@@ -54,6 +54,11 @@ import org.icgc.dcc.downloader.core.SchemaUtil;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * 
+ * This class is used for generating HFiles for dynamic download
+ * 
+ */
 public class ToHFile extends EvalFunc<DataBag> {
 
   private static int BLOCKSIZE = 5 * 1048576;
