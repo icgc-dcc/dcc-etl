@@ -43,19 +43,20 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.icgc.dcc.common.cascading.CascadingContext;
+import org.icgc.dcc.common.cascading.taps.MongoDbTap;
 import org.icgc.dcc.common.core.model.DataType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.common.core.util.DccConstants;
 import org.icgc.dcc.common.core.util.Extensions;
 import org.icgc.dcc.common.core.util.Jackson;
+import org.icgc.dcc.common.hadoop.fs.HadoopUtils;
 import org.icgc.dcc.etl.loader.core.ProvidedDataReleaseDigest;
 import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.mongodb.LoaderMongoDbScheme;
-import org.icgc.dcc.common.cascading.CascadingContext;
-import org.icgc.dcc.common.cascading.taps.MongoDbTap;
-import org.icgc.dcc.common.hadoop.fs.HadoopUtils;
 
+import cascading.flow.Flow;
 import cascading.flow.FlowConnector;
 import cascading.property.ConfigDef;
 import cascading.tap.SinkMode;
@@ -243,14 +244,14 @@ public abstract class BaseLoaderPlatformStrategy implements LoaderPlatformStrate
   public Fields getFileHeader(String submission, FileType fileType) {
     val fileSystem = platformData.getFileSystem();
 
-    return HadoopUtils.getFileHeader(
+    return new Fields(HadoopUtils.getFileHeader(
         fileSystem,
         getHeaderContainingFilePath(
             fileSystem,
             getInputFilePath(
                 submission,
                 fileType)),
-        LOADER_SEPARATOR);
+        LOADER_SEPARATOR));
   }
 
   protected String getInputFilePath(String submission, FileType fileType) {

@@ -19,10 +19,10 @@ package org.icgc.dcc.etl.loader.platform;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newHashMap;
+import static org.icgc.dcc.common.cascading.util.CascadingProperties.enableDotExports;
 import static org.icgc.dcc.common.core.util.VersionUtils.getCommitId;
 import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
 import static org.icgc.dcc.common.hadoop.util.HadoopConstants.LZO_CODEC_PROPERTY_VALUE;
-import static org.icgc.dcc.common.hadoop.util.HadoopProperties.enableDotExports;
 import static org.icgc.dcc.common.hadoop.util.HadoopProperties.enableIntermediateMapOutputCompression;
 import static org.icgc.dcc.common.hadoop.util.HadoopProperties.enableJobOutputCompression;
 import static org.icgc.dcc.common.hadoop.util.HadoopProperties.setAvailableCodecs;
@@ -35,11 +35,11 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.fs.FileSystem;
+import org.icgc.dcc.common.cascading.CascadingContext;
 import org.icgc.dcc.common.core.model.DataType;
+import org.icgc.dcc.common.hadoop.util.HadoopProperties;
 import org.icgc.dcc.etl.loader.cascading.TupleEntrySerialization;
 import org.icgc.dcc.etl.loader.service.LoaderService;
-import org.icgc.dcc.common.cascading.CascadingContext;
-import org.icgc.dcc.common.hadoop.util.HadoopProperties;
 
 import cascading.property.AppProps;
 import cascading.tap.Tap;
