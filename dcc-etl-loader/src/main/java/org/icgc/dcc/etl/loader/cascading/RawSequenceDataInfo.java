@@ -31,7 +31,7 @@ import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.META_FILES
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.META_FILE_RETAIN_FIELDS;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.MISSING_VALUE_REPLACEMENT;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.RAW_SEQUENCE_DATA_FIELDS_MAPPING;
-import static org.icgc.dcc.common.hadoop.cascading.Tuples2.nestTuple;
+import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -48,9 +48,9 @@ import org.icgc.dcc.common.core.model.SubmissionModel;
 import org.icgc.dcc.common.core.util.SerializableMaps;
 import org.icgc.dcc.common.core.util.Strings2;
 import org.icgc.dcc.etl.loader.mongodb.TupleEntryToDBObjectTransformer;
-import org.icgc.dcc.common.hadoop.cascading.SubAssemblies.NullReplacer.EmptyTupleNullReplacer;
-import org.icgc.dcc.common.hadoop.cascading.TupleEntries;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseBuffer;
+import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer.EmptyTupleNullReplacer;
+import org.icgc.dcc.common.cascading.TupleEntries;
+import org.icgc.dcc.common.cascading.operation.BaseBuffer;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.BufferCall;

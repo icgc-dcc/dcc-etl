@@ -29,7 +29,7 @@ import static org.icgc.dcc.common.core.util.Optionals.ABSENT_FILE_TYPE;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.generatedFields;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
 import static org.icgc.dcc.etl.loader.identification.Identifier.identify;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.getCountFieldCounterpart;
+import static org.icgc.dcc.common.cascading.Fields2.getCountFieldCounterpart;
 import lombok.NonNull;
 
 import org.icgc.dcc.common.core.model.FileTypes.FileType;

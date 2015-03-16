@@ -29,7 +29,7 @@ import org.icgc.dcc.etl.loader.cascading.RawSequenceDataInfo;
 import org.icgc.dcc.etl.loader.core.LoaderTailType;
 import org.icgc.dcc.etl.loader.flow.ClinicalHack;
 import org.icgc.dcc.etl.loader.flow.SummaryCollector;
-import org.icgc.dcc.common.hadoop.cascading.Pipes;
+import org.icgc.dcc.common.cascading.Pipes;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class PipeNames {

@@ -21,14 +21,14 @@ import static cascading.tuple.Fields.ARGS;
 import static cascading.tuple.Fields.REPLACE;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.emptyToNull;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.checkFieldsCardinality;
-import static org.icgc.dcc.common.hadoop.cascading.TupleEntries.getFirstString;
+import static org.icgc.dcc.common.cascading.Fields2.checkFieldsCardinality;
+import static org.icgc.dcc.common.cascading.TupleEntries.getFirstString;
 
 import java.util.Iterator;
 
 import lombok.NonNull;
 
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;

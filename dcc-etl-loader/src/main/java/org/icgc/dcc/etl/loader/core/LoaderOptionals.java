@@ -21,7 +21,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING;
 import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING_LIST;
-import static org.icgc.dcc.common.hadoop.cascading.CascadingOptionals.ABSENT_PIPE;
+import static org.icgc.dcc.common.cascading.CascadingOptionals.ABSENT_PIPE;
 
 import java.util.List;
 

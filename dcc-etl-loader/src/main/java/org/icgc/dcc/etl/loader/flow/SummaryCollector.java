@@ -27,9 +27,9 @@ import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getDonorIdField;
 import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getSummaryTempDonorIdField;
 import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getSummaryValueField;
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getSummaryPipeName;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.getFieldNames;
-import static org.icgc.dcc.common.hadoop.cascading.Tuples2.isNullField;
-import static org.icgc.dcc.common.hadoop.cascading.Tuples2.nestTuple;
+import static org.icgc.dcc.common.cascading.Fields2.getFieldNames;
+import static org.icgc.dcc.common.cascading.Tuples2.isNullField;
+import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
 
 import java.util.Map;
 import java.util.Set;
@@ -45,10 +45,10 @@ import org.icgc.dcc.etl.loader.flow.planner.DonorRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.flow.planner.ObservationRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 import org.icgc.dcc.etl.loader.service.LoaderModel;
-import org.icgc.dcc.common.hadoop.cascading.HasSingleResultField;
-import org.icgc.dcc.common.hadoop.cascading.SubAssemblies.Nest;
-import org.icgc.dcc.common.hadoop.cascading.SubAssemblies.NullReplacer;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.HasSingleResultField;
+import org.icgc.dcc.common.cascading.SubAssemblies.Nest;
+import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;

@@ -38,7 +38,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.core.model.DataType;
 import org.icgc.dcc.etl.loader.cascading.TupleEntrySerialization;
 import org.icgc.dcc.etl.loader.service.LoaderService;
-import org.icgc.dcc.common.hadoop.cascading.CascadingContext;
+import org.icgc.dcc.common.cascading.CascadingContext;
 import org.icgc.dcc.common.hadoop.util.HadoopProperties;
 
 import cascading.property.AppProps;

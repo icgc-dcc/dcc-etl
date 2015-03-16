@@ -52,8 +52,8 @@ import org.icgc.dcc.common.core.util.Jackson;
 import org.icgc.dcc.etl.loader.core.ProvidedDataReleaseDigest;
 import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.mongodb.LoaderMongoDbScheme;
-import org.icgc.dcc.common.hadoop.cascading.CascadingContext;
-import org.icgc.dcc.common.hadoop.cascading.taps.MongoDbTap;
+import org.icgc.dcc.common.cascading.CascadingContext;
+import org.icgc.dcc.common.cascading.taps.MongoDbTap;
 import org.icgc.dcc.common.hadoop.fs.HadoopUtils;
 
 import cascading.flow.FlowConnector;

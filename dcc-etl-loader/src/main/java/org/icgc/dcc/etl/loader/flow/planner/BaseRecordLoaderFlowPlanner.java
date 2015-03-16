@@ -36,7 +36,7 @@ import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getEndPipeName;
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getStartPipeName;
 import static org.icgc.dcc.etl.loader.identification.Identifier.requiresIdentification;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Consequence.getConsequenceArrayInternalName;
-import static org.icgc.dcc.common.hadoop.cascading.CascadingOptionals.ABSENT_PIPE;
+import static org.icgc.dcc.common.cascading.CascadingOptionals.ABSENT_PIPE;
 
 import java.util.Map;
 import java.util.Set;
@@ -66,8 +66,8 @@ import org.icgc.dcc.etl.loader.flow.RecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.identification.Identifier;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 import org.icgc.dcc.etl.loader.service.LoaderModel.Persistence;
-import org.icgc.dcc.common.hadoop.cascading.CascadingFunctions.CloneField;
-import org.icgc.dcc.common.hadoop.cascading.Flows;
+import org.icgc.dcc.common.cascading.CascadingFunctions.CloneField;
+import org.icgc.dcc.common.cascading.Flows;
 
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;
