@@ -16,6 +16,12 @@ components_to_run=${1?} && shift
 host=$(hostname -f)
 valid_host=false
 
+if [ "$host" == "***REMOVED***" ]; then
+ cluster="prod"
+ use_docker=false
+ valid_host=true
+fi
+
 if [ "$host" == "hcn-135.res.oicr.on.ca" ]; then
  cluster="prod"
  use_docker=true
