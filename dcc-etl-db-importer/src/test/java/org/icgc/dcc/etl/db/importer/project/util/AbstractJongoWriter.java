@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,26 +15,18 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.cli;
+package org.icgc.dcc.etl.db.importer.project.util;
 
-import static com.google.common.collect.Lists.newArrayList;
+import lombok.NonNull;
 
-import java.util.List;
+import com.mongodb.MongoClientURI;
 
-import lombok.ToString;
+public abstract class AbstractJongoWriter<T> extends AbstractJongoComponent {
 
-import com.beust.jcommander.Parameter;
+  public AbstractJongoWriter(@NonNull MongoClientURI mongoUri) {
+    super(mongoUri);
+  }
 
-/**
- * Command line options.
- */
-@ToString
-public class Options {
-
-  @Parameter(names = { "--collections" }, converter = CollectionNameConverter.class, description = "Components to import. Comma seperated list of: 'projects', 'genes', 'cgc', 'go', 'pathways'. By default all collections will be imported.")
-  public List<CollectionName> collections = newArrayList(CollectionName.values());
-
-  @Parameter(names = { "--config" }, required = true, description = "Path to the ETL config file")
-  public String configFilePath;
+  abstract public void write(T value);
 
 }

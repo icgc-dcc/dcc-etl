@@ -25,15 +25,15 @@ import static org.icgc.dcc.common.core.model.FieldNames.NormalizerFieldNames.NOR
 import static org.icgc.dcc.common.core.model.FileTypes.FileType.SSM_P_TYPE;
 import static org.icgc.dcc.common.core.model.Marking.from;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
-import static org.icgc.dcc.common.hadoop.cascading.Tuples2.nestTuple;
+import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
 import lombok.NoArgsConstructor;
 import lombok.val;
 
 import org.icgc.dcc.common.core.model.Marking;
 import org.icgc.dcc.etl.loader.service.LoaderModel;
-import org.icgc.dcc.common.hadoop.cascading.TupleEntries;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFilter;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.TupleEntries;
+import org.icgc.dcc.common.cascading.operation.BaseFilter;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FilterCall;

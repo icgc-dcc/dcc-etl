@@ -15,57 +15,48 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.loader.core;
+package org.icgc.dcc.etl.core.util;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING;
-import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING_LIST;
-import static org.icgc.dcc.common.cascading.CascadingOptionals.ABSENT_PIPE;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import lombok.NoArgsConstructor;
-
-import org.icgc.dcc.common.hadoop.util.HadoopCompression;
-
-import cascading.pipe.Pipe;
-
-import com.google.common.base.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Utils method for loader-specific {@link Optional}s (helps with verbosity).
+ * Utils class for mongodb related operations.
  */
-@NoArgsConstructor(access = PRIVATE)
-public final class LoaderOptionals {
+public class MongoDbUtils {
 
-  public static final Optional<HadoopCompression> ABSENT_HADOOP_COMPRESSION = Optional.absent();
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
-  public static Optional<String> optional(String string) {
-    return string == null ?
-        ABSENT_STRING :
-        Optional.<String> of(string);
+  public static String fields(String includedField) {
+    return fields(newArrayList(includedField));
   }
 
-  public static Optional<List<String>> optional(List<String> strings) {
-    if (strings == null) {
-      return ABSENT_STRING_LIST;
-    } else {
-      List<String> list = newArrayList(strings); // To avoid the cast
-      return Optional.of(list);
+  public static String fields(List<String> includedFields) {
+    return fields(new ArrayList<String>(), includedFields);
+  }
+
+  /**
+   * Returns a {@link String} representing the selection/un-selection of fields using mongodb's syntax.
+   * <p>
+   * For instance: {"field1": 1, "field3": 0, "field4": 0, "field5": 1} where fields 1 and 5 are explicitly selected and
+   * fields 3 and 4 explicitly unselected.
+   */
+  public static String fields(List<String> excludedFields, List<String> includedFields) {
+    ObjectNode fields = MAPPER.createObjectNode();
+
+    for (String excludedField : excludedFields) {
+      fields.put(excludedField, 0);
     }
-  }
+    for (String excludedField : includedFields) {
+      fields.put(excludedField, 1);
+    }
 
-  public static Optional<Pipe> optional(Pipe pipe) {
-    return pipe == null ?
-        ABSENT_PIPE :
-        Optional.<Pipe> of(pipe);
-  }
-
-  public static Optional<HadoopCompression> optional(HadoopCompression hadoopCompression) {
-    return hadoopCompression == null ?
-        ABSENT_HADOOP_COMPRESSION :
-        Optional.<HadoopCompression> of(hadoopCompression);
+    return fields.toString();
   }
 
 }

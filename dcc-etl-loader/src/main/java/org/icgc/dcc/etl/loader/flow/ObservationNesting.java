@@ -29,17 +29,17 @@ import static org.icgc.dcc.etl.loader.service.LoaderModel.Occurence.NO_VALUE_REP
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Occurence.OBSERVATION_ARRAY_FIELD;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Occurence.OCCURENCE_FIELDS;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Occurence.SECONDARY_SORT_FIELDS;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.cloneFields;
-import static org.icgc.dcc.common.hadoop.cascading.Tuples2.nestTuple;
-import static org.icgc.dcc.common.hadoop.cascading.Tuples2.sortTuples;
+import static org.icgc.dcc.common.cascading.Fields2.cloneFields;
+import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
+import static org.icgc.dcc.common.cascading.Tuples2.sortTuples;
 
 import java.util.Iterator;
 
 import lombok.val;
 
-import org.icgc.dcc.common.hadoop.cascading.TupleEntries;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseBuffer;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.TupleEntries;
+import org.icgc.dcc.common.cascading.operation.BaseBuffer;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.BufferCall;

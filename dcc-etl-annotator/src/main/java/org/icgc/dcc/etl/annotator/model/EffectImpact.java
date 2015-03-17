@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.etl.annotator.model;
 
-
 /**
  * SnpEff Effect Impact.<br>
  * SnpEff labels each effect as either MODIFIER, LOW, MODERATE or HIGH.

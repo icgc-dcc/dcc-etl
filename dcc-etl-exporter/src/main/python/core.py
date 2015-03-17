@@ -1,3 +1,4 @@
+import os
 from org.apache.pig.scripting import *
 from org.apache.hadoop.hbase import HBaseConfiguration
 

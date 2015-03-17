@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.importer.util;
 
-import static org.icgc.dcc.etl.importer.util.ValuesWrapper.ABSENT_VALUES_WRAPPER;
+import static org.icgc.dcc.etl.importer.util.DocumentFilter.ABSENT_DOCUMENT_FILTER;
 
 import java.net.UnknownHostException;
 
@@ -53,22 +53,22 @@ public class CollectionImporter {
    * {@link #exclusionValues}).
    */
   @NonNull
-  private final Optional<ValuesWrapper> inclusionValues;
+  private final Optional<DocumentFilter> inclusionValues;
 
   /**
    * Values to exclude in the import. If absent, all values are included. {@link #inclusionValues} trumps this
    * mechanism.
    */
   @NonNull
-  private final Optional<ValuesWrapper> exclusionValues;
+  private final Optional<DocumentFilter> exclusionValues;
 
   public CollectionImporter(@NonNull MongoClientURI sourceMongoUri,
       @NonNull MongoClientURI targetMongoUri) {
     this.sourceMongoUri = sourceMongoUri;
     this.targetMongoUri = targetMongoUri;
 
-    this.inclusionValues = ABSENT_VALUES_WRAPPER;
-    this.exclusionValues = ABSENT_VALUES_WRAPPER;
+    this.inclusionValues = ABSENT_DOCUMENT_FILTER;
+    this.exclusionValues = ABSENT_DOCUMENT_FILTER;
   }
 
   public void import_(String collectionName) {
@@ -109,14 +109,17 @@ public class CollectionImporter {
   }
 
   private void execute(MongoCollection sourceCollection, MongoCollection targetCollection) {
+    int count = 0;
     Iterable<JsonNode> sourceDocuments = sourceCollection.find().as(JsonNode.class);
     for (JsonNode sourceDocument : sourceDocuments) {
       if ((!inclusionValues.isPresent() && !exclusionValues.isPresent()) ||
           (inclusionValues.isPresent() && inclusionValues.get().isMatch(sourceDocument)) || // Trumps the exclusion list
           (exclusionValues.isPresent() && !exclusionValues.get().isMatch(sourceDocument))) {
         targetCollection.save(sourceDocument);
+        count++;
       }
     }
+    log.info("Finished importing {} documents.", count);
   }
 
   private Jongo getSourceJongo() {

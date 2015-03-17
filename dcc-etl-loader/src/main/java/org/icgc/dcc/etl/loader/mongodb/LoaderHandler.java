@@ -42,11 +42,11 @@ import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.potentiall
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.AVAILABLE_RAW_SEQUENCE_DATA_FIELD;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.isAvailableRawSequenceDataField;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Summary.isSummaryField;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.field;
-import static org.icgc.dcc.common.hadoop.cascading.TupleEntries.OBJECT_TO_TUPLE_ENTRY_CAST;
-import static org.icgc.dcc.common.hadoop.cascading.TupleEntries.getFieldNames;
-import static org.icgc.dcc.common.hadoop.cascading.TupleEntries.getTuple;
-import static org.icgc.dcc.common.hadoop.cascading.TupleEntries.getTupleEntry;
+import static org.icgc.dcc.common.cascading.Fields2.field;
+import static org.icgc.dcc.common.cascading.TupleEntries.OBJECT_TO_TUPLE_ENTRY_CAST;
+import static org.icgc.dcc.common.cascading.TupleEntries.getFieldNames;
+import static org.icgc.dcc.common.cascading.TupleEntries.getTuple;
+import static org.icgc.dcc.common.cascading.TupleEntries.getTupleEntry;
 
 import java.util.Collection;
 import java.util.List;

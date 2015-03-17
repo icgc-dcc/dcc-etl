@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,62 +15,45 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.importer.util;
+package org.icgc.dcc.etl.db.importer.project.util;
 
-import static com.google.common.base.Objects.toStringHelper;
-import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Iterables.limit;
+import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
-import java.util.Set;
+import java.io.Closeable;
+import java.io.IOException;
 
 import lombok.NonNull;
-import lombok.Value;
-import lombok.Builder;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.base.Optional;
+import org.icgc.dcc.common.core.model.ReleaseCollection;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
 
-/**
- * Represents a wrapper for values that are explicitly specified to be included or excluded in the import.
- */
-@Value
-@Builder
-public class ValuesWrapper {
+import com.mongodb.MongoClientURI;
 
-  public static final Optional<ValuesWrapper> ABSENT_VALUES_WRAPPER = Optional.absent();
+public abstract class AbstractJongoComponent implements Closeable {
 
   /**
-   * Surrogate key that identifies the documents.
+   * Configuration.
    */
-  @NonNull
-  private final String surrogateKey;
+  protected final MongoClientURI mongoUri;
 
   /**
-   * Values to act upon.
+   * Dependencies.
    */
-  @NonNull
-  private final Set<String> values;
+  protected final Jongo jongo;
 
-  /**
-   * Determines if a document has a match in the values specified and for the given surrogate key.
-   */
-  public boolean isMatch(JsonNode sourceDocument) {
-    JsonNode value = sourceDocument.path(surrogateKey);
-    checkState(!value.isMissingNode() && value.isTextual(),
-        "Expecting a field '{}' in document '{}'", surrogateKey, sourceDocument);
-    return values.contains(value.asText());
+  public AbstractJongoComponent(@NonNull MongoClientURI mongoUri) {
+    this.mongoUri = mongoUri;
+    this.jongo = createJongo(mongoUri);
   }
 
   @Override
-  public String toString() {
-    int displayThreshold = 100;
-    return toStringHelper(ValuesWrapper.class)
-        .add("surrogateKey", surrogateKey)
-        .add(
-            "values",
-            values.size() < displayThreshold ?
-                values :
-                limit(values, displayThreshold) + " [...]")
-        .toString();
+  public void close() throws IOException {
+    jongo.getDatabase().getMongo().close();
   }
+
+  protected MongoCollection getCollection(ReleaseCollection releaseCollection) {
+    return jongo.getCollection(releaseCollection.getId());
+  }
+
 }

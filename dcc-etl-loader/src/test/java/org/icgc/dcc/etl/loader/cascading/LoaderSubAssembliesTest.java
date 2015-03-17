@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.loader.cascading;
 
-import static org.icgc.dcc.common.hadoop.cascading.Cascades.cascadingSerialize;
+import static org.icgc.dcc.common.cascading.Cascades.cascadingSerialize;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

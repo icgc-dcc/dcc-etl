@@ -23,7 +23,7 @@ import org.icgc.dcc.etl.loader.mongodb.LoaderHandler;
 import org.icgc.dcc.etl.loader.mongodb.LoaderHandler.HandlingType;
 import org.icgc.dcc.etl.loader.mongodb.LoaderHandler.Nesting;
 import org.icgc.dcc.etl.loader.mongodb.LoaderHandler.Redacting;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;

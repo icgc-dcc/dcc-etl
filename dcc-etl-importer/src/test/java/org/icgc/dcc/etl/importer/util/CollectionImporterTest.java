@@ -62,7 +62,7 @@ public class CollectionImporterTest {
   public void testExecute() {
     CollectionImporter importer =
         new CollectionImporter(getTargetDatabaseUri(), getTargetDatabaseUri(),
-            Optional.<ValuesWrapper> absent(), Optional.<ValuesWrapper> absent());
+            Optional.<DocumentFilter> absent(), Optional.<DocumentFilter> absent());
     importer.import_(DONOR_COLLECTION.getId());
 
     assertThat(size(getDonors())).isEqualTo(0);

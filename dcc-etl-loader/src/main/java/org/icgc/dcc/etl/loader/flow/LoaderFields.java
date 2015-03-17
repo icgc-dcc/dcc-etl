@@ -21,12 +21,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.icgc.dcc.common.core.model.FileTypes.NOT_APPLICABLE;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.getFieldName;
+import static org.icgc.dcc.common.cascading.Fields2.getFieldName;
 
 import java.util.List;
 
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
-import org.icgc.dcc.common.hadoop.cascading.Fields2;
+import org.icgc.dcc.common.cascading.Fields2;
 
 import cascading.tuple.Fields;
 

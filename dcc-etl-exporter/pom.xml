@@ -104,11 +104,29 @@
     </dependency>
 
     <!-- HBase -->
-	<dependency> 
-	  <groupId>org.apache.hbase</groupId> 
-	  <artifactId>hbase-client</artifactId> 
-	  <version>${hbase-cdh.version}</version> 
-	</dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>${hbase-cdh.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>slf4j-log4j12</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>log4j</artifactId>
+          <groupId>log4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-logging</artifactId>
+          <groupId>commons-logging</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
     <!-- Pig -->
     <dependency>

@@ -2,7 +2,6 @@
 from org.apache.pig.scripting import *
 from org.icgc.dcc.downloader.core import SchemaUtil
 from org.icgc.dcc.etl.exporter.pig.storage import StaticMultiStorage
-from org.icgc.dcc.etl.exporter.util import ExporterUtil
 from subprocess import call
 import os, os.path, sys
 import getopt

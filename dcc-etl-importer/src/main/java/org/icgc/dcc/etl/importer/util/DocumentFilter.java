@@ -15,57 +15,62 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.loader.core;
+package org.icgc.dcc.etl.importer.util;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING;
-import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING_LIST;
-import static org.icgc.dcc.common.cascading.CascadingOptionals.ABSENT_PIPE;
+import static com.google.common.base.Objects.toStringHelper;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.limit;
 
-import java.util.List;
+import java.util.Set;
 
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 
-import org.icgc.dcc.common.hadoop.util.HadoopCompression;
-
-import cascading.pipe.Pipe;
-
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Optional;
 
 /**
- * Utils method for loader-specific {@link Optional}s (helps with verbosity).
+ * Represents a filter for values that are explicitly specified to be included or excluded in the import.
  */
-@NoArgsConstructor(access = PRIVATE)
-public final class LoaderOptionals {
+@Value
+@Builder
+public class DocumentFilter {
 
-  public static final Optional<HadoopCompression> ABSENT_HADOOP_COMPRESSION = Optional.absent();
+  public static final Optional<DocumentFilter> ABSENT_DOCUMENT_FILTER = Optional.absent();
 
-  public static Optional<String> optional(String string) {
-    return string == null ?
-        ABSENT_STRING :
-        Optional.<String> of(string);
+  /**
+   * filed that identifies the documents.
+   */
+  @NonNull
+  private final String idField;
+
+  /**
+   * Values to act upon.
+   */
+  @NonNull
+  private final Set<String> values;
+
+  /**
+   * Determines if a document has a match in the values specified and for the given id filed.
+   */
+  public boolean isMatch(JsonNode sourceDocument) {
+    JsonNode value = sourceDocument.path(idField);
+    checkState(!value.isMissingNode() && value.isTextual(),
+        "Expecting a field '%s' in document '%s'", idField, sourceDocument);
+    return values.contains(value.asText());
   }
 
-  public static Optional<List<String>> optional(List<String> strings) {
-    if (strings == null) {
-      return ABSENT_STRING_LIST;
-    } else {
-      List<String> list = newArrayList(strings); // To avoid the cast
-      return Optional.of(list);
-    }
+  @Override
+  public String toString() {
+    int displayThreshold = 100;
+    return toStringHelper(DocumentFilter.class)
+        .add("idField", idField)
+        .add(
+            "values",
+            values.size() < displayThreshold ?
+                values :
+                limit(values, displayThreshold) + " [...]")
+        .toString();
   }
-
-  public static Optional<Pipe> optional(Pipe pipe) {
-    return pipe == null ?
-        ABSENT_PIPE :
-        Optional.<Pipe> of(pipe);
-  }
-
-  public static Optional<HadoopCompression> optional(HadoopCompression hadoopCompression) {
-    return hadoopCompression == null ?
-        ABSENT_HADOOP_COMPRESSION :
-        Optional.<HadoopCompression> of(hadoopCompression);
-  }
-
 }

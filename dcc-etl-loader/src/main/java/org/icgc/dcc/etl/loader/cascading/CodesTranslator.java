@@ -21,9 +21,9 @@ import static cascading.tuple.Fields.ARGS;
 import static cascading.tuple.Fields.REPLACE;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.checkFieldsCardinality;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.fields;
-import static org.icgc.dcc.common.hadoop.cascading.TupleEntries.getFirstString;
+import static org.icgc.dcc.common.cascading.Fields2.checkFieldsCardinality;
+import static org.icgc.dcc.common.cascading.Fields2.fields;
+import static org.icgc.dcc.common.cascading.TupleEntries.getFirstString;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 import lombok.NonNull;
 import lombok.val;
 
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;

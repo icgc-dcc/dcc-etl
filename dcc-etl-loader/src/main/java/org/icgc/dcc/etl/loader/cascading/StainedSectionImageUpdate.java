@@ -29,7 +29,7 @@ import java.util.Properties;
 import lombok.SneakyThrows;
 import lombok.val;
 
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.Function;

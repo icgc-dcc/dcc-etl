@@ -20,22 +20,21 @@ package org.icgc.dcc.etl.service;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.padEnd;
 import static com.google.common.collect.Maps.newLinkedHashMap;
-import static java.lang.Boolean.valueOf;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.commons.lang.StringUtils.repeat;
 import static org.apache.hadoop.fs.CommonConfigurationKeysPublic.FS_DEFAULT_NAME_KEY;
-import static org.icgc.dcc.common.core.util.EtlConventions.getIndexerOutputDir;
-import static org.icgc.dcc.common.core.util.EtlConventions.getLoaderOutputDir;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatDuration;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatPercent;
 import static org.icgc.dcc.common.core.util.Joiners.PATH;
 import static org.icgc.dcc.common.core.util.Protocol.FILE;
 import static org.icgc.dcc.common.core.util.URIs.LOCAL_ROOT;
 import static org.icgc.dcc.common.core.util.URLs.getUrlFromPath;
+import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
+import static org.icgc.dcc.etl.core.util.EtlConventions.getIndexerOutputDir;
+import static org.icgc.dcc.etl.core.util.EtlConventions.getLoaderOutputDir;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newDistributedService;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newLocalService;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,11 +49,8 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.common.core.model.Identifiable;
 import org.icgc.dcc.etl.core.config.EtlConfig;
-import org.icgc.dcc.etl.db.importer.DBImporter;
-import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.importer.Importer;
 import org.icgc.dcc.etl.indexer.core.Config;
 import org.icgc.dcc.etl.indexer.model.DocumentType;
@@ -181,13 +177,6 @@ public class EtlService {
   }
 
   private void imports(String releaseName, Set<String> projects) {
-    val dbImporter = new DBImporter(
-        config.getGeneMongoUri(),
-        createICGCConfig(config));
-
-    val collections = Arrays.asList(CollectionName.values());
-    dbImporter.import_(collections);
-
     val importer = new Importer(
         config.getReleaseMongoUri(),
         config.getGeneMongoUri(),
@@ -314,18 +303,6 @@ public class EtlService {
 
   private static String getMongoUri(String mongoUri, String databaseName) {
     return PATH.join(mongoUri, databaseName);
-  }
-
-  private static ICGCClientConfig createICGCConfig(EtlConfig config) {
-    return ICGCClientConfig.builder()
-        .cgpServiceUrl(config.getIcgc().get("cgpServiceUrl"))
-        .consumerKey(config.getIcgc().get("consumerKey"))
-        .consumerSecret(config.getIcgc().get("consumerSecret"))
-        .accessToken(config.getIcgc().get("accessToken"))
-        .accessSecret(config.getIcgc().get("accessSecret"))
-        .strictSSLCertificates(valueOf(config.getIcgc().get("strictSSLCertificates")))
-        .requestLoggingEnabled(valueOf(config.getIcgc().get("requestLoggingEnabled")))
-        .build();
   }
 
   private static String getIndexName(String jobId) {

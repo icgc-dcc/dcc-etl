@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.etl.loader;
 
-import static org.icgc.dcc.common.core.util.FsConfig.FS_URL;
 import static org.icgc.dcc.common.hadoop.fs.Configurations.addFsDefault;
 import static org.icgc.dcc.common.hadoop.fs.FileSystems.getFileSystem;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.getConfigurationDescription;
@@ -44,7 +43,7 @@ public class LoaderFileSystemProvider implements Provider<FileSystem> {
 
   @Override
   public FileSystem get() {
-    val fs = getFileSystem(addFsDefault(configuration, config.getString(FS_URL)));
+    val fs = getFileSystem(addFsDefault(configuration, config.getString("fs.url")));
     log.info("Hadoop configuration: '{}'", getConfigurationDescription(fs.getConf()));
 
     return fs;
