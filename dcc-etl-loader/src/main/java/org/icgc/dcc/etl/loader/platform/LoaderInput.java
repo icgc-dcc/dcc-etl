@@ -21,11 +21,11 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Maps.asMap;
 import static com.google.common.collect.Maps.filterEntries;
 import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.common.core.util.EtlConventions.GENERATED_FILE_TYPE_TO_COMPONENT;
-import static org.icgc.dcc.common.core.util.EtlConventions.getInputGeneratingComponentProjectInputDir;
-import static org.icgc.dcc.common.core.util.EtlConventions.getConcatenatorProjectInputDir;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.exists;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.isFile;
+import static org.icgc.dcc.etl.core.util.EtlConventions.GENERATED_FILE_TYPE_TO_COMPONENT;
+import static org.icgc.dcc.etl.core.util.EtlConventions.getConcatenatorProjectInputDir;
+import static org.icgc.dcc.etl.core.util.EtlConventions.getInputGeneratingComponentProjectInputDir;
 
 import java.util.Map;
 import java.util.Map.Entry;

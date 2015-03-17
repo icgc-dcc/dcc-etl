@@ -29,6 +29,12 @@
       <artifactId>dcc-common-cascading</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-etl-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- Command line -->
     <dependency>
       <groupId>com.beust</groupId>

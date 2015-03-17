@@ -23,8 +23,6 @@ import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.commons.lang.StringUtils.repeat;
 import static org.apache.hadoop.fs.CommonConfigurationKeysPublic.FS_DEFAULT_NAME_KEY;
-import static org.icgc.dcc.common.core.util.EtlConventions.getIndexerOutputDir;
-import static org.icgc.dcc.common.core.util.EtlConventions.getLoaderOutputDir;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatDuration;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatPercent;
 import static org.icgc.dcc.common.core.util.Joiners.PATH;
@@ -32,6 +30,8 @@ import static org.icgc.dcc.common.core.util.Protocol.FILE;
 import static org.icgc.dcc.common.core.util.URIs.LOCAL_ROOT;
 import static org.icgc.dcc.common.core.util.URLs.getUrlFromPath;
 import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
+import static org.icgc.dcc.etl.core.util.EtlConventions.getIndexerOutputDir;
+import static org.icgc.dcc.etl.core.util.EtlConventions.getLoaderOutputDir;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newDistributedService;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newLocalService;
 

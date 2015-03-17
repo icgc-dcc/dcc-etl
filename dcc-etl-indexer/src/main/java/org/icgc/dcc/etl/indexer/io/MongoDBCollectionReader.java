@@ -33,7 +33,7 @@ import static org.icgc.dcc.common.core.model.ReleaseCollection.MUTATION_COLLECTI
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.RELEASE_COLLECTION;
-import static org.icgc.dcc.common.core.util.MongoDbUtils.fields;
+import static org.icgc.dcc.etl.core.util.MongoDbUtils.fields;
 import static org.icgc.dcc.etl.indexer.model.CollectionFields.collectionFields;
 import static org.icgc.dcc.etl.indexer.transform.GeneGeneSetPivoter.pivotGenesGeneSets;
 

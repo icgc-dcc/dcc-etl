@@ -21,6 +21,7 @@ import static cascading.tuple.Fields.ALL;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
+import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
 import static org.icgc.dcc.common.core.model.FeatureTypes.withRawSequenceData;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_ANALYZED_SAMPLE_ID;
 import static org.icgc.dcc.common.core.model.FileTypes.FileType.SAMPLE_TYPE;
@@ -31,7 +32,6 @@ import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.META_FILES
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.META_FILE_RETAIN_FIELDS;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.MISSING_VALUE_REPLACEMENT;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.RAW_SEQUENCE_DATA_FIELDS_MAPPING;
-import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -41,16 +41,16 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer.EmptyTupleNullReplacer;
+import org.icgc.dcc.common.cascading.TupleEntries;
+import org.icgc.dcc.common.cascading.operation.BaseBuffer;
+import org.icgc.dcc.common.core.collect.SerializableMaps;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.Identifiable.Identifiables;
 import org.icgc.dcc.common.core.model.SpecialValue;
 import org.icgc.dcc.common.core.model.SubmissionModel;
-import org.icgc.dcc.common.core.util.SerializableMaps;
 import org.icgc.dcc.common.core.util.Strings2;
 import org.icgc.dcc.etl.loader.mongodb.TupleEntryToDBObjectTransformer;
-import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer.EmptyTupleNullReplacer;
-import org.icgc.dcc.common.cascading.TupleEntries;
-import org.icgc.dcc.common.cascading.operation.BaseBuffer;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.BufferCall;

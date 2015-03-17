@@ -38,6 +38,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
 
+import org.icgc.dcc.common.core.collect.SerializableMaps;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.common.core.model.SubmissionModel;
 import org.icgc.dcc.common.core.model.SubmissionModel.FileModel;
@@ -46,7 +47,6 @@ import org.icgc.dcc.common.core.model.SubmissionModel.JoinModel;
 import org.icgc.dcc.common.core.model.ValueType;
 import org.icgc.dcc.common.core.util.Functions2;
 import org.icgc.dcc.common.core.util.Optionals;
-import org.icgc.dcc.common.core.util.SerializableMaps;
 import org.icgc.dcc.submission.dictionary.model.CodeList;
 import org.icgc.dcc.submission.dictionary.model.Dictionary;
 import org.icgc.dcc.submission.dictionary.model.Field;
