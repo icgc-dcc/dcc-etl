@@ -17,9 +17,9 @@
  */
 package org.icgc.dcc.etl.loader.cascading;
 
-import static org.icgc.dcc.common.hadoop.cascading.TupleEntries.remove;
+import static org.icgc.dcc.common.cascading.TupleEntries.remove;
 
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseAggregator;
+import org.icgc.dcc.common.cascading.operation.BaseAggregator;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.AggregatorCall;

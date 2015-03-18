@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutorService;
 
 import lombok.NonNull;
 
-import org.icgc.dcc.common.hadoop.cascading.FlowExecutor;
+import org.icgc.dcc.common.cascading.FlowExecutor;
 import org.icgc.dcc.etl.indexer.core.Config;
 import org.icgc.dcc.etl.indexer.core.DocumentTask;
 import org.icgc.dcc.etl.indexer.model.DocumentType;

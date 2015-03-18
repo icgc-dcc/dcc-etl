@@ -59,6 +59,14 @@ public final class EtlConventions {
     return inputGeneratingComponent.getProjectDir(workingDir, projectKey);
   }
 
+  public static String getLoaderOutputDir(@NonNull final String workingDir) {
+    return Component.LOADER.getComponentDir(workingDir);
+  }
+
+  public static String getIndexerOutputDir(@NonNull final String workingDir) {
+    return Component.INDEXER.getComponentDir(workingDir);
+  }
+
   private static Entry<FileType, Component> getEntry(FileType fileType, Component component) {
     return new SimpleEntry<FileType, Component>(fileType, component);
   }

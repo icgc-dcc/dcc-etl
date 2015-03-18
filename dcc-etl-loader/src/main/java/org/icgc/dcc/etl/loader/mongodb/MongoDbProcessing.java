@@ -25,7 +25,7 @@ import static org.icgc.dcc.common.core.model.ReleaseCollection.DONOR_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.MUTATION_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
-import static org.icgc.dcc.common.core.util.MongoDbUtils.fields;
+import static org.icgc.dcc.etl.core.util.MongoDbUtils.fields;
 
 import java.util.List;
 import java.util.Set;

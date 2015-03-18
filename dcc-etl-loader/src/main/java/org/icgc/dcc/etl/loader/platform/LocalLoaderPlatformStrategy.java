@@ -24,7 +24,7 @@ import java.util.Map;
 
 import lombok.NonNull;
 
-import org.icgc.dcc.common.hadoop.cascading.CascadingContext;
+import org.icgc.dcc.common.cascading.CascadingContext;
 
 public class LocalLoaderPlatformStrategy extends BaseLoaderPlatformStrategy {
 

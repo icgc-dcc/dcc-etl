@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.common.core.model.SubmissionModel;
 import org.icgc.dcc.etl.loader.cascading.AsList;
-import org.icgc.dcc.common.hadoop.cascading.SubAssemblies.NullReplacer.EmptyTupleNullReplacer;
+import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer.EmptyTupleNullReplacer;
 
 import cascading.pipe.CoGroup;
 import cascading.pipe.Every;

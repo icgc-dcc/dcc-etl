@@ -27,9 +27,9 @@ import static org.icgc.dcc.common.core.model.SpecialValue.isDeprecatedValue;
 import static org.icgc.dcc.common.core.model.SpecialValue.isFullMissingCode;
 import static org.icgc.dcc.common.core.util.Joiners.INDENT;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.cloneFields;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.fields;
-import static org.icgc.dcc.common.hadoop.cascading.Fields2.getFieldNames;
+import static org.icgc.dcc.common.cascading.Fields2.cloneFields;
+import static org.icgc.dcc.common.cascading.Fields2.fields;
+import static org.icgc.dcc.common.cascading.Fields2.getFieldNames;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.common.core.model.ValueType;
-import org.icgc.dcc.common.hadoop.cascading.RemoveHollowTupleFilter;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.RemoveHollowTupleFilter;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;

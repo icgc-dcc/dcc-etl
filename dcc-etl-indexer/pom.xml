@@ -24,6 +24,16 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-hadoop</artifactId>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-cascading</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-etl-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Command line -->
     <dependency>

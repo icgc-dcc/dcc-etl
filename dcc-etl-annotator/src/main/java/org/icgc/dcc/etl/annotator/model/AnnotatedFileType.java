@@ -106,7 +106,8 @@ public enum AnnotatedFileType implements Identifiable {
       }
     }
 
-    throw new IllegalArgumentException(String.format("No '%s' with name '%s' found", AnnotatedFileType.class.getName(), name));
+    throw new IllegalArgumentException(String.format("No '%s' with name '%s' found", AnnotatedFileType.class.getName(),
+        name));
   }
 
   public static AnnotatedFileType byPath(@NonNull Path path) {
@@ -117,7 +118,8 @@ public enum AnnotatedFileType implements Identifiable {
       }
     }
 
-    throw new IllegalArgumentException(String.format("No '%s' with inputFileName '%s' found", AnnotatedFileType.class.getName(),
+    throw new IllegalArgumentException(String.format("No '%s' with inputFileName '%s' found",
+        AnnotatedFileType.class.getName(),
         inputFileName));
   }
 

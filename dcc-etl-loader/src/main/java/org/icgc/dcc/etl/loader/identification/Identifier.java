@@ -52,7 +52,7 @@ import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.etl.loader.flow.RecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.util.HttpIdentifierClient;
 import org.icgc.dcc.etl.loader.util.IdentifierClient;
-import org.icgc.dcc.common.hadoop.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;
