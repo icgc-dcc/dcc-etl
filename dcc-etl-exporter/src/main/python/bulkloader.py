@@ -57,7 +57,7 @@ def bulkloadData(type):
       # bulk load to tablename
       #try :
       os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R hbase " + tmp_hfile)
-      os.system("HADOOP_USER_NAME=hbase hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles " + tmp_hfile + " " + tablename)
+      os.system("HADOOP_USER_NAME=hbase java -cp `hbase classpath` -Xmx6G org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles -Dhbase.mapreduce.bulkload.max.hfiles.perRegion.perFamily=9999 " + tmp_hfile + " " + tablename)
       os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R downloader " + tmp_hfile)
 
   #SchemaUtil.majorCompact(tablename)

@@ -21,7 +21,7 @@ source ${EXPORTHOMEDIR}/bin/setenv.sh
 start_time=`date +%s`
 
 # Extract
-${EXPORTHOMEDIR}/bin/parallel -r -j 4 "${EXPORTHOMEDIR}/lib/pig/bin/pig -l ${EXPORTHOMEDIR}/logs/*.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/python/exporter.py -b -d * -e ${EXPORTHOMEDIR}/pig -i ${source} -r ${release} -l ${logfile}" ${types[@]}
+${EXPORTHOMEDIR}/bin/parallel -r -j 2 "${EXPORTHOMEDIR}/lib/pig/bin/pig -l ${EXPORTHOMEDIR}/logs/*.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/python/exporter.py -b -d * -e ${EXPORTHOMEDIR}/pig -i ${source} -r ${release} -l ${logfile}" ${types[@]}
 
 # Bulkload
 ${EXPORTHOMEDIR}/lib/pig/bin/pig -l ${EXPORTHOMEDIR}/logs/bulkloader.log -4 ${EXPORTHOMEDIR}/conf/log4j.properties ${EXPORTHOMEDIR}/python/bulkloader.py -e ${EXPORTHOMEDIR}/pig -r ${release} -l ${logfile} -d $datatypes
