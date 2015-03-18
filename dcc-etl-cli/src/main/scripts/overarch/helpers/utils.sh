@@ -122,8 +122,11 @@ function email() {
 	smtp_server=$(get_config_value ${config_file?} ${SMTP_SERVER_CONFIG_KEY?})
 	sender=$(get_config_value ${config_file?} ${SENDER_CONFIG_KEY?})
 	recipients=$(get_config_value ${config_file?} ${RECIPIENTS_CONFIG_KEY?})
-
-    sendemail -f ${sender?} -t ${recipients?} -u "ETL run '${job_id?}' on '${HOSTNAME?}' ${status?}" -m "$(cat ${attempt_manifest_file?})" -s ${smtp_server?}
+  subject="ETL run '${job_id?}' on '${HOSTNAME?}' ${status?}"
+  body="$(cat ${attempt_manifest_file?})"
+  #sendemail -f ${sender?} -t ${recipients?} -u ${subject?} -m ${body?} -s ${smtp_server?}
+  #echo -e "${body?}" | mail -s "${subject?}" "${recipients?}" -aFrom:${sender?}
+  echo -e "${body?}" | mail -s "${subject?}" "sepehr.mavedati@oicr.on.ca,***REMOVED***" -aFrom:${sender?}
 }
 
 # Determines whether the component is to be run or not
