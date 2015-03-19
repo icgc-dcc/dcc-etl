@@ -40,12 +40,17 @@ ls ${java_home?}/bin/java || { echo "ERROR: invalid JAVA_HOME '${java_home?}'"; 
 echo "java_home=\"${java_home?}\""
 echo 
 
+input_dir=${parent_cluster_output_dir?}/${loader_component?}
+types=$(hadoop fs -ls -h ${input_dir?} | tail -n +2 | cut -d "/" -f 8)
+data_type=$(echo $types | tr ' ' ',')
+
 # Build command
 new_cmd_builder
 add_to_cmd "JAVA_HOME=${java_home?}"
 add_to_cmd "${exporter_bin_dir?}/export.sh"
 add_to_cmd "  ${job_id?}" # output directory name
-add_to_cmd "  ${parent_cluster_output_dir?}/${loader_component?}" # input data
+add_to_cmd "  ${input_dir?}" # input data
+add_to_cmd "  ${data_type?}" # comma-separated data types to process
 cmd=$(build_cmd)
 pretty_print_cmd "${cmd?}"
 eval_cmd "${cmd?}"
