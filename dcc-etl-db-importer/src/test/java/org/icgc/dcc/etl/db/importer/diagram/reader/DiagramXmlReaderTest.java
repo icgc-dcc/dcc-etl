@@ -41,4 +41,5 @@ public class DiagramXmlReaderTest {
     // Make sure we can unescape it
     assertThat(StringEscapeUtils.unescapeXml(result)).startsWith("<");
   }
+
 }

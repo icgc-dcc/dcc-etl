@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -36,14 +37,11 @@ import com.mongodb.MongoClientURI;
  * 
  */
 @Slf4j
+@RequiredArgsConstructor
 public class DiagramImporter {
 
   @NonNull
   private final MongoClientURI mongoUri;
-
-  public DiagramImporter(@NonNull MongoClientURI mongoUri) {
-    this.mongoUri = mongoUri;
-  }
 
   @SneakyThrows
   public void execute() {
@@ -66,4 +64,5 @@ public class DiagramImporter {
     // @Cleanup
     // write stuff
   }
+
 }

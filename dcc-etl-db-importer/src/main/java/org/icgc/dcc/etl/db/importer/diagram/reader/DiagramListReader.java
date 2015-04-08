@@ -55,6 +55,7 @@ public class DiagramListReader {
       // Add all pathway nodes as non-diagrammed or diagrammed
       for (int i = 0; i < nodes.getLength(); i++) {
         val hasDiagram = nodes.item(i).getAttributes().getNamedItem("hasDiagram");
+
         if (hasDiagram == null) {
           nonDiagrammedPathways.add(nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue()
               + "-" + getDiagrammedParent(nodes.item(i))); // Append the diagrammed parent

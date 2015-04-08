@@ -17,11 +17,13 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.model;
 
+import static org.elasticsearch.common.collect.Maps.newHashMap;
+
 import java.util.Map;
 
 public class DiagramModel {
 
-  Map<String, Diagram> diagrams;
+  Map<String, Diagram> diagrams = newHashMap();
 
   public void addDiagram(Diagram diagram, String id) {
     diagrams.put(id, diagram);
@@ -30,4 +32,5 @@ public class DiagramModel {
   public Map<String, Diagram> getDiagrams() {
     return diagrams;
   }
+
 }

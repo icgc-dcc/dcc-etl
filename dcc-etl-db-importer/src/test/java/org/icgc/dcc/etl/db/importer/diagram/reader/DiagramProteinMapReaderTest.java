@@ -17,26 +17,26 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static com.google.common.xml.XmlEscapers.xmlAttributeEscaper;
-import static java.lang.String.format;
-
-import java.net.URL;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import org.apache.tika.io.IOUtils;
+import org.junit.Test;
 
 /**
  * 
  */
-public class DiagramXmlReader {
+@Slf4j
+public class DiagramProteinMapReaderTest {
 
-  private final String DIAGRAM_XML_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/pathwayDiagram/%s/XML";
-
-  public String readPathwayXml(String dbId) throws Exception {
-    val input = new URL(format(DIAGRAM_XML_URL, dbId)).openStream();
-    return xmlAttributeEscaper().escape(IOUtils.toString(input, "UTF-8"));
+  @Test
+  public void testProteinMapReader() throws Exception {
+    val reader = new DiagramProteinMapReader();
+    reader.readProteinMap("4839726");
+    // log.info(result);
+    assertThat(reader.getProteinMap()).isNotNull();
+    // Make sure it's escaped
+    assertThat(reader.getProteinMap().get("UniProt:Q8NEZ4")).isEqualTo("95335");
   }
 
 }
