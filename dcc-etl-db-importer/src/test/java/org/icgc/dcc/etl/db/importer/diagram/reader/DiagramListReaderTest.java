@@ -17,25 +17,31 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static com.google.common.xml.XmlEscapers.xmlAttributeEscaper;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.URL;
+import java.io.IOException;
+
+import javax.xml.transform.TransformerException;
 
 import lombok.val;
 
-import org.apache.tika.io.IOUtils;
+import org.junit.Test;
 
 /**
  * 
  */
-public class DiagramXmlReader {
+public class DiagramListReaderTest {
 
-  private final String DIAGRAM_XML_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/pathwayDiagram/%s/XML";
+  @Test
+  public void testReadList() throws IOException, TransformerException {
+    val reader = new DiagramListReader();
+    reader.readListOfPathways();
 
-  public String readPathwayXml(String dbId) throws Exception {
-    val input = new URL(String.format(DIAGRAM_XML_URL, dbId)).openStream();
-    return xmlAttributeEscaper().escape(IOUtils.toString(input, "UTF-8"));
+    assertThat(reader.getDiagrammedPathways()).isNotEmpty();
+
+    // This might be too aggressive of a test - but at least it fails when something changes?
+    assertThat(reader.getDiagrammedPathways().size()).isEqualTo(533);
+    assertThat(reader.getNonDiagrammedPathways().size()).isEqualTo(1210);
   }
 
 }

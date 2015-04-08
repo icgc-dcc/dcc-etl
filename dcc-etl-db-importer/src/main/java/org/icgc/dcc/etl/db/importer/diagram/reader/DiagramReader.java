@@ -45,6 +45,8 @@ public class DiagramReader {
       diagram.setProteinMap(null); // TODO: add a protein map reader
 
       model.addDiagram(diagram, pathwayId);
+
+      Thread.sleep(3000); // Take this out if you have bad blood with someone at reactome
     }
 
     log.info("Adding all non-diagrammed pathways and their highlights...");

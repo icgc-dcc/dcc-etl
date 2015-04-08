@@ -17,12 +17,16 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
+import static com.google.common.collect.ImmutableSet.copyOf;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import lombok.val;
 
@@ -39,28 +43,46 @@ public class DiagramListReader {
   private List<String> diagrammedPathways;
   private List<String> nonDiagrammedPathways;
 
-  public void readListOfPathways() throws IOException {
+  public void readListOfPathways() throws IOException, TransformerException {
+    diagrammedPathways = new ArrayList<String>();
+    nonDiagrammedPathways = new ArrayList<String>();
+
     try {
       val factory = DocumentBuilderFactory.newInstance();
       val doc = factory.newDocumentBuilder().parse(new URL(DIAGRAMS_LIST_URL).openStream());
       val nodes = doc.getElementsByTagName("Pathway");
 
+      // Add all pathway nodes as non-diagrammed or diagrammed
       for (int i = 0; i < nodes.getLength(); i++) {
         val hasDiagram = nodes.item(i).getAttributes().getNamedItem("hasDiagram");
         if (hasDiagram == null) {
           nonDiagrammedPathways.add(nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue()
-              + "-" + getDiagrammedParent(nodes.item(i)));
+              + "-" + getDiagrammedParent(nodes.item(i))); // Append the diagrammed parent
         } else {
           diagrammedPathways.add(nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue());
         }
       }
+
+      makeUnique();
 
     } catch (SAXException | IOException | ParserConfigurationException e) {
       throw new IOException("Failed to read list of pathway diagrams", e);
     }
   }
 
-  public String getDiagrammedParent(Node node) {
+  private void makeUnique() {
+    // Make the diagrammed list unique (removes about 15%)
+    val diagrammedSet = copyOf(diagrammedPathways);
+    diagrammedPathways.clear();
+    diagrammedPathways.addAll(diagrammedSet);
+
+    // Make non diagrammed list unique too (removes about 25%)
+    val nonDiagrammedSet = copyOf(nonDiagrammedPathways);
+    nonDiagrammedPathways.clear();
+    nonDiagrammedPathways.addAll(nonDiagrammedSet);
+  }
+
+  private String getDiagrammedParent(Node node) {
     val parent = node.getParentNode();
     if (parent == null) { // Just in case it has no diagrammed parents... fall back on something
       return "wellplayedreactome";
