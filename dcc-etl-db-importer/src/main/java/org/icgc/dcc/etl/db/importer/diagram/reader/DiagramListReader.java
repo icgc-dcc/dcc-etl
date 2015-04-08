@@ -1,0 +1,80 @@
+/*
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ *                                                                                                               
+ * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+ * You should have received a copy of the GNU General Public License along with                                  
+ * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
+ *                                                                                                               
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package org.icgc.dcc.etl.db.importer.diagram.reader;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import lombok.val;
+
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
+/**
+ * 
+ */
+public class DiagramListReader {
+
+  private final String DIAGRAMS_LIST_URL =
+      "http://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/pathwayHierarchy/homo+sapiens";
+  private List<String> diagrammedPathways;
+  private List<String> nonDiagrammedPathways;
+
+  public void readListOfPathways() throws IOException {
+    try {
+      val factory = DocumentBuilderFactory.newInstance();
+      val doc = factory.newDocumentBuilder().parse(new URL(DIAGRAMS_LIST_URL).openStream());
+      val nodes = doc.getElementsByTagName("Pathway");
+
+      for (int i = 0; i < nodes.getLength(); i++) {
+        val hasDiagram = nodes.item(i).getAttributes().getNamedItem("hasDiagram");
+        if (hasDiagram == null) {
+          nonDiagrammedPathways.add(nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue()
+              + "-" + getDiagrammedParent(nodes.item(i)));
+        } else {
+          diagrammedPathways.add(nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue());
+        }
+      }
+
+    } catch (SAXException | IOException | ParserConfigurationException e) {
+      throw new IOException("Failed to read list of pathway diagrams", e);
+    }
+  }
+
+  public String getDiagrammedParent(Node node) {
+    val parent = node.getParentNode();
+    if (parent == null) { // Just in case it has no diagrammed parents... fall back on something
+      return "wellplayedreactome";
+    }
+    val attribute = parent.getAttributes().getNamedItem("hasDiagram");
+    return attribute == null ? getDiagrammedParent(parent) : attribute.getNodeValue();
+  }
+
+  public List<String> getDiagrammedPathways() {
+    return diagrammedPathways;
+  }
+
+  public List<String> getNonDiagrammedPathways() {
+    return nonDiagrammedPathways;
+  }
+
+}
