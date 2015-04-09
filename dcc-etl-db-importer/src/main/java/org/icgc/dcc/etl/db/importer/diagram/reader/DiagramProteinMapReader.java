@@ -18,61 +18,52 @@
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static java.lang.String.format;
+import static org.elasticsearch.common.collect.Maps.newHashMap;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import lombok.val;
 
-import org.elasticsearch.common.collect.Maps;
-import org.xml.sax.SAXException;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONTokener;
 
-/**
- * 
- */
 public class DiagramProteinMapReader {
 
   private final String PROTEIN_MAP_URL =
       "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/getPhysicalToReferenceEntityMaps/%s";
-  private Map<String, String> proteinMap = Maps.newHashMap();
 
-  public void readProteinMap(String pathwayId) throws IOException {
-    try {
-      val factory = DocumentBuilderFactory.newInstance();
-      val doc = factory.newDocumentBuilder().parse(new URL(format(PROTEIN_MAP_URL, pathwayId)).openStream());
-      val nodes = doc.getElementsByTagName("refEntities");
+  public Map<String, String> readProteinMap(String pathwayId) throws IOException, JSONException {
+    val result = (JSONArray) new JSONTokener(IOUtils.toString(new URL(format(PROTEIN_MAP_URL, pathwayId)))).nextValue();
+    Map<String, String> proteinMap = newHashMap();
 
-      for (int i = 0; i < nodes.getLength(); i++) {
-        String reference = "uniprot", db = "dbid";
-        Boolean isProtein = false;
-        val children = nodes.item(i).getChildNodes();
+    for (int i = 0; i < result.length(); i++) {
+      val entities = result.getJSONObject(i).getJSONArray("refEntities");
+      val dbId = result.getJSONObject(i).getString("peDbId");
 
-        for (int j = 0; j < children.getLength(); j++) {
-          if (children.item(j).getNodeName().equalsIgnoreCase("dbId")) {
-            db = children.item(j).getNodeValue();
-          } else if (children.item(j).getNodeName().equalsIgnoreCase("displayName")) {
-            reference = children.item(j).getNodeValue().substring(0, children.item(j).getNodeValue().indexOf(" "));
-          } else if (children.item(j).getNodeName().equalsIgnoreCase("schemaClass")) {
-            isProtein = children.item(j).getNodeValue().equalsIgnoreCase("ReferenceGeneProduct");
+      String referenceIds = "";
+      for (int j = 0; j < entities.length(); j++) {
+        val entity = entities.getJSONObject(j);
+
+        if (entity.getString("schemaClass").equalsIgnoreCase("ReferenceGeneProduct")) {
+          referenceIds += entity.getString("displayName")
+              .substring(0, entity.getString("displayName").indexOf(" "));
+
+          if (j < entities.length() - 1) {
+            referenceIds += ",";
           }
         }
 
-        // Only add it to the map if it's not there
-        if (isProtein && proteinMap.get(reference) == null) {
-          proteinMap.put(reference, db);
-        }
       }
 
-    } catch (SAXException | IOException | ParserConfigurationException e) {
-      throw new IOException(format("Failed to get protein map with id %s", pathwayId), e);
+      if (!referenceIds.isEmpty()) {
+        proteinMap.put(dbId, referenceIds);
+      }
     }
-  }
 
-  public Map<String, String> getProteinMap() {
     return proteinMap;
   }
 

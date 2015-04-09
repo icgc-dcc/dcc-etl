@@ -15,57 +15,28 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.diagram.reader;
+package org.icgc.dcc.etl.db.importer.diagram.writer;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
-import org.icgc.dcc.etl.db.importer.diagram.model.Diagram;
 import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+import org.jongo.MongoCollection;
+
+import com.mongodb.MongoClientURI;
 
 /**
  * 
  */
-@Slf4j
-public class DiagramReader {
+public class DiagramWriter extends AbstractJongoWriter<DiagramModel> {
 
-  public DiagramModel read() throws Exception {
-    val model = new DiagramModel();
-    val listReader = new DiagramListReader();
-    val xmlReader = new DiagramXmlReader();
-    val proteinMapReader = new DiagramXmlReader();
+  private MongoCollection diagramCollection; // TODO
 
-    log.info("Reading list of pathways..");
-    listReader.readListOfPathways();
+  public DiagramWriter(MongoClientURI mongoUri) {
+    super(mongoUri);
+  }
 
-    log.info("Getting all diagrammed pathways and their protein maps...");
-    for (val pathwayId : listReader.getDiagrammedPathways()) {
-      val diagram = new Diagram();
-
-      diagram.setDiagram(xmlReader.readPathwayXml(pathwayId));
-      proteinMapReader.readPathwayXml(pathwayId);
-      diagram.setProteinMap(null); // TODO: pluck ids of interest from proteinMapReader
-
-      model.addDiagram(diagram, pathwayId);
-
-      Thread.sleep(3000); // Take this out if you have bad blood with someone at reactome
-    }
-
-    log.info("Adding all non-diagrammed pathways and their highlights...");
-    for (val id : listReader.getNonDiagrammedPathways()) {
-      val diagrammedId = id.substring(id.indexOf("-") + 1);
-      val nonDiagrammedId = id.substring(0, id.indexOf("-"));
-
-      val baseDiagram = model.getDiagrams().get(diagrammedId);
-      baseDiagram.setHighlights(null); // TODO: add a containedevents reader
-
-      model.addDiagram(baseDiagram, nonDiagrammedId);
-    }
-
-    // TODO: replace all dbId keys with REACT_ ids
-    // i.e. kill reactome servers in case they're still up
-
-    return model;
+  @Override
+  public void write(DiagramModel value) {
+    diagramCollection.save(value); // TODO ??
   }
 
 }

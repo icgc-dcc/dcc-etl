@@ -19,24 +19,21 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
 
-/**
- * 
- */
-@Slf4j
 public class DiagramProteinMapReaderTest {
 
   @Test
   public void testProteinMapReader() throws Exception {
     val reader = new DiagramProteinMapReader();
-    reader.readProteinMap("4839726");
-    // log.info(result);
-    assertThat(reader.getProteinMap()).isNotNull();
-    // Make sure it's escaped
-    assertThat(reader.getProteinMap().get("UniProt:Q8NEZ4")).isEqualTo("95335");
+    val result = reader.readProteinMap("4839726");
+
+    assertThat(result).isNotNull();
+
+    assertThat(result.get("5218942")).isEqualTo("UniProt:P68431,UniProt:Q71DI3");
+    assertThat(result.get("181902")).isEqualTo("UniProt:P62805");
+    assertThat(result.get("77087")).isNull();
   }
 
 }
