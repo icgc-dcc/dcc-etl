@@ -15,56 +15,52 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.diagram;
+package org.icgc.dcc.etl.db.diagram.model;
 
-import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.collect.Maps.newHashMap;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
+import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
-import org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader;
-import org.icgc.dcc.etl.db.importer.diagram.writer.DiagramWriter;
+import org.icgc.dcc.etl.db.importer.diagram.model.Diagram;
+import org.icgc.dcc.etl.db.importer.diagram.model.DiagramNodeConverter;
+import org.junit.Test;
 
-import com.mongodb.MongoClientURI;
+public class DiagramNodeConverterTest {
 
-/**
- * 
- */
-@Slf4j
-@RequiredArgsConstructor
-public class DiagramImporter {
+  @Test
+  public void testConvertDiagram() {
+    val converter = new DiagramNodeConverter();
+    val result = converter.convertDiagram(getTestDiagram("am i aly?", "123,456,789", true), "REACT");
 
-  @NonNull
-  private final MongoClientURI mongoUri;
-
-  @SneakyThrows
-  public void execute() {
-    val watch = createStarted();
-
-    log.info("Reading diagram model...");
-    val model = readDiagramModel();
-
-    log.info("Writing diagram model to {}...", mongoUri);
-    writeDiagramModel(model);
-
-    log.info("Finished importing diagrams in {}", watch);
+    assertThat(result.toString()).isEqualTo("{\"diagram_id\":\"REACT\",\"xml\":\"am i aly?\",\"highlights\""
+        + ":\"123,456,789\",\"protein_map\":{\"123\":\"uniprot1\",\"456\":\"uniprot2\"}}");
   }
 
-  private DiagramModel readDiagramModel() throws Exception {
-    return new DiagramReader().read();
+  @Test
+  public void testConvertIncompleteDiagram() {
+    val converter = new DiagramNodeConverter();
+    val result = converter.convertDiagram(getTestDiagram("am i aly?", "", false), "REACT");
+
+    assertThat(result.toString()).isEqualTo(
+        "{\"diagram_id\":\"REACT\",\"xml\":\"am i aly?\",\"highlights\":\"\"}");
   }
 
-  private void writeDiagramModel(DiagramModel model) throws UnknownHostException, IOException {
-    val writer = new DiagramWriter(mongoUri);
-    writer.write(model);
-    writer.close();
+  private Diagram getTestDiagram(String xml, String highlights, Boolean proteins) {
+    val diagram = new Diagram();
+    diagram.setDiagram(xml);
+    diagram.setHighlights(highlights);
+
+    Map<String, String> map = newHashMap();
+    if (proteins) {
+      map.put("123", "uniprot1");
+      map.put("456", "uniprot2");
+    }
+    diagram.setProteinMap(map);
+
+    return diagram;
   }
 
 }

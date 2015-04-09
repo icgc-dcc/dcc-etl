@@ -17,26 +17,48 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.writer;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
+import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
+import org.icgc.dcc.etl.db.importer.diagram.model.DiagramNodeConverter;
 import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
 import org.jongo.MongoCollection;
 
 import com.mongodb.MongoClientURI;
 
-/**
- * 
- */
+@Slf4j
 public class DiagramWriter extends AbstractJongoWriter<DiagramModel> {
 
   private MongoCollection diagramCollection; // TODO
 
-  public DiagramWriter(MongoClientURI mongoUri) {
+  public DiagramWriter(@NonNull MongoClientURI mongoUri) {
     super(mongoUri);
   }
 
   @Override
-  public void write(DiagramModel value) {
-    diagramCollection.save(value); // TODO ??
+  public void write(@NonNull DiagramModel value) {
+    diagramCollection = getCollection(ReleaseCollection.DIAGRAM_COLLECTION);
+
+    log.info("Droppping current diagram collection..");
+    dropCollection();
+
+    log.info("Saving new diagram collection..");
+    saveCollection(value);
+  }
+
+  private void dropCollection() {
+    diagramCollection.drop();
+  }
+
+  private void saveCollection(DiagramModel value) {
+    val converter = new DiagramNodeConverter();
+
+    for (val entry : value.getDiagrams().entrySet()) {
+      diagramCollection.save(converter.convertDiagram(entry.getValue(), entry.getKey()));
+    }
   }
 
 }

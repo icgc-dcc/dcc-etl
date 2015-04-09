@@ -15,56 +15,36 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.diagram;
+package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import static com.google.common.base.Stopwatch.createStarted;
-
-import java.io.IOException;
-import java.net.UnknownHostException;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_HIGHLIGHTS;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_XML;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
-import org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader;
-import org.icgc.dcc.etl.db.importer.diagram.writer.DiagramWriter;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import com.mongodb.MongoClientURI;
+public class DiagramNodeConverter {
 
-/**
- * 
- */
-@Slf4j
-@RequiredArgsConstructor
-public class DiagramImporter {
+  public JsonNode convertDiagram(Diagram diagram, String id) {
+    val mapper = new ObjectMapper();
 
-  @NonNull
-  private final MongoClientURI mongoUri;
+    val node = mapper.createObjectNode();
+    node.put(DIAGRAM_ID, id);
+    node.put(DIAGRAM_XML, diagram.diagram);
+    node.put(DIAGRAM_HIGHLIGHTS, diagram.highlights);
 
-  @SneakyThrows
-  public void execute() {
-    val watch = createStarted();
+    val proteinNode = mapper.createObjectNode();
 
-    log.info("Reading diagram model...");
-    val model = readDiagramModel();
+    for (val entry : diagram.proteinMap.entrySet()) {
+      proteinNode.put(entry.getKey(), entry.getValue());
+    }
 
-    log.info("Writing diagram model to {}...", mongoUri);
-    writeDiagramModel(model);
+    if (!diagram.proteinMap.isEmpty()) node.put(DIAGRAM_PROTEIN_MAP, proteinNode);
 
-    log.info("Finished importing diagrams in {}", watch);
-  }
-
-  private DiagramModel readDiagramModel() throws Exception {
-    return new DiagramReader().read();
-  }
-
-  private void writeDiagramModel(DiagramModel model) throws UnknownHostException, IOException {
-    val writer = new DiagramWriter(mongoUri);
-    writer.write(model);
-    writer.close();
+    return node;
   }
 
 }
