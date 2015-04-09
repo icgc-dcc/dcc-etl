@@ -44,4 +44,11 @@ public class DiagramListReaderTest {
     assertThat(reader.getNonDiagrammedPathways().size()).isEqualTo(1210);
   }
 
+  @Test
+  public void testIdConvert() throws IOException {
+    val reader = new DiagramListReader();
+    val result = reader.getReactId("1300645");
+    assertThat(result).isEqualTo("REACT_163938");
+  }
+
 }

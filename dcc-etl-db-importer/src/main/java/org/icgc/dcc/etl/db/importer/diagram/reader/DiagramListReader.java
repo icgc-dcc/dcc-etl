@@ -18,6 +18,8 @@
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static com.google.common.collect.ImmutableSet.copyOf;
+import static java.lang.String.format;
+import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,13 +35,12 @@ import lombok.val;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-/**
- * 
- */
 public class DiagramListReader {
 
   private final String DIAGRAMS_LIST_URL =
       "http://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/pathwayHierarchy/homo+sapiens";
+  private final String DIAGRAMS_ID_CONVERT_URL =
+      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/Pathway/%s";
   private List<String> diagrammedPathways;
   private List<String> nonDiagrammedPathways;
 
@@ -98,6 +99,13 @@ public class DiagramListReader {
 
   public List<String> getNonDiagrammedPathways() {
     return nonDiagrammedPathways;
+  }
+
+  public String getReactId(String dbId) throws IOException {
+    val querlUrl = new URL(format(DIAGRAMS_ID_CONVERT_URL, dbId));
+    val id = DEFAULT.readTree(querlUrl).path("stableIdentifier").path("displayName").asText();
+
+    return id.substring(0, id.indexOf("."));
   }
 
 }

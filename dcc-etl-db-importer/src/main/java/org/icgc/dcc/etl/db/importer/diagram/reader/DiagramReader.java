@@ -32,8 +32,6 @@ public class DiagramReader {
   public DiagramModel read() throws Exception {
     val model = new DiagramModel();
     val listReader = new DiagramListReader();
-    val xmlReader = new DiagramXmlReader();
-    val proteinMapReader = new DiagramXmlReader();
 
     log.info("Reading list of pathways..");
     listReader.readListOfPathways();
@@ -42,13 +40,13 @@ public class DiagramReader {
     for (val pathwayId : listReader.getDiagrammedPathways()) {
       val diagram = new Diagram();
 
-      diagram.setDiagram(xmlReader.readPathwayXml(pathwayId));
-      proteinMapReader.readPathwayXml(pathwayId);
-      diagram.setProteinMap(null); // TODO: pluck ids of interest from proteinMapReader
+      diagram.setDiagram(new DiagramXmlReader().readPathwayXml(pathwayId));
+      diagram.setProteinMap(new DiagramProteinMapReader().readProteinMap(pathwayId));
+      diagram.setHighlights("");
 
-      model.addDiagram(diagram, pathwayId);
+      model.addDiagram(pathwayId, diagram);
 
-      Thread.sleep(3000); // Take this out if you have bad blood with someone at reactome
+      Thread.sleep(3000);
     }
 
     log.info("Adding all non-diagrammed pathways and their highlights...");
@@ -57,15 +55,19 @@ public class DiagramReader {
       val nonDiagrammedId = id.substring(0, id.indexOf("-"));
 
       val baseDiagram = model.getDiagrams().get(diagrammedId);
-      baseDiagram.setHighlights(null); // TODO: add a containedevents reader
+      baseDiagram.setHighlights(new DiagramHighlightReader().readHighlights(nonDiagrammedId));
 
-      model.addDiagram(baseDiagram, nonDiagrammedId);
+      model.addDiagram(nonDiagrammedId, baseDiagram);
     }
 
-    // TODO: replace all dbId keys with REACT_ ids
-    // i.e. kill reactome servers in case they're still up
+    val updatedModel = new DiagramModel();
 
-    return model;
+    log.info("Replacing all dbIds with REACT ids...");
+    for (val entry : model.getDiagrams().entrySet()) {
+      val reactId = listReader.getReactId(entry.getKey());
+      updatedModel.addDiagram(reactId, entry.getValue());
+    }
+
+    return updatedModel;
   }
-
 }

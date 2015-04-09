@@ -25,7 +25,7 @@ public class DiagramModel {
 
   Map<String, Diagram> diagrams = newHashMap();
 
-  public void addDiagram(Diagram diagram, String id) {
+  public void addDiagram(String id, Diagram diagram) {
     diagrams.put(id, diagram);
   }
 

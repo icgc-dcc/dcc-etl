@@ -17,54 +17,23 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static com.google.common.collect.Maps.newHashMap;
-import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Map;
 
 import lombok.val;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONTokener;
+import org.junit.Test;
 
-public class DiagramProteinMapReader {
+public class DiagramHighlightReaderTest {
 
-  private final String PROTEIN_MAP_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/getPhysicalToReferenceEntityMaps/%s";
+  @Test
+  public void testHighlightRead() throws IOException {
+    val reader = new DiagramHighlightReader();
+    String ids = reader.readHighlights("1300645");
 
-  public Map<String, String> readProteinMap(String pathwayId) throws IOException, JSONException {
-    val result = (JSONArray) new JSONTokener(IOUtils.toString(new URL(format(PROTEIN_MAP_URL, pathwayId)))).nextValue();
-    Map<String, String> proteinMap = newHashMap();
-
-    for (int i = 0; i < result.length(); i++) {
-      val entities = result.getJSONObject(i).getJSONArray("refEntities");
-      val dbId = result.getJSONObject(i).getString("peDbId");
-
-      String referenceIds = "";
-      for (int j = 0; j < entities.length(); j++) {
-        val entity = entities.getJSONObject(j);
-
-        if (entity.getString("schemaClass").equalsIgnoreCase("ReferenceGeneProduct")) {
-          referenceIds += entity.getString("displayName")
-              .substring(0, entity.getString("displayName").indexOf(" "));
-
-          if (j < entities.length() - 1) {
-            referenceIds += ",";
-          }
-        }
-
-      }
-
-      if (!referenceIds.isEmpty()) {
-        proteinMap.put(dbId, referenceIds);
-      }
-    }
-
-    return proteinMap;
+    assertThat(ids).isNotNull();
+    assertThat(ids).isEqualTo("1297354,1297333");
   }
 
 }

@@ -17,54 +17,23 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static com.google.common.collect.Maps.newHashMap;
-import static java.lang.String.format;
+import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.io.Resources.readLines;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
 
 import lombok.val;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONTokener;
+public class DiagramHighlightReader {
 
-public class DiagramProteinMapReader {
+  private static final String QUERY_BY_ID_URL =
+      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/getContainedEventIds/%s";
 
-  private final String PROTEIN_MAP_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/getPhysicalToReferenceEntityMaps/%s";
+  public String readHighlights(String pathwayId) throws IOException {
+    val diagramUrl = new URL(String.format(QUERY_BY_ID_URL, pathwayId));
 
-  public Map<String, String> readProteinMap(String pathwayId) throws IOException, JSONException {
-    val result = (JSONArray) new JSONTokener(IOUtils.toString(new URL(format(PROTEIN_MAP_URL, pathwayId)))).nextValue();
-    Map<String, String> proteinMap = newHashMap();
-
-    for (int i = 0; i < result.length(); i++) {
-      val entities = result.getJSONObject(i).getJSONArray("refEntities");
-      val dbId = result.getJSONObject(i).getString("peDbId");
-
-      String referenceIds = "";
-      for (int j = 0; j < entities.length(); j++) {
-        val entity = entities.getJSONObject(j);
-
-        if (entity.getString("schemaClass").equalsIgnoreCase("ReferenceGeneProduct")) {
-          referenceIds += entity.getString("displayName")
-              .substring(0, entity.getString("displayName").indexOf(" "));
-
-          if (j < entities.length() - 1) {
-            referenceIds += ",";
-          }
-        }
-
-      }
-
-      if (!referenceIds.isEmpty()) {
-        proteinMap.put(dbId, referenceIds);
-      }
-    }
-
-    return proteinMap;
+    return readLines(diagramUrl, UTF_8).get(0);
   }
 
 }

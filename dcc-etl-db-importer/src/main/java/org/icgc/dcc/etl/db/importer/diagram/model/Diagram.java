@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import java.util.List;
 import java.util.Map;
 
 import lombok.Data;
@@ -27,6 +26,6 @@ public class Diagram {
 
   Map<String, String> proteinMap;
   String diagram;
-  List<String> highlights;
+  String highlights;
 
 }
