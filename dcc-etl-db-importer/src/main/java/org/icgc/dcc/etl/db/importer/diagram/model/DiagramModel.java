@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import static org.elasticsearch.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newHashMap;
 
 import java.util.Map;
 

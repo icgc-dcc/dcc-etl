@@ -27,9 +27,9 @@ import java.util.Map;
 import lombok.val;
 
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONTokener;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONTokener;
 
 public class DiagramProteinMapReader {
 
