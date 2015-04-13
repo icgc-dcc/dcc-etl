@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
-import static org.icgc.dcc.etl.db.importer.diagram.DiagramImporter.INCLUDED_REACTOME_DIAGRAMS;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
@@ -92,8 +91,6 @@ public class DBImporter {
     }
 
     if (collections.contains(CollectionName.DIAGRAMS)) {
-      val diagramIds = System.getProperty(INCLUDED_REACTOME_DIAGRAMS);
-      log.info("Diagramtest list: " + diagramIds);
       watch.reset().start();
       log.info("Importing Diagrams...");
       importDiagrams(mongoUri);

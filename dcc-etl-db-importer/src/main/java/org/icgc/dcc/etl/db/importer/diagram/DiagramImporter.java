@@ -65,7 +65,7 @@ public class DiagramImporter {
 
   private DiagramModel readDiagramModel() throws Exception {
     val diagramIds = System.getProperty(INCLUDED_REACTOME_DIAGRAMS);
-    log.info("Diagram test list: " + diagramIds);
+
     if (Strings.isNullOrEmpty(diagramIds)) {
       return new DiagramReader().read(new ArrayList<String>());
     } else {
