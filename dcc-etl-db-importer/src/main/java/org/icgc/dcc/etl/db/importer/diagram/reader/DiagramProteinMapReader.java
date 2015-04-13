@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static java.lang.String.format;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,8 +34,7 @@ import org.codehaus.jettison.json.JSONTokener;
 
 public class DiagramProteinMapReader {
 
-  private final String PROTEIN_MAP_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/getPhysicalToReferenceEntityMaps/%s";
+  private final String PROTEIN_MAP_URL = REACTOME_BASE_URL + "getPhysicalToReferenceEntityMaps/%s";
 
   public Map<String, String> readProteinMap(String pathwayId) throws IOException, JSONException {
     val result = (JSONArray) new JSONTokener(IOUtils.toString(new URL(format(PROTEIN_MAP_URL, pathwayId)))).nextValue();
@@ -43,21 +43,7 @@ public class DiagramProteinMapReader {
     for (int i = 0; i < result.length(); i++) {
       val entities = result.getJSONObject(i).getJSONArray("refEntities");
       val dbId = result.getJSONObject(i).getString("peDbId");
-
-      String referenceIds = "";
-      for (int j = 0; j < entities.length(); j++) {
-        val entity = entities.getJSONObject(j);
-
-        if (entity.getString("schemaClass").equalsIgnoreCase("ReferenceGeneProduct")) {
-          referenceIds += entity.getString("displayName")
-              .substring(0, entity.getString("displayName").indexOf(" "));
-
-          if (j < entities.length() - 1) {
-            referenceIds += ",";
-          }
-        }
-
-      }
+      val referenceIds = getReferenceIds(entities);
 
       if (!referenceIds.isEmpty()) {
         proteinMap.put(dbId, referenceIds);
@@ -65,6 +51,24 @@ public class DiagramProteinMapReader {
     }
 
     return proteinMap;
+  }
+
+  private String getReferenceIds(JSONArray entities) throws JSONException {
+    String referenceIds = "";
+    for (int j = 0; j < entities.length(); j++) {
+      val entity = entities.getJSONObject(j);
+
+      if (entity.getString("schemaClass").equalsIgnoreCase("ReferenceGeneProduct")) {
+        referenceIds += entity.getString("displayName")
+            .substring(0, entity.getString("displayName").indexOf(" "));
+
+        if (j < entities.length() - 1) {
+          referenceIds += ",";
+        }
+      }
+    }
+
+    return referenceIds;
   }
 
 }

@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 import static com.google.common.collect.ImmutableSet.copyOf;
 import static java.lang.String.format;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import lombok.NonNull;
 import lombok.val;
 
 import org.w3c.dom.Node;
@@ -37,14 +39,12 @@ import org.xml.sax.SAXException;
 
 public class DiagramListReader {
 
-  private final String DIAGRAMS_LIST_URL =
-      "http://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/pathwayHierarchy/homo+sapiens";
-  private final String DIAGRAMS_ID_CONVERT_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/Pathway/%s";
+  private final String DIAGRAMS_LIST_URL = REACTOME_BASE_URL + "pathwayHierarchy/homo+sapiens";
+  private final String DIAGRAMS_ID_CONVERT_URL = REACTOME_BASE_URL + "queryById/Pathway/%s";
   private List<String> diagrammedPathways;
   private List<String> nonDiagrammedPathways;
 
-  public void readListOfPathways() throws IOException, TransformerException {
+  public void readPathwayList() throws IOException, TransformerException {
     diagrammedPathways = new ArrayList<String>();
     nonDiagrammedPathways = new ArrayList<String>();
 
@@ -86,8 +86,9 @@ public class DiagramListReader {
 
   private String getDiagrammedParent(Node node) {
     val parent = node.getParentNode();
-    if (parent == null) { // Just in case it has no diagrammed parents... fall back on something
-      return "wellplayedreactome";
+    if (parent == null) {
+      // Just in case it has no diagrammed parents... fall back on something
+      return "missing";
     }
     val attribute = parent.getAttributes().getNamedItem("hasDiagram");
     return attribute == null ? getDiagrammedParent(parent) : attribute.getNodeValue();
@@ -101,7 +102,7 @@ public class DiagramListReader {
     return nonDiagrammedPathways;
   }
 
-  public String getReactId(String dbId) throws IOException {
+  public String getReactId(@NonNull String dbId) throws IOException {
     val querlUrl = new URL(format(DIAGRAMS_ID_CONVERT_URL, dbId));
     val id = DEFAULT.readTree(querlUrl).path("stableIdentifier").path("displayName").asText();
 

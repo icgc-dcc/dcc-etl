@@ -21,14 +21,15 @@ import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_HIGHLIGHTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_XML;
+import lombok.NonNull;
 import lombok.val;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DiagramNodeConverter {
 
-  public JsonNode convertDiagram(Diagram diagram, String id) {
+  public JsonNode convertDiagram(@NonNull Diagram diagram, @NonNull String id) {
     val mapper = new ObjectMapper();
 
     val node = mapper.createObjectNode();
@@ -42,7 +43,9 @@ public class DiagramNodeConverter {
       proteinNode.put(entry.getKey(), entry.getValue());
     }
 
-    if (!diagram.proteinMap.isEmpty()) node.put(DIAGRAM_PROTEIN_MAP, proteinNode);
+    if (!diagram.proteinMap.isEmpty()) {
+      node.put(DIAGRAM_PROTEIN_MAP, proteinNode);
+    }
 
     return node;
   }

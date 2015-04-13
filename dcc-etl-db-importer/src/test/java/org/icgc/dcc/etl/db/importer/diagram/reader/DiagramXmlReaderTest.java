@@ -36,8 +36,10 @@ public class DiagramXmlReaderTest {
     val result = reader.readPathwayXml("4839726");
     log.info(result);
     assertThat(result).isNotNull();
+
     // Make sure it's escaped
     assertThat(result).startsWith("&lt;");
+
     // Make sure we can unescape it
     assertThat(StringEscapeUtils.unescapeXml(result)).startsWith("<");
   }

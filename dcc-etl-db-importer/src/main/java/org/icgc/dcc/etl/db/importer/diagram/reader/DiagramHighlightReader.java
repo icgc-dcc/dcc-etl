@@ -19,18 +19,19 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.io.Resources.readLines;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
 import java.net.URL;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class DiagramHighlightReader {
 
-  private static final String QUERY_BY_ID_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/getContainedEventIds/%s";
+  private static final String QUERY_BY_ID_URL = REACTOME_BASE_URL + "getContainedEventIds/%s";
 
-  public String readHighlights(String pathwayId) throws IOException {
+  public String readHighlights(@NonNull String pathwayId) throws IOException {
     val diagramUrl = new URL(String.format(QUERY_BY_ID_URL, pathwayId));
 
     return readLines(diagramUrl, UTF_8).get(0);

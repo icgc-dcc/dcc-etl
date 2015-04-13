@@ -23,18 +23,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.db.importer.diagram.model.Diagram;
 import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
 
-/**
- * 
- */
 @Slf4j
 public class DiagramReader {
+
+  public final static String REACTOME_BASE_URL = "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/";
 
   public DiagramModel read() throws Exception {
     val model = new DiagramModel();
     val listReader = new DiagramListReader();
 
     log.info("Reading list of pathways..");
-    listReader.readListOfPathways();
+    listReader.readPathwayList();
 
     log.info("Getting all diagrammed pathways and their protein maps...");
     for (val pathwayId : listReader.getDiagrammedPathways()) {
@@ -46,7 +45,7 @@ public class DiagramReader {
 
       model.addDiagram(pathwayId, diagram);
 
-      Thread.sleep(3000);
+      Thread.sleep(3000); // To avoid crashing reactome's servers
     }
 
     log.info("Adding all non-diagrammed pathways and their highlights...");
@@ -70,4 +69,5 @@ public class DiagramReader {
 
     return updatedModel;
   }
+
 }

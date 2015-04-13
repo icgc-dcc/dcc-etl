@@ -17,16 +17,12 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import static com.google.common.collect.Maps.newHashMap;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Map;
-
 import lombok.val;
 
-import org.icgc.dcc.etl.db.importer.diagram.model.Diagram;
-import org.icgc.dcc.etl.db.importer.diagram.model.DiagramNodeConverter;
 import org.junit.Test;
+
+import com.google.common.collect.Maps;
 
 public class DiagramNodeConverterTest {
 
@@ -53,7 +49,7 @@ public class DiagramNodeConverterTest {
     diagram.setDiagram(xml);
     diagram.setHighlights(highlights);
 
-    Map<String, String> map = newHashMap();
+    val map = Maps.<String, String> newHashMap();
     if (proteins) {
       map.put("123", "uniprot1");
       map.put("456", "uniprot2");

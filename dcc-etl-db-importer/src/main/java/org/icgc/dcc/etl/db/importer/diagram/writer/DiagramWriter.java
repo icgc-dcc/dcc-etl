@@ -32,7 +32,7 @@ import com.mongodb.MongoClientURI;
 @Slf4j
 public class DiagramWriter extends AbstractJongoWriter<DiagramModel> {
 
-  private MongoCollection diagramCollection; // TODO
+  private MongoCollection diagramCollection;
 
   public DiagramWriter(@NonNull MongoClientURI mongoUri) {
     super(mongoUri);
@@ -57,7 +57,9 @@ public class DiagramWriter extends AbstractJongoWriter<DiagramModel> {
     val converter = new DiagramNodeConverter();
 
     for (val entry : value.getDiagrams().entrySet()) {
-      diagramCollection.save(converter.convertDiagram(entry.getValue(), entry.getKey()));
+      val diagram = entry.getValue();
+      val id = entry.getKey();
+      diagramCollection.save(converter.convertDiagram(diagram, id));
     }
   }
 

@@ -22,6 +22,7 @@ import static com.google.common.base.Stopwatch.createStarted;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -62,9 +63,9 @@ public class DiagramImporter {
   }
 
   private void writeDiagramModel(DiagramModel model) throws UnknownHostException, IOException {
+    @Cleanup
     val writer = new DiagramWriter(mongoUri);
     writer.write(model);
-    writer.close();
   }
 
 }

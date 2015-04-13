@@ -17,15 +17,17 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import static com.google.common.collect.Maps.newHashMap;
-
 import java.util.Map;
+
+import lombok.NonNull;
+
+import com.google.common.collect.Maps;
 
 public class DiagramModel {
 
-  Map<String, Diagram> diagrams = newHashMap();
+  Map<String, Diagram> diagrams = Maps.<String, Diagram> newHashMap();;
 
-  public void addDiagram(String id, Diagram diagram) {
+  public void addDiagram(@NonNull String id, @NonNull Diagram diagram) {
     diagrams.put(id, diagram);
   }
 

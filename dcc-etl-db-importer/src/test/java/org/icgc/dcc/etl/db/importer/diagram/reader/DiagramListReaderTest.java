@@ -35,13 +35,13 @@ public class DiagramListReaderTest {
   @Test
   public void testReadList() throws IOException, TransformerException {
     val reader = new DiagramListReader();
-    reader.readListOfPathways();
+    reader.readPathwayList();
 
     assertThat(reader.getDiagrammedPathways()).isNotEmpty();
 
     // This might be too aggressive of a test - but at least it fails when something changes?
-    assertThat(reader.getDiagrammedPathways().size()).isEqualTo(533);
-    assertThat(reader.getNonDiagrammedPathways().size()).isEqualTo(1210);
+    assertThat(reader.getDiagrammedPathways().size()).isEqualTo(471);
+    assertThat(reader.getNonDiagrammedPathways().size()).isEqualTo(1182);
   }
 
   @Test

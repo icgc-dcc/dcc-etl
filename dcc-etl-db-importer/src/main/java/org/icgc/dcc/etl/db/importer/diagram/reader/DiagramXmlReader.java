@@ -19,22 +19,20 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static com.google.common.xml.XmlEscapers.xmlAttributeEscaper;
 import static java.lang.String.format;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.net.URL;
 
+import lombok.NonNull;
 import lombok.val;
 
 import org.apache.tika.io.IOUtils;
 
-/**
- * 
- */
 public class DiagramXmlReader {
 
-  private final String DIAGRAM_XML_URL =
-      "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/pathwayDiagram/%s/XML";
+  private final String DIAGRAM_XML_URL = REACTOME_BASE_URL + "pathwayDiagram/%s/XML";
 
-  public String readPathwayXml(String dbId) throws Exception {
+  public String readPathwayXml(@NonNull String dbId) throws Exception {
     val input = new URL(format(DIAGRAM_XML_URL, dbId)).openStream();
     return xmlAttributeEscaper().escape(IOUtils.toString(input, "UTF-8"));
   }
