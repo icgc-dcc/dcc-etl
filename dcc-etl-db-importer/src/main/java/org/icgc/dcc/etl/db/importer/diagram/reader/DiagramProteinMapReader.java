@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.function.Consumer;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -46,37 +45,27 @@ public class DiagramProteinMapReader {
 
     Map<String, String> proteinMap = newHashMap();
 
-    result.forEach(new Consumer<JsonNode>() {
-
-      @Override
-      public void accept(JsonNode node) {
-        try {
-          val dbId = node.get("peDbId").asText();
-          val referenceIds = getReferenceIds(node.get("refEntities"));
-          if (!referenceIds.isEmpty()) {
-            proteinMap.put(dbId, referenceIds);
-          }
-        } catch (JSONException e) {
-          log.error(format("Failed to read protein id map for pathway '%s'", pathwayId));
+    result.forEach(node -> {
+      try {
+        val dbId = node.get("peDbId").asText();
+        val referenceIds = getReferenceIds(node.get("refEntities"));
+        if (!referenceIds.isEmpty()) {
+          proteinMap.put(dbId, referenceIds);
         }
+      } catch (JSONException e) {
+        log.error(format("Failed to read protein id map for pathway '%s'", pathwayId));
       }
-
     });
     return proteinMap;
   }
 
   private String getReferenceIds(JsonNode entities) throws JSONException {
     val joiner = new StringJoiner(",");
-    entities.forEach(new Consumer<JsonNode>() {
-
-      @Override
-      public void accept(JsonNode node) {
-        if (node.get("schemaClass").asText().equalsIgnoreCase(GENE_TYPE)) {
-          val uniprotId = node.get("displayName").asText();
-          joiner.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
-        }
+    entities.forEach(node -> {
+      if (node.get("schemaClass").asText().equalsIgnoreCase(GENE_TYPE)) {
+        val uniprotId = node.get("displayName").asText();
+        joiner.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
       }
-
     });
 
     return joiner.toString();
