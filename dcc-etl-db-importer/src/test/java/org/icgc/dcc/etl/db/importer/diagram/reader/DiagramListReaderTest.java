@@ -27,21 +27,18 @@ import lombok.val;
 
 import org.junit.Test;
 
-/**
- * 
- */
 public class DiagramListReaderTest {
 
   @Test
   public void testReadList() throws IOException, TransformerException {
     val reader = new DiagramListReader();
-    reader.readPathwayList();
+    val pathways = reader.readPathwayList();
 
-    assertThat(reader.getDiagrammedPathways()).isNotEmpty();
+    assertThat(pathways.getDiagrammed()).isNotEmpty();
 
     // This might be too aggressive of a test - but at least it fails when something changes?
-    assertThat(reader.getDiagrammedPathways().size()).isEqualTo(471);
-    assertThat(reader.getNonDiagrammedPathways().size()).isEqualTo(1182);
+    assertThat(pathways.getDiagrammed().size()).isEqualTo(471);
+    assertThat(pathways.getNotDiagrammed().size()).isEqualTo(1182);
   }
 
   @Test

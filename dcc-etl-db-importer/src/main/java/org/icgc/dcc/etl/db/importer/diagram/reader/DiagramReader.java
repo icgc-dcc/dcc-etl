@@ -27,21 +27,22 @@ import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
 public class DiagramReader {
 
   public final static String REACTOME_BASE_URL = "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/";
+  public final static String NOT_HIGHLIGHTED = "";
 
   public DiagramModel read() throws Exception {
     val model = new DiagramModel();
     val listReader = new DiagramListReader();
 
     log.info("Reading list of pathways..");
-    listReader.readPathwayList();
+    val pathways = listReader.readPathwayList();
 
     log.info("Getting all diagrammed pathways and their protein maps...");
-    for (val pathwayId : listReader.getDiagrammedPathways()) {
+    for (val pathwayId : pathways.getDiagrammed()) {
       val diagram = new Diagram();
 
       diagram.setDiagram(new DiagramXmlReader().readPathwayXml(pathwayId));
       diagram.setProteinMap(new DiagramProteinMapReader().readProteinMap(pathwayId));
-      diagram.setHighlights("");
+      diagram.setHighlights(NOT_HIGHLIGHTED);
 
       model.addDiagram(pathwayId, diagram);
 
@@ -49,9 +50,9 @@ public class DiagramReader {
     }
 
     log.info("Adding all non-diagrammed pathways and their highlights...");
-    for (val id : listReader.getNonDiagrammedPathways()) {
-      val diagrammedId = id.substring(id.indexOf("-") + 1);
-      val nonDiagrammedId = id.substring(0, id.indexOf("-"));
+    for (val id : pathways.getNotDiagrammed()) {
+      val diagrammedId = parseDiagramId(id);
+      val nonDiagrammedId = parseNonDiagramId(id);
 
       val baseDiagram = model.getDiagrams().get(diagrammedId);
       baseDiagram.setHighlights(new DiagramHighlightReader().readHighlights(nonDiagrammedId));
@@ -68,6 +69,14 @@ public class DiagramReader {
     }
 
     return updatedModel;
+  }
+
+  private String parseDiagramId(String id) {
+    return id.substring(id.indexOf("-") + 1);
+  }
+
+  private String parseNonDiagramId(String id) {
+    return id.substring(0, id.indexOf("-"));
   }
 
 }

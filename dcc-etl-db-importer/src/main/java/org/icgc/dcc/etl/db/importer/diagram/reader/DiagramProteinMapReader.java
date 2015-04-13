@@ -19,56 +19,67 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static java.lang.String.format;
+import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.io.IOUtils;
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONTokener;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+@Slf4j
 public class DiagramProteinMapReader {
 
   private final String PROTEIN_MAP_URL = REACTOME_BASE_URL + "getPhysicalToReferenceEntityMaps/%s";
+  private final String GENE_TYPE = "ReferenceGeneProduct";
 
   public Map<String, String> readProteinMap(String pathwayId) throws IOException, JSONException {
-    val result = (JSONArray) new JSONTokener(IOUtils.toString(new URL(format(PROTEIN_MAP_URL, pathwayId)))).nextValue();
+    val result = DEFAULT.readTree(new URL(format(PROTEIN_MAP_URL, pathwayId)));
+
     Map<String, String> proteinMap = newHashMap();
 
-    for (int i = 0; i < result.length(); i++) {
-      val entities = result.getJSONObject(i).getJSONArray("refEntities");
-      val dbId = result.getJSONObject(i).getString("peDbId");
-      val referenceIds = getReferenceIds(entities);
+    result.forEach(new Consumer<JsonNode>() {
 
-      if (!referenceIds.isEmpty()) {
-        proteinMap.put(dbId, referenceIds);
+      @Override
+      public void accept(JsonNode node) {
+        try {
+          val dbId = node.get("peDbId").asText();
+          val referenceIds = getReferenceIds(node.get("refEntities"));
+          if (!referenceIds.isEmpty()) {
+            proteinMap.put(dbId, referenceIds);
+          }
+        } catch (JSONException e) {
+          log.error(format("Failed to read protein id map for pathway '%s'", pathwayId));
+        }
       }
-    }
 
+    });
     return proteinMap;
   }
 
-  private String getReferenceIds(JSONArray entities) throws JSONException {
-    String referenceIds = "";
-    for (int j = 0; j < entities.length(); j++) {
-      val entity = entities.getJSONObject(j);
+  private String getReferenceIds(JsonNode entities) throws JSONException {
+    val joiner = new StringJoiner(",");
+    entities.forEach(new Consumer<JsonNode>() {
 
-      if (entity.getString("schemaClass").equalsIgnoreCase("ReferenceGeneProduct")) {
-        referenceIds += entity.getString("displayName")
-            .substring(0, entity.getString("displayName").indexOf(" "));
-
-        if (j < entities.length() - 1) {
-          referenceIds += ",";
+      @Override
+      public void accept(JsonNode node) {
+        if (node.get("schemaClass").asText().equalsIgnoreCase(GENE_TYPE)) {
+          val uniprotId = node.get("displayName").asText();
+          joiner.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
         }
       }
-    }
 
-    return referenceIds;
+    });
+
+    return joiner.toString();
   }
 
 }

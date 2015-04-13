@@ -44,7 +44,7 @@ public class DiagramNodeConverterTest {
         "{\"diagram_id\":\"REACT\",\"xml\":\"am i aly?\",\"highlights\":\"\"}");
   }
 
-  private Diagram getTestDiagram(String xml, String highlights, Boolean proteins) {
+  private Diagram getTestDiagram(String xml, String highlights, boolean proteins) {
     val diagram = new Diagram();
     diagram.setDiagram(xml);
     diagram.setHighlights(highlights);

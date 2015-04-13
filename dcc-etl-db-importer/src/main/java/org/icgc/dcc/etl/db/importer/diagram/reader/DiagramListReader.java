@@ -17,36 +17,41 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static com.google.common.collect.ImmutableSet.copyOf;
 import static java.lang.String.format;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import com.google.common.collect.ImmutableSet;
+
 public class DiagramListReader {
 
   private final String DIAGRAMS_LIST_URL = REACTOME_BASE_URL + "pathwayHierarchy/homo+sapiens";
   private final String DIAGRAMS_ID_CONVERT_URL = REACTOME_BASE_URL + "queryById/Pathway/%s";
-  private List<String> diagrammedPathways;
-  private List<String> nonDiagrammedPathways;
 
-  public void readPathwayList() throws IOException, TransformerException {
-    diagrammedPathways = new ArrayList<String>();
-    nonDiagrammedPathways = new ArrayList<String>();
+  @Value
+  class Pathways {
+
+    ImmutableSet<String> diagrammed;
+    ImmutableSet<String> notDiagrammed;
+  }
+
+  public Pathways readPathwayList() throws IOException, TransformerException {
+    val diagrammedPathwaysBuilder = new ImmutableSet.Builder<String>();
+    val nonDiagrammedPathwaysBuilder = new ImmutableSet.Builder<String>();
 
     try {
       val factory = DocumentBuilderFactory.newInstance();
@@ -56,32 +61,20 @@ public class DiagramListReader {
       // Add all pathway nodes as non-diagrammed or diagrammed
       for (int i = 0; i < nodes.getLength(); i++) {
         val hasDiagram = nodes.item(i).getAttributes().getNamedItem("hasDiagram");
+        val diagramDbId = nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue();
 
         if (hasDiagram == null) {
-          nonDiagrammedPathways.add(nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue()
-              + "-" + getDiagrammedParent(nodes.item(i))); // Append the diagrammed parent
+          nonDiagrammedPathwaysBuilder.add(diagramDbId + "-" + getDiagrammedParent(nodes.item(i)));
         } else {
-          diagrammedPathways.add(nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue());
+          diagrammedPathwaysBuilder.add(diagramDbId);
         }
       }
 
-      makeUnique();
+      return new Pathways(diagrammedPathwaysBuilder.build(), nonDiagrammedPathwaysBuilder.build());
 
     } catch (SAXException | IOException | ParserConfigurationException e) {
       throw new IOException("Failed to read list of pathway diagrams", e);
     }
-  }
-
-  private void makeUnique() {
-    // Make the diagrammed list unique (removes about 15%)
-    val diagrammedSet = copyOf(diagrammedPathways);
-    diagrammedPathways.clear();
-    diagrammedPathways.addAll(diagrammedSet);
-
-    // Make non diagrammed list unique too (removes about 25%)
-    val nonDiagrammedSet = copyOf(nonDiagrammedPathways);
-    nonDiagrammedPathways.clear();
-    nonDiagrammedPathways.addAll(nonDiagrammedSet);
   }
 
   private String getDiagrammedParent(Node node) {
@@ -94,19 +87,12 @@ public class DiagramListReader {
     return attribute == null ? getDiagrammedParent(parent) : attribute.getNodeValue();
   }
 
-  public List<String> getDiagrammedPathways() {
-    return diagrammedPathways;
-  }
-
-  public List<String> getNonDiagrammedPathways() {
-    return nonDiagrammedPathways;
-  }
-
   public String getReactId(@NonNull String dbId) throws IOException {
     val querlUrl = new URL(format(DIAGRAMS_ID_CONVERT_URL, dbId));
     val id = DEFAULT.readTree(querlUrl).path("stableIdentifier").path("displayName").asText();
 
-    return id.substring(0, id.indexOf("."));
+    val versionlessId = id.indexOf(".");
+    return id.substring(0, versionlessId);
   }
 
 }

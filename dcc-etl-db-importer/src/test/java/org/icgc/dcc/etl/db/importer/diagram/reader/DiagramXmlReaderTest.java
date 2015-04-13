@@ -19,22 +19,17 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.Test;
 
-/**
- * 
- */
-@Slf4j
 public class DiagramXmlReaderTest {
 
   @Test
   public void testXmlReader() throws Exception {
     val reader = new DiagramXmlReader();
     val result = reader.readPathwayXml("4839726");
-    log.info(result);
+
     assertThat(result).isNotNull();
 
     // Make sure it's escaped
