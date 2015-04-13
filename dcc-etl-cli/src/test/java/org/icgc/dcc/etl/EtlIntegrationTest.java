@@ -75,6 +75,7 @@ import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.db.importer.DBImporter;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.diagram.DiagramImporter;
 import org.icgc.dcc.etl.identifier.IdentifierMain;
 import org.icgc.dcc.etl.importer.Importer;
 import org.junit.After;
@@ -100,6 +101,7 @@ public class EtlIntegrationTest {
    */
   public static final String TEST_CONFIG_FILE = "src/test/conf/config.yaml";
   private static final String TEST_GENES_IDS = "ENSG00000176105,ENSG00000156976,ENSG00000215529,ENSG00000204099";
+  private static final String TEST_DIAGRAMS = "453279,1187000";
 
   @Rule
   public final TemporaryFolder tmp = new TemporaryFolder();
@@ -140,14 +142,15 @@ public class EtlIntegrationTest {
 
   @Before
   public void setup() {
+    // Only import these genes to significantly speedup processing during testing
+    System.setProperty(Importer.INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME, TEST_GENES_IDS);
+    System.setProperty(DiagramImporter.INCLUDED_REACTOME_DIAGRAMS, TEST_DIAGRAMS);
+
     startIdentifier();
     seedFathmmDB();
     seedGenomeDB();
 
     importSubmissionFileSystemStructure();
-
-    // Only import these genes to significantly speedup processing during testing
-    System.setProperty(Importer.INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME, TEST_GENES_IDS);
 
     cleanRelease();
     cleanIds();

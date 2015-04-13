@@ -29,9 +29,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import lombok.NonNull;
-import lombok.Value;
 import lombok.val;
 
+import org.icgc.dcc.etl.db.importer.diagram.model.Pathways;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -41,13 +41,6 @@ public class DiagramListReader {
 
   private final String DIAGRAMS_LIST_URL = REACTOME_BASE_URL + "pathwayHierarchy/homo+sapiens";
   private final String DIAGRAMS_ID_CONVERT_URL = REACTOME_BASE_URL + "queryById/Pathway/%s";
-
-  @Value
-  class Pathways {
-
-    ImmutableSet<String> diagrammed;
-    ImmutableSet<String> notDiagrammed;
-  }
 
   public Pathways readPathwayList() throws IOException, TransformerException {
     val diagrammedPathwaysBuilder = new ImmutableSet.Builder<String>();

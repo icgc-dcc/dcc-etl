@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
+import static org.icgc.dcc.etl.db.importer.diagram.DiagramImporter.INCLUDED_REACTOME_DIAGRAMS;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.etl.db.importer.cgc.CgcImporter;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.diagram.DiagramImporter;
 import org.icgc.dcc.etl.db.importer.gene.GeneImporter;
 import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
@@ -89,10 +91,24 @@ public class DBImporter {
       log.info("Finished importing GO in {} ...", watch);
     }
 
+    if (collections.contains(CollectionName.DIAGRAMS)) {
+      val diagramIds = System.getProperty(INCLUDED_REACTOME_DIAGRAMS);
+      log.info("Diagramtest list: " + diagramIds);
+      watch.reset().start();
+      log.info("Importing Diagrams...");
+      importDiagrams(mongoUri);
+      log.info("Finished importing Diagrams in {} ...", watch);
+    }
+
   }
 
   private static void importProjects(ICGCClientConfig config, MongoClientURI releaseUri) {
     val projectImporter = new ProjectImporter(config, releaseUri);
+    projectImporter.execute();
+  }
+
+  private static void importDiagrams(MongoClientURI releaseUri) {
+    val projectImporter = new DiagramImporter(releaseUri);
     projectImporter.execute();
   }
 

@@ -47,8 +47,8 @@ public class DiagramProteinMapReader {
 
     result.forEach(node -> {
       try {
-        val dbId = node.get("peDbId").asText();
-        val referenceIds = getReferenceIds(node.get("refEntities"));
+        String dbId = node.get("peDbId").asText();
+        String referenceIds = getReferenceIds(node.get("refEntities"));
         if (!referenceIds.isEmpty()) {
           proteinMap.put(dbId, referenceIds);
         }
@@ -60,10 +60,10 @@ public class DiagramProteinMapReader {
   }
 
   private String getReferenceIds(JsonNode entities) throws JSONException {
-    val joiner = new StringJoiner(",");
+    StringJoiner joiner = new StringJoiner(",");
     entities.forEach(node -> {
       if (node.get("schemaClass").asText().equalsIgnoreCase(GENE_TYPE)) {
-        val uniprotId = node.get("displayName").asText();
+        String uniprotId = node.get("displayName").asText();
         joiner.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
       }
     });

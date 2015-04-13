@@ -21,6 +21,8 @@ import static com.google.common.base.Stopwatch.createStarted;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -33,6 +35,7 @@ import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
 import org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader;
 import org.icgc.dcc.etl.db.importer.diagram.writer.DiagramWriter;
 
+import com.google.common.base.Strings;
 import com.mongodb.MongoClientURI;
 
 /**
@@ -44,6 +47,8 @@ public class DiagramImporter {
 
   @NonNull
   private final MongoClientURI mongoUri;
+
+  public final static String INCLUDED_REACTOME_DIAGRAMS = DiagramImporter.class + ".diagramIds";
 
   @SneakyThrows
   public void execute() {
@@ -59,7 +64,13 @@ public class DiagramImporter {
   }
 
   private DiagramModel readDiagramModel() throws Exception {
-    return new DiagramReader().read();
+    val diagramIds = System.getProperty(INCLUDED_REACTOME_DIAGRAMS);
+    log.info("Diagram test list: " + diagramIds);
+    if (Strings.isNullOrEmpty(diagramIds)) {
+      return new DiagramReader().read(new ArrayList<String>());
+    } else {
+      return new DiagramReader().read(Arrays.asList(diagramIds.split(",")));
+    }
   }
 
   private void writeDiagramModel(DiagramModel model) throws UnknownHostException, IOException {

@@ -17,11 +17,17 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
+import java.util.List;
+
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.diagram.model.Diagram;
 import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
+import org.icgc.dcc.etl.db.importer.diagram.model.Pathways;
+
+import com.google.common.collect.ImmutableSet;
 
 @Slf4j
 public class DiagramReader {
@@ -29,12 +35,20 @@ public class DiagramReader {
   public final static String REACTOME_BASE_URL = "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/";
   public final static String NOT_HIGHLIGHTED = "";
 
-  public DiagramModel read() throws Exception {
+  public DiagramModel read(@NonNull List<String> testPathways) throws Exception {
     val model = new DiagramModel();
     val listReader = new DiagramListReader();
 
-    log.info("Reading list of pathways..");
-    val pathways = listReader.readPathwayList();
+    Pathways pathways;
+    if (testPathways.isEmpty()) {
+      log.info("Reading list of pathways..");
+      pathways = listReader.readPathwayList();
+    } else {
+      log.info("Using given test pathway list {}...", testPathways);
+      pathways = new Pathways(ImmutableSet.copyOf(testPathways), new ImmutableSet.Builder<String>().build());
+    }
+
+    int count = 1;
 
     log.info("Getting all diagrammed pathways and their protein maps...");
     for (val pathwayId : pathways.getDiagrammed()) {
@@ -46,8 +60,14 @@ public class DiagramReader {
 
       model.addDiagram(pathwayId, diagram);
 
+      log.info("Added diagram '{}' to list - {}/{}", pathwayId, count, pathways.getDiagrammed()
+          .size());
+
       Thread.sleep(3000); // To avoid crashing reactome's servers
+      count++;
     }
+
+    count = 1;
 
     log.info("Adding all non-diagrammed pathways and their highlights...");
     for (val id : pathways.getNotDiagrammed()) {
@@ -58,6 +78,12 @@ public class DiagramReader {
       baseDiagram.setHighlights(new DiagramHighlightReader().readHighlights(nonDiagrammedId));
 
       model.addDiagram(nonDiagrammedId, baseDiagram);
+
+      log.info("Finished adding non-diagram '{}' to list - {}/{}", id, count, pathways.getNotDiagrammed()
+          .size());
+
+      Thread.sleep(1000);
+      count++;
     }
 
     val updatedModel = new DiagramModel();
