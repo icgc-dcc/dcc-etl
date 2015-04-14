@@ -17,9 +17,9 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static com.google.common.xml.XmlEscapers.xmlAttributeEscaper;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeJson;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.net.URL;
@@ -35,6 +35,6 @@ public class DiagramXmlReader {
 
   public String readPathwayXml(@NonNull String dbId) throws Exception {
     val url = new URL(format(DIAGRAM_XML_URL, dbId));
-    return xmlAttributeEscaper().escape(Resources.toString(url, UTF_8));
+    return escapeJson(Resources.toString(url, UTF_8)).trim();
   }
 }
