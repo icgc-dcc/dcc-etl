@@ -26,6 +26,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_MUTATION_ID;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.DIAGRAM_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.DONOR_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_SET_COLLECTION;
@@ -67,6 +68,11 @@ public class MongoDBCollectionReader implements CollectionReader {
    */
   @NonNull
   private final Jongo client;
+
+  @Override
+  public Iterable<ObjectNode> readDiagrams(@NonNull CollectionFields fields) {
+    return read(DIAGRAM_COLLECTION, fields);
+  }
 
   @Override
   public Iterable<ObjectNode> readReleases(@NonNull CollectionFields fields) {
