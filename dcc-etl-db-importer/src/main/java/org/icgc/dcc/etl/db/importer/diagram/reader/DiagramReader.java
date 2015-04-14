@@ -92,6 +92,7 @@ public class DiagramReader {
     for (val entry : model.getDiagrams().entrySet()) {
       val reactId = listReader.getReactId(entry.getKey());
       updatedModel.addDiagram(reactId, entry.getValue());
+      log.info("Saved diagram  dbId '{}' as {}", entry.getKey(), reactId);
     }
 
     return updatedModel;

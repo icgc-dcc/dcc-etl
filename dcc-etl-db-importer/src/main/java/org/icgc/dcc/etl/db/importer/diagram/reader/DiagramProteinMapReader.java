@@ -37,8 +37,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 @Slf4j
 public class DiagramProteinMapReader {
 
-  private final String PROTEIN_MAP_URL = REACTOME_BASE_URL + "getPhysicalToReferenceEntityMaps/%s";
-  private final String GENE_TYPE = "ReferenceGeneProduct";
+  private final static String PROTEIN_MAP_URL = REACTOME_BASE_URL + "getPhysicalToReferenceEntityMaps/%s";
+  private final static String GENE_TYPE = "ReferenceGeneProduct";
 
   public Map<String, String> readProteinMap(String pathwayId) throws IOException, JSONException {
     val result = DEFAULT.readTree(new URL(format(PROTEIN_MAP_URL, pathwayId)));

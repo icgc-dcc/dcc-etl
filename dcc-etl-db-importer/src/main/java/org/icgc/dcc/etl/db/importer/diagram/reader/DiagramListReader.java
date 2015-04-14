@@ -39,8 +39,8 @@ import com.google.common.collect.ImmutableSet;
 
 public class DiagramListReader {
 
-  private final String DIAGRAMS_LIST_URL = REACTOME_BASE_URL + "pathwayHierarchy/homo+sapiens";
-  private final String DIAGRAMS_ID_CONVERT_URL = REACTOME_BASE_URL + "queryById/Pathway/%s";
+  private final static String DIAGRAMS_LIST_URL = REACTOME_BASE_URL + "pathwayHierarchy/homo+sapiens";
+  private final static String DIAGRAMS_ID_CONVERT_URL = REACTOME_BASE_URL + "queryById/Pathway/%s";
 
   public Pathways readPathwayList() throws IOException, TransformerException {
     val diagrammedPathwaysBuilder = new ImmutableSet.Builder<String>();

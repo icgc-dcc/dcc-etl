@@ -31,7 +31,7 @@ import com.google.common.io.Resources;
 
 public class DiagramXmlReader {
 
-  private final String DIAGRAM_XML_URL = REACTOME_BASE_URL + "pathwayDiagram/%s/XML";
+  private final static String DIAGRAM_XML_URL = REACTOME_BASE_URL + "pathwayDiagram/%s/XML";
 
   public String readPathwayXml(@NonNull String dbId) throws Exception {
     val url = new URL(format(DIAGRAM_XML_URL, dbId));

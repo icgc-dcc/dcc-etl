@@ -39,7 +39,24 @@ import com.google.common.base.Strings;
 import com.mongodb.MongoClientURI;
 
 /**
+ * Imports all the Reactome Pathway Diagram Data
+ * <ol>
+ * <li>Gets list of pathway diagrams: diagrammed and non-diagrammed</li>
  * 
+ * <li>For each diagrammed pathway, add a diagram:</li>
+ * <ul>
+ * <li>Diagram: xml <code>/pathwayDiagram</code></li>
+ * <li>ProteinMap: uniprot id to reactome db id <code>/getPhysicalToReferenceEntityMaps</code></li>
+ * <li>Highlights: --</li>
+ * </ul>
+ * <li>For each nondiagrammed pathway, add a diagram:</li>
+ * <ul>
+ * <li>Diagram: <i>from diagrammed parent</i></li>
+ * <li>ProteinMap: <i>from diagrammed parent</i></li>
+ * <li>Highlights: highlights <code>/getContainedEventIds</code></li>
+ * </ul>
+ * <li>Get a REACT id for each diagram <code>/queryById</code></li>
+ * </ol>
  */
 @Slf4j
 @RequiredArgsConstructor

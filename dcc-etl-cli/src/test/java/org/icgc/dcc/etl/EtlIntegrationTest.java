@@ -142,7 +142,7 @@ public class EtlIntegrationTest {
 
   @Before
   public void setup() {
-    // Only import these genes to significantly speedup processing during testing
+    // Only import some test gene and diagram ids to significantly speedup processing during testing
     System.setProperty(Importer.INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME, TEST_GENES_IDS);
     System.setProperty(DiagramImporter.INCLUDED_REACTOME_DIAGRAMS, TEST_DIAGRAMS);
 
