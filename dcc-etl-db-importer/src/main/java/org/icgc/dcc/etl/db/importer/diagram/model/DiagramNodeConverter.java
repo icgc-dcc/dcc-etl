@@ -21,6 +21,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_HIGHLIGHTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_XML;
+import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
 import lombok.NonNull;
 import lombok.val;
 
@@ -33,6 +34,7 @@ public class DiagramNodeConverter {
     val mapper = new ObjectMapper();
 
     val node = mapper.createObjectNode();
+    node.put(MONGO_INTERNAL_ID, id);
     node.put(DIAGRAM_ID, id);
     node.put(DIAGRAM_XML, diagram.diagram);
     node.put(DIAGRAM_HIGHLIGHTS, diagram.highlights);
