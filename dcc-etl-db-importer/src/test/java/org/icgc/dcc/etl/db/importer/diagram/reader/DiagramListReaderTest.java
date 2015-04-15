@@ -36,9 +36,9 @@ public class DiagramListReaderTest {
 
     assertThat(pathways.getDiagrammed()).isNotEmpty();
 
-    // This might be too aggressive of a test - but at least it fails when something changes?
-    assertThat(pathways.getDiagrammed().size()).isEqualTo(471);
-    assertThat(pathways.getNotDiagrammed().size()).isEqualTo(1182);
+    // It's up to reactome whether today it will be 471 or 533 or ???
+    assertThat(pathways.getDiagrammed().size()).isIn(471, 533);
+    assertThat(pathways.getNotDiagrammed().size()).isIn(1182, 1210);
   }
 
   @Test

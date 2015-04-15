@@ -33,7 +33,7 @@ public class DiagramHighlightReaderTest {
     String ids = reader.readHighlights("1300645");
 
     assertThat(ids).isNotNull();
-    assertThat(ids).isEqualTo("1297354,1297333");
+    assertThat(ids).isEqualTo("1297333,1297354");
   }
 
 }
