@@ -1,0 +1,100 @@
+donor_id	therapy_start_interval	therapy_duration	therapy_type	therapy_response	therapy_notes
+4182393	1	101	Other:B-NHL BFM 04 R3	1	-888
+4119027	0	103	Other:B-NHL BFM 04 R3	1	-888
+4125240	10	28	Other:NHL BFM 95 II-R1	1	-888
+4190495	8	196	Other:B-NHL BFM 04 R3	1	-888
+4189998	7	109	Other:B-NHL BFM 04 Rituximab R4,Rituximab	1	-888
+4135350	2	89	Other:Rituximab, Vorphase (Dexa+Cy), A-B-A-B-,Rituximab	1	-888
+4159170	20	1351	CHOP/CHOEP,Rituximab	1	-888
+4194218	2	78	Other:B-NHL BFM 04 R2	1	-888
+4116738	0	379	Other:B-NHL BFM 2004 (6 Zyklen)	1	-888
+4163639	2	125	Other:R-CHOP,Rituximab,G-CSF Support	2	-888
+4105105	115	133	CHOP/CHOEP,Rituximab	1	-888
+4131257	15	54	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4189200	19	1135	CHOP/CHOEP,Rituximab	1	-888
+4175837	40	158	Bendamustin,Rituximab	2	-888
+4108101	7	124	Other:R-CHOP,Rituximab,G-CSF Support	2	-888
+4130003	8	71	Other:B-NHL BFM 04 Rituximab R2,Rituximab	1	-888
+4146289	7	449	Other:B-NHL BFM 04 R2	1	-888
+4112512	0	143	Other:B-NHL-BFM 2004,Rituximab	1	-888
+4158726	13	169	CHOP/CHOEP,Rituximab	1	-888
+4193278	12	76	Other:B-NHL BFM 04 Rituximab R2,Rituximab	1	-888
+4121361	32	80	Rituximab,Radiotherapie	1	-888
+4134005	3	139	CHOP/CHOEP,Rituximab	2	-888
+4188900	6	147	Bendamustin,Rituximab	1	-888
+4104893	14	72	Other:B-NHL BFM 04 R2	1	-888
+4177376	6	259	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4135099	5	515	Other:R-CHOP (PETAL-Studie),Rituximab,G-CSF Support	2	-888
+4101316	39	101	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4177434	5	136	Other:B-NHL BFM 04,Rituximab,G-CSF Support	1	-888
+4177987	8	183	Bendamustin,Other:GA101-Antikoerper (i.R-Gallium-Studie)	2	-888
+4133511	6	95	Other:B-NHL BFM 04 R3	1	-888
+4177856	1	193	Other:B-NHL BFM 04 R4	2	-888
+4142267	2	131	Other:B-NHL BFM 04 R4	1	-888
+4194891	4	111	Other:B-NHL BFM Rituximab R4,Rituximab	1	-888
+4107137	6	213	CHOP/CHOEP,Rituximab,Radiotherapie,G-CSF Support	1	-888
+4112447	13	90	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4127766	7	128	Other:B-NHL BFM 04 R4	1	-888
+4131744	22	132	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4159421	13	118	Bendamustin,Rituximab	3	-888
+4102009	23	255	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4160468	31	973	Radiotherapie	1	-888
+4170686	-888	-777	not yet necessary	3	-888
+4171706	36	591	Bendamustin,Rituximab	1	-888
+4172511	7	69	Rituximab,Radiotherapie	1	-888
+4174905	27	190	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4198542	154	119	CHOP/CHOEP,Rituximab	1	-888
+4177601	-888	-777	not yet necessary	4	-888
+4191799	13	130	Other:Prephase Cyclophosphamid 3d, Prednisolon, Dexa 12d, then R-EPOCH,Rituximab	1	-888
+4139696	1	-777	CHOP/CHOEP,Rituximab,Radiotherapie,G-CSF Support	4	-888
+4120193	10	248	CHOP/CHOEP,Rituximab,Radiotherapie	1	-888
+4166706	19	164	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4176133	7	319	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4184094	6	155	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4177810	5	267	CHOP/CHOEP,Rituximab	1	-888
+4119279	2	215	CHOP/CHOEP,Other:GMALL/B-NHL 2002,Rituximab,G-CSF Support	1	-888
+4120403	6	147	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4133263	22	187	Other:G-MALL-B-ALL / NHL 2002,Rituximab,G-CSF Support	1	-888
+4166503	299	148	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4110378	36	91	CHOP/CHOEP,Rituximab	1	-888
+4115001	52	239	CHOP/CHOEP,Rituximab	1	-888
+4145177	21	224	CHOP/CHOEP,Rituximab	1	-888
+4149246	1094	195	Bendamustin,Rituximab	1	-888
+4157186	33	147	CHOP/CHOEP,Rituximab	1	-888
+4188879	7	162	CHOP/CHOEP,Rituximab,Radiotherapie	2	-888
+4134434	6	122	CHOP/CHOEP,Rituximab,G-CSF Support	2	-888
+4160100	24	63	CHOP/CHOEP,Rituximab	4	-888
+4136702	7	182	Bendamustin,Other:GA101	1	-888
+4142605	2	263	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4178655	8	198	Bendamustin,Other:GA 101,G-CSF Support	3	-888
+4189035	12	148	CHOP/CHOEP,Rituximab,Radiotherapie,G-CSF Support	1	-888
+4150895	10	257	CHOP/CHOEP,Rituximab	1	-888
+4113825	-888	-777	not yet necessary	4	-888
+4178310	5	120	Other:B-NHL BFM 04,Rituximab	1	-888
+4147968	27	96	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4103141	36	439	CHOP/CHOEP	1	-888
+4108992	9	323	Bendamustin,Rituximab	2	-888
+4111326	17	104	Other:CLIP 14,Rituximab,G-CSF Support	1	-888
+4178345	1	117	Other:B-NHL BFM 04	1	-888
+4111337	27	129	CHOP/CHOEP,Other:mini CHOP,Rituximab,Radiotherapie,G-CSF Support	1	-888
+4113191	27	351	Bendamustin,Rituximab	1	-888
+4124542	358	112	CHOP/CHOEP,Rituximab	1	-888
+4131095	-888	-777	not yet necessary	4	-888
+4144633	35	92	Rituximab	1	-888
+4120157	0	274	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4144951	14	56	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4145528	7	97	CHOP/CHOEP,Rituximab,Radiotherapie,G-CSF Support	2	-888
+4138885	41	729	Rituximab,Radiotherapie	1	-888
+4147081	2	495	CHOP/CHOEP,Rituximab,Autologe Transplantation	1	-888
+4161781	8	141	CHOP/CHOEP,Radiotherapie,G-CSF Support	1	-888
+4165379	30	131	Radiotherapie	1	-888
+4128477	26	133	CHOP/CHOEP,Rituximab	2	-888
+4166151	0	136	CHOP/CHOEP,Rituximab,G-CSF Support	3	-888
+4193638	1	119	CHOP/CHOEP,Rituximab,G-CSF Support	1	-888
+4196670	20	153	Bendamustin,Rituximab	1	-888
+4199714	6	96	Other:iCE,Rituximab,Radiotherapie,G-CSF Support	1	-888
+4181460	4	130	CHOP/CHOEP,Rituximab,Radiotherapie	1	-888
+4199996	-888	-777	not yet necessary	4	-888
+4190784	7	91	Other:B-NHL BFM 04,Rituximab	1	-888
+4145056	169	347	Rituximab,Radiotherapie	3	-888
+4188398	27	44	Radiotherapie	4	-888
