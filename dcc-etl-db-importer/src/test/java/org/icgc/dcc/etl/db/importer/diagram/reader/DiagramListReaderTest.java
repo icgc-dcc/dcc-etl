@@ -38,7 +38,9 @@ public class DiagramListReaderTest {
 
     // It's up to reactome whether today it will be 471 or 533 or ???
     assertThat(pathways.getDiagrammed().size()).isIn(471, 533);
-    assertThat(pathways.getNotDiagrammed().size()).isIn(1182, 1210);
+    assertThat(pathways.getNotDiagrammed().size()).isIn(1254);
+
+    assertThat(pathways.getNotDiagrammed().contains("917729-199991")).isTrue();
   }
 
   @Test

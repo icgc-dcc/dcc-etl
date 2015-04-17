@@ -64,7 +64,11 @@ public class DiagramProteinMapReader {
     entities.forEach(node -> {
       if (node.get("schemaClass").asText().equalsIgnoreCase(GENE_TYPE)) {
         String uniprotId = node.get("displayName").asText();
-        joiner.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
+        if (uniprotId.indexOf(" ") > 0) {
+          joiner.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
+        } else {
+          joiner.add(uniprotId);
+        }
       }
     });
 

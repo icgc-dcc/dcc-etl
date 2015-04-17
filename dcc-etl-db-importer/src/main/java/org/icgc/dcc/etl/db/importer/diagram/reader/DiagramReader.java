@@ -60,7 +60,7 @@ public class DiagramReader {
 
       model.addDiagram(pathwayId, diagram);
 
-      log.info("[{}/{}] Added diagram '{}'", pathwayId, count, pathways.getDiagrammed().size());
+      log.info("[{}/{}] Added diagram '{}'", count, pathways.getDiagrammed().size(), pathwayId);
 
       Thread.sleep(3000); // To avoid crashing reactome's servers
       count++;
@@ -78,7 +78,8 @@ public class DiagramReader {
 
       model.addDiagram(nonDiagrammedId, baseDiagram);
 
-      log.info("[{}/{}] Added non-diagram '{}'", id, count, pathways.getNotDiagrammed().size());
+      log.info("[{}/{}] Added non-diagram '{}' of pathway '{}'", count, pathways.getNotDiagrammed().size(), id,
+          diagrammedId);
 
       Thread.sleep(1000);
       count++;

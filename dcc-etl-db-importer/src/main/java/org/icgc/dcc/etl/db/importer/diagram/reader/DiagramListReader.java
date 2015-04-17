@@ -77,7 +77,8 @@ public class DiagramListReader {
       return "missing";
     }
     val attribute = parent.getAttributes().getNamedItem("hasDiagram");
-    return attribute == null ? getDiagrammedParent(parent) : attribute.getNodeValue();
+    val id = parent.getAttributes().getNamedItem("dbId").getNodeValue();
+    return attribute == null ? getDiagrammedParent(parent) : id;
   }
 
   public String getReactId(@NonNull String dbId) throws IOException {
