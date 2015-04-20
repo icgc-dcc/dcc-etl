@@ -34,6 +34,7 @@ public class DiagramHighlightReader {
   public String readHighlights(@NonNull String pathwayId) throws IOException {
     val diagramUrl = new URL(String.format(QUERY_BY_ID_URL, pathwayId));
 
+    // Response is one line of dbIds that should be focused on
     return readLines(diagramUrl, UTF_8).get(0);
   }
 

@@ -59,42 +59,42 @@ public class DBImporter {
     if (collections.contains(CollectionName.PROJECTS)) {
       log.info("Importing projects...");
       importProjects(icgcConfig, mongoUri);
-      log.info("Finished importing projects in {} ...", watch);
+      log.info("Finished importing projects in {}", watch);
     }
 
     if (collections.contains(CollectionName.GENES)) {
       watch.reset().start();
       log.info("Importing genes...");
       importGenes(mongoUri);
-      log.info("Finished importing genes in {} ...", watch);
+      log.info("Finished importing genes in {}", watch);
     }
 
     if (collections.contains(CollectionName.CGC)) {
       watch.reset().start();
       log.info("Importing CGC...");
       importCgc(mongoUri);
-      log.info("Finished importing CGC in {} ...", watch);
+      log.info("Finished importing CGC in {}", watch);
     }
 
     if (collections.contains(CollectionName.PATHWAYS)) {
       watch.reset().start();
       log.info("Importing pathways...");
       importPathways(mongoUri);
-      log.info("Finished importing pathways in {} ...", watch);
+      log.info("Finished importing pathways in {}", watch);
     }
 
     if (collections.contains(CollectionName.GO)) {
       watch.reset().start();
       log.info("Importing GO...");
       importGo(mongoUri);
-      log.info("Finished importing GO in {} ...", watch);
+      log.info("Finished importing GO in {}", watch);
     }
 
     if (collections.contains(CollectionName.DIAGRAMS)) {
       watch.reset().start();
       log.info("Importing Diagrams...");
       importDiagrams(mongoUri);
-      log.info("Finished importing Diagrams in {} ...", watch);
+      log.info("Finished importing Diagrams in {}", watch);
     }
 
   }

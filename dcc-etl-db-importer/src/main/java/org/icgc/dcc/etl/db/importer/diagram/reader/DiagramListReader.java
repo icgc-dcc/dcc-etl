@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import lombok.NonNull;
@@ -33,7 +32,6 @@ import lombok.val;
 
 import org.icgc.dcc.etl.db.importer.diagram.model.Pathways;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -64,9 +62,8 @@ public class DiagramListReader {
       }
 
       return new Pathways(diagrammedPathwaysBuilder.build(), nonDiagrammedPathwaysBuilder.build());
-
-    } catch (SAXException | IOException | ParserConfigurationException e) {
-      throw new IOException("Failed to read list of pathway diagrams", e);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to read list of pathway diagrams", e);
     }
   }
 
@@ -76,8 +73,10 @@ public class DiagramListReader {
       // Just in case it has no diagrammed parents... fall back on something
       return "missing";
     }
-    val attribute = parent.getAttributes().getNamedItem("hasDiagram");
-    val id = parent.getAttributes().getNamedItem("dbId").getNodeValue();
+    val attrs = parent.getAttributes();
+
+    val attribute = attrs.getNamedItem("hasDiagram");
+    val id = attrs.getNamedItem("dbId").getNodeValue();
     return attribute == null ? getDiagrammedParent(parent) : id;
   }
 

@@ -17,7 +17,10 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.xml.transform.TransformerException;
 
 import lombok.NonNull;
 import lombok.val;
@@ -35,18 +38,12 @@ public class DiagramReader {
   public final static String REACTOME_BASE_URL = "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/";
   public final static String NOT_HIGHLIGHTED = "";
 
+  private DiagramListReader listReader = new DiagramListReader();
+
   public DiagramModel read(@NonNull List<String> testPathways) throws Exception {
     val model = new DiagramModel();
-    val listReader = new DiagramListReader();
 
-    Pathways pathways;
-    if (testPathways.isEmpty()) {
-      log.info("Reading list of pathways..");
-      pathways = listReader.readPathwayList();
-    } else {
-      log.info("Using given test pathway list {}...", testPathways);
-      pathways = new Pathways(ImmutableSet.copyOf(testPathways), new ImmutableSet.Builder<String>().build());
-    }
+    val pathways = resolvePathways(testPathways);
 
     int count = 1;
 
@@ -54,8 +51,11 @@ public class DiagramReader {
     for (val pathwayId : pathways.getDiagrammed()) {
       val diagram = new Diagram();
 
-      diagram.setDiagram(new DiagramXmlReader().readPathwayXml(pathwayId));
-      diagram.setProteinMap(new DiagramProteinMapReader().readProteinMap(pathwayId));
+      val xmlReader = new DiagramXmlReader();
+      val proteinMapReader = new DiagramProteinMapReader();
+
+      diagram.setDiagram(xmlReader.readPathwayXml(pathwayId));
+      diagram.setProteinMap(proteinMapReader.readProteinMap(pathwayId));
       diagram.setHighlights(NOT_HIGHLIGHTED);
 
       model.addDiagram(pathwayId, diagram);
@@ -73,8 +73,10 @@ public class DiagramReader {
       val diagrammedId = parseDiagramId(id);
       val nonDiagrammedId = parseNonDiagramId(id);
 
+      val highlightReader = new DiagramHighlightReader();
+
       val baseDiagram = model.getDiagrams().get(diagrammedId);
-      baseDiagram.setHighlights(new DiagramHighlightReader().readHighlights(nonDiagrammedId));
+      baseDiagram.setHighlights(highlightReader.readHighlights(nonDiagrammedId));
 
       model.addDiagram(nonDiagrammedId, baseDiagram);
 
@@ -95,6 +97,16 @@ public class DiagramReader {
     }
 
     return updatedModel;
+  }
+
+  private Pathways resolvePathways(List<String> testPathways) throws IOException, TransformerException {
+    if (testPathways.isEmpty()) {
+      log.info("Reading list of pathways..");
+      return listReader.readPathwayList();
+    } else {
+      log.info("Using given test pathway list {}...", testPathways);
+      return new Pathways(ImmutableSet.copyOf(testPathways), new ImmutableSet.Builder<String>().build());
+    }
   }
 
   private String parseDiagramId(String id) {

@@ -53,9 +53,10 @@ public class DiagramProteinMapReader {
           proteinMap.put(dbId, referenceIds);
         }
       } catch (JSONException e) {
-        log.error(format("Failed to read protein id map for pathway '%s'", pathwayId));
+        throw new RuntimeException(format("Failed to read protein id map for pathway '%s'", pathwayId), e);
       }
     });
+
     return proteinMap;
   }
 
