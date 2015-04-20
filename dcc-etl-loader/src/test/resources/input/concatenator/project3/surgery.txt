@@ -1,0 +1,9 @@
+donor_id	procedure_interval	procedure_type	procedure_site	resection_status	specimen_id
+0011	-777	5	LSrNHJIqzK	3	0020
+0011	-888	1	mBujnGqkUK	1	0020
+0012	-9999	2	ltuHfbQHXT	2	0021
+0012	79	1	JDtVvnypOl	1	0021
+0012	120	3	BJOC loAFO	2	0022
+0012	-777	6	 QWMzuxhcC	-777	0022
+0013	61	2	qZWcZEqxMO	3	0024
+0013	62	6	fmRjInYMgI	3	0024

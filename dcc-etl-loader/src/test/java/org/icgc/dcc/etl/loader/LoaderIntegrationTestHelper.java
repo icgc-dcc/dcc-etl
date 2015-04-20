@@ -36,6 +36,7 @@ import static org.icgc.dcc.common.test.Tests.MONGO_PORT;
 import static org.icgc.dcc.common.test.Tests.OUTPUT_DIR_NAME;
 import static org.icgc.dcc.common.test.Tests.PROJECT1;
 import static org.icgc.dcc.common.test.Tests.PROJECT2;
+import static org.icgc.dcc.common.test.Tests.PROJECT3;
 import static org.icgc.dcc.common.test.Tests.REFERENCE_DIR_NAME;
 import static org.icgc.dcc.common.test.Tests.TEST_HOST;
 import static org.icgc.dcc.common.test.Tests.getTestJobId;
@@ -59,12 +60,12 @@ import org.icgc.dcc.common.core.Component;
 import org.icgc.dcc.common.core.util.AppUtils;
 import org.icgc.dcc.common.core.util.Protocol;
 import org.icgc.dcc.common.core.util.URIs;
-import org.icgc.dcc.etl.loader.factory.LoaderServiceFactory;
-import org.icgc.dcc.etl.loader.service.LoaderService;
-import org.icgc.dcc.etl.loader.util.StubIdentifierClient;
 import org.icgc.dcc.common.hadoop.fs.DccFileSystem2;
 import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 import org.icgc.dcc.common.test.mongodb.JsonUtils;
+import org.icgc.dcc.etl.loader.factory.LoaderServiceFactory;
+import org.icgc.dcc.etl.loader.service.LoaderService;
+import org.icgc.dcc.etl.loader.util.StubIdentifierClient;
 
 import com.google.common.base.Optional;
 import com.mongodb.MongoClient;
@@ -84,7 +85,7 @@ public class LoaderIntegrationTestHelper {
   private static final URL CODELISTS_URL = getCodeListsDccResource();
   private static final Component TESTED_COMPONENT = LOADER;
   private static final String TEST_JOB_ID = getTestJobId(TESTED_COMPONENT);
-  private static final Set<String> PROJECT_KEYS = newLinkedHashSet(newArrayList(PROJECT1, PROJECT2));
+  private static final Set<String> PROJECT_KEYS = newLinkedHashSet(newArrayList(PROJECT1, PROJECT2, PROJECT3));
 
   /**
    * File system constants.
