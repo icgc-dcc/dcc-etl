@@ -26,19 +26,20 @@ import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.PRIMARY_SUBTY
 import java.util.Map;
 import java.util.Set;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.Builder;
 
 import org.apache.hadoop.fs.FileSystem;
+import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileSubType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.common.core.model.SubmissionModel;
+import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 import org.icgc.dcc.etl.loader.core.ProvidedDataReleaseDigest;
 import org.icgc.dcc.etl.loader.core.ProvidedDataSubmissionDigest;
-import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -125,7 +126,7 @@ public class PlatformData {
   private static ProvidedDataSubmissionDigest summarizeSubmissionDataProvided(
       @NonNull final Map<FileType, String> projectFiles) {
 
-    val mapBuilder = new ImmutableMap.Builder<FeatureType, Set<FileSubType>>();
+    val featureTypeMap = new ImmutableMap.Builder<FeatureType, Set<FileSubType>>();
     for (val featureType : FeatureType.values()) {
       if (hasFeatureType(projectFiles, featureType)) {
         val availableSubTypes = ImmutableSet.copyOf(
@@ -135,12 +136,29 @@ public class PlatformData {
                     in(projectFiles.keySet())),
                 FileType.getGetSubTypeFunction()));
         checkConsistency(featureType, availableSubTypes);
-        mapBuilder.put(featureType, availableSubTypes);
+        featureTypeMap.put(featureType, availableSubTypes);
       }
     }
 
-    return new ProvidedDataSubmissionDigest()
-        .setFeatureDataTypes(mapBuilder.build());
+    val supplementalTypeMap = new ImmutableMap.Builder<ClinicalType, Set<FileSubType>>();
+    for (val supplementalType : ClinicalType.values()) {
+      if (hasSupplementalType(projectFiles, supplementalType)) {
+        val availableSubTypes = ImmutableSet.copyOf(
+            transform(
+                filter(
+                    supplementalType.getCorrespondingFileTypes(),
+                    in(projectFiles.keySet())),
+                FileType.getGetSubTypeFunction()));
+        checkConsistency(supplementalType, availableSubTypes);
+        supplementalTypeMap.put(supplementalType, availableSubTypes);
+      }
+    }
+
+    val digest = new ProvidedDataSubmissionDigest();
+    digest.setFeatureDataTypes(featureTypeMap.build());
+    digest.setSupplementalDataTypes(supplementalTypeMap.build());
+
+    return digest;
   }
 
   /**
@@ -152,12 +170,27 @@ public class PlatformData {
   }
 
   /**
+   * Determine if the target {@link ClinicalType} is present in the supplied {@code submisssionDirectory} subject to the
+   * {@code dictionary}.
+   */
+  private static boolean hasSupplementalType(Map<FileType, String> projectFiles, ClinicalType clinicalType) {
+    return projectFiles.containsKey(clinicalType.getDataTypePresenceIndicator());
+  }
+
+  /**
    * At the very least "p" or "g" must be present, since "m" is necessarily present at this stage.
    */
   private static void checkConsistency(FeatureType featureType, Set<FileSubType> availableSubTypes) {
     checkState(availableSubTypes.contains(PRIMARY_SUBTYPE),
         "Inconsistent set of available sub-types found for '%s': '%s'",
         featureType, availableSubTypes);
+  }
+
+  /**
+   * Apply the verification logic here if at some point supplemental files become mandatory.
+   */
+  private static void checkConsistency(ClinicalType supplementalType, ImmutableSet<FileSubType> availableSubTypes) {
+    checkState(true);
   }
 
 }
