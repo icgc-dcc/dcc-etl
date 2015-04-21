@@ -21,6 +21,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_ID;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.generatedFields;
 
+import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 
 import cascading.tuple.Fields;
@@ -67,6 +68,13 @@ public class SummaryHelper {
    */
   public static Fields getAvailableDataTypeField() {
     return new Fields(AVAILABLE_DATA_TYPES);
+  }
+
+  /**
+   * Returns a {@link Fields} to hold summary information for a given {@link ClinicalType}.
+   */
+  public static Fields getSummaryValueField(ClinicalType clinicalType) {
+    return new Fields(clinicalType.getSummaryFieldName());
   }
 
 }

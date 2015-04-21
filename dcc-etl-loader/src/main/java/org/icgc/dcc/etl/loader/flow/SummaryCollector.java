@@ -22,14 +22,14 @@ import static cascading.tuple.Fields.ARGS;
 import static cascading.tuple.Fields.REPLACE;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newLinkedHashMap;
+import static org.icgc.dcc.common.cascading.Fields2.getFieldNames;
+import static org.icgc.dcc.common.cascading.Tuples2.isNullField;
+import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
 import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getAvailableDataTypeField;
 import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getDonorIdField;
 import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getSummaryTempDonorIdField;
 import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getSummaryValueField;
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getSummaryPipeName;
-import static org.icgc.dcc.common.cascading.Fields2.getFieldNames;
-import static org.icgc.dcc.common.cascading.Tuples2.isNullField;
-import static org.icgc.dcc.common.cascading.Tuples2.nestTuple;
 
 import java.util.Map;
 import java.util.Set;
@@ -39,16 +39,17 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.cascading.HasSingleResultField;
+import org.icgc.dcc.common.cascading.SubAssemblies.Nest;
+import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer;
+import org.icgc.dcc.common.cascading.operation.BaseFunction;
+import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.Identifiable.Identifiables;
 import org.icgc.dcc.etl.loader.flow.planner.DonorRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.flow.planner.ObservationRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 import org.icgc.dcc.etl.loader.service.LoaderModel;
-import org.icgc.dcc.common.cascading.HasSingleResultField;
-import org.icgc.dcc.common.cascading.SubAssemblies.Nest;
-import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer;
-import org.icgc.dcc.common.cascading.operation.BaseFunction;
 
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;
@@ -343,6 +344,13 @@ public class SummaryCollector extends SubAssembly implements HasSingleResultFiel
           SummaryHelper.getSummaryTempDonorIdField()
               .append(SummaryHelper.getSummaryValueField(
                   checkNotNull(featureType, "Expecting a non-null featureType: {}", featureType)));
+    }
+
+    public SummaryTapInfo(ClinicalType clinicalType) {
+      this.summaryFields =
+          SummaryHelper.getSummaryTempDonorIdField()
+              .append(SummaryHelper.getSummaryValueField(
+                  checkNotNull(clinicalType, "Expecting a non-null featureType: {}", clinicalType)));
     }
 
     /**

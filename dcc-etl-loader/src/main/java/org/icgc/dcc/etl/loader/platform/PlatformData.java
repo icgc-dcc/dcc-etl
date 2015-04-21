@@ -140,7 +140,7 @@ public class PlatformData {
     }
 
     return new ProvidedDataSubmissionDigest()
-        .setDataTypes(mapBuilder.build());
+        .setFeatureDataTypes(mapBuilder.build());
   }
 
   /**
