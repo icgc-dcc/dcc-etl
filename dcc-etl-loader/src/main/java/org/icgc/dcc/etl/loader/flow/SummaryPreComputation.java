@@ -80,36 +80,9 @@ public class SummaryPreComputation extends SubAssembly {
         summaryPipeName,
         supplementalPipe);
 
-    if (supplementalType.isCountSummary()) {
-      pipe = new ControlledRowsRedacting(pipe);
-    }
-
     // Only keep donor ID and rename it
     pipe = new Retain(pipe, getDonorIdField());
     pipe = new Rename(pipe, getDonorIdField(), getSummaryTempDonorIdField());
-
-    // Summarise based on the type (count or presence)
-    if (supplementalType.isCountSummary()) {
-      log.info("Counting by donors for {} ({})", projectKey, supplementalType);
-
-      // Count by donors
-      pipe = new CountBy(
-          pipe,
-          getSummaryTempDonorIdField(),
-          getSummaryValueField(supplementalType));
-    } else {
-      log.info("Uniquifying donors for {} ({})", projectKey, supplementalType);
-
-      // Uniquify donors
-      pipe = new Unique(pipe, getSummaryTempDonorIdField());
-
-      // Mark the resulting tuples as present (to distinguish them when we side join later on)
-      pipe = new Each(pipe,
-          new Insert(
-              getSummaryValueField(supplementalType),
-              true),
-          ALL);
-    }
 
     return pipe;
   }

@@ -43,7 +43,6 @@ import org.icgc.dcc.common.cascading.HasSingleResultField;
 import org.icgc.dcc.common.cascading.SubAssemblies.Nest;
 import org.icgc.dcc.common.cascading.SubAssemblies.NullReplacer;
 import org.icgc.dcc.common.cascading.operation.BaseFunction;
-import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.Identifiable.Identifiables;
 import org.icgc.dcc.etl.loader.flow.planner.DonorRecordLoaderFlowPlanner;
@@ -344,13 +343,6 @@ public class SummaryCollector extends SubAssembly implements HasSingleResultFiel
           SummaryHelper.getSummaryTempDonorIdField()
               .append(SummaryHelper.getSummaryValueField(
                   checkNotNull(featureType, "Expecting a non-null featureType: {}", featureType)));
-    }
-
-    public SummaryTapInfo(ClinicalType clinicalType) {
-      this.summaryFields =
-          SummaryHelper.getSummaryTempDonorIdField()
-              .append(SummaryHelper.getSummaryValueField(
-                  checkNotNull(clinicalType, "Expecting a non-null featureType: {}", clinicalType)));
     }
 
     /**
