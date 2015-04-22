@@ -34,6 +34,9 @@ public class DiagramHighlightReaderTest {
 
     assertThat(ids).isNotNull();
     assertThat(ids).isEqualTo("1297333,1297354");
+
+    ids = reader.readHighlights("167168");
+    assertThat(ids).isEmpty();
   }
 
 }

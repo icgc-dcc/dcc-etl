@@ -22,20 +22,35 @@ import static com.google.common.io.Resources.readLines;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class DiagramHighlightReader {
 
-  private static final String QUERY_BY_ID_URL = REACTOME_BASE_URL + "getContainedEventIds/%s";
+  public static final String CONTAINED_EVENTS_URL = REACTOME_BASE_URL + "getContainedEventIds/%s";
+  private static final List<String> FAILURES = new ArrayList<String>();
 
   public String readHighlights(@NonNull String pathwayId) throws IOException {
-    val diagramUrl = new URL(String.format(QUERY_BY_ID_URL, pathwayId));
+    val diagramUrl = new URL(String.format(CONTAINED_EVENTS_URL, pathwayId));
 
-    // Response is one line of dbIds that should be focused on
+    val connection = (HttpURLConnection) diagramUrl.openConnection();
+    if (connection.getResponseCode() == 500) {
+      log.error("500 Server Error from Reactome!\nFailed to get URL: {}\nSetting '{}' highlights to \"\"",
+          diagramUrl.toExternalForm(), pathwayId);
+      FAILURES.add(pathwayId);
+      return "";
+    }
     return readLines(diagramUrl, UTF_8).get(0);
   }
 
+  public static List<String> getFailedPathways() {
+    return FAILURES;
+  }
 }

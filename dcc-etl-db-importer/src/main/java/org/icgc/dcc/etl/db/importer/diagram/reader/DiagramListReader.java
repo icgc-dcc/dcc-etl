@@ -54,7 +54,7 @@ public class DiagramListReader {
         val hasDiagram = nodes.item(i).getAttributes().getNamedItem("hasDiagram");
         val diagramDbId = nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue();
 
-        if (hasDiagram == null) {
+        if (hasDiagram == null || hasDiagram.getNodeValue() == "false") {
           nonDiagrammedPathwaysBuilder.add(diagramDbId + "-" + getDiagrammedParent(nodes.item(i)));
         } else {
           diagrammedPathwaysBuilder.add(diagramDbId);
@@ -75,9 +75,9 @@ public class DiagramListReader {
     }
     val attrs = parent.getAttributes();
 
-    val attribute = attrs.getNamedItem("hasDiagram");
+    val diagrammed = attrs.getNamedItem("hasDiagram");
     val id = attrs.getNamedItem("dbId").getNodeValue();
-    return attribute == null ? getDiagrammedParent(parent) : id;
+    return diagrammed == null ? getDiagrammedParent(parent) : id;
   }
 
   public String getReactId(@NonNull String dbId) throws IOException {

@@ -17,6 +17,10 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
+import static java.lang.String.format;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramHighlightReader.CONTAINED_EVENTS_URL;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramHighlightReader.getFailedPathways;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -87,6 +91,9 @@ public class DiagramReader {
       count++;
     }
 
+    log.info("Failed to read highlights of {} pathways...", getFailedPathways().size());
+    printFailed();
+
     val updatedModel = new DiagramModel();
 
     log.info("Replacing all dbIds with REACT ids...");
@@ -97,6 +104,12 @@ public class DiagramReader {
     }
 
     return updatedModel;
+  }
+
+  private void printFailed() {
+    getFailedPathways().forEach(
+        pathwayId -> log.info("Couldn't read highlights of pathway '{}'"
+            + "\nReactome URL:{}", pathwayId, format(CONTAINED_EVENTS_URL, pathwayId)));
   }
 
   private Pathways resolvePathways(List<String> testPathways) throws IOException, TransformerException {
