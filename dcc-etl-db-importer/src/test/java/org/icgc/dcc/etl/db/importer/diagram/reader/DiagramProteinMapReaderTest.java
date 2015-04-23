@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 import lombok.val;
 
 import org.junit.Test;
@@ -29,9 +30,8 @@ public class DiagramProteinMapReaderTest {
     val reader = new DiagramProteinMapReader();
     val result = reader.readProteinMap("4839726");
 
-    assertThat(result).isNotNull();
-
-    assertThat(result.get("5218942")).isEqualTo("UniProt:P68431,UniProt:Q71DI3");
+    assertTrue(result.get("5218942").equals("UniProt:Q71DI3,UniProt:P68431")
+        || result.get("5218942").equals("UniProt:P68431,UniProt:Q71DI3"));
     assertThat(result.get("181902")).isEqualTo("UniProt:P62805");
     assertThat(result.get("77087")).isNull();
   }
