@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.indexer.io;
 
-import static com.google.common.base.Charsets.UTF_8;
+import static com.fasterxml.jackson.core.JsonGenerator.Feature.AUTO_CLOSE_TARGET;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
 import static org.icgc.dcc.etl.indexer.factory.JacksonFactory.newDefaultMapper;
 
@@ -25,18 +25,21 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.utils.CountingOutputStream;
 import org.icgc.dcc.etl.indexer.core.Document;
 import org.icgc.dcc.etl.indexer.core.DocumentWriter;
 import org.icgc.dcc.etl.indexer.model.DocumentType;
 import org.icgc.dcc.etl.indexer.service.IndexService;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.io.ByteStreams;
 
 /**
  * Knapsack compliant archive writer.
@@ -49,7 +52,7 @@ public class TarArchiveDocumentWriter implements DocumentWriter {
   /**
    * Constants.
    */
-  private static final ObjectMapper MAPPER = newDefaultMapper();
+  private static final ObjectMapper MAPPER = newDefaultMapper().configure(AUTO_CLOSE_TARGET, false);
   public static final String SETTINGS_FILE_NAME = "_settings";
   public static final String MAPPING_FILE_NAME = "_mapping";
 
@@ -72,11 +75,15 @@ public class TarArchiveDocumentWriter implements DocumentWriter {
   }
 
   @Override
-  public void write(final Document document) throws IOException {
+  public void write(Document document) throws IOException {
     val name = formatEntryName(document);
-    val text = formatDocument(document);
 
-    addEntry(name, text);
+    try {
+      addEntry(name, document.getSource());
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to write document with id " + document.getId() + " of type "
+          + document.getType(), e);
+    }
   }
 
   @Override
@@ -98,15 +105,15 @@ public class TarArchiveDocumentWriter implements DocumentWriter {
     }
   }
 
-  private void addEntry(String name, String text) throws IOException {
-    byte[] bytes = text.getBytes(UTF_8);
+  private void addEntry(String name, ObjectNode source) throws IOException {
+    val size = getSize(source);
 
     // knapsack 2.x versions needs an extra directory so we embedded them under the index
     val entry = new TarArchiveEntry(formatEntryName(indexName, name));
-    entry.setSize(bytes.length);
+    entry.setSize(size);
 
     archive.putArchiveEntry(entry);
-    archive.write(bytes);
+    MAPPER.writeValue(archive, source);
     archive.closeArchiveEntry();
   }
 
@@ -118,12 +125,16 @@ public class TarArchiveDocumentWriter implements DocumentWriter {
     return String.format("%s/%s", parent, child);
   }
 
-  private static String formatDocument(Document document) throws JsonProcessingException {
-    return MAPPER.writeValueAsString(document.getSource());
-  }
-
   private static TarArchiveOutputStream createArchive(OutputStream outputStream) throws IOException {
     return new TarArchiveOutputStream(outputStream);
+  }
+
+  @SneakyThrows
+  private static long getSize(ObjectNode source) {
+    val counter = new CountingOutputStream(ByteStreams.nullOutputStream());
+    MAPPER.writeValue(counter, source);
+
+    return counter.getBytesWritten();
   }
 
 }
