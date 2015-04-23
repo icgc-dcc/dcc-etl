@@ -19,84 +19,50 @@ package org.icgc.dcc.etl.loader.flow.planner;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_CORE_TYPE;
-import static org.icgc.dcc.common.core.model.FeatureTypes.withRawSequenceData;
-import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getRawSequenceDataInfoPipeName;
-import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getStartPipeName;
+import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_OPTIONAL_TYPE;
 
 import java.util.Set;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileSubType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
-import org.icgc.dcc.etl.loader.cascading.RawSequenceDataInfo;
-import org.icgc.dcc.etl.loader.cascading.StainedSectionImageUpdate;
 import org.icgc.dcc.etl.loader.core.LoaderContext;
 import org.icgc.dcc.etl.loader.core.LoaderPlan;
-import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 
 @Slf4j
-public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
+public class DonorOptionalRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
 
   /**
    * List of {@link FeatureType}s available for a given submission (all types are not always provided, though there
    * typically is always at least one).
    */
-  private final Set<FeatureType> availableFeatureTypes;
+  private final Set<ClinicalType> availableOptionalTypes;
 
-  public DonorRecordLoaderFlowPlanner(
+  public DonorOptionalRecordLoaderFlowPlanner(
       @NonNull final LoaderContext context,
       @NonNull final LoaderPlan plan,
       @NonNull final String submission,
-      @NonNull final Set<FeatureType> availableFeatureTypes,
+      @NonNull final Set<ClinicalType> availableFeatureTypes,
       @NonNull final Set<FileSubType> availableSubTypes,
       @NonNull final LoaderPlatformStrategy platformStrategy) {
-    super(context, CLINICAL_CORE_TYPE, submission, availableSubTypes, platformStrategy);
-    this.availableFeatureTypes = checkNotNull(availableFeatureTypes);
+    super(context, CLINICAL_OPTIONAL_TYPE, submission, availableSubTypes, platformStrategy);
+    this.availableOptionalTypes = checkNotNull(availableFeatureTypes);
 
     // There should always be the core clinical files at the minimum
     checkState(!availableFeatureTypes.isEmpty(), "No feature types found for submission: '%s'", submission);
   }
 
-  SummaryCollector summary;
-
   @Override
   protected Pipe process(@NonNull Pipe clinicalPipe) {
-
-    for (FileSubType fileSubType : availableSubTypes) {
-      Set<FileType> fileTypes = fileSubType.getCorrespondingFileTypes();
-      for (FileType fileType : fileTypes) {
-        if (fileType.isOptional()) {
-          Pipe supplemenalPipe = new Pipe(getStartPipeName(getIdentifiableProjectKey(), fileType));
-          heads.put(fileType, supplemenalPipe);
-
-          // TODO: Add further processing
-          supplemenalPipe = preProcess(supplemenalPipe, fileType);
-          // supplemenalPipe = mapTuple(supplemenalPipe);
-
-          // supplementalPipes.put(fileType, supplemenalPipe);
-        }
-      }
-    }
-
-    // Pipe supplementalPipe = new Merge(supplementalPipes.values().toArray(new Array[]));
-    //
-    // supplementalPipe = new Group(supplementalPipe, "donor_id");
-    //
-    // clinicalPipe = new Join(clinicalPipe, supplementalPipe, "donor_id");
-    // clinicalPipe = new Each(clinicalPipe, new AddClinicalSupplemental());
-
-    summary = new SummaryCollector(clinicalPipe, availableFeatureTypes, getSubmission());
-
-    return summary;
+    return clinicalPipe;
   }
 
   @Override
@@ -113,16 +79,25 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
       // Nothing more to do here
       return clinicalPipe;
 
-    case SPECIMEN_TYPE:
-      return new StainedSectionImageUpdate(clinicalPipe);
+    case BIOMARKER_TYPE:
+      // Nothing more to do here
+      return clinicalPipe;
 
-    case SAMPLE_TYPE:
-      return new RawSequenceDataInfo(clinicalPipe,
-          getSubmission(),
-          availableFeatureTypes,
-          RawSequenceDataInfo.filterRawSequencingMappings(
-              context.getSubmissionModel(),
-              availableFeatureTypes));
+    case FAMILY_TYPE:
+      // Nothing more to do here
+      return clinicalPipe;
+
+    case EXPOSURE_TYPE:
+      // Nothing more to do here
+      return clinicalPipe;
+
+    case SURGERY_TYPE:
+      // Nothing more to do here
+      return clinicalPipe;
+
+    case THERAPY_TYPE:
+      // Nothing more to do here
+      return clinicalPipe;
 
     default:
       throw new IllegalStateException(String.format("Unexpected file type: '%s'", currentFileType));
@@ -132,19 +107,8 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
 
   @Override
   protected void onConnectSources(FlowDef flowDef, LoaderPlatformStrategy platformStrategy) {
-    log.info("Connecting extra sources for the {} flow ({} additional sources)",
-        getDescription(), availableFeatureTypes.size());
-
-    summary.connect(flowDef, platformStrategy);
-
-    // Plugging taps to read meta files (raw sequence data info)
-    for (val featureType : withRawSequenceData(availableFeatureTypes)) {
-
-      val metaFileType = featureType.getMetaFileType();
-      flowDef.addSource(
-          getRawSequenceDataInfoPipeName(getIdentifiableProjectKey(), featureType),
-          platformStrategy.getSourceTap(getSubmission(), metaFileType));
-    }
+    log.info("********* doing nothing Connecting extra sources for the {} flow ({} additional sources)",
+        getDescription(), availableOptionalTypes.size());
   }
 
   @Override

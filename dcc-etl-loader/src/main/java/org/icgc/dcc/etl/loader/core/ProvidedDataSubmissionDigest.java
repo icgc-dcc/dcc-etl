@@ -54,6 +54,11 @@ public final class ProvidedDataSubmissionDigest {
   }
 
   @JsonIgnore
+  public Set<ClinicalType> getSupplementalTypes() {
+    return supplementalDataTypes.keySet();
+  }
+
+  @JsonIgnore
   public Set<FileSubType> getSubTypes(FeatureType type) {
     return featureDataTypes.get(type);
   }
@@ -63,7 +68,4 @@ public final class ProvidedDataSubmissionDigest {
     return supplementalDataTypes.get(type);
   }
 
-  public Set<ClinicalType> getSupplementalTypes() {
-    return supplementalDataTypes.keySet();
-  }
 }

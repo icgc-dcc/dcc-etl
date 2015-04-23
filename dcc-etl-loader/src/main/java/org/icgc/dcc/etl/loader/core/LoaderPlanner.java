@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.loader.core;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.MANDATORY_SUBTYPES;
+import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.CLINICAL_SUBTYPES;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
 
 import java.util.Set;
@@ -92,7 +92,7 @@ public class LoaderPlanner {
     plan.includeFlowPlanner(projectKey,
         provider.getDonorFlowPlanner(
             projectKey, featureTypes,
-            MANDATORY_SUBTYPES, platformStrategy));
+            CLINICAL_SUBTYPES, platformStrategy));
 
     // Include flow planners for the feature types available
     for (val featureType : featureTypes) {

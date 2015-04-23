@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
+import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_OPTIONAL_TYPE;
 import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.PRIMARY_SUBTYPE;
 
 import java.util.Map;
@@ -43,6 +44,8 @@ import org.icgc.dcc.etl.loader.core.ProvidedDataSubmissionDigest;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Sets.SetView;
 import com.mongodb.MongoClientURI;
 
 /**
@@ -141,17 +144,16 @@ public class PlatformData {
     }
 
     val supplementalTypeMap = new ImmutableMap.Builder<ClinicalType, Set<FileSubType>>();
-    for (val supplementalType : ClinicalType.values()) {
-      if (hasSupplementalType(projectFiles, supplementalType)) {
-        val availableSubTypes = ImmutableSet.copyOf(
-            transform(
-                filter(
-                    supplementalType.getCorrespondingFileTypes(),
-                    in(projectFiles.keySet())),
-                FileType.getGetSubTypeFunction()));
-        checkConsistency(supplementalType, availableSubTypes);
-        supplementalTypeMap.put(supplementalType, availableSubTypes);
-      }
+
+    if (hasSupplementalType(projectFiles, CLINICAL_OPTIONAL_TYPE)) {
+      val availableSubTypes = ImmutableSet.copyOf(
+          transform(
+              filter(
+                  CLINICAL_OPTIONAL_TYPE.getOptionalDataTypeFileTypes(),
+                  in(projectFiles.keySet())),
+              FileType.getGetSubTypeFunction()));
+      checkConsistency(CLINICAL_OPTIONAL_TYPE, availableSubTypes);
+      supplementalTypeMap.put(CLINICAL_OPTIONAL_TYPE, availableSubTypes);
     }
 
     val digest = new ProvidedDataSubmissionDigest();
@@ -174,7 +176,9 @@ public class PlatformData {
    * {@code dictionary}.
    */
   private static boolean hasSupplementalType(Map<FileType, String> projectFiles, ClinicalType clinicalType) {
-    return projectFiles.containsKey(clinicalType.getDataTypePresenceIndicator());
+    SetView<FileType> intersection =
+        Sets.intersection(projectFiles.keySet(), clinicalType.getOptionalDataTypeFileTypes());
+    return !intersection.isEmpty();
   }
 
   /**
