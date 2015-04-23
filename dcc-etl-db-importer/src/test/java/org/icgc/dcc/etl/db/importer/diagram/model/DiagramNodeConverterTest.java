@@ -29,20 +29,20 @@ public class DiagramNodeConverterTest {
   @Test
   public void testConvertDiagram() {
     val converter = new DiagramNodeConverter();
-    val result = converter.convertDiagram(getTestDiagram("am i aly?", "123,456,789", true), "REACT");
+    val result = converter.convertDiagram(getTestDiagram("id", "123,456,789", true), "REACT");
 
     assertThat(result.toString()).isEqualTo(
-        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"am i aly?\",\"highlights\""
+        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\""
             + ":\"123,456,789\",\"protein_map\":{\"123\":\"uniprot1\",\"456\":\"uniprot2\"}}");
   }
 
   @Test
   public void testConvertIncompleteDiagram() {
     val converter = new DiagramNodeConverter();
-    val result = converter.convertDiagram(getTestDiagram("am i aly?", "", false), "REACT");
+    val result = converter.convertDiagram(getTestDiagram("id", "", false), "REACT");
 
     assertThat(result.toString()).isEqualTo(
-        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"am i aly?\",\"highlights\":\"\"}");
+        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\":\"\"}");
   }
 
   private Diagram getTestDiagram(String xml, String highlights, boolean proteins) {
@@ -55,6 +55,7 @@ public class DiagramNodeConverterTest {
       map.put("123", "uniprot1");
       map.put("456", "uniprot2");
     }
+
     diagram.setProteinMap(map);
 
     return diagram;

@@ -77,7 +77,8 @@ public class Importer {
 
     log.info("Importing projects...");
     val projectKeysWrapper = DocumentFilter.builder().idField(PROJECT_ID).values(projectKeys).build();
-    val projectCollectionImporter = getCollectionImporter(releaseUri, Optional.of(projectKeysWrapper), null);
+    val projectCollectionImporter =
+        getCollectionImporter(releaseUri, Optional.of(projectKeysWrapper), Optional.<DocumentFilter> absent());
     projectCollectionImporter.import_(PROJECT_COLLECTION.getId());
     log.info("Finished importing projects in {} ...", watch);
 
@@ -92,13 +93,15 @@ public class Importer {
 
     watch.reset().start();
     log.info("Importing gene sets...");
-    val geneSetCollectionImporter = getCollectionImporter(releaseUri, Optional.<DocumentFilter> absent(), null);
+    val geneSetCollectionImporter =
+        getCollectionImporter(releaseUri, Optional.<DocumentFilter> absent(), Optional.<DocumentFilter> absent());
     geneSetCollectionImporter.import_(GENE_SET_COLLECTION.getId());
     log.info("Finished importing gene sets in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing diagrams...");
-    val diagramCollectionImporter = getCollectionImporter(releaseUri, null, null);
+    val diagramCollectionImporter =
+        getCollectionImporter(releaseUri, Optional.<DocumentFilter> absent(), Optional.<DocumentFilter> absent());
     diagramCollectionImporter.import_(DIAGRAM_COLLECTION.getId());
     log.info("Finished importing diagrams in {} ...", watch);
 
@@ -113,15 +116,9 @@ public class Importer {
     log.info("Finished importing functional impact predictions {} ...", watch);
   }
 
-  private CollectionImporter getCollectionImporter(MongoClientURI uri, Optional<DocumentFilter> included,
-      Optional<DocumentFilter> excluded) {
-    if (included == null) {
-      included = Optional.<DocumentFilter> absent();
-    }
-    if (excluded == null) {
-      excluded = Optional.<DocumentFilter> absent();
-    }
-
+  private CollectionImporter getCollectionImporter(@NonNull MongoClientURI uri,
+      @NonNull Optional<DocumentFilter> included,
+      @NonNull Optional<DocumentFilter> excluded) {
     return new CollectionImporter(new MongoClientURI(geneMongoUri), uri, included, excluded);
   }
 

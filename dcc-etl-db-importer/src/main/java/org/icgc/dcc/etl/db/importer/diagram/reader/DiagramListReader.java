@@ -51,8 +51,10 @@ public class DiagramListReader {
 
       // Add all pathway nodes as non-diagrammed or diagrammed
       for (int i = 0; i < nodes.getLength(); i++) {
-        val hasDiagram = nodes.item(i).getAttributes().getNamedItem("hasDiagram");
-        val diagramDbId = nodes.item(i).getAttributes().getNamedItem("dbId").getNodeValue();
+        val attributes = nodes.item(i).getAttributes();
+
+        val hasDiagram = attributes.getNamedItem("hasDiagram");
+        val diagramDbId = attributes.getNamedItem("dbId").getNodeValue();
 
         if (hasDiagram == null || hasDiagram.getNodeValue() == "false") {
           nonDiagrammedPathwaysBuilder.add(diagramDbId + "-" + getDiagrammedParent(nodes.item(i)));
@@ -73,10 +75,10 @@ public class DiagramListReader {
       // Just in case it has no diagrammed parents... fall back on something
       return "missing";
     }
-    val attrs = parent.getAttributes();
+    val attributes = parent.getAttributes();
 
-    val diagrammed = attrs.getNamedItem("hasDiagram");
-    val id = attrs.getNamedItem("dbId").getNodeValue();
+    val diagrammed = attributes.getNamedItem("hasDiagram");
+    val id = attributes.getNamedItem("dbId").getNodeValue();
     return diagrammed == null ? getDiagrammedParent(parent) : id;
   }
 

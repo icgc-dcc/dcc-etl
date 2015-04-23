@@ -55,4 +55,5 @@ public class DiagramHighlightReader {
   public static List<String> getFailedPathways() {
     return FAILURES;
   }
+
 }
