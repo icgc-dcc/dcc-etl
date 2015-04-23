@@ -28,13 +28,11 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.codehaus.jettison.json.JSONException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-@Slf4j
 public class DiagramProteinMapReader {
 
   private final static String PROTEIN_MAP_URL = REACTOME_BASE_URL + "getPhysicalToReferenceEntityMaps/%s";
@@ -46,21 +44,17 @@ public class DiagramProteinMapReader {
     Map<String, String> proteinMap = newHashMap();
 
     result.forEach(node -> {
-      try {
-        String dbId = node.get("peDbId").asText();
-        String referenceIds = getReferenceIds(node.get("refEntities"));
-        if (!referenceIds.isEmpty()) {
-          proteinMap.put(dbId, referenceIds);
-        }
-      } catch (JSONException e) {
-        throw new RuntimeException(format("Failed to read protein id map for pathway '%s'", pathwayId), e);
+      String dbId = node.get("peDbId").asText();
+      String referenceIds = getReferenceIds(node.get("refEntities"));
+      if (!referenceIds.isEmpty()) {
+        proteinMap.put(dbId, referenceIds);
       }
     });
 
     return proteinMap;
   }
 
-  private String getReferenceIds(JsonNode entities) throws JSONException {
+  private String getReferenceIds(JsonNode entities) {
     StringJoiner joiner = new StringJoiner(",");
     entities.forEach(node -> {
       if (node.get("schemaClass").asText().equalsIgnoreCase(GENE_TYPE)) {
