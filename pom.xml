@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>13</version>
+    <version>14</version>
   </parent>
 
   <artifactId>dcc-etl</artifactId>
@@ -175,7 +175,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.2.4</dcc-common.version>
+    <dcc-common.version>3.8.5.0</dcc-common.version>
     <dcc-submission-core.version>3.8.2.3</dcc-submission-core.version>
 
     <!-- Versions - JSON -->
