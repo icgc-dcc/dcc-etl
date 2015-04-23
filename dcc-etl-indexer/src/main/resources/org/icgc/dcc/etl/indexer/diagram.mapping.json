@@ -1,5 +1,6 @@
 {
   "diagram":{
+  	"enabled":"false",
     "_source":{
       "compress":"true"
     },

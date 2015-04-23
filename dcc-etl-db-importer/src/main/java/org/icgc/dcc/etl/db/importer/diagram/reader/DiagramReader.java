@@ -18,6 +18,8 @@
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static java.lang.String.format;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramHighlightReader.CONTAINED_EVENTS_URL;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramHighlightReader.getFailedPathways;
 
@@ -41,6 +43,8 @@ public class DiagramReader {
 
   public final static String REACTOME_BASE_URL = "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/";
   public final static String NOT_HIGHLIGHTED = "";
+  private final static int PATHWAY_ENDPOINT_DELAY_MILLISECONDS = 3000;
+  private final static int ID_ENDPOINT_DELAY_MILLISECONDS = 1000;
 
   private DiagramListReader listReader = new DiagramListReader();
 
@@ -48,6 +52,8 @@ public class DiagramReader {
     val model = new DiagramModel();
 
     val pathways = resolvePathways(testPathways);
+
+    printEstimateTime(pathways.getDiagrammed().size(), pathways.getNotDiagrammed().size());
 
     int count = 1;
 
@@ -66,7 +72,7 @@ public class DiagramReader {
 
       log.info("[{}/{}] Added diagram '{}'", count, pathways.getDiagrammed().size(), pathwayId);
 
-      Thread.sleep(3000); // To avoid crashing reactome's servers
+      Thread.sleep(PATHWAY_ENDPOINT_DELAY_MILLISECONDS); // To avoid crashing reactome's servers
       count++;
     }
 
@@ -80,14 +86,17 @@ public class DiagramReader {
       val highlightReader = new DiagramHighlightReader();
 
       val baseDiagram = model.getDiagrams().get(diagrammedId);
-      baseDiagram.setHighlights(highlightReader.readHighlights(nonDiagrammedId));
+      val newDiagram = new Diagram();
+      newDiagram.setHighlights(highlightReader.readHighlights(nonDiagrammedId));
+      newDiagram.setDiagram(baseDiagram.getDiagram());
+      newDiagram.setProteinMap(baseDiagram.getProteinMap());
 
-      model.addDiagram(nonDiagrammedId, baseDiagram);
+      model.addDiagram(nonDiagrammedId, newDiagram);
 
-      log.info("[{}/{}] Added non-diagram '{}' of pathway '{}'", count, pathways.getNotDiagrammed().size(), id,
-          diagrammedId);
+      log.info("[{}/{}] Added non-diagram '{}' of pathway '{}'", count, pathways.getNotDiagrammed().size(),
+          nonDiagrammedId, diagrammedId);
 
-      Thread.sleep(1000);
+      Thread.sleep(PATHWAY_ENDPOINT_DELAY_MILLISECONDS);
       count++;
     }
 
@@ -100,10 +109,23 @@ public class DiagramReader {
     for (val entry : model.getDiagrams().entrySet()) {
       val reactId = listReader.getReactId(entry.getKey());
       updatedModel.addDiagram(reactId, entry.getValue());
+
+      Thread.sleep(ID_ENDPOINT_DELAY_MILLISECONDS);
       log.info("Saved diagram  dbId '{}' as {}", entry.getKey(), reactId);
     }
 
     return updatedModel;
+  }
+
+  private void printEstimateTime(int diagrammed, int nonDiagrammed) {
+    int pathwayDelay = (diagrammed + nonDiagrammed) * PATHWAY_ENDPOINT_DELAY_MILLISECONDS;
+    int idDelay = (diagrammed + nonDiagrammed) * ID_ENDPOINT_DELAY_MILLISECONDS;
+    int totalTime = pathwayDelay + idDelay + diagrammed * 300 + nonDiagrammed * 150;
+
+    log.info(format("Estimated Time: %d min, %d sec",
+        MILLISECONDS.toMinutes(totalTime),
+        MILLISECONDS.toSeconds(totalTime) - MINUTES.toSeconds(MILLISECONDS.toMinutes(totalTime))
+        ));
   }
 
   private void printFailed() {

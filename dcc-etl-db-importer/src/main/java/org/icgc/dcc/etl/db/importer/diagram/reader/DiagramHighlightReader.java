@@ -47,6 +47,8 @@ public class DiagramHighlightReader {
       FAILURES.add(pathwayId);
       return "";
     }
+
+    // Read the first (and only) line that contains a list of reaction ids to zoom in on
     return readLines(diagramUrl, UTF_8).get(0);
   }
 
