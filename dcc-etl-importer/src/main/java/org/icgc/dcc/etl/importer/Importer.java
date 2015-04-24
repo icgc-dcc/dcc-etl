@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.importer;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames.GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames.PROJECT_ID;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.DIAGRAM_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_SET_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
@@ -77,8 +78,7 @@ public class Importer {
     log.info("Importing projects...");
     val projectKeysWrapper = DocumentFilter.builder().idField(PROJECT_ID).values(projectKeys).build();
     val projectCollectionImporter =
-        new CollectionImporter(new MongoClientURI(geneMongoUri), releaseUri, Optional.of(projectKeysWrapper),
-            Optional.<DocumentFilter> absent());
+        getCollectionImporter(releaseUri, Optional.of(projectKeysWrapper), Optional.<DocumentFilter> absent());
     projectCollectionImporter.import_(PROJECT_COLLECTION.getId());
     log.info("Finished importing projects in {} ...", watch);
 
@@ -94,10 +94,16 @@ public class Importer {
     watch.reset().start();
     log.info("Importing gene sets...");
     val geneSetCollectionImporter =
-        new CollectionImporter(new MongoClientURI(geneMongoUri), releaseUri, Optional.<DocumentFilter> absent(),
-            Optional.<DocumentFilter> absent());
+        getCollectionImporter(releaseUri, Optional.<DocumentFilter> absent(), Optional.<DocumentFilter> absent());
     geneSetCollectionImporter.import_(GENE_SET_COLLECTION.getId());
     log.info("Finished importing gene sets in {} ...", watch);
+
+    watch.reset().start();
+    log.info("Importing diagrams...");
+    val diagramCollectionImporter =
+        getCollectionImporter(releaseUri, Optional.<DocumentFilter> absent(), Optional.<DocumentFilter> absent());
+    diagramCollectionImporter.import_(DIAGRAM_COLLECTION.getId());
+    log.info("Finished importing diagrams in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing Fathmm predictions...");
@@ -108,6 +114,12 @@ public class Importer {
     log.info("Importing functional impact predictions");
     importFunctionalImpact(releaseUri);
     log.info("Finished importing functional impact predictions {} ...", watch);
+  }
+
+  private CollectionImporter getCollectionImporter(@NonNull MongoClientURI uri,
+      @NonNull Optional<DocumentFilter> included,
+      @NonNull Optional<DocumentFilter> excluded) {
+    return new CollectionImporter(new MongoClientURI(geneMongoUri), uri, included, excluded);
   }
 
   private void importFunctionalImpact(MongoClientURI releaseUri) {
@@ -135,4 +147,5 @@ public class Importer {
       return Optional.of(DocumentFilter.builder().idField(GENE_ID).values(ids).build());
     }
   }
+
 }

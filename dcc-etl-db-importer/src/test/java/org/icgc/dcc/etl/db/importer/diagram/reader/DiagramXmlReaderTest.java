@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,27 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import java.io.Closeable;
-import java.io.IOException;
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeJson;
+import static org.assertj.core.api.Assertions.assertThat;
+import lombok.val;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import org.junit.Test;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+public class DiagramXmlReaderTest {
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+  @Test
+  public void testXmlReader() throws Exception {
+    val reader = new DiagramXmlReader();
+    val result = reader.readPathwayXml("4839726");
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+    assertThat(result).isNotNull();
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
-
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
-
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+    // Make sure we can unescape it
+    assertThat(unescapeJson(result).trim())
+        .isEqualTo(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Process nextId=\"6326\" reactomeDiagramId=\"5084132\" hideCompartmentInName=\"true\">\n  <Properties>\n    <displayName>Diagram of Chromatin organization</displayName>\n  </Properties>\n  <Nodes>\n    <org.gk.render.ProcessNode id=\"354\" reactomeId=\"3247509\" schemaClass=\"Pathway\" position=\"386 120\" bounds=\"310 84 153 73\" textPosition=\"317 99\">\n      <Properties>\n        <displayName>Chromatin modifying enzymes</displayName>\n      </Properties>\n    </org.gk.render.ProcessNode>\n  </Nodes>\n  <Edges />\n  <Pathways />\n</Process>");
+  }
 
 }

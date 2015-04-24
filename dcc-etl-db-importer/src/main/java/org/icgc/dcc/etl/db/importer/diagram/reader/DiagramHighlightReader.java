@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,45 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import java.io.Closeable;
+import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.io.Resources.readLines;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
+
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+@Slf4j
+public class DiagramHighlightReader {
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+  public static final String CONTAINED_EVENTS_URL = REACTOME_BASE_URL + "getContainedEventIds/%s";
+  private static final List<String> FAILURES = new ArrayList<String>();
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+  public String readHighlights(@NonNull String pathwayId) throws IOException {
+    val diagramUrl = new URL(String.format(CONTAINED_EVENTS_URL, pathwayId));
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
+    val connection = (HttpURLConnection) diagramUrl.openConnection();
+    if (connection.getResponseCode() == 500) {
+      log.error("500 Server Error from Reactome!\nFailed to get URL: {}\nSetting '{}' highlights to \"\"",
+          diagramUrl.toExternalForm(), pathwayId);
+      FAILURES.add(pathwayId);
+      return "";
+    }
 
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
+    // Read the first (and only) line that contains a list of reaction ids to zoom in on
+    return readLines(diagramUrl, UTF_8).get(0);
+  }
 
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
-
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+  public static List<String> getFailedPathways() {
+    return FAILURES;
+  }
 
 }

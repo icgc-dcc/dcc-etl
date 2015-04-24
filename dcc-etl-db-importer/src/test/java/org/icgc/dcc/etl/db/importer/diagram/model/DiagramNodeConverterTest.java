@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,50 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import java.io.Closeable;
-import java.io.IOException;
+import static org.assertj.core.api.Assertions.assertThat;
+import lombok.val;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import org.junit.Test;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Maps;
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+public class DiagramNodeConverterTest {
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+  @Test
+  public void testConvertDiagram() {
+    val converter = new DiagramNodeConverter();
+    val result = converter.convertDiagram(getTestDiagram("id", "123,456,789", true), "REACT");
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
+    assertThat(result.toString()).isEqualTo(
+        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\""
+            + ":\"123,456,789\",\"protein_map\":{\"123\":\"uniprot1\",\"456\":\"uniprot2\"}}");
+  }
 
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
+  @Test
+  public void testConvertIncompleteDiagram() {
+    val converter = new DiagramNodeConverter();
+    val result = converter.convertDiagram(getTestDiagram("id", "", false), "REACT");
 
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
+    assertThat(result.toString()).isEqualTo(
+        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\":\"\"}");
+  }
 
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
+  private Diagram getTestDiagram(String xml, String highlights, boolean proteins) {
+    val diagram = new Diagram();
+    diagram.setDiagram(xml);
+    diagram.setHighlights(highlights);
 
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
+    val map = Maps.<String, String> newHashMap();
+    if (proteins) {
+      map.put("123", "uniprot1");
+      map.put("456", "uniprot2");
+    }
 
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
+    diagram.setProteinMap(map);
 
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+    return diagram;
+  }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,45 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import java.io.Closeable;
-import java.io.IOException;
+import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import java.net.URL;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.NonNull;
+import lombok.val;
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+import com.google.common.io.Resources;
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+public class DiagramXmlReader {
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
+  private final static String DIAGRAM_XML_URL = REACTOME_BASE_URL + "pathwayDiagram/%s/XML";
 
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
+  public String readPathwayXml(@NonNull String dbId) throws Exception {
+    val url = new URL(format(DIAGRAM_XML_URL, dbId));
+    return escape(Resources.toString(url, UTF_8));
+  }
 
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
+  private String escape(String xml) {
+    for (String[] replacement : replacements) {
+      xml.replace(replacement[0], replacement[1]);
+    }
+    return xml;
+  }
 
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
-
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+  private String[][] replacements =
+  {
+      { "\b", "\\b" },
+      { "\n", "\\n" },
+      { "\t", "\\t" },
+      { "\f", "\\f" },
+      { "\r", "\\r" },
+      { "\"", "\\\"" },
+      { "\\", "\\\\" },
+      { "/", "\\/" }
+  };
 
 }

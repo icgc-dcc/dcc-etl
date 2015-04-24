@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,52 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.writer;
 
-import java.io.Closeable;
-import java.io.IOException;
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
+import org.icgc.dcc.etl.db.importer.diagram.model.DiagramNodeConverter;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+import org.jongo.MongoCollection;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mongodb.MongoClientURI;
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+@Slf4j
+public class DiagramWriter extends AbstractJongoWriter<DiagramModel> {
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+  private MongoCollection diagramCollection;
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
-
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
-
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
+  public DiagramWriter(@NonNull MongoClientURI mongoUri) {
+    super(mongoUri);
+  }
 
   @Override
-  void close() throws IOException;
+  public void write(@NonNull DiagramModel value) {
+    diagramCollection = getCollection(ReleaseCollection.DIAGRAM_COLLECTION);
+
+    log.info("Droppping current diagram collection..");
+    dropCollection();
+
+    log.info("Saving new diagram collection..");
+    saveCollection(value);
+  }
+
+  private void dropCollection() {
+    diagramCollection.drop();
+  }
+
+  private void saveCollection(DiagramModel value) {
+    val converter = new DiagramNodeConverter();
+
+    for (val entry : value.getDiagrams().entrySet()) {
+      val diagram = entry.getValue();
+      val id = entry.getKey();
+      diagramCollection.save(converter.convertDiagram(diagram, id));
+    }
+  }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,35 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import java.io.Closeable;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.IOException;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import lombok.val;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.junit.Test;
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+public class DiagramHighlightReaderTest {
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+  @Test
+  public void testHighlightRead() throws IOException {
+    val reader = new DiagramHighlightReader();
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
+    String ids = reader.readHighlights("1300645");
+    assertThat(ids.split(",")).containsOnly("1297354,1297333".split(","));
 
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
+    ids = reader.readHighlights("418360");
+    assertThat(ids.split(",")).containsOnly(
+        "425661,434798,426223,139855,434700,418359,139854,139853,418309,418365".split(","));
+  }
 
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
-
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+  @Test
+  public void testNoHighlightsRead() throws IOException {
+    val reader = new DiagramHighlightReader();
+    String ids = reader.readHighlights("167168");
+    assertThat(ids).isEmpty();
+  }
 
 }
