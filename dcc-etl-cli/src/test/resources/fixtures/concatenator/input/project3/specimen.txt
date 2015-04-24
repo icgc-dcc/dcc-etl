@@ -1,0 +1,856 @@
+donor_id	specimen_id	specimen_type	specimen_type_other	specimen_interval	specimen_donor_treatment_type	specimen_donor_treatment_type_other	specimen_processing	specimen_processing_other	specimen_storage	specimen_storage_other	tumour_confirmed	specimen_biobank	specimen_biobank_id	specimen_available	tumour_histological_type	tumour_grading_system	tumour_grade	tumour_grade_supplemental	tumour_stage_system	tumour_stage	tumour_stage_supplemental	digital_image_of_stained_section	percentage_cellularity	level_of_cellularity	specimen_notes
+0010	0020	106	-888	13	6	lcy FU KmX	5	zpuFUnhkge	5	xDBggDGDwr	-9999	NXaBYOAz s	RWZGpZgdXM	1	nYPKZEcP Q	-777	KQCUtWusjW	-888	PdOyriEiGg	ImxUIFnjK 	ZnotGKVUJL	IOfFhCjcqn	92	3	 mXAxzEmxf
+0010	0021	109	cQJyJpzsQg	46	4	-888	-9999	nxDoVROnvi	5	 pvXWXBzNz	1	-9999	-777	1	WIXdfvBOqH	-888	AafEutyEeo	-888	p oy PxdfU	TmxZ OwulA	fNjuzW OXl	QScgyw HHt	167	5	LIWOvfgEwG
+0011	0022	108	 zPxQHrPCG	167	8	jCapDannbl	1	aAf ZqTNxQ	1	SOtFGbGxCZ	-888	zacQyEMHgd	-9999	-888	RXFMhSuUbC	yulrVYLRgz	fzmiOKibjL	OvwESjKJzH	PzvJF OGZ 	nwNhvHrzbE	aseseWRTZU	IyMa JUtgc	129	5	bYt lWdjJw
+0011	0023	111	OzkThmhOHa	149	-888	sBXhZsbvNc	3	SmMkDcLjdo	-777	 IdiEJACUf	1	-9999	d ZypcPth 	2	XkxosTCxyt	sOgTsnlcg 	-777	-777	dEvTaYKvzV	Svvo blpBH	dvqc FWQLy	 uqwgkPFaW	157	-9999	
+0011	0024	113	-9999	54	1	xNtbRMQypz	-9999	ERjLGMpmBh	3	-9999	1	HaPStKnPkw	-777	1	 Hxip OviA	-9999	ZXQMpGXwox	bGQJvBJBXa	WftjALMpPy	tOxkZE gYM	-888	-888	198	2	LRWhtf Kzz
+0011	0025	115	mLEMh SPlu	-9999	8	uYHhepXzdt	-888	zWZktmfOhf	-777	yYGwzWwKJa	-777	-9999	-9999	1	LJdViSvDiT	r TIfRYJvr	-777	MlMu MoDLv	O gszxdAZu	-888	i NPEDDSPM	-9999	148	4	
+0012	0026	125	-888	133	-777	-777	-888	VWbccAacEB	-777	-777	2	 PsvumZ oy	sEED ZN av	2	-888	yXjaPTReP 	rc Kfnoidu	-9999	-777	ifbgesgsZA	yMkJgBdOhX	wEAGRD cwm	-9999	-9999	xxPOWEulQf
+0012	0027	101	PfHIojzQrg	26	3	-9999	4	DIGJkppYNu	-888	clldC bEbG	1	cg CH LxlO	dRtcMaztqd	-888	gtMwpK DsQ	xbYqNMrNHU	-888	u WVRkTgHw	-888	mB BUtPTDC	-9999	SK W VUEeY	45	-888	CvxfnECnaT
+0013	0028	121	-9999	129	6	OFQqRJ oVS	-777	nacoeSXym 	2	Lae vgaWBM	2	C xZjq sG 	J TZAIWomU	-888	-9999	W WiWuaio 	-888	E AcDdKi I	vJXhQuLEwW	 s ECnywiv	-777	ElJBXPuuUD	-777	2	yeBFRpLFEu
+0013	0029	104	-777	-9999	3	-888	-888	-777	-888	-888	1	WOcGhOZTZj	-777	1	Bi hnPryoo	MCEYhJG cA	-888	 lFELqqK Z	-888	-9999	DvKWLFMgLy	YQ z kqwux	4	5	gK occNPBy
+0014	00210	101	fzeRUwBepN	-777	7	hMamzKHZH 	4	-777	2	K HzLKvu J	2	Nnj  sj kS	kd pdHvXwC	2	mkKJ  EyHb	hK FYvTDoB	-777	qsRdirJDaF	RZzFWCEvhW	-888	vLDbWbSBIt	-777	193	-9999	
+0014	00211	101	-777	-777	-9999	MXuBWjPBEe	7	-9999	5	e iZpZeUbt	2	BvHn JRilP	-9999	-9999	nMWkiupAYw	hEnqKFnGhl	TOfqmsuhsD	sxc uYWIRj	ZSsLuNlCzQ	F XElHqHSI	-777	jdnoItdsg 	147	5	ElWFXjnVkW
+0014	00212	101	-9999	175	6	wTwmlYIFIY	-9999	-777	4	nMFfBRGHFp	-9999	hfgFoYVUuv	-888	2	LHSsKdRqqb	nSQds RSxZ	-9999	mDeBNmGpvd	mIUV zq Xz	YoFiXZi gL	-777	ZzHuGGBwuW	24	-777	
+0014	00213	116	 sbYuzKUOB	50	-888	-888	4	lKnSSBDqxa	-9999	SYQHLjKlvC	1	eJwGRIkSnc	ZoOBloD RB	2	tYCWzYR bp	vEw n gPcQ	 u cyugCfj	GxStUPwNcS	kddACuOToA	-888	-9999	RXcsM GsBQ	109	5	
+0015	00214	121	GdnGH MImX	-888	-888	KKEwuaQ Lp	8	AnQPBOIKtw	1	tiZwcfWcsC	2	MvkPVTR Jd	-888	2	-777	dkRxLhFNXA	 QoaFP pHP	-888	-888	YqwMxLjt t	w ebxtDHyC	eoxjNKvdyE	106	2	YwwbtyKwSZ
+0016	00215	113	xAhg oESVJ	-777	3	FrcbzDSWMp	-9999	-777	-9999	rz ciWfyAw	2	IuKVjwddUh	xdspuTSvKB	1	qqWfFRs fU	-9999	wqntblOwdy	jPqLdGklkx	-777	vt ox pewP	-888	-777	116	1	  UabM Sin
+0017	00216	116	-888	15	-777	mkkpNDdfpO	5	ruvJgLFnSy	-777	-777	1	CvFft owNx	rtZWYUSYYu	1	SStBscMsJK	NXhISlFqpI	-777	ieExBmUDen	-777	-9999	OE fdfFdiF	 zhQrwdHWy	-777	1	
+0017	00217	113	URtDFTjVlv	154	6	asmQUOlVQv	5	-777	3	VyumXijSKf	1	ReA mPXFuc	-888	1	ilwKUZBEVg	prDYYPqYNP	-888	gzpTAfLEvq	iLuWCUuYh 	-888	NORsgdkxQx	tGr IQuWQF	78	3	 gQGxlvgSF
+0018	00218	107	-888	36	8	IUgInGIhVW	-777	L sDcap sd	1	anHChFmeZV	-777	YKCXHUkLOq	-888	2	-888	uzi OFrorg	UczRCWsDoH	TiPyTjSaCO	 Fr rKbabq	twdNXiNaRh	LgzhGJXuWr	-888	188	2	GhKSuvIwhS
+0018	00219	125	ZvxUYuHpnY	57	5	dNCYXExans	9	ttJsusojRI	1	Ad X glToK	-888	PchRTscuDP	bTDopmHS h	2	ojqDTeskPN	-777	-9999	vvasT VLAH	-777	gFgZS jcOf	-888	-777	-9999	5	
+0018	00220	121	r MflqpxUx	166	8	-888	1	xNPKbuNCBZ	-9999	zsoiEzo Ww	1	hTqPAmEAiY	UEYojhzPFq	1	xYZWTeQNVe	-888	 XlkDrHWrx	NKo qDGJJO	 PkOANdXYl	YwURA KOI 	-9999	ubvySyIUkz	158	4	
+0019	00221	126	NNhVmTrWTd	-9999	-888	kULpX MBxl	-9999	NoRoNAdNaB	6	-888	1	HVANyIuqFW	XDSJPSHtZo	2	-888	kFggBQSkvt	KBnLmmwqTq	tLCb nj zm	qLyy qsJhx	EEpbuJVunT	SFlfUZf PH	 BcgiejcmL	175	-9999	
+0019	00222	117	-777	96	3	iPeuN sEMQ	8	-9999	1	EkYZ ZGTjQ	1	zdJT DfFdG	mmrFnebaM 	1	cD Csm  em	zFlRW PDoQ	YjyL yRFkh	-9999	U SuuiPpGW	-777	-888	zVbHKJpwu 	176	1	VsuAvWMEJH
+00110	00223	120	GSLFi hp p	64	-9999	-777	-9999	EJCSrGsqot	-777	-888	-9999	dZU yKlLbJ	iziYuAsqjF	-888	MfUNNmjpCC	-888	aZgmSBUaOO	wzfNmQKqiW	qySnctczCj	MTqja aSmk	awYrM hjoo	QqLvlguBfH	-9999	5	
+00111	00224	123	-9999	99	7	JDuLsDPqPq	4	pbpGkcIvmu	5	mtpHlq xqm	1	wJbHkgENgT	MUzTiYUCIU	2	 DfEMMcuDg	av UKyKQYw	-888	UfEHc QkDl	aqkeFKDkp 	ETzss mGhG	-888	BdulDpAXbS	178	1	N fAlAp DC
+00112	00225	121	iNDYxhrbqx	0	1	BzctMdPsSL	6	WTOySTHDeC	-777	cChwkrN M 	1	CvokjAMJVj	EeeiBCrOkD	1	-888	EwYnS LDcH	 RzITCqNhl	 LigsedNFM	-777	GXltlXBrEL	l cTyDErbs	vakwdg Kt 	47	2	
+00112	00226	109	pYEEaykClX	120	-9999	BAIOixDbyT	-888	-9999	7	RatGYVaDCw	1	-9999	JFx unOxHH	1	iIeKan lGf	LtfHJDejjG	jiwDNLHAsk	wHZZ frKXW	QlLh cPTji	myxtQbPKeK	TsJZ JFDYL	-888	-9999	3	NQ yvLebhd
+00112	00227	102	-888	153	1	NIXlqAIljj	7	gdc EkRJTO	-9999	-9999	1	JjmOvTeoUk	vgacfz IIh	2	wYuoFHvqux	-9999	bWbjhNJ Zu	-777	nopWUuTxhQ	lRauVLvXOF	JgJQjiWsMi	WfyOjoUOCa	132	5	ngE  BAEvf
+00112	00228	110	-777	56	1	ZpIgHizCoH	4	TwDOOoLWTJ	6	-9999	1	SThahswqgv	-888	1	EnIWQsiGhv	-9999	-9999	qiC xrKuaY	-777	WeVVb Pse 	movlhJNdvA	QQBiHIACto	123	5	
+00113	00229	125	-888	-888	4	ncOOAvPJDP	-777	MgPmpmiucP	-888	-777	2	-888	-777	-777	-777	-777	 DA RVvZYN	IroSgbezMc	HwDodHsBOb	-888	-777	-777	51	5	WnryzgCVsT
+00113	00230	126	gKeAbWWRWA	132	2	FtJTCEZZ d	5	-888	5	NPI wBxQnh	1	-9999	GIbQlolsAM	2	mEpxSMr rn	GuvwxCIGsF	-888	-777	-9999	eggpqBBBQw	vqgdzqMPom	-777	182	4	DXHLavRxnI
+00114	00231	122	-888	182	-888	kpZTJUAjAC	-9999	cpU Br LeD	7	X kol EZiY	-9999	WgHdbXDpus	BRElACEhAB	2	VHTpHGMrcp	SiuUU xiie	kuOJMpCAMI	aeuyalrTYK	yzJjkTClfA	yyBrMZyebn	-888	MgzhWFNWVH	195	-888	ociImukNps
+00114	00232	121	-777	-777	7	j fsklbQGg	6	-888	3	-777	2	bXELeJQWDG	-9999	1	j DotYZNcg	-777	nBckosOfYV	-9999	YvIVAJDYqo	xRmtFaurYE	wjf WpLgkR	stmKTpIXXs	52	-9999	PVyZCcoeXq
+00114	00233	104	NkiwvZvLlA	54	2	MZjzVnKvkV	7	XQWtlDcuqu	6	dWQJyK wEA	1	mxmobCyUaH	-777	2	-777	iDgTejTVcu	mSZmJoRwaf	-9999	FWGLvrGwdJ	emXbMYeoph	-888	MfSVeNdoHY	95	2	ADeAiKGNvz
+00114	00234	125	CUxAWg f V	13	6	KxsvLuxOyU	-777	 ExKEoRdUr	7	 uEYOcHjop	2	xwkjlKNswE	EuAmlpItuM	2	ekMsWTiTDu	KfICXilTht	zcGkGKoNkd	gD boBymWt	IhSLZb AjF	-9999	-777	KqTVWyMw y	179	-777	zwEtHIg Gf
+00115	00235	110	wcDnxPZUSW	20	4	-777	-888	-777	3	-888	2	-9999	-777	-888	mZYJaVORjN	Ji XeMc oS	-777	-9999	iWG Z RFE 	q KRywsrHg	bZUEhsyEPX	QFpNSTCJJK	189	-9999	
+00116	00236	113	yHm PcvcpC	174	-888	CgBXluJwGb	5	-888	-888	-9999	1	HhinvJLcoQ	yPjcvCZEmG	2	krySSdICCk	ycZavkZmZF	TofViWkORw	 spVst CJj	fWzrRJMHaj	 nRojlp qg	dVtzsCzapT	-777	59	-777	uHkZeeEXbt
+00116	00237	120	-777	179	-9999	-888	8	-777	1	fuRcDgjNtC	-888	-888	lISloKEtjY	-777	XNH  HvbWr	mvBCEkxd T	DJjTVM iws	SHD aE lfN	-777	yXblIiwnfN	OycMImLiy 	-888	114	-888	OeBpPqZaij
+00116	00238	104	REpBFSNpXP	165	2	RJCmfAwPRS	1	ygWx VbQpw	-9999	DihOTIKCKE	-777	VCcMLCeGjA	aPnEbiMpLN	2	-777	lXhmMWuUfC	eKVLTOq hX	-777	dkV aDafrD	mtrRVzFPgo	Hzl CBzdqG	-9999	-888	3	
+00116	00239	109	HiiYrxgdlC	-9999	3	-888	4	-777	-888	-777	-777	XSLXCekQLj	-888	2	dnYYHsavYX	uWYPOtxSZM	-9999	-777	-888	aoLyWO LIP	-777	-9999	-777	-888	SeAjCUUn B
+00117	00240	121	UtiuvhINSI	-777	8	NzG IGUGJR	4	JENyhDQa s	-888	CDrWygxDY 	2	aGess pkJ 	p v HIvDet	1	eMNNpDSPzc	-888	HGPoPswAjZ	-9999	vVFqxl eCV	exZKeQ Qxw	ydi eJhDfs	-888	70	2	
+00117	00241	110	sufx eNN F	-777	-777	-777	-9999	dskTRjcwsd	1	hEqHbFmcBB	1	 icmmNVMAr	-777	1	MgRsIeegEF	MPNnoKvaYl	-888	oXIlqHFuuQ	-888	-777	pVMqKWSnEG	ZGHayqKepc	200	5	
+00117	00242	108	-888	94	-777	-777	-9999	AbVRgNbkbD	7	Ny W  NPGJ	2	WdtaMDxgKW	-9999	1	NmAmqyqppx	brNeZUlyxg	LmoOPXd cx	AdW NOcpPj	uVdtYLMpTg	-888	-777	-777	166	-9999	qFtm MwfDT
+00118	00243	122	 tCQ ryrIJ	148	-777	aCvxZiOWJr	8	DwUocqkVkG	2	ekMpxAtU R	2	-9999	cThUnX pNX	-9999	 XASiWKkWZ	-777	-9999	LAseNThAtZ	nrXiPnaeLT	XRTYAwSv w	-888	EiSgyYIOwi	-777	5	IpIgxVyUDO
+00119	00244	122	-888	151	-9999	-777	8	-888	2	XxiwRqYuDR	1	tENwhqpnJQ	CNXwMJdwVa	-888	JfcGNcNkIa	oFWZYvlhGB	cLduKjzRlg	xmjjaOXqjj	oFcy CyiXx	mGIhKTirAC	BqQCx dkEz	-888	-777	3	cmgvWQAKgM
+00120	00245	108	rDkJsEphRG	-888	4	gHiuSPQQcc	-888	kCyrVXs lK	2	LYiympXahe	1	-888	KYDTG KeUk	1	ePEnSNXIfK	pmVxPY  lT	GjNWGtRPJL	 eZLOiTr e	nbObfQ WQS	ITSSEBllxf	VNapqtznAO	qJtNSDfzZf	-888	4	EKXsPKXVN 
+00121	00246	116	-888	72	5	-9999	-9999	 DSqXWLJYD	5	-9999	-9999	PCbUDqaIvP	-888	-777	t rpZrtlxK	NaR nbxE z	w gvrEJ HN	kajPMmyDAs	hFTZbdsNbu	AYKJpFRJDZ	zDGJ ba Vx	HrTYU xdAs	107	3	
+00122	00247	111	 zLcS rGRy	124	3	ZSJqKrPehX	1	-9999	5	dETZbcT rQ	1	meAtJkkhAp	VRgRKqZTDe	-9999	-9999	ycIBqyP WN	hBfLsISYZi	vgfetWFcMk	 jM Qeccyw	KXGfajimnP	QLoMyRDyKZ	TWLDQnLdo 	139	5	blvVPdqnhL
+00123	00248	126	AeDieSCZYG	-777	-888	-777	9	emmTUsrg T	4	 iHE IQrCx	1	bsdQVyjS W	eUvqXepwTC	2	xZI tREOG 	 S amZgidl	OMnRxQbSMC	rqxsnlWpFn	-9999	DnyVndhGfL	-9999	pSUFRB Yxm	182	3	YG NFSBrhg
+00123	00249	110	-9999	47	-777	BigOJWN II	4	KtyF ASRSo	4	AIkVufDhRt	1	lJgvIjVWtN	-888	-777	c ptZpgYOe	 xA JMfoBY	GOBCidw Hw	uX NHnIOIQ	DvJeAkV oJ	cJunyEVBCV	-888	-888	148	2	
+00124	00250	112	IBtSks gAg	48	8	QAJmqksKKR	8	Cytwmkvkbt	-777	JlGLZx AGb	1	IjTEOvJmPj	V hOaoQEOr	2	-888	KUP Beufaz	TLRElLOALO	McM MCDumK	wUiaJD  cG	xbGIFG fSw	-777	 wTgGNEyWw	-888	-888	PI OIXw Pc
+00124	00251	113	vk zzkiCnQ	-777	3	gO SZHarXF	6	-888	6	-9999	1	bMdz Mfjnb	TbFcZvGHQW	-9999	-9999	VdzHtwMPGh	-888	eBtdSigFar	-9999	CBuxQApyBM	vrSSfOwxVI	h zFmMWl D	103	1	
+00124	00252	125	NOi BcCJmN	74	4	-888	6	-888	4	-9999	-777	kzGFaqykUz	-777	2	fsnSJFJ ZJ	cGkPqcFrNh	ImB WrTRjq	YlcHemNOmB	WYePbMNqIp	UObHrzxUPM	-777	HqasBErmEQ	-9999	5	dwNkzCsMbk
+00124	00253	117	WHOJWofBnw	161	5	sUcGyXygUq	1	-9999	1	TdvUPUaTBK	-888	VUIHoMmdeV	oApQUtrNYE	-888	mgFK toCGT	-888	VJAvMlHvpI	QQ lNKuAFb	GPqOUH uhe	YBYDeS kCV	OJzirkhAdj	ZwC rYkGE 	186	1	pP QOsDvkY
+00125	00254	112	-888	23	6	GZdRLm bAw	9	oSulzyCJPR	-9999	NYPDEixCnA	2	n dIg LTzs	UtcCCoeOBQ	2	-888	MAmLzhZiIf	-777	XodcgIHpAr	ZtIAshx sG	immQMBSAf 	-777	uAwIsckV m	4	3	mZiayJHYKZ
+00125	00255	105	-888	0	5	-888	4	-9999	3	-888	2	-9999	JfbouCgHiY	2	XuEJXyO kz	qTDqINZAyY	oyGP tXZRD	hhCrQfyEqV	-888	gRXRDmjIIv	sXtVfRUSRY	-9999	188	5	
+00126	00256	109	-777	-888	7	FDNQ ryaMz	9	ARq hqh nT	3	IkiJaTuqtq	2	sGNxTkMyDO	-9999	-888	wvKWF Jnvd	-777	GcRQjaw Ar	qKCbKjmECL	FjdDxejhEh	FjTIqscSZg	FaeIdsCOTe	ykrChYdHMB	119	5	ZsFApdObgN
+00127	00257	109	-777	-777	2	-888	7	JusMAdxtRq	4	-888	2	  uQREbueD	wM zpUxhdf	1	cIPjFsDicz	-777	HEZUXiJG n	EYRDNRid r	mx  ZreVBt	ShsUIJYtAl	-888	mCftPqvkJ 	142	5	zHNHWaIVJC
+00127	00258	102	-888	-888	-777	gfnc vfSjr	6	-9999	7	w BiNaudUO	-888	ZFnscfjRSg	UrbsDuTITf	1	-9999	nS mf Ynas	ScgaZIhZso	C  yaLNuWQ	pXdwQhlBNy	WUn kpwFnk	-9999	l EZPJSc C	64	1	F sfLWeHip
+00128	00259	112	IXaokJGzsT	194	8	jEIAtiXnQC	-9999	 vLcFhzfZl	7	YhMhXgPXaO	2	-888	Kvtpo jwVo	1	txoBfvzPTM	QVYCriiBWq	LOIPldKVYB	-888	I   mqbhfm	jOYCuGrSJw	-777	-888	59	2	FEqDQzH UM
+00128	00260	106	-9999	58	6	q UMlYn uy	3	x  LXJvNqw	4	krhCNElPVO	-9999	dXCYPlofBq	Hei cKVQIo	-9999	qjKmzchm g	ZDfuvpmrxN	N sWVHSqZs	 QotPUkLrh	 wX  hLDCo	ZPqSWBgf N	-9999	iJmxrP dye	133	3	SkpGVAaqSi
+00128	00261	111	-777	114	-777	yYYNAcCted	4	vKNabonvWL	3	qAptUv USF	1	-888	-777	1	wVfDzs k W	-888	 PCGGQpCqN	ELu mfugNd	ik G EmSbP	Papmt lxoj	-9999	-777	52	5	
+00128	00262	122	trq eAzYOF	68	4	 ZvZWgOXxy	8	eCFwHdy NH	4	-9999	1	PLfwoFEkLt	oNeaGzSauX	1	PJPnq HcJM	-9999	nLYKTm CAi	LZmIeaInwi	PNLleLheVR	MFijlfqIPg	HRqlOJUOvQ	-888	40	1	
+00129	00263	124	-888	-9999	6	rYQQm Bcrx	6	DtDzbGndH 	-777	nsInOdFtMS	1	 MuhfcaP q	-9999	2	-9999	enZWYNuXqk	-888	xJjWebFjfW	hshTwHYPOo	-777	-777	-777	139	-888	
+00130	00264	123	-777	-9999	8	gtV abGYmC	9	-777	-777	gzXlBYRIRj	1	-777	-9999	2	 lyRzEYgcK	FlpaxbEKGW	-9999	 vFRWluTEM	ROsmzYOkbU	ZxleceXxJZ	-9999	-777	4	4	I WlCk oXr
+00131	00265	102	IxWmysPVgQ	197	-888	-9999	-777	GivzEMqfTv	6	mFZkveywfj	1	zvlnlyUSKh	aJPPLpSVmq	-777	-777	-9999	yZoL oJVak	xbkdA hDx 	vpCkqtcrhT	-777	-9999	-888	-9999	3	JakbsyxPBh
+00131	00266	121	kzptpvwMnB	98	2	dkHlFPWiFq	7	UBydCQsjlL	4	-777	2	-888	KJgokZI Js	-777	mqfKMjyvLp	AUDZ GqVkR	ZukAbwyVzg	NFyztDVzUb	dweE rlIGI	hxWCGaQokZ	-888	-777	115	2	AeYZkDvx V
+00132	00267	116	NoVevtpttP	-777	8	yljxtNSkAE	8	 w BWHkFNK	-777	iEWISRIdtz	2	-777	IKRxGm FJJ	-888	EQBTHlXqm 	zvKDbiIDIk	hHqAKk Usm	OuvoXMjeCK	-9999	-9999	dLDNQXtlaQ	cHJqMttfHx	19	5	 eAP XCCWQ
+00132	00268	122	xZGK RxNQp	192	3	KFGr BIINg	8	ahiAwHFBmV	3	uKQOKkuWuX	1	HfI SYeOJU	QKNEnNbC V	2	QOGIwudkSo	-888	JkhnBGya k	PMu kBaIfm	oUl Mxopam	pSxRKInmlS	xAXWTjCpxP	mtAsgLpLJ 	94	3	TpgJCy XBf
+00132	00269	114	-9999	-888	2	-888	6	LENibjZlJx	-888	-9999	-888	-888	VzJekJNj Y	1	-9999	qEronkAqhH	-777	 rYWNLrCAM	rpXwRmCzYS	useoZwOstu	-888	TVOWKdwqEm	115	2	
+00132	00270	119	 oRkblFdpQ	82	6	-9999	-9999	-888	-9999	FNxLOjfo V	-777	lgqvJeDvEh	cjZshFocBB	-777	IeibCwHGGQ	vcIAqaobTT	-777	JcH PftTLv	Mf aDCThbo	aXLsTOBxTY	HaUkXm VTY	XpBKSoJGSa	-888	-777	c abtQQvo 
+00133	00271	120	LXlCHMAhiI	-888	-9999	qrjCZnGsVP	-888	Vk Vrmuhng	-9999	J gpNDRGFl	1	bAJxUqsrRU	 mPDdWhaUQ	-888	-888	PzfFceVYVY	OvoYpDuFbb	AQduyLVXDy	nzszkSNlFq	gAwbclQFel	iPjohcnWkm	-9999	64	1	mvcFQypvdA
+00133	00272	103	-777	-888	-777	QWyQMeAHue	7	KAJJJhRcsS	4	XtjNCksYwg	1	-9999	-9999	-777	FdOlRmJntt	-777	Klcj JWVWv	-888	k BSenVilF	ksCkVDhVXJ	qKaBVBFLQD	-888	143	4	 fZDeqaNiZ
+00133	00273	106	TaDfETTyYC	112	-777	-777	8	lebRsTfrsK	2	jUXapkEEOx	2	JCvtqWB kG	-888	-888	zEMIaASJdS	txHVIGxAZ 	-9999	Qcgp GsJrc	DjPcf  XrZ	BwOUQnaZhX	ZeqHNJDbUF	GAvGkgNsFb	-9999	5	DactAfszd 
+00134	00274	102	LjGVKkDrZM	126	2	-888	4	yDjNBgBCSq	7	wPUCMluHLW	2	mNimpmnbEh	onLumkyOZD	1	-777	MOZjNqJrIH	-777	-888	PgHFJheeiH	bWQB UrgXF	hgxvuD LUB	-9999	29	4	QyocLQpzrA
+00134	00275	126	-9999	-777	2	-9999	-888	-888	2	-9999	2	pxUdYOcVAe	yFTZLLvLqA	2	gZGs RzYHC	UdpYUk lcA	-888	-777	-888	lqvnTdVVfI	q wETMunwt	w qTwvhjc 	153	5	
+00134	00276	120	NGRJVb AUp	2	5	XTQbgld Ff	-9999	pCSKZObWlV	-888	GQPSszaIPo	1	PIILzsaaUu	AGbQ OUCkN	-888	ekJB zvOBa	fcZ kDee X	gacuboTnIX	b YuRBflQS	Djy FoHeiv	YzodasjCcg	jdHVeUZizt	-9999	38	4	dxj YLtzkp
+00135	00277	124	CCdIJDlNUw	179	8	hNV ldggHC	5	OEmPALdAZv	1	C pbvyIfdN	1	HBHdmIWTHC	 UJ GmYWhm	1	zNuqLSunAA	-9999	-888	RdrqRyjlNk	kp  gNtiKA	z Mph oaQW	vPzhqugYth	GCsVRsrcuM	65	5	MiAh DUjEi
+00136	00278	104	UkNFGIah  	187	-9999	-9999	5	rTEltZQBwm	6	HPERaqK Bd	-9999	-777	-777	-9999	Os voQBQTH	MQrvYLXpRr	-777	-777	vVvLTRkFJx	XWlehSgfkA	PZgvzunvVy	 vNZHAaRCn	-9999	-777	
+00136	00279	126	-9999	32	6	-777	-888	-777	-9999	YqUfKuhuvU	1	-888	iQGASSnRDH	2	mdSLUaPjVo	-777	-888	hifPNDmGlR	 CIPA gmxN	-777	-888	BRPL BRnR 	72	4	
+00136	00280	124	  rjqlJq f	29	3	Vkcg ASdxg	-777	mWlezKwmWM	-9999	MxLHw fpcq	2	fJvSmOPb W	HIcwxjmbId	1	KmMsDVOyUB	QeK HbUwJS	NPt itcATS	FMcLmwZQUl	rACGDl hay	sqfvxCyFbp	-888	RFxnOhoomq	38	3	WzPSlvPQsd
+00137	00281	107	-888	34	2	ZnXdmPWfwn	-9999	lz khBDkTO	4	ixPVBhbuuE	1	plTAWMOhab	ReFqeKWLOs	2	PF CLPSccq	-777	etbYZZkWHi	GqwNpuFZDk	 juuMooQlz	V ARshiIDN	-888	jTLoUDb wd	38	-9999	sFtZoEJ ki
+00137	00282	112	w EkStadBD	58	3	sjKVhsIHDr	-777	IUwTQUaqTs	1	-9999	2	RUAakH nJZ	MGsNjnZVRd	2	-888	Q ROppSRON	 VtdsFHHhX	inolBMxELP	fCTLQUXHKr	MLMhvwtnPJ	VUBenp bLU	-777	13	1	WdIXHHsjFP
+00137	00283	121	I ttHQPSqD	168	2	v TnwUsn s	-888	xzOebdhHSG	-777	LKsqIxPUsY	1	EQCX dgNMW	p KsimRjNh	1	PMqhtrQREL	eotxMQiFfZ	-888	-888	JhHNsp peL	pQIhunlUpY	DkJWnfTyeY	cPi GLRAtF	104	5	
+00138	00284	108	qXCbqRDnJn	57	8	-888	-777	G zUM OrgX	7	Zaigd ZN j	2	XsGNvy fqE	HbZjwjduIu	-888	tzdLjC YTw	eBRMbNnRbc	-777	KQZe DfAdu	 GogWkI Bn	K WgKjBAiH	SXScvSV ic	lSSJDffqaW	99	1	
+00138	00285	102	eFma kEZeM	197	2	mwYahZ kyO	2	paaSsvB Ve	1	rqcD  XTvs	-888	vbembvkrtp	kKocWnOOwB	-777	VEYmRJlpMd	Uci gAhVVp	OrDudZDUpc	scIcmPdsUQ	BeFehbJldk	zKEODFwLGy	ViGFtaEwQF	UaEbZMXXgn	103	-9999	eMMFlRv Wh
+00139	00286	124	vCUupTRrwh	-777	-9999	iVsMRtVfv 	3	lHTpEPgzGA	4	pslRsZgjIC	2	WeIwVQqM R	-777	1	-777	EevTqLpVWh	OsXU Pqbk 	ZjxrnxjSSI	fMkWkhqpuS	-9999	m bJqBQlnJ	VPLsS wyYS	140	-9999	SNESo aWHJ
+00139	00287	103	zKEXpDMjr 	14	1	AqnjhRXnrn	4	etlRfUnGfS	3	x TTsWIWPV	2	-777	kZBjfzOcPa	1	-9999	HadZLLpONf	xtmipcypXB	EWmnBFNFnt	jcdRzMJbCp	fijUuRjqOv	rlshpdGXYE	-888	109	-888	xOKzifnlJW
+00139	00288	118	-777	-9999	7	-888	4	-777	1	-9999	-888	-777	KlTYXYLoqe	1	-777	H WIUkVhvc	fHGepFqAHu	mSbv ZIytl	QgDOWPAjjZ	-888	WzSmdjWIDC	AjFfzleU Z	199	5	kVXqiYOKfk
+00139	00289	119	 IwCLQcXPq	162	2	-9999	5	azFqhdBE o	-9999	HDkbswRoNo	-9999	NFqUkYHgMA	-777	2	-777	Bjnl xPeFy	qForRAMfow	XNtfDjVjMi	-777	-9999	 MAiB  Tvo	-777	181	5	fHMJqaIebK
+00140	00290	104	WIkN TewKs	-9999	-888	-777	5	pQGEIeToV 	3	LVBXIAEkwL	-9999	wx ZWKOlzA	fPTNABnryc	2	TBGlEGC Sg	-9999	PXDQE BrmD	aj ikEmWdB	TcrTboUKLE	apbIbfwdoh	-9999	yLgTbjNbGP	27	1	lxLxszLEAN
+00140	00291	117	FtpcsmQuHJ	174	-9999	JGRwlvwinc	8	yDSEbpsiZY	5	JVNZGSakv 	2	-888	-9999	2	-888	-888	-9999	 UAOSdPDvO	-888	meKVYLmjAY	iKYhVHpFOP	-9999	144	3	yDbNROmpco
+00140	00292	117	sddkhdRldJ	-9999	-888	yuXrwhgYIi	8	AkVWpiWSgp	4	-9999	1	nOFSzFJ NC	VRbleytjEQ	-888	lpyhaFsvi 	JRLeujoRgP	pMNOwLxZ U	JyCDIjo gO	lAxceLrhmy	QLhGWDBsnG	-888	jhvQDmEaqJ	65	5	
+00141	00293	103	JwUGtHXVpV	195	1	lxmNKJGvzJ	-888	-777	6	V pCnwciXm	-777	-9999	QVXhyoSdSa	-888	NpISAz FNf	EJeR ViIyw	RKbdOZcmmz	SYtecJ JtE	DtsmmLZIIV	mxfUAfgQ k	WZTcoBKYGh	XdcRTmBnQs	-777	-9999	SPShxqKIrs
+00142	00294	108	bAX SrfLex	123	-888	EEvBXLNMRq	-9999	O PgGGxTeW	-777	AqNQnwHALg	-888	ocClSf vix	icLgu JHIf	2	NzEjlIlnDB	FAPtqCnHae	wQyQJt wqa	-777	-9999	SlvB DRElI	yWqfWHNLSq	CNCGqMesvq	-777	-777	hkhw  fMpt
+00142	00295	105	jWqevZcXwa	88	6	rpKFrwLOos	-9999	Pg FJN Odc	4	 yQnD lVZ 	2	VMreLLJpcD	sFBkzvsGgN	1	-888	uImbWRabqb	lZMzusbrBn	J BTIRmILQ	-888	XuLacaDWEQ	ZRLGhxMKdC	zwSiGMjinV	157	5	sHQ b hrcN
+00142	00296	110	-777	46	-777	xyj Ujc wH	8	-9999	1	-9999	1	RA HQBnLVF	z TsBIozHU	-9999	WZTDdcREfI	-777	kXzDjRVWRj	-9999	-9999	v tmiXySUH	 TNHWxHHBz	uGRKlgNyhv	31	5	jJezQNoidX
+00143	00297	123	-888	29	-9999	loD VmhfWo	6	DVlLJGKPSI	6	guBpwDMiFx	2	-9999	-9999	2	KTKQdTwzpo	hlUjfpGVTh	uMdImcQiHv	ymN  WJCre	 DYgwhpztk	-888	cbhfSemmlK	-888	198	4	KEXquJ Ouu
+00143	00298	102	icfAVJUIit	157	3	rvRaeYGRAu	-777	TMAdaExCyp	-777	Yzh kaWBBi	2	AkJaomIfR 	-9999	1	vZawMMjCMd	YfXotB zxW	-9999	AvCSBiacBZ	kOPbTJMlRG	udoZYUPaRw	fRr p dZci	EXNiUBtIjk	60	-777	GecrjUHzwg
+00143	00299	107	oyEWdjUzCc	19	8	u LVe IUHp	8	 DKCcqxRIV	1	 L KnEBdng	1	-9999	-777	1	pDZRBMsUoI	IJiXxIcWPg	zekV HPHpc	tOmEgtWulX	-9999	MuotbnMwh 	xumTrKWmPW	-888	122	-9999	XpwNrLP zP
+00143	002100	107	 ucpTkNl M	142	-9999	-777	-9999	EwTLQ VHUQ	5	hCCduUVHwQ	-888	IZsghyDgQA	-9999	2	plwIzKiueh	TXMofTIAGJ	-888	-777	-9999	QOojVH U x	djoiCJksTR	-888	112	5	VVJdL meOz
+00144	002101	113	HZnxJuiFWS	-888	4	kddkmRYDTo	9	-888	-777	VmMzOJVYid	-9999	-777	-888	2	-9999	YuOem RVDB	TSqmlNFKBN	-777	tbtPanZm G	pSzdEZPi T	elNOYJutnj	gUMKEWQjPp	139	-9999	jtxEvGOPdj
+00145	002102	123	JWds YxAVH	116	-777	-888	5	tkKEojEWTj	-777	-888	1	-777	jbCOgYJNfQ	2	wPbjgtYesJ	IASzDLJXQ 	ZeUIKpOeLd	-777	vWOBPvWNFC	BloQLBpOIK	yJjHIDhHMg	AdxHBfOnPg	-777	-888	Y mHCILBa 
+00145	002103	101	OibaRWrMQj	-888	-777	-9999	-9999	DIQReEOqNL	-777	lCVnHPJUhj	-9999	RGLBNOYuLP	vyVHYQDucp	1	-888	uKPOGJyeOz	bqWXo jHno	cbhwSDCQjB	lmXVYpPbUF	WbgLBMNybk	-9999	MStxpOoCbD	-9999	3	iLYgoclnob
+00145	002104	111	vEhgWLuLdh	92	6	qyq RBzPNm	2	xTRbZOb zH	-9999	 zEfnirBMa	2	 yRcVucSZD	cKVxIrjbFh	1	-777	KtflEvDGxV	ccrCiKfMOM	  qARCMKcZ	QVJzZqXdEh	okeEmcYfQY	-9999	KIxCLMqSkF	133	-888	zFKAVyUaBG
+00146	002105	109	 GEwclioPi	123	8	hTorBGDnVK	8	yw pUygUfX	-888	tlgwaev wj	1	-777	ugcDPKaaF 	2	-888	T qDEFdIRe	HIIFzFpPvr	-9999	gYVxjAdRhJ	UBCJ  jNxX	-777	-777	17	5	pjNw mBZI 
+00146	002106	108	b MSCIi YT	176	3	-888	9	jvUZ IUpFc	5	vabi CnVCj	2	KmOSXxIsPB	kC sTzUmRb	-888	-9999	RSJbgnjLwC	KnbzyOBOvR	-9999	-888	Z IOjXIYSo	CjtyLJbiCN	VB IRzxEIe	-9999	1	 F DKvhgSu
+00146	002107	120	HJNZIiLZEE	-777	5	XCxxSvuheO	1	oReqdHhhrN	-9999	-777	1	-9999	AaYDBuTgy 	1	pRXOVSnWsJ	ZOilObSgCq	-777	-888	-9999	HeNzaLxREr	RfMRVNklPu	OgBgaGrags	32	-777	
+00146	002108	122	kO PHlTYCV	-777	1	fy mDt Xn 	8	-9999	7	rQvMYaK Yv	2	pkDCfZUVpb	upHCydMKUr	2	yEK xMapET	-777	AEfVOSAfCt	LkzMhRyqlE	euxIhg lch	-777	NqycwAjNxI	RhajZTdEKq	163	-777	
+00147	002109	107	OYClZxxhoS	175	6	kBEWKxLVqG	-9999	zBYzX zq c	-777	zjQ nQQtef	2	vhNeAnW hg	JXcPTM Rk 	2	P a EQEWpR	-777	mPUMXzG HF	-777	euWOmuOAGi	lkptC Npej	euDVcd gBv	MbFaYkULYV	-888	2	
+00147	002110	103	-777	118	-888	NOuZSDHtgf	-9999	-888	2	gf iuDWnKI	1	-888	mABCputoUp	-9999	q LORTuxKp	CkMbpijcJB	fuVUqrgTdn	-777	vlTooIrHnf	AyFswGdVaf	 mtZKQflpA	FBcsJEHZLK	-777	-9999	YdyKXCdRfb
+00147	002111	111	ceAdLxlkwz	87	4	eoioDKNnDl	-777	KKTyWeDavK	4	m aSoSDGzU	1	cO b WTSRY	-888	1	YFuaywpuNo	cLjwEDrl L	-888	-9999	uIngxcZQFz	RZkNDIxMtS	-888	-777	69	-777	LbgxDVuqqM
+00147	002112	112	hDqBnjXnNT	-9999	2	JUK hNapp 	4	aVQokmXuRQ	4	-888	2	xqlzOOvBmj	gHvzQoZupW	-888	-9999	mPVzY pwqH	EwzJZztwzl	-888	XPJmSWkbaU	 YaBrVPYWR	-888	FQjFxpTXzZ	120	-888	TaAaXYpNzr
+00148	002113	120	bpxHITboVt	111	2	 TUMPjwjiq	-9999	tFd oCIgmq	4	EROHCLJcJB	1	-888	 GlWVxm fn	2	kRcvJWehgG	-9999	qentXUyyq 	-888	VejqlSSbue	-888	-888	bLj bWT Nq	20	3	OWRUePcCzI
+00148	002114	122	-9999	184	7	pSavlPYuKZ	6	-777	3	oytingvMQp	-9999	phkPsKfQcX	SsJTjFNadH	1	-777	-9999	-777	mGSNRTygJt	-777	-777	ObedvTbyEX	v eqWnkovl	84	-777	gkUxXxTbLf
+00149	002115	104	nFHtP Pnlf	109	1	 ImjdcnrhD	5	unOPXTpJgj	-777	lWsSEXolMD	2	vWxFge t P	lvcNun cDm	2	bMqjwJUEGj	-777	RelYHGVCZQ	-9999	kuvLvAeYQo	yDZGTwTI T	-9999	VLoWqzauQA	168	3	XycFTGJpYY
+00149	002116	104	rjtN QDhCA	-9999	4	-777	-888	ZelsgtQCvW	3	YlLTqCel m	2	owkAGfvn x	vTUwvccKuL	-9999	Lmvy OCKR 	Kev zK KWP	tMbz LQBkR	-777	-777	-9999	RyYMgPgVud	sBHpZhkCOz	75	5	
+00150	002117	101	BCYcCDUYot	160	-888	-888	2	TcDYbdLieU	-777	-777	-777	gYrugxJASi	OCnkDGKPCy	-9999	-888	DXbGpRShAr	azZzTCyrPy	-9999	fFLvtNMNOm	DXfpNSjIYN	QZvoC dmQT	-9999	156	2	
+00150	002118	125	dnzlgunwCq	-888	-9999	-888	7	IWwfTYm OE	3	UYMspuZmRH	1	-888	fjlYdroKpq	2	LtxbdfpwCI	mkXkWPuBam	 BTjYxiAqN	-888	ASTYoMzpHo	zMjZrkHxiS	chejAqwLne	ZDIzaopqDb	81	5	ICrbQajRDU
+00151	002119	123	LOZxVTNAub	77	-888	t fuKVdmj 	2	KHFaj Z Es	-9999	sPBwnqfkat	2	-888	-777	-888	YuVHsnAww 	kQaDLpxOWm	iwgJbnXKKY	-888	ZYHM z Cfp	JjGvRCJERQ	-9999	j tcguiUms	130	5	adhYCJQMlM
+00151	002120	117	kGZp Cki o	-777	-888	BuBdygAjNd	2	HBzrLmoxzp	-9999	FQGUETauEW	1	cnUfGsKiRy	BrtWiMZZm 	2	 CcCtdtWsF	-888	LOwDLvM PX	liPsBjRjeD	gjGWhKkILR	ZtmIkayPqj	JOoTjNUO v	XkFhMWSTWK	-777	-888	 GiBhiTQcc
+00151	002121	117	-9999	130	4	pWUFZAVDio	4	hxrBadfily	5	fveSiyfzhl	1	pXQJlMp YL	vIqhEEoRXQ	1	OCiDTXKEsW	jVc HFkBFL	OeRcS HFYJ	DmYrlFcZeh	 orDTXN pI	bzFWLlqHbj	-777	sKnZNZLtoS	-777	4	o EtAibOwQ
+00152	002122	123	PYAvKfCBql	147	6	-888	8	ROYDtAoYPx	1	-888	2	-888	CzMfslsCwu	2	H  VWOHOLl	sxr NlywrS	dYRMrnHLaA	-777	lck qmLbEa	-888	HIEQkpdMqx	-888	164	2	
+00152	002123	113	-9999	-777	7	z ySTnGQwt	7	QwWlSvkhEn	4	kAvrCoIsH 	1	-888	ESTtMnxq W	-9999	-888	HvYmJIin O	-888	-777	PPbvWjsRus	HwEIjcbltd	-777	ZjKEDeadVn	17	3	xaDsKPJyYw
+00153	002124	113	-888	200	7	xM wNqUZ  	-888	RaLhqBUeac	2	-777	1	-9999	qTLOu  MFy	2	KyDTOWkyhA	-888	-777	pATcGoLnyZ	-777	NI dT lYUD	gWkxPTyAJG	BWUqyRbLNw	163	-888	
+00153	002125	107	zZUfsyCMnW	-777	5	zlhmIWdaQL	8	-9999	-9999	peUbJGtFfD	2	HPzVMrjZKZ	-777	2	HzrndhSrBY	fwOwnkupsJ	WpdOAxoQyk	DUJstCWcSh	vnBeSALtCz	KE  zQhkos	Lim OWnmdh	 tADYVNKyX	67	4	EaoGWYLFaw
+00154	002126	121	ie E uXhMu	-9999	8	pvi rwfzhr	2	-9999	-888	xRJrMuoWyV	1	HYwue xKeY	 migOFdamu	1	nxKoAVwGvq	-888	PnMlSoyBUR	-888	cy pFKAQRE	CsYSvCkQAx	xCEkfpeGMt	MIlyzFzRr 	44	5	NmwFEEzFRS
+00154	002127	118	 knvxDerk 	139	2	AID CrsREv	-888	XGyEhexHKI	7	-9999	1	AFTgYkuQbR	EuYyBpIbiT	2	CbmjpPoSxe	tsIm WwWzV	WiG ZjxcJq	RucNxoymXG	tUBplapszF	-9999	 ktcTTqxRx	hEJkbqpzhG	136	3	PdaJyMoXRK
+00155	002128	126	JplNhIsdMM	-777	-777	fk  UpvNoF	-9999	atMvtNLkG 	1	RhOXhdC LW	1	-777	LjLariiayn	1	mhvkKpySb 	BWgApgW Nc	agXJHSC oW	HaLemPks  	LFmHiSXpKs	vyamsiEhSE	 Re zcKvKf	 PdisoWhnD	18	5	
+00155	002129	121	afdzNxHPQh	153	-777	UTXnXv bSb	6	-888	4	ljdMwZrC i	-888	huoGktwCNQ	tMK uidoEP	1	YdsbOILv s	-9999	tmQGBKaMI 	lERXqoqmWq	 gqGHjBzIW	-777	qqcDerMqHd	weWZuyAJai	84	3	ylbniZ HEE
+00156	002130	101	aku CpPcoe	72	4	htbgxkr r 	6	ciyLBZAAfx	2	-777	-9999	-777	bDJviWvtbj	-9999	JqKmxGeTb 	 ileRhyOmd	aaokoUrLAv	-9999	fHpbvHsGlC	vunoQTdYWy	 TcpehYjAm	xGW fPtCnz	-888	5	UIJcJCfolX
+00156	002131	116	TXp xgVH n	86	-888	-777	4	gotv p odJ	1	GgheyRWDib	2	N nhzVhGcP	-9999	1	rHYezK dk 	-777	-888	LhKQXK  gw	gtHMBfHHjU	lAJYDkHntZ	goZtA AqPb	hz ZHTYQUy	-9999	-9999	kvldySM xS
+00156	002132	123	DTPUwLyTa 	121	8	UDLECvPJfp	9	zwIAsZhYkg	3	Xhtnrzbwja	1	-777	 UQqljGmTd	-888	-888	EjerNmmKho	fQoq zprpo	cD OvjPTvL	YVNQgWCOXl	kcVNjmoMaK	p Mx hRySf	GqVESMHdcP	140	4	StJuKAeyYj
+00157	002133	125	ifybAad ow	14	5	EeSyGbhK i	2	jQCCanBasy	-9999	VvO KkiOvs	2	iPyzua FZT	WhiDv kskU	-9999	-777	-9999	-777	PQSykmYNne	-777	 sOTevRGXV	-9999	FiPJXYsLA 	10	4	ZiFgYJLuSr
+00157	002134	107	ZBzPDuVqFp	38	-888	GTCfoeQgZL	-9999	WjqmKNIbIl	3	MAjpl Eybe	1	-9999	MSFUNRRvmY	-888	-9999	Aqt ceRsGa	VzwtbwFUCN	juZfQBPDEV	-888	 FblXQCv O	-888	mVwlKvwIVB	20	-9999	PNGRcLEaYg
+00158	002135	121	-888	-777	3	BkXMqmFary	5	-9999	5	RicOE NQUS	2	yc hvQgJFK	MQPZcdslHD	2	-777	sUaYhSmFlh	F EHowVEen	YNlUSFJV X	RYaDgylGoV	-777	-9999	-888	171	2	iITwySWipH
+00158	002136	121	-888	-9999	4	-888	8	VRRqlwHukc	6	-777	2	-9999	kjTwKVWryW	2	WktDOHG Xh	-777	owUbkpOnJs	cIMyhVUzYd	vDDsSGrSal	ROznLwEqmo	YdNGIotunQ	WknFZgnkSo	21	4	VXUn Zg Ry
+00158	002137	117	-9999	17	-9999	-9999	6	WGfgKCKVtG	-9999	TqarAb mG 	1	VfSODcVT u	-777	1	EkFli  PvX	-888	-888	-888	eZPCIJCxKB	bRYiMEjmFY	hLRYzQZ wy	CeVGDyF xA	156	4	buEnUXdiKD
+00159	002138	118	c QJONOmRR	114	7	EUrkohaeMj	2	mus XdyKdu	6	DVjeXFSXes	1	pjdeXjgbMn	-888	2	-888	yVsRFjtcEA	SFgUCItqkq	-777	jNkKlaTtec	qXG ldPfKf	gdlqKxWmlp	QbnFSd  EP	84	-888	K ZsgLslNO
+00160	002139	120	lxkrSb V M	-9999	6	pvibZIqXOj	9	DI PkpinsM	-888	CQqlZFQAuE	-9999	hDG ofVrfP	 JIcUlnZgo	1	HbDER GduW	-9999	-9999	NkKZIoNgoe	jutofhsoHC	 MCQzYaCkT	-777	LMyWTgDDND	90	5	
+00160	002140	109	-777	-888	8	oHogHl bXN	6	yr aRLjoCo	6	-888	1	L YDGHANSe	-777	2	wtxSMzTtqN	XnQLmWO VH	-9999	YPJzQkjuQz	-777	 haZbGZPDZ	 KLx PKRx 	JKEIUO VlK	26	5	 OKQxKanmE
+00160	002141	111	SWMKMqimPf	161	5	aIunUcg pH	6	-777	-9999	sLLNdo tX 	-9999	quHHUKEuGx	GEIXljTyIh	1	xdqIYUyh  	-777	qmuwBeTQOW	oKXRP SgHh	C cPyiTtSl	PWnfFCmoqV	RjK iiZpc 	Cljnq nNCT	6	-777	geEcbVDl y
+00161	002142	110	cTlrZUBSZE	112	6	TrNtimCtEI	-888	AlDOKtRnvb	1	xfXcCAfMbb	1	Ihve shQVI	W NfbDvh M	-777	xzgy GvASp	AaxXGyZgcj	FXf CjwZZO	-777	DONopQYnXy	-777	hYJinT s v	MQPSb  sre	-9999	-777	B OLYFeZSH
+00162	002143	125	fvZucFxTnF	47	-9999	-9999	6	dXzVpSuKUe	5	 bVytMkAKZ	-888	V teorSMzE	QPGzBnKIMo	2	UhSPwhGtWj	C IDT LPjO	-888	P gufUaxBN	-9999	OqsDxHbjgn	PzCaKOYs g	drNqe jIcb	18	4	JSpmbwCnuR
+00162	002144	118	P MaSoScve	51	2	-777	1	AJiZItpnoO	1	 x Xq YHKD	-9999	-888	bGYpJMCWBd	2	-888	-888	CWVLOOjMGv	WLyXsB TQl	KiC KGAJwt	-888	-888	kZCfIIaeRB	-9999	2	hBsBvhQTe 
+00162	002145	117	  EIds LFw	134	-888	-888	3	bqgEqq NQH	-888	-9999	-888	CLPhrvexxz	vcrKgToYuH	1	-9999	-888	-888	VEL OkFvAH	cqclXxszhI	WwfOtzeKdm	-888	BKLzOAEYas	-9999	2	oqhgc Nb o
+00162	002146	110	-9999	27	-888	zuI DZfVPa	8	aOTrdsqwVF	5	-777	1	-888	yXeXUqgfbV	1	EvpGyqUXsm	-888	ojsW wmFnP	IPIjfjuzSw	OFDstnQ yt	EgvZKFTWGc	sTtvgUm EZ	-9999	49	4	
+00163	002147	123	KeyMtLFsTM	10	-9999	-9999	-777	VHOAhkQCOX	4	SBBLBsudV 	-777	bLusWxhRln	NBRJ ab xd	2	pSeDX wzWh	OG TvCrobE	kFBbZJGsLa	JUcpzaEdTK	 TDe WsHUT	kUZRiSGucz	 rQl Yybuh	YDstvGavxC	-888	3	
+00163	002148	126	eRzxGSdvFn	-777	-777	PNnmuyhp v	-888	KXfvAiwoYB	7	fgYFPXswWQ	2	-9999	  fDGatxEp	2	ffNUdzbSQH	-777	LWXPIIWfF 	-9999	eqeGnZLxET	slFGwtwobn	UyYJjaWPN 	lLiBJgeZYC	80	2	AFGSUkgebP
+00164	002149	109	-888	-888	2	ks DJAoUXO	-9999	DlSBsM dYY	5	eUWgR AcgQ	-9999	u aRQxFHoH	SimjtzIQCb	-888	HVbCkTNcZS	-777	-888	bzPaXFMwVl	-888	CMyotDcrNS	DtNuZuCzHY	-777	126	2	QHFSAorDbf
+00164	002150	103	PIkcnW LiB	163	-888	yqqrpMmhDY	-777	 coUr EBaA	-777	HWGKGPLhku	2	bepehlHPuX	fg jQrb aO	2	iQwpPVyFDp	riy YurLFp	-888	yzasLGif D	YRGULt kZv	 lHxacp RV	SoMaJaRZJB	-888	86	5	
+00165	002151	101	apwfJSAI a	44	-888	-777	-888	NGLlrnClLl	4	gUKWZxyzEa	-777	doI mLIVae	-888	2	-888	NbejWoqZwi	s zvfaCETm	pZSWrCXdlk	svYPgzLXyH	nTFCKeMwXR	-777	aePZmNjCWM	104	3	NyYql Jnhd
+00166	002152	114	QPqVxfyAFz	50	5	JOEPsSZXrr	6	qnUpWIPlMG	1	OtnWAqyINH	2	qw lvQPsSV	yztQGmBCBv	1	caxRLCeuUw	-777	czwZxWAmCe	qokAoPAt V	-9999	xbmzYmbzSV	 JlODsrXmy	yEVMNLyvMq	-777	3	
+00166	002153	126	rNZJj bXZA	14	-9999	P ZnwbRcQ 	-9999	BeEnTaPtMj	5	utnDkZAqaf	2	wvUKvMOBzt	LbzECWE hg	1	hRzuteFPAe	-9999	crrEQWVsFm	ptsQPIOrNx	rnmYjKCjnE	LWoJLhWSjF	mbgLTyesAD	lwQfJuBzHq	34	-777	gcestiGUyh
+00166	002154	125	wCaWNUoSwr	126	6	sOwspsTbHs	5	zXDrywqRki	-888	ztwWXxStGK	1	HMqkYHcUYx	-777	2	-777	-9999	-777	-888	ayoM ZJbXJ	-777	OkCWqUKa b	IwRsIfDsPX	109	-888	vvI PAUhrW
+00166	002155	124	YmS xhKgQI	34	4	-777	4	yTwHkLbdSe	6	RbxdM irSa	2	-9999	 DqdgvJW W	2	sQd exhfsh	-9999	hr xGWATgZ	-888	Rmax RcOXt	-777	-9999	JFUorOqNno	-9999	3	LyNZJEuOGf
+00167	002156	103	UctuHNHsdr	170	8	wmQMNe RxB	9	rQBe elEQw	6	PkiIHUYFfr	2	Fbbif smcJ	XZyDywsNYP	-888	HnyCvcodDW	cuerVNBTiG	kgZjkHNo K	-888	r fZBzzQBP	fmApVYDUho	-777	-9999	87	3	BGuVSCduiY
+00167	002157	122	VpFOwPxTTW	69	6	vhEwV  peb	9	saBTkwssOg	1	K ZHS PqyI	1	 oujYqkcYb	TrIlEsfhTT	2	PclnMhnwpA	 ndNSFBCkx	-777	ayNxvayCfj	jPcrJaAI r	-777	-9999	KXMmjQKtkh	167	2	PDYUBRXfgr
+00167	002158	104	UryjPlU iD	-888	3	jwcyGu KIg	5	-777	5	SzEvEbbfnr	-777	DvqHsvBCa 	npWShBPd u	1	bkShTOUIiv	PTcPSgnx d	ypElvJDRuZ	-888	QwAHZfsHkm	ZGY tLjCIW	-777	IPUjCAIcIQ	-777	1	EqvoxaxIEr
+00167	002159	117	oM oDDEYTd	-777	3	FMnaZvSrMK	8	hjExPbMvhI	7	hHFwdhYA Q	-777	-888	fROqbNnVgn	2	mlYiGAGhZ 	gGlCEjJKKt	OhtvLGnyw 	-777	-9999	 KrPkekyyu	-888	zuZSL nwhU	193	-888	dffwmxUmLk
+00168	002160	115	-9999	0	2	cSXX IrGUn	8	 VOv AsuyW	-888	-888	2	xOwalyDCof	-777	1	-777	ePf xphyq 	LwWWnqKlfa	Brz XyyoKD	 tEiHgcqaO	uOFxvVaY e	BPJjUGb G 	-9999	104	-9999	TIcpzhOCH 
+00168	002161	119	-888	12	2	-777	8	-9999	7	aWTHHMmVwM	2	qzgd JIqQF	-777	-888	-777	cEHXW kibV	NApmWwhcfu	tYSfjlvKYy	JFlHK Qkeo	-9999	KWMlRbEiZV	bedKgEGzmH	-888	-888	eyouMZZPJa
+00168	002162	125	YgMpxeXkdY	100	5	Y  eOBQlJC	3	YYaOBGIpKF	1	-777	1	ZejxqIHdit	ycTVNJD Iq	-888	cp RUDLwhM	dUQVTxEusV	UYRJMpHSDW	-888	jXwwZhhoc 	kKOqk oBZk	ElEAobufuG	Okbmqj GZg	187	5	
+00169	002163	108	-777	166	6	T uXvP XNp	4	SKrHkLLzwn	1	-777	-888	 JMyNaeeos	-9999	-888	-777	-777	-777	 G KT vjHk	JKqDgJ dQH	-9999	IWV kruc x	QdpLHmdi s	-9999	3	g QaJYdXFE
+00170	002164	111	jcbsOfNQSr	178	6	hI LQeyXfh	4	ftKpfMnZGw	-777	-9999	2	XfVdckVfeV	ZwFiGg lCn	1	awczXFcywu	Iz uTZRoJX	UmXuHUIIap	agCIKmLJao	-888	wTIpfVnKaw	SIkBVlntqY	fTkHvwNuKV	136	-888	yBeNYjJ Ol
+00170	002165	122	yESsZiHcJb	149	-9999	nuivYlZpcG	9	-9999	5	-777	-888	YkEnuWySPT	CNeySuIbKP	1	fMVybwEBXf	-9999	ARNJtpqDkf	WqvDq FjUp	kfyAoAlAbe	QqqeH UPsX	mfxqolfCLV	XNJsZvVFiQ	187	1	
+00170	002166	105	LWuJhHPhQa	-888	6	mDBEgOOXwI	3	ToSKvtdiXO	5	zvBBOYhHgX	-888	yShZY whlj	ZZQjTIjHMb	2	-888	FUqdchVqaQ	LtYePHikeh	CQP lsKSpx	KxLLTuAKoy	UC aktvQOs	IvuItFNruo	AGRXSJDXnv	114	-777	
+00170	002167	103	 TIaNFFQXk	188	-888	TBryVznCt 	1	zceISAMpZo	-9999	bMxUeF veR	1	gqsEKCktGZ	-888	2	HVOtmhjpEv	qGANTKA tn	-9999	hFfPmvYHqm	gxtEeB WWF	pRIUizUYVp	OMwaw mOWK	-9999	96	3	uNJqbUpfTP
+00171	002168	114	-888	-9999	-9999	hFZmqazVps	2	 A XUA Tt 	7	-888	1	-888	hbMFZF LhO	1	nljmMSivCZ	fxGbCdoYAX	ankoWxmkSo	-9999	JrUaBtZaGy	dxEEimm Pj	DhIE dGo J	J VZMU Laq	-9999	3	HQPLVJemuX
+00171	002169	112	J  rVqnfLj	-9999	1	cgjUuYaRtD	8	-9999	5	wexG dkxkH	1	-888	Uhe eRQmDC	1	hHsrbmgcYf	-9999	-9999	lYfzt Oyzz	xTBjdYbGYx	lAKXwzzP D	lHeohmHqyC	-777	110	1	AeJ C ARdP
+00171	002170	110	-888	-777	3	CVeWRIXcAm	7	-9999	7	adtqB dPiL	1	hWBdtXQxIt	-9999	-9999	A RdjnGyYM	XdFrjSXPMI	YFQdhSRwim	Onl ntKdcy	BWHocKkOpR	NCbfkxnJek	t cSUrYzyp	wnRxkmhBZx	191	5	
+00172	002171	105	ZskWGGMsnJ	-777	2	vpcdxyJuQb	8	ORJzwGonVp	3	fDfiX u gx	-9999	DAQJHAAUWZ	JdENOKkLlF	-777	t EeHGcdCX	DyuOwpVi P	leVa uAbcb	zHheg vdTn	XJgAGEVFIo	OiUymuncUs	qsUOyLatKM	 fvABhOnWt	120	-777	vExdUl vla
+00172	002172	113	PgD VLwYHR	181	7	-9999	1	-777	-888	-777	2	 COiCkwIxh	-888	2	TKNld fNOd	VtqYuciowJ	-777	 EGVHfFtZz	KtUDJTDfwZ	-9999	iZAXps LLA	r hfVkZfFf	-888	4	UBedIKeAWz
+00172	002173	105	cdoxrrhBiL	54	1	kPgwZAeAHe	6	THCpKZFsEI	-9999	Z pIWPRdW 	2	bQkrRvmXmJ	-9999	-888	nlyOzBwDXT	xpcbKsFUqW	vFwRSkUIee	LRWlJJHWrM	hdjfC wQFN	eDgbjoHpQZ	xUBnzDkXCx	PRCdKTwlfb	-9999	2	aKIWcrlza 
+00172	002174	110	DmuzVNsgyU	21	5	PEhOlE ujF	8	mbcwmkETIl	5	JvqmxyNdmH	2	-888	BzLPBrvpzx	1	smsUDSuih 	ROtkuyTtkS	-888	-777	vaoxqnpL L	lfdNffRCk 	-777	-9999	10	-777	yKD ddpMpr
+00173	002175	116	vgsGRncOpu	-777	-9999	-9999	-9999	qSpgoRHQPN	7	WdWYnPbdU 	-888	TUbCE ycAC	RmJsdWKqyJ	1	-888	xdLJM QOvE	eeAADERpdj	-777	ZAfVBCbjwI	uQjdNmyqHa	-777	accaPkKKNw	81	3	
+00173	002176	104	o kJGOKFOl	45	3	-9999	7	oFxosoaHoY	2	pbOqBUpo N	2	cRughjJWUk	-9999	-9999	xwonrzkdHg	-9999	QXBYUVtWiy	JUheKNUCDl	XtDivcQdnr	EdhNmFjAEN	CvCGiTSvrz	EHcSzZGNod	107	2	
+00173	002177	104	hNMiBgkWyX	1	-9999	-777	4	XpquGNGFDQ	6	MtPORxYQwo	1	-777	AsxjTmBUNF	1	CgmZUAO O 	pdzwcnCDFE	rSPM KpLPe	-9999	YdwlQukrEQ	-9999	vACT RlyPv	cNBZpnJMZz	-9999	2	
+00174	002178	126	-9999	-9999	5	JHue pGmvs	4	VIpmCSPtjS	7	izAD tNfQK	1	fceoqnuhhp	bWgfnXtKLV	2	cHbzE ckL 	-888	idKIczOuXE	PMqDgQxYem	ASsqcoKChO	sgqNTMUqYb	IOcMhMCkkP	bXLuYHXGGD	-888	3	I vBvwOBzT
+00174	002179	117	-888	-888	7	WaVQUYc UY	-9999	l buXcqgio	1	kHVUIYOdZD	1	tWsfVVS yM	lAEOBBEiFi	2	-777	Ant  icn z	LmLLHxUDac	oajqPYhwmY	JvhLKOtUaa	SinnqSatxC	eU fipSAOI	LwkxEObodc	47	4	
+00174	002180	108	MaAtJzFjAz	118	-9999	-9999	2	EPZnFsKdJQ	2	iaCunAEBbx	2	QSHWmvTbys	PnzXJKsTsV	-888	-9999	pdHNMgJJzn	 lwcNhgZsA	FvdLcYdCUF	 ZczSZyFii	QfHoibQHXB	VhewxYcKAK	-777	37	4	
+00174	002181	119	kqcaRiOhN 	23	2	hQEQsA DCt	-9999	-777	-777	lHKNlvkjcO	1	wFUao oNlh	uVRoOGJM  	2	opRGGPQlJV	qDBZhQRXIm	-888	PCbHYSqdip	wEFOuWFvln	otJUmpLO s	FLKwCluaCb	HaoXmOrEIp	145	5	eFrqufbrHu
+00175	002182	112	IMBycgPLmP	-888	-9999	-9999	6	hiddIQXVAh	2	-888	1	wITGHPbQhz	bxbZrfNsYv	2	ouRnSmAtPM	tnfEbASOnE	iyVYINwvxq	 hxEj  ImY	-9999	-777	yfFJhXdxEn	-9999	52	4	
+00175	002183	124	pcpykyWLME	-9999	-9999	-777	2	   TfDlEay	1	pvdCoxrWlC	2	ZOfuPZHDKh	geLeXrvH Y	2	DdOapnlpev	RpCLjjfuql	grSLgxYJFd	scaexUNLcR	AMxVSVYdV 	aLGLJcvgkb	gkGOmlFxDx	thOrpfisce	153	3	gvYYOnzDLc
+00175	002184	116	B pUYsMGVg	9	-777	tWQaoYQgsf	7	-777	4	QmXo LDSnL	2	PMz OptncM	gEPGqDrptM	1	-888	-888	LfRVrg XXA	rDea j InP	RrKnUGY P 	-888	TkMXZrSsQt	-9999	143	3	uVfqlnoNxd
+00175	002185	121	-9999	101	1	-9999	4	GrBPtthqp 	2	poSOiXROBy	-777	nWaN bpWLZ	-777	2	-888	MYTWpgIY G	eVhVvZkkxc	UkUJwEWnUK	TPnUGYjoWY	lCHg FLYmN	wFMn xP j 	LdOgGvvojp	190	-777	lkcItEhnRT
+00176	002186	111	-777	75	6	osJLAaUvDS	6	JmyiofjNNY	-9999	cwvBxyhaFo	-9999	YqTWfXoKt 	LjiTtmoKex	2	WunTKRLbdF	MwkgMBVdAH	MxzsseDKFB	s VeGX BvM	RYuTrPixog	HRSywVeDaa	LlZw FEzou	w ZaGDlgw 	111	-9999	BYc SZYMlH
+00177	002187	113	 a lqEUQlV	-888	4	EHYlnwtDAP	6	xLcJVTmxKW	4	-777	2	MTitOoaSuI	YsQYMmERNU	-888	hfpIkivHKE	slFWval sm	nDOjGAqWzJ	-9999	zILzYIdxRN	-9999	nYqORDy yY	-9999	124	5	j UzOHsYkd
+00178	002188	114	-9999	196	-777	hycMjQXvJC	-9999	L vlwVDbgN	5	VPXhi Trzr	-777	lfCdxpKZcl	-888	1	-888	bqQnULqHrk	-9999	yvwxOEzVLF	VDvMfGvSbW	-777	IMcFKdqt  	-888	-888	5	qaNHUCrKEw
+00178	002189	111	AdsMO awnb	80	-9999	vlgQOpH yX	3	mhbLodGsfl	3	vrHTMfSeug	1	hRSruzCpxM	YQVnqnVben	2	SoLCfoBaHC	sWtuDO mKY	s ORLuEfpy	-9999	PsNvJVOHhK	MfNVFLzsJm	SPwypsYyDG	cypZJQrReK	-9999	4	
+00178	002190	103	uIaMBhAGun	200	5	CVBe CqBlW	-9999	jfHlKD BNi	6	RMO xnkNJ 	-888	IMyLWqbzwm	stQJXMzgjJ	-888	NkHcSmdHGT	WDBH xXQGY	mVVFzLcclD	-777	 yh YpFVcR	rFEooDhCLu	-888	 tdIGjRKbx	-9999	3	qxGfTRCIF 
+00178	002191	113	ALwlOGFnWT	41	7	Nn RUFB dR	-9999	wDXWffrCRy	-777	-888	-777	THkJMKVCjI	IPODFPSXTt	2	qvHjEhARli	gYdFP BWVs	-777	MIYKUrutJy	-888	-9999	YyOphaB  W	-888	126	-777	
+00179	002192	118	wY JGSBptT	92	3	-888	-888	ZPzVpjS pR	6	qRRPZVNIBJ	2	ENo OAYagK	n gToZjbws	2	-9999	aqKE PZHYd	JnuveGVWuY	-777	Yb fKdTgYp	HEQlLzRsDD	hIBs tocWI	-9999	123	-777	CKmz ZwIjZ
+00179	002193	102	-9999	104	7	pZkTMJGXdd	5	-888	-888	w APQ BFAc	-9999	-888	DDrEreMZH 	-9999	-9999	jyfvfWDQSq	xratmGGQsa	xxfiUYRwrU	J zAEhMGHG	dkNQt itwQ	-777	pjODCOejYO	121	3	MEabnIrQhI
+00179	002194	107	-888	71	6	-888	8	VAqPwz pts	6	 BvEGgKumf	1	ISYPwZKmny	J rzHBapKJ	2	 hVZyVXZRE	-777	tENahyNWnt	-777	-9999	lknuCFTZwh	YZrwjMpFzu	-777	67	-9999	
+00180	002195	105	v bsRCbfGb	70	8	UsDvckC Gw	1	DfXCL ZTEN	5	WirCMubMvW	2	-777	umSTPFRxae	2	joTyctttTu	-888	wAIK hne W	-777	-888	-777	-888	rXeztK wxO	191	4	
+00181	002196	126	sPWulwRoVS	130	3	 hTzlbXUOP	5	myeoXYNUTo	-777	ot onRxQow	1	qFgIPpXAWD	-888	-888	-888	 sYsIpx hT	-888	XZpbSqHlrC	 eMT vbPPr	nxRbrvdSl 	-888	SUBDNxtbp 	-9999	4	mmCiYeCDHz
+00182	002197	106	AsNbQM HMd	133	8	OvFUNbzUyB	-888	-777	4	ttylPn GG 	-888	Txr UdtdvL	nIECdK LyM	1	TjKqylLOiU	-777	vXuPDzTPmv	AhsnJXYvb 	zcAzKdWDNi	FxWQfNnLrl	-888	KShuA tcZz	113	-9999	ojJzYyBAUF
+00183	002198	119	IQFdSSXrj 	-9999	-888	QmvdQeCefb	8	-9999	6	U LyWNWAjK	1	uIWtMRP mF	-9999	2	TFAVxDAAf 	YfGRA vaxZ	bKhMqpeCUV	 WqfouRxOi	NTpFBFkwg 	-777	XBBOLxhATo	-9999	-777	-888	cY rBRJlLv
+00183	002199	103	-777	87	-9999	CQXXHMJCSX	2	eOUjRISoJP	-888	eLbc Mqzh 	2	-9999	elaNqJZMh 	-9999	-777	JqihnzXTLY	XORCBtqSHG	jQGKZzkMj 	-777	ZcvZbbDddS	-777	xLvTG OpfT	-888	5	gWWkoZCVnE
+00184	002200	112	FyTDBsblWi	58	8	oVjckvIqUU	4	SmT kgXVef	-777	-777	1	VeqtqMFC h	ZwSZ eJvkI	1	-777	pcEkUqkkWZ	-888	jwBMjiPY V	TFSTFIynnQ	tW FqGFxCN	IFotweWeoH	LhbClN caJ	30	1	BUOgxWhjMX
+00184	002201	118	YfAnkepDNG	-888	-888	-888	8	VYhLbTOLVG	-777	NYEGPlZzgt	1	i hizwGFBO	E EOA sNVe	-9999	-9999	jeDVPNHIZE	PnLFxquzop	-9999	KDjGaPRcDW	ABNIReephD	yggbvFAfFl	UgDKiVtRDY	166	-777	mJeSJuM sU
+00185	002202	121	pbQqxFqHPj	-777	3	 dHvmvTswC	2	jLGbVPvyVz	3	WXYuG  vRY	2	-777	VaCyzwfvZm	2	RlIk rqTfu	lFsBhfDUJh	IgYVeWj BD	-777	-777	-888	ufumfrSjup	-9999	53	5	CaHeDyMJoq
+00186	002203	111	-9999	-888	6	-888	-9999	pODIUqmfar	-9999	pUCknVgybB	1	nQqURIUfse	-888	2	DVzRahO J 	FaNGoMyhs 	cRxXmfKFse	aKbYMNeDQS	-9999	lTVifuknUm	WOGNhAXbHK	 yGPM fcHu	26	5	FjWNstvXjm
+00186	002204	124	ynPGFWkTEH	65	7	TBPlJ uwvX	1	 UMGpdOcXw	-9999	PbPARQanBO	2	-777	dkjaZazpWI	1	-888	vPvhZ wrpG	Kb QgkjEcz	SzqYsws cC	mXVCKRyEBy	oV  o rPdv	MeCYaxzKsB	i irPHZqqo	46	4	
+00187	002205	122	kGZYMQYGZE	16	2	kBCvoGAUmH	3	eNbvpjxDNG	-777	-777	2	-9999	KisuRHckfM	-9999	XziNnEUBAa	RLCGjAhwrv	-777	Mxmcv zHLL	ARZYxEpxWO	TCgiOciPls	YbkPjlnQuL	zmTGhGfwcA	140	4	fKbak fbvw
+00187	002206	102	omgnpu sRu	160	6	bGUo rNSxP	1	D AHmff pb	2	elhupdngWa	-777	AALcRQJBuB	-777	2	t XCyeZ  e	My kt bBvE	-9999	jdxjqF tHF	rZOgCSjIXD	fCcHzD DNB	-888	fJiEBGQLhY	99	5	YjXnzKl zd
+00188	002207	106	-9999	-888	5	-9999	-777	cWldGyH Zv	3	MGGKNlff U	1	TcYLkxoMqS	Co ZXX bjq	2	xVUZUbSwTZ	XQAzxaeKHt	fjCjPuEzQh	tFMSYxWfyL	EASPZsPKNY	-888	Y aPFNHhHW	PnO GWlLHy	-888	2	
+00188	002208	111	-888	169	1	jYMa oSyYG	1	NqPohyQQ V	1	rnUxTuLXRG	1	-777	rRNAvNljEM	1	pbjbjqhC X	-9999	ztxHtcCMGY	-777	majcGMdfwR	RwokIHQtMJ	-777	-888	27	3	
+00188	002209	121	-9999	-9999	1	CtOGI JzMf	-888	PveSIzlwkw	-9999	IJNWFwsYQy	2	COuN fKnkS	LOIEuNUcBn	1	tbFEAMivnA	ToRWJXPMc 	-888	JZwKXPjbjk	WoEjP mUfr	B exZELuPm	bKsGSqeSgS	PnNtjoqsov	68	-888	uTBa snEfu
+00189	002210	120	-888	174	2	 eojP uFyC	4	Hc xCgFCcX	3	LCgkNWMVlW	-9999	WEaTXBuXwU	zvIMZv itT	2	BdRjuELpNA	-9999	YsfnjPgwqd	CYOjLsLSL 	-777	-9999	YWhlbkkeXJ	HsKgqLFAwj	177	4	
+00189	002211	110	sNAPfDmEBt	103	1	-888	-9999	VRNJuVgdNZ	4	fDQqsmTEwY	1	IDVTnLDqoK	-888	2	k GDxmxfgh	ZanqBwBepF	 UmwHkTIkL	dILgw wxnz	-777	-777	-9999	-888	164	2	I CaSDXlaR
+00190	002212	120	-9999	177	1	JlbdHNrFXs	2	ZdiGfcEvrW	7	uMOFHVXUQK	1	ZFlnuQOuHw	EZK yh Ube	2	SetuLYvd D	XLziEUXEDn	aTjXofDcRZ	QVirQvXWZj	RTMoKlyNFQ	-888	cCkCKpTxyT	-9999	-777	4	
+00190	002213	109	-777	73	8	-888	3	KkqWhkQEmD	7	 YCuretqPc	1	VcIbeFVwjJ	gSJUwGyOse	1	ySsuFRwgxE	vNTckOKJfK	QYCVcnGKwl	y jkl Udvt	-888	-9999	-777	GoVUsRyJGP	-777	-9999	
+00191	002214	109	Pio bjde p	-888	1	-888	6	jEoAMyHKdK	2	cRMxxYlz y	1	I CpZtlHob	bqrvwUuD U	2	XCmvTzSKcg	DgYomkcejH	ylWK rKPsW	gHALndiIKL	HYwnYqAvck	jmcgJAayvk	PaijXCtrXr	uvmpKJgOSK	130	3	
+00191	002215	112	-9999	150	1	jsEimFpGmR	-777	NSDUGPRxTe	1	-888	1	JiSUCIahQI	-9999	2	-777	nnseRhdVSp	bh SByaA h	-777	uxSiiJcJSN	zQgOsYAoZV	TZKZnZZTAy	kRPOsYOSuG	29	4	GElTYqlraY
+00191	002216	105	YJrYpwcmIn	87	-777	JZUVdncpsQ	2	fdADmSJpWv	2	LbQgVWUfaA	1	-777	DegPpfbfTp	1	-888	-777	CYdjnoOtVW	NxjxZbiNIC	LeZXClZWkK	yGyqVusuBz	PasqKoOWGm	VnYAvuYDBB	128	1	MNuRVVqfmn
+00191	002217	118	xXvAdHgHQW	58	-777	KromnEPXvk	8	NqAJlTsEwv	7	-888	2	u dFFunLdu	-777	2	xVctHmU Gl	RwXcYKezsK	-777	qnKtnTNsEK	uTq pGGMLM	Pb  jPtcAu	QAJgeheViW	hOMTRpwCRH	-888	-9999	zdBnnWwVnk
+00192	002218	124	azVxguldBV	167	6	qmgG mIGwL	3	coUEfWJfny	2	VYkBpocKcf	2	-777	-888	-888	-888	-777	TpNerttqOb	kheivxoXhe	bUGO etMgx	 K zTs z g	IxFkJRWmZt	QySwTJxiPM	174	3	NqItwEXNEd
+00192	002219	117	GpaIbUhjep	199	4	iHtqZVdfpY	7	IDVAEEcdGj	2	RuIDhANLDE	2	vREnVLCNZU	fAiBihgwej	1	JPxuSaDJGA	EeXrgLHJBU	JJsTb kUYk	uuwgJNdNEK	IvkAFEpaOW	w rzupncgb	-9999	LvQxqMFHiT	-9999	-777	vSwbM tptk
+00192	002220	109	hBSmTfawUW	93	-888	XWR ZThaJx	7	TKYzDkjbZv	-888	KYFIzFOquc	2	 waIOojYFA	-777	2	ujxaWzmUJU	JVLMidGNwT	EHgMNnykTz	SVl sBjY K	gQINvVLK e	-777	-888	-777	-9999	1	EMKQiaMdRW
+00192	002221	118	pkcGfGfiFa	5	2	BVyCxsWWcg	6	-777	1	ekbvBRiUHE	-888	-9999	Fywi nJNjv	2	qhobQVPEWu	nujw APCUD	llquyP jam	sntJhcNoXn	DocPq dGhp	FmuuphRQqZ	-888	GkPQLYUKkn	-777	5	kIteSDrfHV
+00193	002222	111	QAtzsiL Sg	173	4	NYfYO mKVM	-777	-888	-888	eGFCZZmyGF	-777	rLVbfXBZzN	MDcmAennPm	-9999	R FChV zX 	-9999	-777	PGut peGnN	-777	-888	-888	JgDVTURWoy	198	1	
+00193	002223	107	  obGDGXva	164	6	AwGuXzuvCt	5	TIsremnkqu	7	mKmZVKDRZh	2	JRXVB RLgG	-777	1	ZgrauJiCKE	zarzJGjpvo	ZLWddygBxB	JVSyX oaui	-9999	Zd DHazBrE	 hNNHzNaPm	EoodbKtlEn	107	3	
+00193	002224	113	XpP GIbD c	162	2	-888	7	fYcquNGIEG	-888	cdQdyKvqDB	-777	btBAchlWuP	-888	-777	-9999	jil iCJJnH	-777	-777	LiDjOImYwb	LELUsDlasm	 DGKiUEnyd	-9999	30	-888	iNdpmpmSHG
+00194	002225	112	xv lYMqYyv	1	6	-888	-888	-9999	5	 T HBJlixe	2	Ph FfqsZOr	apL gMgHtv	2	yjzqLVJhXf	M NnQmABnZ	 dYLSRtFob	LfuHliKdIo	Ik tisXNTo	-9999	pfffBkIXxf	tU fzbyuP 	67	1	
+00194	002226	120	DXjog  qqN	74	7	-9999	2	nJCWumgOnP	7	SXclyJhKod	1	Xf xIOBll 	 kYExLXJcq	2	mQTBpJZMOl	-9999	WAyfWjSWbl	CvkwKqjbgg	BbCw r xcL	-9999	Fi ZqkErji	WDoACoVrGA	27	-888	NWAPsWyFVr
+00195	002227	103	-9999	-9999	7	TeHVuFcDvp	3	dnMZqDVrpO	3	-888	2	-9999	CnWtuzvWOF	1	HjEGWS QnZ	mSOoXmOXB 	YDdV eGTVU	GMbXhb kCV	 WqmBTJfZO	cVfBHTNdxR	FzQQU JxEw	gNNKFhVStN	131	1	
+00195	002228	106	SWZltUgExM	31	6	GicVnMQISF	7	 aKklS tVe	4	JtWpiXKNfT	1	imjfNDztgp	-9999	1	cEbWcrRLhb	-777	-777	jo  AuorFj	-888	 MYMVACSsj	JsLvaQbkCl	rkkzHMQ pP	190	1	
+00196	002229	125	-888	-888	-777	-888	8	pahSVddlDZ	6	u  HVZLbKH	2	-888	-888	-777	xSLLYFPvdJ	aUsdIlNtEL	NoFyXosKY 	agHFCFVenT	fsBjHvujxP	Rs xhxfi r	IqwQhZ Wpu	-888	37	4	FYEMwXeDWy
+00196	002230	115	BLCVLSEhDq	54	4	DLPDGiLx b	3	HX  ZcrXhl	7	 H QedpJdG	1	ZqufHa eWW	-9999	-888	gsluLOuQkf	Fha NplvtV	I RnpyDxsp	caNIYqMswW	EFpc IurmK	FmulzhEfgu	JrADFfDwrn	kUNLgPnm X	160	2	CkcRkBMiaD
+00196	002231	106	o PLCKUAXU	-888	8	uRsH ctKjW	2	HarmIoxzBd	5	pWTuGmDPdQ	2	qPlJzo bs 	-9999	1	HlOp  JoTy	esEtPEErMF	CLTzoVPmne	-888	XCsVjnonNN	KPhLyTOmWN	izhdppMYOA	hoAIDZVYCJ	29	3	SEeVAstNdX
+00197	002232	116	hcHvxqGWZR	93	-888	-9999	2	tk  iIgj Y	2	-777	2	u  WBYlAIO	rgPoNInXSt	1	aqxdDtzuwg	-777	lkE tZzJ g	sSCqeoLocH	 G fFp Jyc	PQhft pjeS	-777	NxQYSSTlqC	22	3	
+00197	002233	114	tExyKBWmkD	3	5	XfeQAhVxTO	-9999	sp OkhOqKm	3	ZB XC simo	1	-777	-888	-777	UTIUjIQPaP	aSnTGOxYja	OcTyp BSuZ	zvjtkDzoKV	zW e SOPcm	 CjBxVutrC	lGsbJCbiYd	-9999	53	2	aETzrnBQpY
+00197	002234	124	NI ganTvUH	37	6	GBJhbseqVu	7	xLjZNExlVm	-9999	-888	2	f qFHWcCfg	pqkjPoUdr 	1	aqdLmDLshk	wlFswOo UE	ZztotykTgk	RFzqckipGX	-777	tGxakDXSEl	-777	grBz CJtt 	179	1	
+00198	002235	110	RuZBOhMuVy	2	-777	-9999	7	-777	3	-777	2	pLmxuZpkov	BqcvP AcZa	-9999	lXrzQWSRwC	CuVWGhntQk	-888	K pvYTIScM	Qv LYyutrN	-777	tNGzsZbiHv	CETwVXcQfA	-888	2	ozKKjbR gu
+00198	002236	125	JsBvYkcv m	182	1	fAWAnqpgNe	-888	sJYvRNsbGP	-777	pXOJYTeRtJ	2	ggbIrAtOCG	GvkoJxzPtp	2	-888	TCbTHLrAoH	qvH fJWQRC	ANbFTKLhDA	VaqgtMm NM	 kwsuEpRG 	-888	mYiXAQPOqJ	172	5	veIXwrLIPq
+00198	002237	112	 tTJrsaXfy	-888	-9999	aqKciyGEhc	-777	-888	-9999	AxROQ UGwz	1	VWfbzLKnRE	 jDEngyzwG	1	AeK ROq JO	ctDnUOpIgV	xpnJAlOMWU	PGAgCwDkVw	VBspCFtxe 	 zSUOUygZF	-9999	unFREozyzI	92	-9999	PGEetTqbZi
+00199	002238	106	 z rlRA UA	-888	-777	wCgjpkPEAP	-777	I  llFb tn	6	-888	2	-777	iqaRgDcpJA	-777	gxtTpZe rl	 QFaqXLCCY	fVLGL  e B	-9999	-9999	-888	-9999	DXhWCZpAAZ	196	-9999	j PHzEtyMU
+00199	002239	117	tSg  lpftK	116	4	qHIoBbA iE	6	-9999	2	HVTpmrWgeY	1	-888	-888	-9999	 cVknfYjDs	LVKIYoAY n	-888	qkDDuQdBUS	WUvRJPcBSp	fpZWCHC mM	dgyhvRRIpU	GOpLuSNYqn	4	-888	EQXkE BsgY
+001100	002240	106	QKkvqoKemT	-888	5	qG xmkatrW	-888	zAzJAdOFGf	4	UcvIjeCxOE	-888	njqsYJeoIK	drVgeEhxzp	-9999	ya aEukKam	tOjxAkMyBF	iOttd btHG	-9999	eJEU JfkWU	-9999	V DVJlyNfu	RrN OZkQuQ	25	4	
+001100	002241	123	-9999	130	-777	-888	7	MaoG Ycrpt	4	O PIOlYawQ	-777	xmntqWmk Q	OLtbqv eBL	2	BsAdMjDCGt	hXPvnXQWGb	lHlurSpNKX	wUHtcKIAQN	sPqhbFBnMT	QCJxWQGLhP	ldJLodUzbX	TbUcV afe 	175	-9999	CFOvqEQTbz
+001100	002242	125	bvFYTRvHov	53	5	v kitfzT I	-888	NJa tcW dk	4	-888	-777	LXdcMClIvY	QEHFqgsylJ	1	egXzFpdcBW	uzCrWmiTHE	snmMGRTokM	-888	oClLufYVsv	-777	iSewDBxNqA	-888	92	2	
+001100	002243	108	JFEtIJilHV	-9999	4	mNOmsYpylQ	4	owfWketVHC	-777	-888	2	XErGEMePSg	kCUCnxtZbi	2	IdHmSBIxRD	iiNksl aqE	TPMVkP IK 	-888	mNKCtVbkCk	 Y B drsEK	-777	EcerSLedZm	176	2	VO pXjlGOd
+001101	002244	112	-9999	149	-777	dFYWU u yr	3	-888	-9999	iXyHwMPkC 	1	-777	QYl CxvQ l	2	AhnCQuMs g	oHGOMJhEFc	bFvDYtjvO 	JRronYoSDI	 SVNeLedbC	CF dFqltBc	hHlHue DxR	LRegHVnbph	144	-888	zPDAVbLBpe
+001102	002245	117	V pfxIfqKl	-888	-777	zMC  PiBrL	7	-777	2	ANsVvJNPQe	2	-777	-777	1	TuqqLMHzWv	-777	SdgNKe LEI	duXGMzUJlN	csmpZco Di	mCFxjxzSuW	-888	-888	114	4	
+001102	002246	120	XEHRRXySrn	-888	4	TqSr VZOTL	8	Smivglyplu	1	-777	-9999	nBvURHlnSZ	zYXTVKzUg 	-777	-9999	xA VJRLKiN	LGEtSgCFFS	eMNrSYGFOL	-777	TJnPtIQGly	dWRiwLZJdD	wnTdpJ Bfe	22	2	UQtQdfNsup
+001103	002247	108	-888	49	-9999	PknMhJDhbz	2	GjeDzasbAN	7	qJvrXlGjys	1	OhAXS edQs	-888	2	oIiBeqOVxO	-9999	IwChrudoeK	SuQAHxadiY	LElvkbLAGQ	-9999	oB PD XCPo	PdlQtXJLDw	43	-888	WMYOxyvFui
+001103	002248	112	kkElHAoCYv	126	-888	XAKUhvjMEH	8	LHZbeeSagU	6	-9999	-888	YnEj fLfAg	TIjPUDIKVg	1	-9999	-888	CeTdBqOxZu	NJdYMTTvPJ	LzoKSPtrsi	-9999	-888	beSVVaON n	186	-777	
+001103	002249	126	mseOZDy  n	199	1	-9999	8	-9999	3	LQcQ IcYOW	2	gTTiNpbxbi	ThGUhIkETe	-9999	-888	-888	EAlYPyOsxo	-777	 ALW IpzoK	-9999	QWfEedpsmY	RrJrfbkWTj	183	2	
+001103	002250	108	-9999	-888	-777	sXpNHhcW p	4	-888	2	cIzDTNyRQ 	2	rjyjDfYzc 	PtuSMlyxSB	2	-777	-9999	-888	AjBw Ynmjm	-777	t mg Y EoZ	OoZfFQZOiM	sMEzlwyLEV	-9999	1	
+001104	002251	114	mx Q MCeYe	-9999	3	B ZJArozL 	7	bZMzVvYUCB	5	-9999	2	lYPniyRxbE	-9999	-888	-888	ngZ JFsmUn	VuNtngFm G	-888	RjjHfSecEX	Wjio GSwqS	-9999	bgdDIwWI v	50	5	
+001104	002252	102	tPfyjjLnPC	146	7	jlttKCARqc	5	uQZRaTUPnn	7	CsJvdiaFtv	1	rshQiJrmYq	DPzpmJjiQF	2	JcPRUjvqGx	TgsiIoImaJ	euvmVVDkWs	 sYsUxD xt	EqRVUlSRei	bP X YjJdh	Q gZgjIWOj	REsJiEXxYq	106	4	ipRooFoPzg
+001104	002253	108	OB TPnJrje	22	-777	-9999	-888	htfnzE DzB	3	OgIzJzdAAI	-888	-777	pxeOn snld	-888	vPNweDotHI	BPpNbcXDdl	-9999	CXbsuSyIre	-888	-9999	-777	-777	-777	2	
+001104	002254	120	-888	76	-888	FESGWzMUtK	2	CgHijpXGNj	7	-777	2	Q KOqLeQYM	-888	-777	aspwasdKVl	WgTaYaXudy	vgMhMuUhel	qqtOOrRzLv	wrDCJriAJa	Fwhdd P Kx	-9999	JHXckNSHi 	-777	5	obCkqyorF 
+001105	002255	103	ahsiTYMYeV	-9999	3	-9999	4	evWJrtRNLq	4	DhAHIxOTSB	2	WxgqhEvEJk	CmMagnhdHs	1	gy cZUIqgS	-777	-777	-9999	-777	FirhspKEjb	xKcDTniBaI	qDRYxjVD S	91	5	
+001106	002256	105	wZOQjicqFb	147	-777	yLMCfXuaNQ	7	DCR wcrhsN	5	-777	1	-777	hcaSreleEN	1	-888	kQqzIyKKdm	-777	tDul qxaDE	fzqxCOJepp	-888	-777	 fRmgsHkCi	59	2	mhWvuibkuG
+001106	002257	109	KxHSbhWasx	192	2	UWXFgBgVYW	-777	yzKPcFSDzr	5	vBgtDQRsth	-9999	uPqmyqjdub	brfsjQenyR	1	ggcLEpnrQC	pogSNYf bi	jrWnAdSqXI	H ICLSkizH	Wh meWFXWt	-888	NAIzekd ss	EUSxWwiNcu	-9999	1	MGXOBRTmNH
+001106	002258	113	dwcnIuhhji	-888	-9999	GTTkSdpq  	6	XJJGlZfCJT	7	BAHdoA KD 	-9999	jLozNXQQUI	-9999	1	irErNgrz Z	YEJxIdCuoC	OHuJlnuqaV	-9999	z ujwUdpXq	AK LUkaTgm	-888	OhMlFdgyE 	181	4	
+001107	002259	119	-777	23	6	WqTKDSJKJo	6	EdIvXdFkxI	1	UfN GsmXqR	2	NnGSUcOeT 	mh JCdmdPm	1	-777	-888	hNpCQP Clu	hCAad naAa	-9999	-9999	tGanmbmFxC	WVbI RuyTA	167	4	KzHQ SNAWu
+001107	002260	104	-9999	63	4	Zq gOHjSX 	5	-9999	2	RdIsWFFO E	-9999	PeeRBMUqnU	-777	2	ggwE PTZHj	adPrOvsUrG	uriZBkUMFC	-9999	qpTLyqC gW	GdPWTCBSXf	APpnIKZpmq	-888	144	5	nFbjrnuEYC
+001107	002261	118	FD GwXShwT	3	2	Vvai FaVLM	8	hfwWN yKVT	1	-9999	-9999	q MXyzCG l	zbuYrfterD	2	W FxGKTaFZ	kEfMGL Kqk	TvpDFuV bH	xEcJMFYDjb	rvwgFCvtSX	BytA wpXuU	-888	LWHmhtLfCq	156	5	KxlezBNxtY
+001107	002262	119	zYhNLnSaEQ	53	1	lSGbWyJFVX	-9999	 bGCTblXsZ	5	-9999	-9999	 eFtQGrFOM	-888	2	YHgbzj SKe	-777	uujGIkdDmW	-777	IpkGAr UaU	-777	zzvY  zaJZ	STTtSTaOqV	10	5	vsolPPzaSY
+001108	002263	108	yhFfTeWnBM	42	5	CwvqcwQpwA	5	st UtrgIth	4	DP yYgh Ci	1	NSfVBDzPjW	-777	1	-777	sdBPgmHMzc	d RK iSmEJ	-777	-888	AWmpDIvsur	UtiCdMaEnU	-9999	78	2	YrsFdbSXrr
+001108	002264	115	-9999	122	-9999	SdRYUKDC x	-9999	-888	4	QdvucTmcpl	2	-777	ykuqcXuQuE	-9999	IrXYaSgXbl	qEnaM EjrH	YqHQzNTHDW	ViRGjbzxhy	LoYaEdqNNq	XVPWkLTfDn	-9999	A fwoonRcE	-9999	-9999	yaQeLQSffl
+001108	002265	111	TKqztxcAG 	-777	5	rOoyIWNlfC	2	LrYKtKCAlt	7	taOXsjWPnl	1	cuGlsHQWix	jfRqDqYGCo	2	-777	-9999	-777	IUpmgJQxJU	YYkNnCwAwT	yedtetuXXW	-777	-888	109	5	ZjQPfEREUv
+001108	002266	104	D YXPMvaxE	52	7	kShcMHnkUF	9	iEQwIFZTGh	6	-9999	-777	RkGzxZKSkv	fSRczzHhrB	1	U hkhlrYqG	 yThEmVlUc	-9999	nrXmfsbvia	GfBppijNRe	skmWrVsoIR	-888	DwWFhTaJnF	-888	-9999	tkaNaSDrJM
+001109	002267	105	-777	-9999	6	ZZaeFKBhwB	-888	NfaVYsrPaZ	4	nj bEpwJsc	2	hxmudVUeGk	dUpiQHxksd	2	-9999	QGUuOLeOOT	QHhbfvLAGo	 Xocx  p R	FQVGteVswt	uKHOQuPIya	vZudvYwuRs	RKftxmjUMn	69	2	TzvuMjZYVj
+001110	002268	125	oRFPzzKJdM	19	6	VtjBzNu  g	9	jlpguD Fjg	3	kTRMtVjUHq	1	-777	EFwqUUpYFz	-888	ZQsEqLXokz	DsTFGmCNzS	QxmnwOuYgo	VcCbAlUP s	-777	BPZFv CaWj	dKWdNiKrDX	BfdJcESaQx	110	1	 JgrTAJedV
+001110	002269	120	lJMdBgD Qm	80	2	UlHCzvNTqD	3	QkzrFZsGEp	5	-9999	1	-777	utXWiMxvSs	-888	EBHtpJggNI	-9999	-9999	-777	rLagxsROUp	Lr QGhAtGe	-9999	jAA owDJdn	74	1	ZThSxnnlID
+001110	002270	123	-888	18	4	 ILpZGpyXE	5	MHbMpY jNK	-9999	-9999	-777	-9999	-888	1	wEcNJbxvEA	wcTFdbiulV	HqKO JiXXp	WSsxPARFYm	-888	IBVApKiESO	-9999	GALHBzFHUL	111	-9999	UrFnasLikE
+001111	002271	124	jqTLYnRZMJ	155	1	GouprqPJXD	-777	-777	-888	HvWXVkajZS	1	-888	ntaQxSEkmb	-9999	-888	-9999	MaHCja IFh	-9999	pBdoZWCbQX	RpTKkaDzyQ	MPSrnKHdMS	zAOjrfoRvy	65	-888	
+001112	002272	116	XLapgZyBvg	174	1	A BMbEMliW	7	YwECAbpRaX	4	AXXkmxeEDH	-888	mSmgibRmdk	G klliirUB	2	Ens ujeClm	-888	FKVClVTE l	-888	Gcu ENDrxi	LicquUixDr	-777	-777	-9999	-777	jVoiZGBRlz
+001112	002273	109	MEHfeMEFfM	161	1	-9999	1	y QiGUeOcn	-888	CGtpPiDWwd	1	-888	AmMto FwrE	2	PGEWVMPBtO	QksmqSgUab	-888	wGiqvGUyBb	uFwGNn PGb	-777	BJiYqKXscW	GtEPXyUyr 	119	-888	KWDlOKrfTF
+001113	002274	126	Yeanr vXcm	96	-888	qCUJfMEZa 	6	kiGBiWhSGj	4	WWYaLBWzeA	2	-777	-777	1	-9999	GQp O IbFe	CzihaeytiF	kGzdUIsXgQ	BMtkobDyiP	-9999	vhrxmuFHvj	wjVVpLRmWP	141	5	
+001114	002275	118	scuvugRf T	133	2	nZ XM RDnD	5	GTxEVMUdrQ	5	jfHPzmhPDS	-888	-777	zpzDtvD qu	1	-777	lNMQOCjbbz	Aoxvqq ZlX	jXUuJZnRxG	xHdyeTdFgM	ZLXJH bIAt	-777	mywCtIMTMS	9	-9999	 uYWLPwr P
+001114	002276	105	yOeuFFVgfJ	-777	5	UQYKzUoYNk	9	gNRXVRCNtW	4	 xuMTYiYcs	1	oUlGpQkTQC	DuhGRuUJOf	1	-9999	YeUrawOBkb	Lm FhiZHfP	xHuwzR fBg	BIOySvvPRy	 ApHeDRlV 	szPFrGoKUF	LAqnCxdD c	197	2	
+001115	002277	114	aTxQXVjBtg	-888	8	-777	3	 KBzm PKfm	3	MDAdsk wJk	-777	ObZoPRLGgV	OAuKZer KS	-9999	sPMBKHoRH 	wckmCZngwD	XfFkGKGUcR	ptxEEhiJut	RxNPkUPEFk	rFxyAGSwym	-888	OdqqqeVGPZ	-888	3	YykXhSSPAu
+001115	002278	123	FvjdIqhfsA	-777	3	-777	-888	nxa NWypHJ	6	-9999	1	-888	jfBPujiG L	2	lq upzahva	dWp  NCBVK	-9999	-777	wb N dloEb	zmxHyX szf	-9999	HCqIaFmOLI	141	-777	E TaTgNrQW
+001115	002279	117	ZibhEahfBv	171	5	ZGwDDQQwl 	6	-888	-9999	t FmAfiIKY	-9999	-888	-777	2	jpMxiWSJEk	zK WMRTHEF	A efcMqQtz	CH FpOZuyT	opdbHja vz	-9999	-9999	wFhfHide W	123	4	eg YbUARyy
+001116	002280	113	hjDSHAaHci	-777	1	-888	8	-777	1	-9999	2	RrZanuAPTw	dXvSfrSDhm	-888	WmLeGsDZPC	  smRnVEwP	-9999	FOtyQK ZiP	qAXQFWLakz	v IszwJaNC	vzDs OHeGy	-777	196	5	
+001116	002281	126	-777	16	2	-9999	4	mzoj  HOFf	5	yPFIcpWYqG	1	 acljAjXxw	uDxpbSjXDP	1	-9999	-888	 ShTuBNYKE	-9999	Pv JBpdRSQ	SUW guy dD	UoUWsjpMgZ	ngeDsFPmMT	76	2	u GijyEEEb
+001116	002282	106	aMBgcidv c	100	1	fspRE rBgG	2	kooUbpIQCo	4	-888	1	 zQgwkKrip	eQKz AJBXG	2	gqulXiqguz	sbpjtxYRCq	kGfgqKSznh	-888	-9999	z NOZsDHOy	iYU Qhgn L	ZFjxje k r	-888	2	
+001116	002283	110	AS VtTeSzO	-888	7	qTvs GaLEs	6	-777	-9999	-9999	2	wFcDwAc DA	-888	-888	-888	aAXlSocUh 	yuGyOqFy P	-9999	XBtfqkZcjG	njCjPNkhev	VgVUX dmG 	F FTIMzZjO	158	-888	
+001117	002284	109	ZQswZajpbk	21	-9999	vPxxlRxymd	9	-9999	-9999	sKyvCgewJB	2	-888	-9999	1	ThoaxYfqZ 	-9999	kXMJfmAjyI	dJolneNQ T	EKfHFcZbAM	LAlwvZrDJo	-777	aXcYtYgoOv	144	-777	 alwfUUxm 
+001117	002285	104	OBuxRMEvth	101	6	sqwLppMNZx	2	-777	7	CIzZjKJOfV	1	 vvWzt PrW	hZuPDuNeZ 	-777	-9999	BQcoiuNF g	nnhmnJ  MS	wOEYfiifnR	OXwzHbeUBt	ehDLrQmowS	WS fKdzOTN	cyx  jHXTA	140	3	CpZWeST VN
+001118	002286	105	-777	16	8	yIzOulEmi 	7	-777	2	-9999	2	bVEO UJI V	-888	2	JgbthqGxeW	-777	ixWtkXkhNr	qpZbBxEnyI	-888	-777	rMsSBcEOEa	-888	131	-888	JazlaOeO q
+001119	002287	110	-9999	152	8	nfcfjizgfp	2	odhyrzLMpd	6	-9999	1	LxPXuVLJCi	e VgAKnhSV	-888	vxOi BDfbd	-777	gXcZMUsoSQ	mZ XOJZOQt	VogkNZPNSX	-9999	-888	lYGi RXYVh	35	-777	
+001119	002288	104	-9999	78	1	fOeSmFxDSx	-777	mvKfCujmlB	4	yUlvOiq Zx	2	LJUssPRwbH	-9999	1	WxuWJRBMoY	KmxnVNmje 	xYAsZYsnKv	-777	-888	fjOgyyZKqv	HBrSv O aG	-9999	173	5	xANfonFQLY
+001119	002289	126	-9999	149	6	pTuerLxxVP	4	-9999	7	HuUrq oQiB	-9999	-777	iA xISJwfE	2	NwtJOfORbN	-777	ZBJIUgUENd	-888	BwpOKX Esw	-9999	-9999	-888	59	3	vDVQPmv VO
+001120	002290	118	jG SuRjBEi	108	7	MwotNLKCGv	-777	dDvNWRHrDz	2	JwXS kU Ko	-9999	-888	HBimmw eEI	1	YfSi bWgVK	-9999	JEDqmVuqXZ	gyJNIaqWi 	ULtVjdXAwj	zqUxtbDik 	-9999	ixKNXEafPx	21	-888	 wmGBIutor
+001120	002291	108	 IHQOiz mR	-888	-777	-888	-9999	-888	1	 aqYsmLnxU	2	gVUZDQnEcc	pRUKOrbZHm	1	-888	lZhtYvGRMM	-888	YPGuqWkceh	xzVgJrQfxE	GLQnKQieJb	sgVvVSES  	-888	-888	1	
+001120	002292	113	BFzyHmidJc	124	-888	sNlOodIJeB	6	-9999	3	YSpmTIpssU	2	uVioRAO in	-9999	2	McXedIuvoJ	 MCHUCpQat	Fww H zGoz	-9999	NPPlerkr U	sRWvTnhpxs	-9999	-888	10	-9999	
+001121	002293	103	-9999	-888	5	ZuPZMinylW	1	-9999	1	nqKU OqLiz	-777	jDk zYHlSv	QPnEIAkUp 	2	-888	-777	bGDZmreTSn	FERXuRORGZ	-888	wM LjKqpyb	tosqFjpeRb	WOFsvDg Nn	76	1	IHoGgMtRaP
+001122	002294	111	-9999	194	4	-9999	2	-777	-777	GCgENatTEW	-888	-888	-777	1	FDFkDMfE f	DxuXVcvzuZ	IvLYIQtWig	Aj XA FvqQ	egXFnaZlMH	Xzd BGcUSA	tZvLgIxRLS	QRJPTHpeQj	130	2	DwUYMyOXFC
+001122	002295	117	FHEWzQpIZC	123	3	-888	9	-777	-888	IMOO qBmEP	1	g C WfjBJo	WMFmjUIcnJ	2	tzUlCaJkfA	jhsiPVmPeN	-888	WGREiVOuDP	SYUGdoLtqx	-9999	CnbEdClWCs	oxfbzsdxco	-888	1	tyGixyPCpA
+001123	002296	110	-888	-777	5	LTVHoKDQOj	6	ZfHqWTeyxE	3	JNnIIi euK	2	tserCsRrqT	gbHwJD Icc	2	WRbFIdQexa	CtVrAzxArc	-777	hqTLUy lKa	-888	QfG TfWHFx	jiQyyOPg i	-777	-777	5	
+001123	002297	123	GMBJQsZRIa	81	2	bKNuBtFJqb	2	pjX tRstZx	3	-9999	-9999	h lSHYmBBL	qOThRzg Oq	-888	-9999	bv PtXzWrC	-888	ZWbGzVXOoR	UxNhNpBDZ 	Lj zeAlPkK	C EGCCXZRt	BoEIBdWkEF	79	2	HEJhDIOqje
+001124	002298	122	-777	14	2	zWwqUtPLlK	3	SsatCmiyOZ	1	-888	-777	-777	-888	-888	nmBbQxxvtZ	beZeOIlpVM	-9999	bYpYOkFqgD	BxIiB NPBX	XwNSyLCuAF	SABGLwQtXW	M QAoskOBn	75	3	cCRaoXdXEb
+001124	002299	118	XinSZUDOlE	64	8	XTkFysY VK	1	jQADflQXrV	5	DuWYPthJCc	-777	-777	rJBazmUXKd	2	 fxdKQMcWg	Hbk wXwtHw	-777	NnOazqXrpu	xF aFCSLBc	wjGCYYcQLC	RzGg zWZMj	-777	189	2	SYUyltALDv
+001124	002300	117	syCumOsTEZ	-9999	3	yIqYkHlBlj	3	xklwyPgiMl	7	-888	1	-888	CbzNQjamCn	-777	yFVgYEl aQ	IORuDTnJNd	-888	oDMEfmJuXK	 DMfuwdczb	PDBiGRVXTL	SkyIZoauLV	cJngthozhF	163	-888	maTgZLhlMN
+001124	002301	122	nlPXnFL Ea	183	5	VAfwQFRe T	5	qCReoT Miw	-777	IJvwkStd  	1	-888	PGRCmNpIKe	2	XaEOdKNByG	-9999	DgZmXAGBDL	GOTc rXzCE	LZTu  vWSu	-777	evxZlMfUMp	tfV  drzl 	99	5	F AVyJAuXB
+001125	002302	120	HZwvCHaRtP	145	5	mwHk GbTFv	9	lbPPJLpCDu	-777	-777	2	bxeaSTjyFW	-888	-777	nCLerhgkT 	-888	kGPo UrQLg	-9999	-777	-9999	p  zHtxXfq	EaKgzxqfnE	195	-888	SnWWnl HTw
+001125	002303	119	-777	102	-9999	-888	6	-888	-888	-9999	1	-888	UoZWNzHxOd	2	cxcWuMCHOi	-888	ULacFmWkrd	oK w LghUZ	pPrVWz dUq	-888	mzmHjozMoN	CNewH nGwp	115	1	
+001125	002304	101	RENUpdlYFR	-777	-777	G m kwwq A	4	YeACmxmRZJ	-9999	TgiGjypkEm	1	KPDlYwtUnb	HblaYQrKiM	-9999	PbDILnLLW 	JvZIpquggl	Rb  kutd B	AmS l qUq 	-888	CHAbNl Ddn	UaaaBdgzLw	-888	28	-9999	fKTzVFAvEm
+001126	002305	121	uLzn CVwhE	9	5	xRDknvkXPb	8	TmtoiWAToL	-777	FBD WkixBm	-9999	oKSJDDuNbX	-888	1	-888	NNbLgSCWjI	WjJhoBEuIJ	-9999	KgGuWrkAWM	DOdVxyMnoj	QWbqscXMjX	KZsHJ GtLI	74	5	EhkEGgcEEg
+001126	002306	120	 fDstOhNOh	9	2	-9999	7	oQGBhj rSM	1	gPTtLnNjS 	1	J xenSBgJk	fZoxtTmKFu	-888	Y RFjRZEbb	-888	MjMMCMEgCA	FrGLVkxpEa	tGEzyYMnAG	-9999	lfyXtkKhg 	-888	61	3	
+001126	002307	105	-777	51	5	CEIpJawfNO	3	fcGM CSeTm	-9999	yVrMszaaja	1	jRFxWPatZN	-9999	2	KKuyecuzCD	bEgEdUIWeN	lutczJVdMX	 LnSHufIpJ	-777	-9999	hkEbOzQldP	-9999	133	-888	cBgrHCYHoI
+001126	002308	115	GYqgBd FNU	127	2	feDPzHVfJp	5	nWjH mhkdB	3	sYEQrCiCyV	2	TLYLYuScTR	cUiwANhKW 	-777	LNupbhhZb 	WszvikjB n	-888	TyPfLlXZE 	ojspLGjKVR	ySjHD iULb	 HzCGutUjt	OSFtSrfIzj	4	-777	wYEhhpMM m
+001127	002309	117	zhHmCrbZzI	80	7	MvaMHqLxvB	3	hwcdgWaXM 	1	RTAFdSo Z 	1	-9999	-9999	-888	bApkFkKtdG	dMZfTZPtgd	-777	erFHKgdnod	anOqAjsXfd	V hgoEhSNp	O UMBOPdvR	vNvrXK XqW	144	3	DJeo ZDNHh
+001128	002310	121	-777	28	1	QCLkHeEulE	8	ovNkSKQwLv	-888	FKjHHFwnkA	2	zFEnTEMWwa	-777	2	wspgMQE TX	qJZXaqtAvl	BRASpclIyt	dsZbyKElnd	dguzbjRF a	-777	dE Sizfgus	ajWoJFZcaT	63	-777	ndujGQaiHW
+001128	002311	124	-888	122	7	-888	8	-9999	5	ztl DykiUy	2	HZlwcgyJNP	AtIByGZVKT	-777	aLBBsHaqWW	L uQkqnBYi	mZUNfMmTyu	gsvZrMKVcO	cUxTnRmS w	LPkZkAvXYS	v Vghmax  	-888	150	-777	NVUmKZs cP
+001129	002312	118	-777	-9999	2	rSNoPVrIL 	6	VHUUmtvAbj	5	-888	2	zuLvCjvfuQ	-9999	2	t JWpPfYFl	-9999	-9999	-777	TIoWDLECuG	t VBCEEolj	Oe Iwcr wk	-9999	-9999	3	dgz Z njUO
+001129	002313	126	CwHWvBXQAe	-9999	7	wyfZhSrsKX	3	hioytdYWLG	-888	-9999	-888	cPhHCfxRPo	mtWqLValPH	1	 hiVdTqHyC	GDFxsuyRdd	fetKlZbvBL	-9999	HZDSsDtStf	WqlUbALSVu	mhXQKE vHR	vdTPLloQai	22	3	
+001130	002314	112	IPXT UIQRy	111	4	Bg QCJQ Br	-9999	MHdrGLNCNs	4	QPgthndFVS	2	g RlwYPMtX	sCJTUBHaCI	1	ylhmsxijGA	-777	-9999	ATysFsUOyB	-888	-777	zZvmrkpbcz	xKElOatxoF	100	5	MKtkrcjIss
+001130	002315	104	CyFxe BMdd	190	7	chJGXFGsZI	9	JsV ccjsxV	-888	ALaevSFaMi	2	cFzhLizGjT	EEXypbqqUK	2	t AV sAOXy	-777	L D ERVpaA	IdG qwxdAy	-777	vr CeTkHNW	 ErAWugbkr	vdWKIhOXOy	33	1	TBxAaROKCm
+001131	002316	109	Xb I Qba j	127	6	-777	-888	-888	5	o iBnSrCNS	1	-777	-888	1	doN VmbxZQ	Uruu  wxew	-777	UijP ciDBx	lyNjaJZHlf	DvUTidXMCK	nteeWmaxUX	WyPGVlASar	-777	-9999	lgsWZtlPu 
+001131	002317	119	FPHSWojUEi	141	6	FQakyBzLRA	-9999	-888	6	-777	2	nW xovf Zi	tvfrHwxilt	1	-888	yg uZjFSuz	Ed toEZWo 	Mpoh Fksdu	-888	-888	KxTIUTKBcG	hQweKHWpe 	145	-9999	goMlwjSeGj
+001132	002318	121	-777	97	-9999	-888	5	Mo UujDho 	7	gnYctXyq I	-777	ZLWpS drzz	-9999	1	V gMUQhklV	hZcFxgyUTT	UranfDibKW	yR QVfHIiQ	WeWKctNHfH	-777	yYBGLsEIWa	-9999	94	3	vXAlcyXtYF
+001133	002319	117	uSRRTlFkFK	14	1	-888	8	KJoTA    W	6	-888	-888	-777	-888	2	bnoMoBwoCa	lAmrZBptdQ	eUC SXmzEI	-888	bJFK Jkvo 	GwzcproATG	-777	LEdUjdSkEK	154	4	xhiDPNeNNr
+001133	002320	113	ZmUhjsYRql	-9999	-888	yPRpcmtzMk	1	 jpbUexrRM	2	ISUaUljTZg	2	wuxOVJVmgk	-9999	1	VjsOuULQDp	-888	IPMPanrHuR	GXRvoeEXun	bWPlMfDAdK	unwNELt HX	-9999	NxjINkwKlf	13	5	
+001133	002321	112	wkhxDHKdPi	128	8	hdXAoRDZCp	9	-9999	7	sCYwWFEbRd	1	rqWjFdh CE	-888	1	-777	-777	K pZntnNvc	 IdzAVZ bm	WEmbREGLSV	yU WrmFUql	CGB ssIOhm	CSHbNrxyxq	8	3	VzATufeztX
+001134	002322	126	-888	102	4	qSHAZdCrLg	2	hlOiyZTPFN	7	 TAKrkRn N	-777	hqzfKxSxlN	-888	2	kYn KmVXMk	G PlWtjeaE	TqzKk SaEF	agLwi MwME	zknkvCTJes	-888	MUPMVS XtK	HpYPfzVNZP	182	2	
+001134	002323	109	NgphGbYVak	178	2	cZbHM fFKM	9	-888	4	w JonzoVMn	2	 vnoNEevLF	SgKT iHZbV	2	prf zikfjd	OISbC cYCU	TlHRTnjzuc	MKep WmFfR	hAuPkLIhOL	 uACxyytCz	DlWqHZDTSz	SxU bdbRpp	-777	1	yRAOjORUlm
+001135	002324	117	-9999	132	1	nV gFxiNSH	-9999	-9999	-888	NJpWqlANty	1	LSQmjeKs  	CzhAEhgIrj	-777	-9999	W VUCDnYVC	-888	MRKEwcD eV	 lmCsr iTt	HiDbYMKWud	oAQYAtwX b	-9999	7	3	PshhbQoJpO
+001136	002325	116	gdzTDFxZ  	7	8	yNbCCIVS I	4	gFjMpJHxvF	4	-9999	2	Jxpw rPZtw	sqvMUDlwQk	-9999	jmmUPfmRgu	fNVLAhEzqk	-888	-9999	fRaQqbxvoX	CVfsvpTKYh	nWnPRxwEXi	gKCPMqXGMJ	158	5	dUfBbYwoTW
+001136	002326	116	aNvetVysqr	141	-777	PawhCnLdpp	8	UsfSeeWKNG	-777	J OXtOJVef	-777	uWE  RFbfT	-777	1	PcmHnAAcvO	SCngBuZOPe	oH HyovtBK	aWIaaYJkzx	ZxVQip Ssd	CfXpaOyyW 	lQFuhr qgX	BLNYQGbxWN	21	-9999	mGhxZyedSi
+001136	002327	112	qXJjEGcqNp	20	2	-9999	4	OdVQLfWbXE	6	LZLiQId xN	2	brQvgXYact	sjgUkFeQCi	1	oqfv tAQtN	-777	kCfwSHSooS	wPr GOsCZd	-888	Z sPv PfrY	-777	  WKtlxhnN	120	5	vvayzrpTXt
+001136	002328	108	WnYCBPGhCl	47	8	-9999	-888	-888	6	gqhNhRqgTn	-888	RSpfpMSsJt	Y EnCXbAQj	-777	rNw cfHXAb	oFGEfg Bb 	-888	 PWqwCAVYh	wtHVuWugXE	CxNQZHMdmg	TiBXk QylV	-777	-9999	-888	Q aIHDDsqo
+001137	002329	118	jASUZbzUSe	52	1	MSZcjvDzvX	6	tGimLXstCd	7	JpJZKPHOKO	-9999	JpWBNyuNPG	YpdORvEjCO	1	GFAFfn jeR	gyaRNQVDeT	qMKYIKvDKB	QTfI MFh H	pRofeSoHXz	HDLmnvzwuS	EHtarfZbAN	FXRJDBs sa	32	3	CPEFEmEFdY
+001137	002330	110	-777	166	4	meOVMZBQgl	6	ihjATeGWwD	-777	hWzuPTbP l	-9999	-777	kgnCnbjhIt	1	lyfZwBOkaV	NajvXaAHrc	-9999	ymUEgsoqek	odICQzusW 	 y rSokNpm	vZglLEekel	-888	61	-9999	
+001137	002331	108	gKhHQn Yun	24	3	UiZT YNkkA	8	qSmMFiscSD	-9999	UT xGLejBv	1	-9999	FceEwWFcsW	1	TLQ xKKQho	-777	RMNtiMFNRt	erYlqvHKoM	IZebmHVFky	FXwDGbRkXg	gNgFOc Bsz	-777	134	4	
+001137	002332	110	gJgojwcbJv	36	8	aNHUEsP  X	4	hhVwpANx u	6	kUmOUznwoh	-888	DkRlQgXkcV	WfsnGjQBPo	1	OhnGAoFmtq	-888	UBGyRNsCPt	-888	I ekrSCry 	nnnKl Y vb	cQtulYMGZJ	PDqvBUGReE	-9999	1	y XgpEX hL
+001138	002333	114	ykmBG Fabi	96	1	APFjFUl I 	6	-777	3	qJofKKoOuU	2	-777	-888	1	yoSvTDqedc	eULYJbIVBh	cTePdfW nI	ukEH zoqww	aBXeqvGRVl	c isxz KRW	MKZfqYQYLD	 aiYH ipiA	142	5	TMSFmWErAR
+001138	002334	119	MKkyEJBVaK	73	7	-888	4	zTMd eRCbj	-9999	vCIVSBGrY 	1	-9999	ggGSnILgF 	-9999	IDICuzuEZr	xnpVxxWV Y	-9999	nMjNfHVkdA	eKwb stEAl	-888	FnxTjfUIOy	okcvrUZiyA	-9999	5	iJtXKoa Xt
+001138	002335	124	iwFnbYoCAp	-9999	-777	qlRadlmYxN	8	ErpdzmJzRe	6	jqOUQaUWeh	1	XFXoSBwTv 	pRRgfExwNt	2	OgNXStIMwm	twEGKjUtbv	 nYhQjMhTA	TQ AvNVEL 	-777	KmGX cAuRV	-777	HeNPAQCtPj	177	2	AEEPtjOFrq
+001139	002336	104	-777	135	-9999	-888	7	xXlQfBocK 	-777	kMPtuzjHJX	2	jGRma pPYW	IMlDPfS hq	1	mxoUID aLa	JqNhINYCzr	DHfkW KzHP	XKSXKwoo v	-777	-777	PHKJTVlDHN	 uulfgrSNi	-9999	3	pOmkUmw Wr
+001139	002337	116	-888	12	6	 VVMQwxUUg	5	uATVRmlF T	-9999	IQhGrMcD  	2	uTczHHDdul	ofeFYrtjWP	1	aHEwegdhgZ	OGP FidlEs	-777	-777	NSTYUvpSUv	wiQ  aoSAm	BVSDKyvZHp	MxAFrdOrAf	193	-9999	BNYJH hQda
+001139	002338	113	XVSMRteixq	126	6	BUNxJFiBMx	1	-9999	-9999	jZIPwzLPOd	2	Yxqa Rz HR	NY  znhCp 	1	VQjLKBEili	-9999	dWihLLlLCE	Kg  nIIsKd	amqkBvLTNZ	b SQBrwDnC	HbxmnUJNzA	WKAClaNlLa	48	1	XriqwigXkU
+001139	002339	113	-777	8	4	gjBBV YtdH	7	UdnNyoyUHO	-9999	-888	2	RTjymGTRFs	d ZmugR Bg	-777	PmezBQygwD	MfYYXxKhgx	-777	-777	EQChxIoUAe	bThCcYcAKK	coDgBlBwPi	BGzoPChrWl	-777	-888	ciobjAsGrA
+001140	002340	107	HiZtwPD dI	-9999	1	NqatFhJzCf	2	nqWOpWHdRe	6	NBbQsubNgf	1	-888	-888	2	YpceRWU kb	Kweo Quo h	ULEjpuTTIi	-777	EWmWJuqd i	iTwmBOsaNI	u ODYbcLH 	oeBtOk Bzn	188	5	smmfZkZpTq
+001141	002341	109	fWoIodsJUJ	61	4	-888	6	-777	4	VzN FIIzNY	1	GxsTftfaYe	-9999	2	MILQqYEfUZ	JH pY rgDn	-888	I gyhiue K	-888	gqgJSAeBSF	xFmIDy GZs	nbEKfmMpQy	199	-777	aRx ZlFNBX
+001141	002342	119	O f k Ootj	74	-888	XKiSxmtb i	3	NrAkxDUgmD	5	lXAbKHKzDJ	2	GpEOLRfo g	dGle kahGW	1	-777	oxBwMqyBMy	zPsPpFPiEO	pDWmTmlDtE	-777	 ysgOPlUiI	ELvwEyrGmI	-777	64	-777	 uBpH fYDx
+001142	002343	117	CBjBeRBunT	67	4	jgXiJLlKPp	7	tlOidYpEfp	4	tneDGMdSDq	-9999	-777	-777	2	CyIoAYsjzB	WKDMUGDLnN	kO nV qUmL	LBLsdcjnRJ	VkgrkDILJr	iYxyxJlfrv	RSFoyzwkPU	zQLFBQyYDs	-777	4	
+001143	002344	122	EnRDUUZZGz	195	-777	FKWordvcj 	5	DiJvCIKtRi	4	ppnJAusmJL	1	oyIwOiAfAq	kPJJyKYVGN	2	eI rgz GHI	c ihvdAlRL	-888	-9999	eDFIktEtcG	keZEJyXkmw	jxTveGRabw	KXPuy CkjY	81	-9999	sAFDH RQDS
+001143	002345	110	ZXUsSMnvJC	-9999	8	zOuqxVELuv	-9999	ThMkuGEOLB	-888	-777	2	pJCkDyWeWj	WyrnQu TP 	2	SFMPxyJCc 	bNOUMqjtiz	CuGbJeceJp	y MW ZkaEn	TUAvvnk ld	-9999	bATovEyJtW	nkYcuekhAa	170	5	FoMGPHfDfB
+001143	002346	119	EpInINJrFm	-777	3	fYtXYlMHzF	9	-777	7	ezcjTWNfU 	1	KnmPZ IChr	EEPnFAbSgC	-777	TmzMzeDNRP	-9999	rdKfUFRARq	-888	HrBQXTElOj	CqTFWqndyv	qeATStQTyN	JeR nucV X	130	-888	
+001144	002347	112	LBXFaHWOhr	-777	2	SaWgD GQZk	-9999	bozKOAqaBT	-777	-888	1	mVZuY tnCp	EVjhtClbXZ	1	qWzsTNHLQX	LlhVQoaTWl	-888	VrkYZQGkLS	jDaSGdORCn	QFNuZTCZkt	sRFgDLNMLd	-888	131	-888	 UDysdeaBL
+001145	002348	120	XWwSpEzXtg	124	1	L KtuUQqIF	4	-888	2	W uQjonejA	1	keJmhYlWAx	lnFDynMr n	1	-777	FlldVtSbcB	-777	hSUAYREPvl	ndvlQwLyr 	ynAeACRhvF	xTK eRmiI 	RHyYXoTj V	23	2	q UX ejojP
+001145	002349	102	VlQAdS uF 	95	1	RSOXYGqIpw	-9999	GSNzeOsrUZ	7	IZZSF WpEB	1	z sqyWBHXk	INjkwuLPzp	1	-9999	BlWPEuRPYT	DMghuGLXpN	u eGKGiCRP	mE RF RYGn	McBQtryaSu	iwZYfKtxJO	lfSmoIrKHW	188	1	zoF SSxurc
+001145	002350	118	MopPtY  kN	96	7	S kxTNZEwt	4	-888	6	ODeaQvptjU	-777	VcDhpPsVCh	wfnXuDcQ p	2	 LpTlbteKC	HicBPtATZm	ylKDSUlfiF	jJiUui nqv	OrRDqgqVxB	BqAejoFnj 	-9999	 bBYqZ kJx	-9999	-777	yOiY GIOgn
+001145	002351	105	tP VtbUkfk	177	-777	MDKXqyThhH	4	RVTlNA sFc	2	GEoyW GNQN	1	-888	-9999	2	QhaDSTmTsW	-9999	eTVzYYeN V	CNmffsYCx 	FZ AswNK A	 TVZjM BmX	fgU  E zbh	vxmliriQnb	-777	4	ipPlupmOGd
+001146	002352	106	-777	150	5	WRfwBizmth	-9999	bjkL iyYEZ	2	 AjnCJOBiD	1	QEpHldMIJb	qdcR vwsuz	1	RvyMhAhcUT	cFSeW zC F	sLBFgcXdIi	 QGWJcDYwD	 yUWHbLkxL	nreSWItejz	-777	zhcgaLqhHP	-777	1	qXLYHnXhKu
+001146	002353	101	LLvPdFJkeC	-9999	7	-888	4	XoJvcKFlAS	3	dhIDVDscWN	1	jDbXqljhSE	-777	-888	cjnKByyODt	-9999	vsgTNhJgYk	bMuReonCf 	SQCu DCcYv	qFFPiKcIF 	Uu cuNJceF	-888	27	2	HWs IXxeby
+001146	002354	115	PnNekpGVJr	84	-777	sYEWNWr JG	4	xsRWBFbece	-777	jWv Qso AG	1	-777	nPfJV iQFR	2	  BqHToBIC	IjvlCbdRDh	oRMuNtPBIH	-888	g KjlxOmkj	 dsb HIFGx	biqlggDxuf	iZyfLEZCrn	197	4	wgjvgdpJyv
+001146	002355	102	foSmsfxRTK	64	2	wjqDRDr sW	-888	loWMzwmNGH	3	ZFHKfiWZNA	1	-777	phvocE HiA	-9999	-9999	QhlxprzihT	-9999	qBT Rzz Gx	-888	OwissWMfqF	jWtNfQSaZq	 KmFsdXJBB	35	-777	KiTNMaaQiP
+001147	002356	101	-888	78	8	-9999	9	 TXXgkBEZF	5	wDZdCJzKMb	-888	-777	ZcCLfsvUfg	2	IGiHPGdcbg	rD VlughKV	JGjPsiyEEz	gW oMlbHTX	m mtuEBygi	-777	lugiVbSIkC	OeuiZFnEpo	44	5	Pne ipHeAv
+001148	002357	102	baeePYYkTr	134	3	XKOikKSLMw	-888	-777	-777	vFOEpFGCmo	1	yiQDIMCFKL	pjHInWbVBY	2	cdWKH kYeh	kA O hNUgD	kJtXCqzeVW	-9999	k XLrOpWic	fpLFyhzFZr	-9999	-777	169	5	
+001148	002358	105	lyPWEycgbm	169	6	pcTbpOEat 	-9999	BoEFVr tLx	-888	OoyywEgELv	2	Jsrj  QA u	-777	1	-888	TQYFbNRxfz	AnHATSGMN 	ZJbt pidsZ	CPyzjnIOrt	WyA BfaaEX	JUjQrlCIHy	E mfNNVIXd	165	5	DDRaqGBhpw
+001149	002359	122	sHEc mVtib	146	1	HMyyQorKSO	3	AATrGizyMD	7	-9999	2	-9999	OlleL zR C	2	aIomOJjVZE	wt mGsryOR	mncQqrYzGp	AnGhG plkQ	-888	jcqgFMWFnG	SaLLQVN jj	oVtPZRtqPl	0	5	ZJUKLHGqQA
+001150	002360	111	-888	109	6	XesaGGcLJk	-777	-9999	5	UzSyzJUCap	2	-9999	xnfjJJsTzx	2	NYxPYXm ni	lSGONJozjv	-9999	-9999	ajJDEYL IL	SQwykMoFBo	xlXjkYuxu 	UgmaOiTQnG	43	3	fMlSGTcsea
+001150	002361	120	WbpJgbwCQD	169	2	vlOcLy yOZ	7	ykknbPdYBR	-888	NZRwydEA I	1	HTrvLwmz v	wbdJfPaXLX	1	fSzMbJwbez	CqXhiywhqx	-9999	EwuVLbzwxz	zaKCXNn xw	oOsKmsNcFR	faMfjKAPOT	gZuCCtA fn	122	-9999	
+001151	002362	110	rweVdEshgC	-888	7	CzqVOvOnwe	9	XXOudkMqfC	3	JWxsDaxKCi	2	-888	RHiBp iOtF	-777	TE abrCv Y	HNxAgpfycl	-888	OLWIiPCPJL	xENnAkb SD	 agkPeohqk	GiJ GNSKpJ	-9999	79	2	
+001151	002363	110	agUDPEiqRk	-777	6	EYbYLOJuxS	3	sDSxwCrjqd	4	QOLHqnnEMZ	1	DVMnyGQZCS	-9999	1	-777	DzCXtYUFP 	oPPNfLHHyA	k HoAoJmPx	KCayFObvdI	LvIqNMiyXq	FR a UDELJ	AINQaKNRNj	82	5	
+001151	002364	112	-777	-9999	-9999	-777	6	ccEIqyBJnC	1	zVQGTUbecL	-888	-777	BHKIlmLklW	1	 RyVFADhZg	-888	yokDwUGnoI	CttmWKYIVm	iXuMTiO TQ	WYqImrwQhB	-888	jTccxnL nu	-777	-777	JmcAHluhjD
+001151	002365	118	DnRwCud Tg	120	-888	DQcZxyHSFI	4	-777	6	JltOwBwxGZ	1	iHutpkAJXr	WskACVgdLN	2	er FPwSMFK	-777	-777	LLnuRzfRCn	Wn kuzIk M	 yjlbBxpgS	iLJugepunr	 rXGLVFBVB	140	4	
+001152	002366	120	mP J NSqKd	145	-777	voeBxTWGSN	3	GkWsuvN ge	2	acfyUCcCBJ	1	DJdWDijCcg	KxTtx OQfz	2	FP AIoyFFg	GzTqStfiPq	e zsedenXm	fgqprxogEp	-9999	-777	-777	cZE V OPUB	45	-9999	EZUfRctidO
+001152	002367	105	LwOVHYAnlx	-888	1	-9999	-777	utSwvsUqvk	5	 yYgwjLMqw	2	DMWdGgNAHR	S  MHsgfji	-888	kOpItHWjkl	jCXWiMMdfS	-9999	OsCftmNCZB	wad HaKnMk	AdaMIkRVBE	rqQgCQPrOF	HTajRxUNoU	-888	3	a cZjxV ca
+001152	002368	108	 GAHBGSqL 	-9999	-9999	yNRMNRxfdZ	8	dX XSqbtn 	1	qKJJgaekDX	2	VVajjeYmLc	VlNgAzgAzk	1	dJ v Pc rA	zyjfXH KwU	hZbTBQQErQ	xbopXLPocu	-777	 RcELmmB M	Nfg dbMIyF	wiTmrJUWDU	107	1	
+001152	002369	107	-9999	42	3	fOdHtnzTZI	3	-888	-888	daR Gw bGR	1	OerZPJeXjW	  Qrr UYo 	1	nQmYhkxjn 	-9999	-888	dHqJ aCRBL	OvzxNaFy a	DG tyo AtG	-777	 vzSfFwZJh	52	-9999	 nWPBbaYYi
+001153	002370	120	-777	93	-777	-888	-888	TvvOgHdLUl	-888	BVsDiSWeDO	-888	Bwfum c NV	DTWOrBdfCr	1	KJzINngOlA	  vFQwo bR	ZZvLcT uJV	uxwabSvzpU	uzvV wSTXl	-888	oQDJVbpbub	-888	50	-888	iVWCcZpopK
+001153	002371	118	DSyChVWuNj	-777	2	-9999	8	qZEupowMqE	3	vdWAecTrea	1	yHrsCnHsvg	FB oXX JXM	-777	geQJggkxS 	EwcL  mRCX	ECIRWpUntX	-777	raqSopXfGA	TSPxJQYqll	CiXapbrfVM	FLgPcEr SV	-777	2	
+001154	002372	122	YMsfvKkqys	191	2	IGXutZEV x	1	Bx FTcuV j	7	-9999	-9999	eZQVRcpAeX	kvdpumBL H	1	BqUl tFpsY	ZYuhzhviDh	YvPWjubfEL	VC C   IMb	vGkLEGfCWX	XgBg cRbXK	-9999	TFXLaNIlvh	35	5	kgE n VHt 
+001154	002373	114	EXVShp YEB	168	7	-777	1	-888	1	KJFWq iYxg	2	aYYjIEFHpX	-9999	2	MqIiYrpxbK	RLDTFDScdV	Dt K dJzbQ	-777	ht I tXFJ 	-888	-9999	-777	83	5	YM rshjnox
+001154	002374	112	-888	191	8	-888	8	-888	5	YXEZbDgmJ 	2	dv guiEkTa	ko osVEwPa	1	QK tO DfbH	-777	-777	lQAWzjtkug	uwtu mQA f	UoLrd Mhil	GYAfWUCuFd	-9999	85	3	QtFpqfBvtx
+001154	002375	112	CZGOrPSbWw	99	-888	tEpVHOhtXj	1	-777	-777	AF HPf IqX	2	-888	ZjYDKnWIrB	1	-777	FBgiLTyesD	fSNGdonFpS	KK kPNNNnG	tbFICQvIPO	-777	dfLLXiigdT	HfHqvwumii	159	4	lUPVndKAQU
+001155	002376	103	 SbUvHgJyC	11	-777	bgpGQFexvf	7	u pJOWCJ P	4	nAwvVUTqkH	-777	-9999	DYcVDzHhqG	2	niGaezCkAX	-9999	XbTTGNiPMz	-888	GZo jvCkzB	pqTjrxPsEg	idNldzAvYL	rYKVQbtXGl	193	2	
+001155	002377	117	-888	-888	5	-777	1	SoDNRewDa 	7	-777	1	-9999	CMqvph Eot	1	JryWPBghne	BJiZVy fQN	-888	-888	fhOSS tJoO	 sjtdP POn	-9999	-888	-9999	3	
+001155	002378	119	-777	103	3	-777	6	QKqwbencKl	-9999	FDvmbjvLHg	-888	-888	-777	2	twjeKWCADe	XcImT zYPn	NIOQfYhgLq	-777	FPbmDpeVLS	-888	fhiwaoZtrM	GhljwRYz S	43	-9999	bJtEyhlIyK
+001156	002379	117	AcqMgPALBf	99	5	BkUIIjvNWU	-777	YwGzqIlHJU	3	sADdgzCbga	1	rgZTBW mlV	mymwCRrLDu	2	MPVknUnlOa	-777	ZAwlyRy JS	rbx cTEzsu	OhMefgV Gv	TbnmN fJBD	Ar xYX  J 	EAZytKOIQL	68	5	
+001156	002380	117	-777	152	-9999	s kSqJwlzC	-888	FlvVxyAxeR	4	GydbFvmSsm	1	-777	jAYLXrvkYJ	-777	lU ZOHNPNn	iZCbxwaF R	TXquNKjKuM	H DHQytqmU	-9999	-888	-9999	mkujOJvHxD	178	5	ykEpPU FTe
+001157	002381	103	RGEYiJzlKQ	43	-9999	iIMkJmQH y	6	bfUMZtK IK	7	gjhZs QEhr	1	zbzAoAiFap	mTyxIpXrsO	2	OconZZAyLV	 MNCoEUZod	vQvCvWEws 	-9999	yhbB EvIhE	HAUiOejCYs	HzG UFkLIp	-777	139	1	fMMWRa TbL
+001157	002382	107	-888	-9999	-9999	MSJSyFDSiU	8	wrnnwEZgkC	1	-777	-9999	SHcRIZDnXs	-777	1	-777	CcUmpUBOyR	-888	 DnvdQ fB 	 pnjCjofEe	HWfcae dxY	-888	SRM Ppr Z 	18	-9999	aguEm  ZCz
+001157	002383	116	-777	69	-777	YomrLqvTVl	7	bCMJYeLiNR	4	woRkXIxPL 	2	KNHIUMtFoT	-777	1	qhZ PBLody	MjTfBQ VDf	sUxOjhEhhS	CGtC TOkQf	-888	IJjePfXUnW	-777	wodzUTHWZj	-9999	-777	tCfNZlpUrk
+001157	002384	105	-888	-888	3	aWWycMo qJ	7	 qiFaeTUYT	2	-888	-777	ETpOWTOEXc	mYWVznUOra	2	-888	NXsNgCFKAk	OcaPONhPNU	 I koMfPx 	-777	-888	 wjLaPhaRN	WkagMRYdJa	-888	3	acrJXv YcX
+001158	002385	125	RBmeZ pgfi	178	7	QLeCsqprOm	-888	-9999	-9999	qXJvjYDMee	2	Heq fArmzN	-9999	2	tvZIJTgkEl	gwMYXAb l 	edcgyy OIR	NcAXLcbsKD	oGHzDpmJAq	XRPOwbExGi	CpBkiKAElW	-777	121	3	WUXuK qPst
+001159	002386	106	BkxxMak ok	179	8	X  TvZnMJv	1	NzVM nIVrd	7	wWbJKGfJPi	1	vNHJrSogbR	-888	1	ewbIctymQw	YDpdQbYPZE	j Nhhnwhzm	vbU X WIDM	RIL oiaM r	eNS eGxxMy	SapbmnfOIx	lhvjIEDxNs	-777	5	
+001159	002387	110	yBqtcCNHTA	-9999	3	-9999	6	 dKbIeQBMA	-777	UNiMhTHkJK	-777	KegvQrlDWl	XedkTMqlyf	1	fnWMzeI GL	wtyLjBLSiV	-888	 Y lDMzkQe	-888	IhXLLHDxNP	-9999	-888	126	3	OhZvF jpQl
+001160	002388	104	qLwFVauvoZ	-9999	5	r yPviHNRU	6	XtAfTZxVwL	4	Dc ZZOFHbJ	1	-888	-9999	2	-9999	 Zdn ZDKcT	KO ftNwNaH	RgpjCtLrnw	NiioGD RSe	POdCxzLMJX	IFPIXypAlu	-888	128	1	qdyuYSIqgi
+001160	002389	114	aFL Xu sHo	-777	-888	t EzAAZwh 	3	ZUgKRTuaej	7	vpTtT wZBQ	2	-777	GccHsUakHB	1	kRrCmVsoRo	gdlCozOJoh	ukfKnorBjj	OmVlKPI  J	-777	-9999	ZFXckWZAeG	zcdyMBoSIF	-888	-888	xHNmms KaV
+001160	002390	124	UjrbdmCVXx	-777	7	-777	5	kRW yEDyHE	-888	ecLcykaRTB	-888	Yy PlWkttw	-888	-9999	v F xfFSQK	AbDgo LPIl	 RmbPpjIHp	aLOcBCPIRB	bEdbNsRCKx	kBLpWx gJu	lj zZ NvZh	RntpYOAxta	163	-888	y TXNhDpxZ
+001161	002391	113	HNGRIMWEps	136	1	-777	1	hdiTIZYO F	7	-9999	1	dmabad QgV	-9999	1	-777	FuOXStRjMH	nAiHEdM du	gGE LiRToF	aIikrGcRgN	EdNR ckYaS	BhKJtpESFK	-9999	190	3	glxwxUiCbM
+001161	002392	107	DJID GIkJC	-9999	4	rAnsXWFkTJ	-888	ArZmMjkwDS	3	OcifVvTetB	1	-888	QbbKrgELKz	2	CvRPVEZErf	qqBZvwbOdR	WrxXSkgOBn	-777	uarbNI Tc 	lUbmyaWXYV	pbzrSZdhUd	yUjuDAWUST	174	1	TeNEcb udm
+001162	002393	117	-9999	52	-777	iFLjaYpoAe	1	KiRUshcRsr	3	fygFoKLT g	-9999	bGLwPSpcVs	rkvgxRKB G	2	eoHBDKIoyB	-777	-9999	-9999	-9999	WktGyaRTlD	EuIpqgJNjq	S mCMlAxyZ	177	3	adMENZjDIc
+001162	002394	104	eQEgqHQkXG	126	2	-9999	-777	VNDsUJlDrO	2	Nn KfOSVGw	2	-9999	iOmZLQeAHo	1	xEfJimFGTH	-888	QUASoKjTrZ	-9999	-888	ksZvYLodwq	YPvSBwx Kc	GdMFwJ MCq	54	2	Xf ZgHxs B
+001163	002395	114	kvCCjZvYOZ	189	-777	EkVXYwDlfq	-777	-9999	2	 WjDfMsyq 	2	-777	yfcUjPOgxb	2	VfEip Pfvf	TZUT n nzZ	AGNi z gur	FgbpCFsiQ 	ga ZCOmlOz	-888	OQFCCE Miq	mFTjEnGS c	-888	-888	ScyJRiFJNn
+001163	002396	122	AqrpunY  N	-9999	8	H jTCGlEDJ	-888	OOXjaKwyvG	-9999	gYylzllBkm	1	 exLmXmR G	rFxTPZeseK	-888	-888	ZhuCVM dQz	YbXESwdowB	-777	-777	-9999	tvTNwSfqSV	PvlDKnOQaU	158	-888	PbQiaDpfal
+001163	002397	101	-777	-777	7	pt dRfUXjB	-9999	-9999	7	Xs OeavXak	1	OfoGmLHzGE	gkwzvY fbF	1	-777	TwzXNq KHZ	-9999	kaUCqpbQyF	DIrgFmrRHB	fOWFUSLALj	-777	gzewRz IhQ	9	1	TXHIkNKAEn
+001164	002398	106	MONVA mPvG	81	1	GvEkhlOaOH	3	CftmLzEwMz	7	-9999	2	URxGI   ll	-888	2	-777	BYD PPxMbq	fyJpmhhcgW	-9999	-888	rvsMqtqzod	aClMVCoBYb	oKdVLvzeVd	21	2	fQeCPCyh E
+001165	002399	123	-888	177	-777	o YATAfztv	-9999	-9999	5	-9999	2	SOqEYZgmke	-777	1	-9999	Mbr q GcVZ	tIsICuKA a	RtyuyFrhgN	wtuhwtdhWs	-888	uzeVwAOHcs	-888	112	3	KvwWmfSjTs
+001165	002400	113	ZooisczVZL	-777	8	Dnf hkPyc 	1	VPHDYQWvnE	4	-777	-777	cFmapYVvJr	-888	1	WKAWmac md	ZJzj aZSQn	YFxEJvwtba	TLqpoxdXFJ	-888	-9999	-777	mvlsTzNqjN	-9999	3	cVgn eYRHL
+001166	002401	108	-777	-777	4	ijd kERcvk	4	UbdDyksbvN	6	EtpUzeKATP	1	IFqMyLXoPT	ANU ho kjf	-777	iLtNDfDisn	-777	cZdSAkHxvZ	kNAKblNzpB	 NVAgLoe l	YgeaHT Clc	-9999	-888	42	4	nxjJPKDxPP
+001166	002402	111	KGKVziSxJv	167	5	L LUMah EG	-888	Ute ImZxEl	-9999	xirpdSIDqR	1	 flCVyGxgP	-888	1	FckoozIp T	-777	hEAkVWfViE	tp aNGXvTY	-9999	-777	brmLNXGDMS	-888	53	-777	
+001166	002403	118	 wGaHdcMAC	90	4	k obmBaqWD	-777	-888	3	gQJBuV bvC	1	iaZ VHrDjt	JaJjAyzwyI	-777	iFHxowmLlC	TCWOLMqQKw	LKOBAMSAWH	uLdkHsBRoV	-888	-9999	DHxgMXFIUB	JNwPLuMPTM	156	3	ZOGLGKTMxJ
+001166	002404	106	 YA zlVqzn	66	4	S CsCDdCqf	2	MdfUKyImNO	-888	lMM Ucil q	1	-777	SMgca qgeG	-777	MuBWXXWfxK	bKyY HlWbS	aHc TneI t	Gg HbBftbP	-9999	 IxhVExCaL	AGreCYWbFE	-9999	126	5	
+001167	002405	125	RBwlyMaTll	26	-777	-888	9	csKvvgUFvr	6	-9999	2	-9999	a EBZptZVq	1	uNvYoXjuZc	 hDWvMNMqP	BHHTxAAjXK	-9999	fHPlXkLUCp	-9999	Pim WnrEkN	-777	74	-777	c edUZ avG
+001167	002406	104	y yOUN zxz	-777	6	juIbnXvwYc	8	MXCiIgpaZY	3	 BjBMhfjlS	1	RBBrRcIPSK	EaDxLdVqut	-888	FYaOdkAUdV	-777	 c GzcxKvR	OPQNgAEhZa	fugbTTPUwE	HqnYxJUZKw	 iYuJUjEQY	IGJHwyjCON	185	2	fNRTKTEeKf
+001167	002407	118	-777	73	7	-9999	3	JvSRLqqEaa	2	-777	2	NKPrRTjNdx	-888	1	cgti sOVbM	YxljuYDVer	FMVYooyiwc	TKOdCtAH j	fTVqBQyDMj	XMNscvAzNm	dwyP YhVOB	-9999	-888	1	
+001167	002408	112	JVzJTajHYM	-9999	-777	kJuHvPmhCQ	5	bFsTzgKTHw	3	EeUYGw xJP	2	oRAEPeCd M	XlOaT TdaC	1	SdKeLFjcEO	-777	-888	lGvt SihiM	jqULBKRUKG	JJdXvPNxqC	vj mfI RZl	ubIQUAfN t	144	5	
+001168	002409	116	-888	56	-777	-9999	-777	XatzDVJFYY	1	aBZkaKJTtG	2	-888	D  A dWQti	1	-888	GXyuI Bn F	 c xnxuSVq	-888	-777	zCHTs BLAL	yRPVfNgXVR	QrMbJWfDoF	117	4	HxlmclrVcG
+001168	002410	105	cKaSwbdYgf	-9999	3	-777	3	DBsoVmM es	4	-777	1	bwyl gCPo 	bj DFKCL X	1	 UnJklUOdC	OLGZn TATV	-777	vWNBSKuQFD	-777	-777	-888	aLkM JDiOn	-9999	-888	
+001169	002411	121	vJOZXywzmf	33	-888	UVALVfZxGc	8	 mDV fg lp	4	 klyhYwzPY	1	wt AdyHvGk	aDkxOEBaet	2	-888	fQWkLCDkBI	-888	DyGnPXnqaz	mhf ZYjUxl	IBxpLDfmW 	HlDZq XeCI	XCQSsjKBcn	118	-777	zZIPfilPpn
+001169	002412	108	-888	-777	8	mBJJXgZbwp	3	sVeqQgeaXM	3	-888	-777	ITP   ZGeS	pmgguCdfNt	2	auXwUvm rG	tlPoLQccxw	 rxEduVYZH	OYSAIGRLli	 EmXEHITxh	jWqGmaKMR 	hep uLQADZ	-888	-777	2	Hohz WvPNu
+001170	002413	113	HSfqVvBYWH	-9999	1	RratPNYlIa	-9999	-888	4	Ku Pjahriu	1	-777	-777	2	ilk CjtVmk	-9999	-888	vJLhGUDMTd	lkNVHY YQe	-777	-777	-888	195	4	aJYSxgEAAl
+001170	002414	106	-888	78	2	BggmaSoVDP	1	EPGfdLgLPE	-777	-888	-888	Up osjDwEt	UbNOLujpY 	-777	xFqKeJpYOB	eiaxnw OjV	xlLxQbLOPt	azHf T NBH	HzPbCDdFCI	-777	MsmkZenYzN	-888	110	3	gktJXO LPs
+001170	002415	113	  GCnkEQcr	60	-9999	boaAWbXMKL	7	-888	5	gQWOTpSDkn	1	WMXIgtWbFm	iDCAVQfnBU	2	-888	cVVAgXDVJw	cKpAx rMZT	qJIBvtn Cg	FJMVMerxgq	ggFTPTYWGG	sUDVmBdGvx	VdsWrSFqcO	62	5	numrz QeHb
+001171	002416	124	YU PemTWfc	59	-888	-777	4	gEFGRnfTM 	7	TfxvOGcsbg	2	-777	xNwrDPdGBk	2	-777	rD AhiMkSv	nOvtOLnd X	YkfTPCMfdP	dUeKIGy wq	KhlaozwbyA	feNQNVcEFU	-9999	83	-888	wOrWjHyBde
+001171	002417	106	iLddsVNNeB	91	-9999	CzCDYIWVkT	5	-888	1	OVPLXBoyHH	-888	ezdtFlKOWK	-777	-777	 DVLUkjr b	-777	-888	RjaEcLqDba	BnnBkvtXuI	IWxAyPmDpk	 kz VgjZNg	FPqlkdhHpe	5	-9999	M swaaocCU
+001172	002418	126	zmroZw OfY	133	5	fvrYFncROv	7	CuJQPsgGrC	1	zQWzRaGvfh	2	IBrZTN  hQ	-9999	2	i HTTOHbsI	 pmkkEVTkO	XpUxydmVuE	FAinnWdVyF	-777	-777	CniTAYddpw	ugUyObLGHl	77	-9999	dCtFCUXJWW
+001173	002419	117	-777	20	3	-777	-9999	kFUSXwlXou	2	-9999	2	-9999	hbREDyQiAc	-9999	 rjxKXWZYX	 dgFkMRDBO	 PY HeBjde	RtbIkPxFCQ	 FMLwKkLEQ	UtKcxFJqHo	tfjfD T ik	 nuvLcrNHJ	98	3	
+001173	002420	126	BkBdKsqFCb	62	4	vGmAxWHU e	-888	KnPMkiKGDR	-777	ER oNI fpU	1	-9999	-777	1	-9999	JFXnUxFrdt	IVqdOUlMFR	DDNsuOTzTR	xaCEXqacsp	CiaqD uWwE	-777	-777	-9999	1	hGtSHUjIaB
+001173	002421	103	xSPyldvwkO	-888	2	 AvrgWoFer	9	-9999	2	EKevRyzfkq	-888	PlRqRaDQSs	pDsivkjOjm	2	JVUKDzGTvQ	-888	xOzjTUeYjW	ol HXqfE k	riWYSibrJi	-9999	Hj KnkkqHy	B SgoudJ z	33	4	pbpNCsVTTt
+001173	002422	121	saVhumLJoD	118	-9999	CMPyvPvHkj	9	YbSblPsBlU	-777	rCQ zFRNsE	-777	pwREKQHujt	-888	-9999	W QxsFqZiH	XIDKWiAivD	-777	aPGqeZWNCY	hmUdFaQjWX	SYYuhALpvM	-777	-9999	199	3	YPHjaGLmSQ
+001174	002423	126	p wdfLNUPo	6	3	MhYtucGjXO	-888	RGddTTBkcv	6	-9999	-777	UrjMZEaUSs	Hmhwlydwrh	-9999	FaZs EEVIi	BSAkCX  ct	-777	ghJqikFQyH	-777	OVxaesDLoI	 UsetDsjWI	-9999	63	-9999	
+001174	002424	123	KuBbx PMOB	140	4	PsdkssXGGx	-888	ccfayiV YG	-888	d VIvb kMt	2	oxflyDTKuk	KjtnCkaEsO	1	Rphya KKya	JRbVlYwFUR	qCDVASuRgP	kRcXQvEO M	  LFrTLDEi	sF BV jXTd	NKcCOpMBuD	-888	42	4	qUa RyccFZ
+001175	002425	104	YXR HIpZFT	32	-777	zHqdVZxgTq	9	k FLVxXfuK	2	-9999	1	-9999	-888	2	-9999	InSirFYovL	XyFlTeXkcB	itejUxRjoN	IhQeQGyq n	-777	ouBpIRYSqZ	-9999	113	1	QkJiqaNZh 
+001175	002426	114	vTUoNuCYHf	79	-777	kbhwvZOApR	-777	-777	2	zrOvqYBRAf	2	nKPhkUsiGi	S   ciCQaM	-9999	UlkcLBOyND	KSrvCxxNSm	PNOOZEK GC	YgEEJFOzqU	fAPCunx wF	LQZfvXQrhs	GTxkQDMSBq	-888	145	3	EruCk KCCO
+001176	002427	110	KNEjcLvsKv	141	4	tDzyfOOMhC	5	-9999	-888	-777	-777	Dif jjbFqS	kZCGFNYZVU	1	 umYoHucr 	-777	FX nXslZnJ	EzJ JFkBzm	ZDuJApe yM	-777	zTJTenNDeq	-888	1	1	zpbS C QVv
+001176	002428	112	 L tGT WIF	120	7	lyUpffu  E	4	JeTc OKdh 	-777	twMMkMxXyb	1	vOzLTL rsx	-888	2	 YSDAaFVAs	-777	tnpSYnKAFL	PaGFJlpBlq	cxxafUljee	eCvnlc ILh	cQXnkhGgaT	auwx  XXPd	35	-777	XCwLUsIjce
+001177	002429	114	GBKyBKLyvw	148	6	xtSpjk ddP	9	teDZEU Rec	5	-777	2	bl NrmuuPV	-777	1	olDaJrGeAN	arTBltutie	HcIahneUVe	QkEWk jhIO	aBxhwoKjjI	DMfXjSClcb	gPIWSXOL v	-888	1	1	
+001178	002430	115	kcsQlKXmZK	-777	-9999	uvsrMiYqsT	1	IirujXpdSG	5	pZoQFWUYZX	1	-777	aTR B  Ltx	-9999	XWbplten J	gSXiaFlQUX	afIG jzeec	-9999	lQfKvgd  n	NEm jDDrZy	ZmKxJQYJV 	ykIgVQ A W	49	3	fHvoj eCzZ
+001178	002431	106	-888	-888	5	-777	5	mEpSFRwxGB	-888	-888	-888	-777	o brkIiguG	-777	zqng hT AF	Qkgrwqjpvj	loUSUMtZGr	tdconGVgyO	-9999	-9999	-777	XSGicgcyXL	63	-777	
+001178	002432	111	ZiClmLSvo 	176	1	yRweGMQcHe	8	-888	7	fBCIrzuLfy	2	aayszOMbXn	EOgBceDtuB	1	KtDbvLnCYG	UfNlAkWlkn	-888	-888	-777	-9999	LrdgPCaNBq	QJctDlQw  	158	4	HMAIP CLfA
+001179	002433	102	bYMYaynxGP	-777	-9999	jnDqDtNyoC	7	-888	-888	GiSPolXdWp	-9999	-9999	-9999	2	-9999	KcQEeHMN g	iRTmI tTfY	-9999	 gKvqojHPy	elelVXojt 	xsUyMfeMCS	iHLehxrXab	92	1	txSKXGfppY
+001180	002434	123	-888	-9999	8	-9999	7	LbaKVejq i	-9999	-888	2	AUXv AbqSm	yDYMyoGqBF	1	Ltzfpxn OD	-777	poZXtWVBCM	 HlmBgbVyi	Cza szrBCv	bADFxlkaBz	NRzPzfzPid	eaatlZLzOU	-777	-888	
+001180	002435	114	ySudxMxh B	111	2	tDVHzChrtm	1	-777	-888	tuN nC QRZ	-9999	-9999	 bKOsMkBtY	1	pJ tTrghVW	mdEblxmrK 	DenfZTnZct	fvOuTHIukJ	cIsbIzoExs	-888	-9999	zIrqtxglyq	103	-888	VjUa rZEkh
+001180	002436	118	AcFjUTjCzp	199	3	bJJZfzEWuN	3	QcCZS gOlA	2	t gD jAFAs	1	EKfWDDCs N	-9999	1	OkJotWMrMG	-9999	JeerIprWTC	VjSZHjdHIh	ZsYDX lzUR	-777	QpxHObzHQA	-888	-777	-888	gyJ  qEsa 
+001181	002437	104	aNtA rA O 	106	8	-777	8	-777	5	-9999	1	XpGekjlSj 	-9999	2	-777	PCkAVfoqFK	LDpilyiuQq	Qi ZvLstck	dmUMSbocof	-777	 BXBunIgm 	FibSHf SzI	-9999	3	WxO GWlu  
+001182	002438	119	XX eX muHB	-777	3	HDlkPVnjtP	-888	OTI tABRgQ	-777	lFgMgE Rcf	1	HEfLFqLvjn	OXUDINnBJV	1	JGyfGkWDfz	-777	Be phcZaPc	-777	Bo XFZGXUN	YHXLVwuQiv	TwpMozzCzy	-777	23	-9999	zGil SyKEa
+001183	002439	125	-777	88	8	ofCoNXbtO 	8	-777	5	-777	1	-777	IBLEj  yBt	2	vbYIFHGBzX	-777	-9999	-777	gyiJszMlYC	MMjeQyMwcp	OlkXqBTYJv	QZu ubliWw	193	-9999	R iIeTUPdF
+001184	002440	123	LoaDamnjp 	-777	5	cGLAkDpDYS	2	WeIZQxWmNP	-9999	xdhEBLpOab	-9999	Nx rL wpNq	h  TWLtTSt	2	yjeUDD WxR	-777	-888	-9999	  UuhnkHRz	nvtjijICkM	P wjWPorWG	-777	-777	4	 mYdcl fIh
+001185	002441	122	XWPYQLVIzf	85	7	NvAhUDP Mq	6	tlRZ NEtDb	3	xfAXUwjgOs	-9999	zIcCUMRagy	pqzapDiYuj	2	SS vPeY Tv	mDUXGlCDJa	rssUpgfIde	 NZLTNQrc 	jfYFrkWWac	tnUNzYaW e	hDCdVJzqbD	-9999	134	-888	WgKvUnwYCY
+001185	002442	125	pRiLVBCRiY	72	4	SMlMLMXsAf	2	-9999	4	HN XdRbNaQ	-777	-777	AnSWfLsnJM	2	zXOaeNhvFq	AQaAHymrHS	 uEbW DMrX	-9999	KF RiW myn	-888	-777	-888	102	-9999	
+001185	002443	112	itRlwQVgnx	-888	2	asbsQEYbFL	5	buEZHf Vil	3	-777	1	is tcDKNzb	PkTukgOlci	2	mUqRazHWTQ	UglHfBxvrG	-888	-9999	-777	-9999	TztpFEjtGy	r mdk BkM 	177	-888	DI kUrClIz
+001185	002444	122	-888	-9999	-9999	-888	9	UHAdnAiOYG	3	axcWHm Yrb	1	daclmm IUq	LqCrqUYxYF	2	sgRrJoicHk	BwlzcWrDwc	-888	QIHV ToEuA	VzPvg SgLE	-888	S aHkgnLqn	RlYRUTTEeT	84	-888	
+001186	002445	103	OOzVIvPQca	179	3	mBZzZWnM A	-9999	FzArLTzwcE	5	-777	2	QOzSTpwtUG	-888	-9999	-888	JsTUNIlKFv	-777	UESxTfWybZ	-777	XaFzQeuufJ	-888	-777	8	4	
+001187	002446	106	ZlWVVouhde	-9999	8	-777	9	NpeiGajITV	2	ub WffGDaM	-777	ugnzUDTI m	Xp ttMSIkk	2	bgQDzOsxPR	 GtjVNunIK	MvXHdtCq M	ZteRrYmsKr	M TVJ oLUi	-777	DbSdweJkoc	-9999	182	-9999	TcLDByyr M
+001187	002447	109	 HFvRVDXpy	77	8	-9999	3	tMNFEamATi	2	XvTGClprOH	-888	GWRMjNvpFP	VBFTPnnERg	2	yGDVxU GOM	vszxcIvngS	khiKneTjRz	wyAo JcjMh	tdQ euiZAT	-888	-777	ASuNoz Aua	167	-777	q LpQErDTv
+001187	002448	102	-888	117	3	-888	1	VVxJxuPdnV	1	dNfpfjEZlp	1	QstSdnPqG 	-777	-9999	-777	QPx pSATn 	GRPDeTRWgj	erfkrmhcCK	iMPSagJybL	OyZSyuXzKv	hOOWUzy qo	ch W KYjof	12	-888	VJ GoL Zrj
+001188	002449	107	chvJMQVhdZ	157	5	z tQAaJQCs	-888	CwCFGadgIC	4	IXTbskeucG	1	pBXKDQXiNR	-888	1	INDafqEyoh	XptUeArrFS	 DMTAwjOKM	-777	-888	-777	-9999	NpknTtdscP	112	2	
+001188	002450	109	-9999	188	7	TXwttcABnm	-888	NjYHpwyJqm	-888	NSSlsv Apz	1	jZaQDR msL	JUSfcncDYH	2	eg izIZeTn	-9999	-9999	-888	-777	-888	fMkCGpkRjP	 AtsnzIphv	98	2	JbAsvQyVOG
+001188	002451	125	-9999	5	6	RWbcpE  Kd	6	YkuUALYrsa	-888	aSHUvdBNNo	1	-9999	FWqIpCqxFj	-888	bNvCxIymig	pSJNUFvodM	KhDKVD ABx	qaPWnmPTdM	YkqJMDNlPN	hsINpmLFvI	-777	-9999	6	4	
+001188	002452	125	eufsdsngx 	171	4	CqkLNVEWkP	-888	asX eoyrYV	3	-888	2	-9999	tEScVWMKOa	2	UrzpfYXSCo	-777	-777	-777	tgobYEpKJH	cNPlIiSlbU	-888	Dk XTFlOZr	111	5	
+001189	002453	120	EJroP Mboh	129	3	-9999	9	nSUNs  VHv	1	dCioCpFoHz	2	ndMAv TxiE	sATUqCDHYi	1	-9999	UYwCmlBixH	kKhAIPzfbX	-888	EwFqDXgOsm	qMKmo VOps	-888	NNeirCQOkA	-9999	3	 Xtz PLD P
+001189	002454	105	-9999	-9999	2	BNUywcTQPh	5	PiNeXxxvWx	2	-9999	1	cdSlm lqVt	-9999	1	HQrLdDe RF	TJiNscfURo	kvmlYWSedc	FscAsIhR k	TsFFhKGBby	EzynRkAMNa	EvTrxHASIo	-888	133	5	e f oLBScU
+001189	002455	124	KMBGViLIQl	130	7	zFJTOKoyVX	5	IdCGyPDWeY	1	xtvTyyURTK	1	KxzcXsUZLC	aJlVaPjoHA	2	SldYYlzDyp	qc  egnDXS	gaYdkRfvTz	KlidZo JNC	JVKttwSGnV	CMCoyjLcpi	JRo  aESFl	DClFwOqwwy	131	3	PIPWbLHuMf
+001189	002456	111	-777	131	1	VJRwZVLYED	5	SLIMIDqqRu	6	-9999	1	xmSBGR miy	 DOEUCfdnW	1	-888	-9999	-888	 KXSbuzRVs	hqUWrVSE g	-777	XwU ImHTQq	rsNKJWhmFK	128	1	
+001190	002457	107	druKlgtKiO	126	2	s JHyVu Yz	-9999	-777	2	OBCNACZ CA	2	rT xwSEeiT	itta nGhpj	-777	-777	AnXQCyHYe 	IesfgUYZxU	vWfz QZfJv	TgmwgTJc V	-888	KbA oSNwnj	-9999	156	-9999	OnOuVLisLy
+001191	002458	121	riEgfpBXCY	161	7	JTeCdIpTfN	9	wlySCFHm L	1	-777	2	-9999	-9999	1	JYpX UQZFW	-9999	YFxTvykkWw	-9999	FMDnfkbonB	Znjf FkUf 	sUZgklDXiC	-9999	18	-888	FJkytRJapQ
+001192	002459	110	loWNPgDvdi	-777	-9999	-888	-888	IFjwClOBtq	5	 lprddNkXG	2	BdvJLhfLHG	xVBwXBZjsh	-9999	DpfJOYgOHj	-888	PfsvmWgTve	-777	AaJMOvSZsP	oiiAJOhRxK	foCpCDbaQe	VJYWLIpeOc	154	2	EP rmOKfqg
+001192	002460	117	UZswzluOsY	190	-888	GjjfBmfYAK	3	ZBezyjMxZV	7	-888	1	-777	CEAYXrDaEo	2	-777	QXp doozRS	ahJErDXikR	-9999	-9999	TBTLO wPAe	CWARIIlyrF	-777	123	-9999	
+001193	002461	120	dCwVhGJYfe	172	-888	PavoRFwQbX	2	-888	5	 PBbZRt GW	1	uaSHFYtZMb	-888	-777	UjpbZCrxFe	-888	SCvZQtKbSo	lXeCtEsxcb	wyxJmfYSCj	x pxSLVIto	sBPuhVrWXW	-777	176	-888	Z dpgRsByK
+001193	002462	114	RlakQX Prw	-9999	5	jfLU WvIzq	-777	QBqGrybDom	7	PUSnIBBSNz	2	jSnCmxoOvO	lodyEJBKYW	2	BTsJt oacG	UQZbbNonBS	qiqStRpTvV	-9999	XAGkUwFyAD	rwoIdYwReI	-888	-9999	37	5	gCHwCoiKKr
+001193	002463	116	-9999	-9999	1	-888	3	zFObmjhdYc	6	Zlsh sKdu 	1	-888	-777	1	 gt  TXzPx	-888	wTlIMNw wp	eiqxfvbuvr	-777	e  PVsCssp	-9999	 sykfSoLkr	-777	-777	MmMoJoReWy
+001194	002464	109	FimbPZMWKM	159	6	F EPFm ASi	8	-888	3	-888	2	-888	XH nKul jn	-9999	KzdGpRUxNG	MLLu a Aji	dW WsmspLX	xIaEhLTYzz	wpgHeSrGmd	-9999	fRRPvaPItD	-9999	121	-9999	dxDT  WWNB
+001194	002465	111	Cbpbs aFM 	15	3	iruQhgTcHt	6	-9999	3	 siYLAtJTr	2	 qKweXFFyp	-777	2	FtAa WydSE	jsjKXlqOiY	-9999	-888	YcUdeQKXyn	Dki cucsew	-888	PzsN fWzQS	-777	-777	RmgtZlEVMS
+001194	002466	118	pQDki cZ L	-777	-9999	htjAgJyKoL	7	ImTDFQJyan	4	PS NPTmipk	-9999	-777	OujWU BwQJ	2	qZFwxigwp 	NnOWvtPsRX	-9999	sHHiISVHQm	NhvbVXnJfb	CPtGI HkDq	-777	-777	179	5	iTUnEKWnhw
+001194	002467	112	-777	-888	1	xxxHiiYdUx	4	-888	4	fNgZmkDUCR	2	-888	-777	1	 kJsHFzOep	jFXpGTPkLM	mP CapJTvu	-9999	hxQ rBMBM 	lwVmvVmjvi	-888	SjFFPBUwin	-9999	-888	  xbVdRPdE
+001195	002468	121	QDTIiPAlvd	-888	-888	BsRVDJMq i	4	cRb MwlPcF	3	XZZrqDqUvU	1	-777	dyctAeekap	1	YuUAtZJmKS	YqqQVHcNey	 wlgAJUW  	ZjAgcJIdw 	-777	-888	IeHYkbLMk 	kxqhATrqeR	5	-9999	jnO tnfEHM
+001195	002469	126	rNnaOJcTod	69	7	BjyGhskvvT	4	NZA pOFelw	1	lkUWsXiDCW	-777	-9999	 BUk VwFCm	2	sLDEwFzsNy	QpDMMhnQPq	ujvuaNgxLD	NdouAISvhF	-9999	CGWvACrXRf	SoWAPxjrKd	qF kbXVPvD	175	1	XTt FGVbYA
+001196	002470	122	lxSOSzDlMp	0	7	tsvinvEIdt	-9999	cZ ThEaPMO	2	lsuoL odRI	1	-888	bDVbanBSlA	1	MwT nXbmvJ	qGifNuRJLO	wDGlOsOCfe	FIgT rHEzQ	bISfmOAKlS	uNdzTHuwY 	vuvUzNPLcd	NtzFHkLd f	140	-888	BKR ImFaXZ
+001196	002471	115	JRwfxcmxMg	197	-9999	-888	-777	IdcMhPP oD	-888	nwFcUuVLaO	-9999	-777	ACPq bWbSQ	1	-777	jxWEKwyVwC	PEmXLgMgRs	TYEHTinZjj	IGikjJpDrE	NplCIcQiLL	 GBitTzEIJ	aenkPlwZ S	128	5	
+001196	002472	110	-777	23	2	-888	7	uxgFZji Im	4	lBMbCjFU s	1	cFdbCMAiUA	YoptjbLoBX	1	-888	fwqL RaBSt	qVUHQrfqsv	dnFdLeELvg	WpjAYfFx K	aylCIhhOfP	pGdjKsPeHU	TrsO AXGhH	-9999	-9999	
+001197	002473	108	nhSzCMdEBU	198	7	lmdaQVDD D	1	cwOdNayTPP	-888	-888	2	zC WaoSxQj	-9999	2	NKX G OKOs	-777	-888	MuVKmcoYAu	xFKiqEogyD	OS hwGruuD	ofkizkiGOm	-888	-888	3	Aumi wpiCh
+001197	002474	120	bKuFysfcEX	34	3	Wh OXijLeI	2	bJzSwBXyxM	-777	TOwHadhjqf	1	-888	d TbDSIGTU	2	DQA ErTPYj	UhoXcGkuQY	-9999	EdgvmTaMET	 TGANhhjFN	FyzfiaKRHx	EyXVJjAANV	ayXmwQklcW	-888	4	OZrBfdz LU
+001197	002475	123	gEvtf KcUv	131	3	qiGa SBYpI	-777	QQRKxVdKjc	3	yFDl  Zuui	1	YAHIeQ GIW	xGiTFFXcOH	2	qVfhjMK oZ	L eBii Vi 	vAdgQChEYF	-888	-777	K SZTANija	-9999	WNmLazHWYg	176	1	IRtRTBOSAM
+001198	002476	121	eyFxHBS nM	-9999	7	zoXiQjHTBA	-9999	egWNXkEshs	7	JoYerJAEGv	1	gi IoRL mj	HWgvlplLjj	2	zPbk PDwaA	zZrQxVqRhM	e gOrPbXbS	-888	L qHqgjlek	-9999	FEGaHWZBPN	-9999	157	4	IuAyYPATnu
+001199	002477	106	MUMVhRkjqM	75	1	VCUsQqQEPK	3	DLcLuVaRyK	1	CQN wxi  O	-9999	-777	eO eCmNSEr	2	GTjRlwcCAS	AdWlEnia w	WLnXqXMS n	kzPosJlPq 	sIVYERplGA	utDtBXSXti	iYTBwyRRcR	afZcvCpvOj	132	-777	
+001200	002478	112	QBeySCuMcu	100	7	xemewbwKDg	9	NuzzdraWs 	-888	 XYOQRTGOK	-777	-9999	v qTMc dYa	1	iWMYQrQjTf	EkRkUYnyhD	-9999	 K vfWIZtz	jhIBcTRsZT	wxkYvrM Ir	-888	-888	174	-9999	NztKTazBfY
+001200	002479	120	RHAailLCqI	93	2	-777	-9999	 cpwrzartO	2	-888	2	RjEGcTFofc	-777	1	gPUWdUssQF	-777	ExzUkbS cp	-777	ho JeGtPBc	 kRysrJDot	fFvNmLXxX 	QJf OuGWxq	155	-9999	
+001201	002480	106	eUh yhkinf	85	8	KgqUEnKnui	8	YtTb P BeR	4	XyCSmEOICd	2	RPT LeHOkw	 NkYeTGvfO	2	KIDrp N PB	MwnHfMVJTO	-888	LZMpZCRpRD	uNjpYXAvtf	OqlWnQUQXl	-777	foaiGSE QR	130	2	
+001201	002481	113	XxKgjaWJFc	33	2	McJQsqZWWu	-888	qeGVgRyTra	2	IikPuaOi q	1	mToAKWxWSO	YVvUA rjYR	1	RAHS xTRMn	daOINHReKh	 lLIDnHobJ	LWOSPmZOPK	yhodYrDaID	YTF ZHbBUH	AutOQtRhny	rSrjQVtUQP	111	-777	UBEsUIIBQJ
+001201	002482	123	TYeHBPzEJK	149	-777	DOra sR uO	2	mmbfi JUZS	2	PjbxLSfvSj	2	QvidcalEwX	HLciEQzmrA	1	-888	-777	LZlnGITAsA	-777	FVraBPfyOn	sJDgKvUUcC	-888	-777	-888	3	
+001201	002483	120	-888	63	3	-888	5	-888	4	E yUkYZtFp	2	-9999	VnsGXgFYPn	2	-9999	-777	ViFIJrCTFx	-9999	-9999	KiikplUKJw	 qDhmJtIEO	-888	115	1	SROUeina O
+001202	002484	111	weXPwe blc	147	4	-9999	6	zlWGbjdjuy	6	jHE VMr bD	2	fi gWlvv Y	cyaTmkAzC 	2	-9999	CiEJmGSgOQ	fBGeHBlwbR	-888	RbHMHczgSq	pKEJsUGrBK	-777	kuDpbtriQO	49	3	iDBexrUSEO
+001203	002485	124	kPVAOBpOXk	48	5	UqQpzyZJIQ	8	RsUcuQCEHD	5	HjqTcOlG p	-888	BkVaWAJuSs	-888	1	HDsqOvGtvh	-777	-777	-777	EAbsFykuar	soCYlHMZGn	DefBSQOdpO	ArHkkMWGGC	-777	1	NdUYhCNqzK
+001203	002486	110	DWBAmIrDrc	119	4	-777	5	-888	-9999	 uV dOHsVp	1	lSyM AJDSP	XaRbVKrwwx	-888	bidatFilUZ	OnXXPRyvBZ	UBoGwZFQvi	HjJemuvfh 	ZuqZiXrkfx	-777	-888	NpFqNbcUbp	17	-777	yhjjR ghxt
+001203	002487	121	XUZfxOjpPa	30	-777	uHZpwEEDH 	-777	HZvlnDASTr	5	JlnGzTtD I	-9999	zJZYBAVw K	FLcyosnFqd	-9999	kl vtFYJvY	-888	-888	QpL vUMnZl	ZLGeiJIjsd	btgGhqaoIT	DzaePxZGXU	xhl emqWFc	83	3	NkTonicreF
+001204	002488	106	SpotDk lfP	23	4	 dzUvCYJiL	8	-777	2	YXqedIlpZN	1	g pzzwuf Q	XKkBDWNQiO	2	pOLTsAyOCY	FWZnZtDtfM	wbyvNgPFvI	fTmaXSwp b	FolLrxhVRO	jAdVsXO bY	biYbPgDLzI	-9999	135	4	
+001204	002489	110	cbKQicoQqo	125	-888	oIJypZoFPA	7	wniZ ec Ao	1	b gtLfVhiB	1	NmqpQYjpjx	-777	2	 MmvwYdliF	EQoY pvAyC	gwZIyaGMkv	-777	oSkZSMHvvQ	-777	 OeDUvfjQy	XREmyZHTMs	-9999	4	
+001204	002490	120	-9999	-777	3	-777	-888	I HsvFueAr	-777	-9999	-777	-9999	H EBnVjI e	-888	dYCkuFWKbX	lkdNZIncmo	SajUTYPDyz	RIQYD VkFa	QS nuJHkoe	IsWOaopUdp	QVQUvVGKlV	-777	165	4	
+001204	002491	126	-777	-888	4	-9999	1	WSxRVwvEVJ	2	rQgPwujqQB	1	yGwcUeYzkV	SHDGfvE jV	-888	qgH ou yKf	-9999	-888	dPZUOJSwNt	dQMlwqUOhm	fjNwvLXmjV	hiDAFymVtN	iLr rBVvZE	82	2	q yeeGkfuB
+001205	002492	111	GaeUCUP CQ	68	7	NpKmIqjBoO	6	VwBIxJdXZb	4	uXliIqSYl 	1	-777	-777	1	-9999	  OXtlzbwL	oglCDnPUuV	NSuGpnpDEH	-9999	UtkrEuszSh	krXcnFOgGT	xccsLnpOMk	185	3	Nb Mr ij T
+001205	002493	104	b kHgMYZte	185	-777	BzmLuSRRVn	3	uphpIPybCT	1	eblvSISuVI	-9999	RWwzm eqBB	BbY v ydXp	2	gupYxoUDlg	OXmCEL tyM	TDoGAXFtze	knYJlqIgZl	-888	-888	RUCjxrIxQo	-9999	109	5	zgNKoneKXh
+001205	002494	126	lqRgpcvtJ 	22	1	TDJIuQEc Z	6	xbBBFkCrKm	-777	BpWoPbtUtP	-888	-777	-9999	-9999	dDluiktq W	AK zvaZJOf	CIN xTLcEp	-888	OOlYuNMpmc	-777	JecIsUusNQ	-9999	-9999	5	tAOiuADkhe
+001206	002495	116	-777	97	8	iKyQVjOKnC	-777	PHNnetuH A	2	BsJSHJLyKF	2	dTNhJTloxP	-9999	-888	yOGdpkTCWI	kJmtWfTzTn	 CmyLrUIok	lwZRbmdckR	Cwvft Q BQ	-9999	cctLnXVWcZ	-777	-777	2	dZQIuFQUhg
+001207	002496	111	ilpNGZKwt 	147	-777	LviEKSkmBp	6	vzmHaNmiPC	3	uXiILqZHAX	2	emPwockJ a	-777	1	foBFwyx WT	nDzuIXaPJs	bdAuqcyIpF	OEn Mj Qpd	a plrcGNRe	 vOUhlamfb	QWwjxjJToF	rIPO cHdMI	41	-9999	
+001207	002497	102	-888	65	4	SsA LVjGwM	-777	SqCBJ du v	4	-888	2	eodvYIkqfJ	nvjQZeDoRk	-888	ufjJyJnINz	IBjsKrWPwV	kqgCXadbyL	zUCWBdMfYI	-9999	-9999	ypWsAJW mr	QlpfjCEQMY	136	-9999	uJSJtOpvSR
+001207	002498	113	EeK m aAqf	-888	2	CN XFfDzkf	-777	-888	6	Gyj fzcyQH	1	AusBVArEu 	-888	2	MLXCNNPdTG	-777	UGvkiuPYtF	 cbihR JUP	bDsgCqlQKf	uffxVVY GT	cJtSJDoGPI	faLiGlMiWy	-9999	3	r rk  hRT 
+001208	002499	114	PGtgHDIj x	39	6	BuBdJPAXNH	5	PYPmFZgEbr	5	qc KgUlQxB	1	 APjXWlDVc	TWWklxfslw	1	VINZlUfx i	tOfmFCUOcu	zmY uui be	-777	IPKyuFNZMX	-777	bRV GCqzBC	poCJKZxK N	54	5	
+001209	002500	109	WnJQgBkJDp	-9999	-888	-9999	9	uxvlEPOoVq	2	 j pbzLVxR	1	nZsJMfEOcg	DriWNRMVek	1	MimEvnQAHS	HnxX MTwQU	urBWNsxxTc	-888	-777	NHbuCqiaHM	AhRajMpmQc	jSZAyKO Gl	41	-777	yhuxufe qS
+001210	002501	118	-9999	90	2	-888	6	piSmiCanxD	5	lgrgJEDDpk	1	lZdInLUbQK	-777	-9999	MZunICRxGc	krgLXHzQuV	PhVzcduAox	 SVeQIYaAQ	ebDoeHpSRX	BjerZVRBhs	vs  WwPXwD	 LBJzEqsZs	37	-777	ktkIhAwaNc
+001210	002502	103	MsICmykHNx	107	-9999	HNsMQYUFDe	-888	VlIeYUdjLI	-9999	WfznjrcOvO	2	ECTGNeDG U	OelE  BjEi	2	LKIwAIj  f	GSTlsHhdbc	nBHwYPvIDj	FUcDJGPtqu	-9999	-9999	aEWHI  IWA	Q WakVskTY	86	4	Qh Mgsbbso
+001211	002503	123	-9999	79	1	ZkKpRmoGoj	9	yTCuroQWLA	2	OqTSEVuPrU	1	IsSNBBaPSK	-9999	1	PeBBTnrHgT	WTUNi zoBX	xkLqUDj NV	-777	Bbp NsMQAv	eDeEjIrUeF	dkjH gvq J	TvNXZbfegW	-9999	1	bBkjobUBzf
+001212	002504	105	UDnZAQZyMW	35	1	GTfRj qzQ 	6	sxkFdbqMXv	5	XsPUVLxrwQ	-9999	iHOCDUmQpr	xzyU gnjmP	-9999	tdQzjBQCtS	-9999	VLqKuLW xP	 uUpxOCtYi	TyRFOAfSMN	eWezhqNBum	-777	-888	-9999	4	k OvEsoODf
+001212	002505	108	NkZU gfwAD	194	-777	-9999	5	ClUXyhiOrU	6	YCorp MXKl	2	-777	vHhOqOGYJU	1	-9999	GgSuICdODj	-9999	-888	-777	-888	-9999	EYcLmiZIVT	-9999	-9999	bdTSVtad N
+001212	002506	119	EnKHZorqAa	148	-777	hkBGZqGRfi	-888	-9999	-888	-888	2	Qeal RlNMH	lgGvNaDbdw	1	-888	-888	MMfOJEntDY	t XzNvQyFq	-777	JDlhEOz OA	-777	NAhPXjwtzC	-9999	1	MvhCZKD sS
+001212	002507	112	B reUvhmUA	43	4	qcYAER eRn	1	g WtVfjfFe	5	-9999	-888	sBLa AhgmU	CXfNcRdfca	1	 uEzKmoiBn	NKcoZKGPyh	CGWutxD pH	aV IcyhRfn	X KjUzxQgm	xtmgqEdc C	GaBLMRRIRJ	-777	31	2	
+001213	002508	110	tvEJXtRdUV	111	1	-888	2	cxe GtGbra	-777	-777	1	-9999	-888	2	FfjKWs XlS	sdpnyVSGLd	bQlZUGjdrq	NgwhoencPT	-9999	yGeFzywuRM	UVYXlIhkwx	LhupxGsjkk	121	-9999	
+001214	002509	125	DOhvDJETTq	152	8	gqA F vabz	1	dSwUsiq  z	5	SBHbiSeQYc	1	MuFhzOYivD	-9999	1	kt   Tdopq	-9999	-9999	HhDrVFlrcs	C RjIjirmZ	uVlk xCobD	iZoPmwq U 	RSagyhMwGl	42	1	
+001214	002510	126	GkxM rZOaM	25	-888	bxvEFciXoH	3	OMsonhisYl	7	Po  PLNXKz	-9999	-777	-9999	-777	-777	iiePksJhkW	bedGWGiDLg	-888	iBXcmBteIe	-777	OufQ ou lu	-888	114	5	 eSpAeOzdf
+001214	002511	111	TJ SdHqJxB	198	-888	ycWeN hCjW	7	sLLWeoDIyp	2	inkN K MaV	1	sRXMOMN ux	YE qbsTvbc	1	NrVnlAhLXa	BMLroJKwXj	  pfb y oK	YewBhaDn t	 IBhXSIWME	tSLqwTPvlO	xrog CJRoG	tGz yD BBV	30	5	fWuoDIe eS
+001215	002512	103	souIUVe E 	63	-888	m foUkvmR 	3	-777	3	dXchDrkHKB	2	Od CB iiRN	odw  Ilmkj	2	aFVLUhxsOB	agcefItvyJ	fmYIRLGZRK	UMqdOHZOWE	uMmVBSHJWQ	sVpXZMyIaj	 tZ uFJSst	-9999	166	5	
+001216	002513	101	MwvgxFKspI	139	7	-777	-9999	NsTaJFbQRt	-888	dWrnpDgTUb	2	RFUlxMzyQZ	lNPyAnZvIi	1	awpyMCnsNz	HGXOxpOHXL	Tw ilCzvSR	xKSvpOKYnl	mx LKJO Yu	eLtKogJNXT	AzHbLytVGP	bSx FKrrrc	60	-9999	
+001216	002514	104	AcOdqyLxlM	125	6	-888	-9999	CJwMZsspZP	5	-9999	-888	fd ILpQWxS	SqDoqOxREs	1	-888	QwPoPiD IR	-9999	CSfoae WDl	-777	yyUHLOmPCG	DHaNrayAcy	pWRNOAu Dw	176	-777	SEyylweuSJ
+001216	002515	122	IsDmaeRJTC	-777	6	Roe KHviV 	6	 FFIc NnGt	7	uuDkWYFKeX	2	AENXxGxihz	y DpnsiPlA	-777	EuyYv x pM	CHqWgzknYZ	m AGoG smD	EMXaAhlf x	-888	zCrleoTzjL	HJbvkHcbIJ	 QSbJlUZuC	56	2	BP izTOinW
+001216	002516	106	wFwDDApPRP	-777	1	YwTavmOxjC	-9999	-9999	5	-777	-777	-888	hBIfiBLmDJ	2	BIIRAOTLfx	wVQcIt YAP	iDApLpv XK	WzdrpwdXXh	oJpJcLLgMs	zSGkWkHiAs	-9999	-9999	-777	-777	NcGikJRDFz
+001217	002517	114	BUDyiegLyo	145	2	wuNyWwWpwc	4	BQrfN VMkt	1	YyfcYolyUk	2	HpYzizBybl	xlfiAoGBtM	1	FoLxAeiofJ	 MUuMPha E	sspFmpyvCQ	PqSdJSdqsV	-9999	 aiseJNxRL	MBxYZIPkwC	pUnuAClvKo	150	-777	WdHJXYCOqh
+001218	002518	119	jIlveAyfIP	-9999	5	XGKyZ oesS	-777	txlTojAKAV	-9999	SdrOUoZPCV	-9999	MbmYLckZbE	ryPMvwnjOg	-888	UapQmHAvbJ	TJjxppEoYu	-777	-9999	-777	cnUZhLw  M	trFLkAdUKh	zFiVXR plF	37	4	SzCNOArJhz
+001218	002519	109	-777	23	1	ylt iyecPe	2	KYXAKzd AE	1	WDIwqlwFVB	2	d McuBTvVY	mNgRBdN tj	1	TYIsA UMHH	SYerNtyfZ 	-777	WexpdGBDjI	-888	-9999	-9999	rvMTKiZhoD	188	5	seCU SxsLw
+001219	002520	112	iy W folzq	90	-777	-888	1	TUsqUIoEQB	-9999	-9999	2	VNOvVgTsgP	IJvbVdBxYD	2	zLnzsCSzPR	 aD OAiWJz	tYfnSDxMbI	JpxIrSjgbg	HsPhxIfqsn	iDDW FEUeO	LtWKcYFIzU	-9999	58	1	
+001220	002521	102	uALbgKSlAJ	200	3	SD LwFbpVF	8	mVEZclQqET	5	XhoQH J iW	-888	FppiKPF  N	R jGkvTqDb	2	-888	qmadDkDGR 	-777	wKktVgw  u	cN I XCbdf	vrOkefoEER	eDRoYxLmOv	-888	53	1	ziCJ  HsIL
+001220	002522	119	-888	116	8	eCTnoveIyp	7	DfTlwlSGZx	7	-888	2	FBZDzNLpaX	HezTyciXGK	-777	UXGnXZ Mda	kysqifdDYL	oPO TssGgF	-777	RCibSOMcHd	-777	Gp GlUsPSX	KS TAYGIya	66	4	ttrInEO lN
+001220	002523	111	bErZYeFeJp	12	5	gxlcdZVxnT	-9999	-777	5	 q GUZBpQO	1	jMPjrjHxhE	aiJIIi Loo	2	UaQpUVJfNF	eIbDT YMLV	-9999	vnIQaSvOyI	-888	QZCCiAFwpl	hxSorrSGBx	c VcTnbuHS	36	1	VBGeFrPBsm
+001220	002524	112	wZpyoRdFMI	199	1	WDzVdsUvPb	5	-888	-777	qkwvRxbtVO	-888	CtNJilgPls	YH VeudxBe	2	CnYqghobcO	vPNkVkPEj 	KAyIruJrjr	-9999	fruTjSImM 	-9999	KaOIPijjJK	-888	-9999	-888	tz DQMnhqv
+001221	002525	121	-9999	99	-9999	-777	9	FVNOVcxUBs	1	-777	1	-777	XaSKRFA BU	2	HmQHbdk os	CxAfLlKagA	FDkSRnljUA	xth w RJVL	asxfxqQFjB	VJygoaoDcq	-9999	xTScvWamo 	147	2	
+001222	002526	126	-888	194	7	JJxcyTsQSk	7	G vWlcUaQ 	4	TBzrpTxuHe	2	qSkKFozebY	lNdW OESmT	-777	MRKybQthrR	gwTptgKKWF	-888	-777	wgCZBJwtoT	-888	-777	EIEs HZDYA	-777	-777	NpeYyvfhkC
+001222	002527	117	-888	-9999	2	xmAsbtVIxw	2	Efn hocPHv	5	-9999	-777	i Vr RUfIa	QHsFQIMuaH	2	IM tco IJn	-777	-9999	-777	JyLEANuLQu	XotbwuhH W	-9999	d PjMrFdQl	137	-9999	hDcQpGtiFK
+001222	002528	125	XyamZWdK c	-777	8	-777	4	kAAeOXtUFQ	7	XvKgwhaqRE	1	wrpmUCtySG	sCcqHZbXAU	1	-888	-9999	yQ RgxzmKN	BhOo nmaRJ	-888	-9999	HoZBDViYts	-777	67	4	oLuEmoAZJ 
+001222	002529	124	OribDOGwWy	43	3	qDlhMnGYTv	7	FVj cVCgMo	3	 zxAR lIi 	-9999	-777	cp rjrJXjf	2	-9999	aeijmlKkLx	-9999	-888	jdWNTEItnZ	-888	Qhac LwZnI	LKOGqAKbOK	180	2	GQoRinyGHi
+001223	002530	113	-888	-777	-9999	-9999	-9999	wBZFYRByGu	-9999	rpv cVbpLa	1	dHozlK NhV	xcHucOCJJC	2	bJOeaPzDbY	WHXrTBY Oo	-9999	ffBQjElfoH	cujzrNxllz	QCchMGzilN	-888	UbRFKMiuKe	54	1	
+001223	002531	117	dSIHWvF QR	142	5	OYNUeEifye	3	YJzBnmuKwp	6	ktRpOHX dl	2	AxxlozUWBN	aSYiBWAOXu	2	UZTSeexzlU	RQ BG   ty	Udosrvruuh	qJME V Ia 	-888	EtKTytzvGs	ZNgvkjtRyL	nIuhVuMuRK	94	5	hLg ixocYC
+001223	002532	109	VejmZzIxjR	116	8	-777	3	CiEVnf Cgm	-9999	-9999	2	NxzxClE wZ	-9999	1	 JFLpVTbes	RcjogaXyav	-777	BLUpmDjTAM	JtckRMeJgK	zLOKsLjuzW	-9999	-888	97	5	
+001223	002533	125	xLTvSzDTFM	40	-9999	AXizMX YQM	2	-888	-888	taYR yXmoB	2	hfFBFZSlwE	AX jkaAWYe	-9999	bNCBixDMrd	EmGPyCwgMD	-888	-9999	-888	e iOvEADs 	J sbhNdDxf	aE PPXUkm 	20	1	pgBvA voMT
+001224	002534	101	ZfCAFIefrY	66	8	-777	6	qwsEGQLbLv	2	TYpIX wgzN	1	MHEDqmKbIV	hEWIZddfEa	2	NadWZxTdto	-777	xrdmarEaNR	wnCvR e vh	lBtoejarbv	 MxfMMDSWW	-9999	lPEcBPhyE 	57	2	GzwaVJjgHu
+001224	002535	120	-9999	95	-9999	-888	1	ZCGapnFhV 	4	fwUlX BEvI	2	xj jjRYdWm	-777	2	yvgRCPR lK	dFh Dqvgqx	trANnHoDYq	 YlTbiCsSE	VU f HOiGI	-777	-9999	-9999	174	5	maEgHqaI I
+001224	002536	119	-888	149	8	-777	9	WJOb MBoOo	3	oOsLPHAric	1	QakKNbAMk 	-888	2	PTIHeymH W	sOcboZaMk 	-888	-9999	HNyKWUOyeC	vveExPtkJw	dkqKeTttTZ	SHsyjobIt 	95	4	cYacmsoJ V
+001225	002537	111	YJSmOfdndn	-9999	6	-9999	-777	uaEWU bOFa	6	WyWeSwIpew	1	-777	Hxh PPilkw	-888	iMZbKedGUb	Etkqgo sDk	Bj IvnJlBT	-888	KIXABGGhew	pwlN FOVql	-888	DbOlUsKD a	69	4	bZZMoACmER
+001225	002538	121	yC miqnsNB	-888	4	ILpTjxXPBl	1	-9999	3	uopRMulVVb	1	BgFk JcYyL	YDTbjAAPJF	2	EfCAcziIbU	cJnf f Jzm	aPrikkkZVd	ZJdnecbcbu	TcnAUlpYds	FKUqOAxNZF	sGxDGBESmO	-777	103	1	DXziTWHsBO
+001226	002539	117	G xW erN v	-9999	8	nTrIJRMPKs	5	ZUBglp QZe	-777	FBnAoSydwo	-9999	RHgjMySCJG	 UV Bz jHn	2	-9999	-888	-777	CjtduJXxHL	edvGbYiBAK	TTiyRZYUDX	mfnO XHYho	ctqCBDefut	152	-888	
+001226	002540	112	-9999	-888	7	iGZiCGmdFe	3	-888	-9999	-888	1	 SijuaDqBr	cGionegVtS	2	-777	w hPxSWCyG	-777	hsXkNwUePx	XQYQt ZTru	jGo xHSeJK	 NXeTNxKON	-777	83	-888	XBoIV HUOC
+001226	002541	108	QpINIUcl j	92	8	kyMPtZOMpz	7	fcrZbzJzDs	6	-888	2	hODnkA QsJ	GUaYbLZExA	1	wOuZhsRWHv	-777	rzNHDwCqfg	rxxJRUc ND	vcLimhr PQ	mZN cyVfEK	Lg WEVCujm	wGlvPQRaXs	29	2	BiPu UZjV 
+001226	002542	101	-777	83	-777	bLDfR  Qxg	7	gUiX wsXPy	3	-888	-9999	iUCzEoMKMM	WFFYZbibpf	2	RMIofEFPOn	IycdsGjgoE	dFkvdfdZWq	jnHPwRpFki	mOwXuKLZbq	dEUnqqjFya	xoncTilNSd	-888	-777	2	
+001227	002543	104	-888	-9999	4	bOODWSDbcs	-888	ptvgUsUgFM	-777	gzKW AamPP	-777	RwZlzqaNzd	hbvmSYdKHn	2	JvCnfXyMTZ	ClAcLboCqp	kcCwvLQjOh	-888	StLlO X xq	MGvUSQ axQ	-777	RmGIXTSPDR	36	3	UPCE JfmZZ
+001227	002544	121	-777	167	8	-9999	-777	-888	6	bujkWpteoH	1	kjwnTvnSnc	-888	2	REE OpVdMU	-777	YQdhglcx x	j vQUWxjPO	cWDDiskcYo	veSQDxAKpE	IIry tRAkX	-777	109	1	XMjGCoFpLD
+001227	002545	101	-888	103	1	-888	7	uwtCpRiNXr	5	bQkaMuzyV 	2	-777	mMMBbikvqd	2	qeicNG cae	AQcDDAJGJI	cPgzAUBtjb	-888	EPz WcAWbP	 l vZorrEg	xVItvVKgUS	-777	67	3	TfqXlbezfv
+001227	002546	110	OdIjQX Nhe	-888	2	VTcYpkdh C	-9999	-9999	5	 L iLGXwC 	1	QBPbhXdO Z	i Jd srXLp	-9999	YvmeiNLJhs	NfXXD mtYc	wFIPlpHmfh	-777	-888	-9999	CMUkxc I Y	rWIvxXWjx 	-9999	5	oRKnCdQqWl
+001228	002547	110	RARklaVCQE	130	-777	ffDvOTmDiW	5	qujeeriaYP	1	bFd HgJUPa	-888	l uLpotgQY	nPXngxQgox	1	-888	BewvfKmlZi	dqaeCrspvl	-888	oKJWGCa  L	p HaMjwnpI	-888	UmtteHrRps	19	3	 NeYdZmxaC
+001228	002548	119	wIwS O YL 	110	5	 nGMrBTScT	3	NSXuicZiYR	-9999	xWMG DMSGn	-9999	-9999	pla lXiQir	1	-777	-777	qIVpfNlIxk	SsIvZvNLod	UhzvIoXO T	-777	-9999	Y leSZikSR	-888	-777	ddZ rMCxld
+001228	002549	116	 cnzcOjAy 	131	-9999	e uUvff Ce	6	-888	2	Ay LQytcjt	1	pJ MsOFfuA	GdcYvZRABR	1	-777	QnxYgGlFUv	 UuiHTsDcO	-777	emsziAeiFa	sCbi Zs wN	 Bidgownop	syilrwPRsp	183	1	cQHYJSnvSb
+001229	002550	108	oVDtbUmSwv	33	6	zSIXem gYm	9	GiNz YWfIg	7	fglRWhs mL	1	-888	UVLTgkXrIN	1	cJeJplndVg	CatHytaSPc	qCNAwdxjHH	YJXrgdSVvJ	xRGxRijVdy	UxJHLWFvlU	Pj kbxoqrZ	rMKSdycePA	77	2	
+001229	002551	103	-888	2	-888	EeLcQJzVRi	6	LaKtZxCca 	-9999	DCUYNYWybJ	2	YbolXnU oP	C biOzzfvW	1	ICtjdhfUPc	yDpfBZxAdx	-888	-888	-888	-9999	ZFzVLTKOfO	fzXXepS jL	195	1	
+001229	002552	126	lXCVdTqqWb	146	1	xqkVqmqOvn	7	qlJpBxrLZR	-888	UBsNrjUnJK	-9999	oTKqMDWMcF	-9999	1	Nm TlqVWse	meBxhGfRci	-888	ChkzFHKTDe	kxDaQlz bk	BwWJCIhuec	TyEss Fwmx	zppDLiXLwI	-888	5	
+001230	002553	114	lqkNLJJKG 	-777	4	drYa ZUzLi	-9999	ihK G BQQN	3	ooQGbokdzs	-9999	ICROyLPURw	TGRW  ZfGQ	1	-9999	-777	Ccf yLfvZy	-777	MeVsOSKvHg	QgELap tAc	hWxUqRBebj	FdIzeqREtg	91	-777	
+001230	002554	104	OJQKcDZKTN	39	8	keaedIFVbq	-9999	HabaPYiHwy	4	bQnfxLniFt	1	-777	-9999	1	StSIKNZSBz	qobRhxezKl	BrHAClGGc 	fuIKmvleCB	Rz LDcWihE	-777	eJdcyjIDhj	-777	-777	5	OmDRVWhBbs
+001230	002555	124	-777	170	8	Td zQrgfRN	3	-9999	-888	ypQuALME z	-888	BngLRN zGI	-777	-9999	ipHAtuPzPG	eoUIMBmmxn	EhxXiuuITT	LilqbIAJas	dwFhdUsFPU	-777	dFZPBdsRUS	d mPNvVGLt	7	4	SzXnKitimn
+001230	002556	114	G QwjnhwRM	-777	2	ICd teYdHG	8	-777	2	eNVlQDQi O	2	s mni twmV	-888	2	-777	kO E sHA D	qkZPTkAZ L	-9999	f eTTZPdkl	-888	uiKhJjx YR	SPOjrqZysw	71	5	scGXBBPBPB
+001231	002557	114	-9999	108	-9999	iuyqjriiVX	7	 YvqckAxZm	-9999	RcxpkMTYQX	2	AJoGurejed	pu uX jUpR	1	-9999	-9999	Yt  ntMpaj	-888	VtEEhXJHot	GhfkXNewqB	GOOFowETAq	jwv bzPYsj	134	1	pSK  LaWnm
+001231	002558	108	-777	137	1	qNboz LpLV	-9999	-9999	5	mWyUMAaouz	1	 MtSxZGKmf	-9999	2	SvgeEXjadd	-888	kgpJAy UGp	PGRFOlhdeL	TonZb kdSh	DojiCFgooW	gfuOlkrYAV	d   UKdq E	105	5	wQPFrMl IB
+001231	002559	109	snNXOPjYbZ	-9999	6	-888	-9999	jMvHLrIcYG	-888	-777	1	-777	Yp gXGfrnE	2	KxUSmaCiJU	KJpFZVCBmV	cnyCO RuFI	HvYkpswoHp	KGcUBs MpS	nhkcXsMXpi	-777	iQ taHOdKz	54	-777	pMasDqwWOX
+001231	002560	117	-888	-777	4	nWi l H mt	-9999	sERqKE Heo	5	abbV MuMPq	2	GeFCrPfSVj	LSFIWko kC	-888	GeVQDqnlDm	EPrjEMTehr	PGJFedrbKZ	iBpvV Ykvs	zNfKb nfME	-9999	fkhm scvFO	WyOjXVwRY 	26	5	mBKc kct e
+001232	002561	122	-888	59	-777	fmPvwTIH J	6	IK pA ftRr	7	JwOj KcJH 	2	omHXAIOcpR	eHslUspL i	-888	-888	-777	-9999	RxGuLZR jt	AYq EhHPs 	 PTwVoxOwV	rngKceLcQV	BQnXoQiXvn	169	2	oZAZBXXkkE
+001232	002562	110	XQpOQrJlMQ	1	-9999	gssLMmtpkG	3	EwAeWjRryF	3	-9999	1	VJ TLoAXzW	NuRkgrgMbu	2	bC AEzhOKS	JjOzUloRym	-9999	WPcGYhuNto	NJpsJWGXII	 GFrHkUblu	NCXCbySYje	CHAQOhGZGH	155	3	
+001232	002563	116	KntAeWZNYX	170	3	lwMLRqkY e	7	EHKNKpiRPW	-777	XtiFKMNiBU	1	nyocjDpMvf	PEcYFDEJjm	2	-888	glcYgJxAvz	-777	-9999	QELUqmXijT	HMXiLL EQs	uGP e IezK	XE TN ynbv	89	-888	aPpMlxCCkL
+001233	002564	107	ifN zwMjuK	79	1	-9999	-888	KFw  kJFSs	3	AKW p  AEQ	1	gJEcPsIqTy	OkhfIZTnGC	1	-888	-9999	-9999	-888	OsSFjcl rc	FsNSKuhNwR	mbazH VSsP	Gf StbMkiF	-888	2	cuVUaZQ xd
+001233	002565	124	Pji aWUWHz	127	7	uctApt NoI	-888	IHPeMRNRBC	3	bhBOwkClOS	-888	jChmVXJ hk	ZYEMQRdIfo	1	b ivpQSzZJ	DfIIDkzFxK	aoUkdxgzTw	kMghP  ufn	-888	-9999	-9999	bSlLaqqUSD	72	2	jGGqYPAYOy
+001234	002566	115	OOExrUNNsx	4	5	-777	5	-888	5	AETvCB Was	-9999	AJafVqRpsv	-9999	-888	-888	aORirj VBF	vlRAIHAZUS	KHBvJOzjYB	DgZLMwLtNU	lMCLZYorck	FUhmpmzBgi	n lgZZIfYi	197	5	trPUHeHE x
+001235	002567	109	dxKtTGQcht	-888	1	WkugPXrFms	7	sXbWFroizG	4	kkdWDYz PH	2	vJd EJvq t	-9999	1	-888	rSYXVMhsAi	-888	-888	-777	-9999	uUyhHGKvib	-777	-777	-9999	VcYNTYOCPY
+001236	002568	103	-9999	110	6	WaQgXhK iN	2	-888	7	JZnAwrvTUA	2	-9999	puIhHf xLE	-777	kIBMg Gp O	UaLtDPahVP	-9999	nXTdmGQzvX	-777	-777	IKrmJnurLi	UCNDDBfVvb	118	-777	drI DNXN F
+001236	002569	121	jExbvPIpnU	177	2	 YTQeTJ Pa	5	xJ FMTDnWL	5	NRBqOzSUgm	2	UzPzjbpUgy	TlixVVOJNm	-888	uLVlsVi tH	-9999	-888	LMwYhOmFjy	JlfyMgtohw	eVBeuV OWz	-9999	-888	108	2	rhGjCgGdkX
+001237	002570	107	-9999	191	4	kEGxGEEaqC	8	MUhuOKVnzd	6	Rssp yCDGs	2	zMUoUJCnP 	-777	2	bUqvxiovGe	ZMYFOZGIhW	-888	Irw Zz WrT	jgTgzQ Fbo	-777	tEfHoXfBeF	F MSLGqDfz	75	2	
+001238	002571	103	-9999	-888	2	rjhblGyGP 	1	ifaEfceMVB	2	ltiUnogCQu	2	xNuDITmvum	-9999	1	PvfdjseoES	sxeBOHDBse	HMxwEqzgaX	sWqOgNv  E	wUnYqisAEL	OiDGsdNG Y	UMYZTD kmM	NzSiJqmMey	132	2	PpAlmdhLqj
+001238	002572	110	-9999	68	2	GNXXWvltyL	6	-888	1	JHQwhswsOW	-888	okQdUspov 	vHiGXz  wv	2	XiKRBtcmRm	-9999	JEufBsbJam	lqWDjghhon	-888	bcoHu BHjo	KOESldUF M	cvgH VYltt	192	-9999	
+001238	002573	121	OJDt  JTlh	177	-777	-777	-888	-888	3	faxROtDNPY	2	IvvQqozfkQ	kUXUTUpecW	2	SmkHQDlKYL	rWWrjtAdzl	mbwuaMkNol	tqJUBuXtLT	vJqtyvcNYE	B UvVEXqPv	 AFoAkHXyf	 q ojpeEGJ	-9999	1	AdooD fZYz
+001239	002574	123	BElpOLNyrE	-888	-777	xEcu m iNC	-777	azc SNCtmO	-777	-777	-777	Sdbadmef l	-888	-9999	-777	-777	SV pcpUeiC	vuEh ipg a	k hbrmuIfp	pHfZSq ksP	UoXPAxiKcT	jWqrWOFvFk	-888	2	 VrzHqNiWl
+001239	002575	115	pkETHFM KM	161	1	 lKvJAXgaD	-777	-9999	-9999	-777	1	ZRzrOvLiEU	-9999	-9999	BxvfVTWIFE	 Zl szukrg	aTgEgFTPAd	-777	LQePCivPdG	g BgwHf Ew	jZUn FXCXD	vn YdIWlnc	130	2	XBmzfsRFmb
+001239	002576	103	PepmnuHhc 	101	2	CSljXDy  f	9	-888	3	TPfOuXgubp	2	CNKbmPTUPP	 BALZHLXNV	-777	-777	BiPFQKHAkB	LMBdJw K x	Wb  M WuOv	wtFLwIpHvw	zgXHAu GcA	gclq G Oow	bbTUmHvNvc	185	1	
+001239	002577	101	-777	143	5	 KABxwlgnv	4	rmzB J lPi	-9999	-9999	-888	IbbeceZCjV	EBIUXPlfWS	-888	xyBhZXkwVi	zKwFEVGgRL	AQoXKZurEY	OpLLPtJzID	-888	LLTQLQGe R	WpoeOMF Pm	  tGamhjSq	-9999	-777	
+001240	002578	108	Eaqschgtya	194	-777	KYkpZMpYfN	2	-888	6	brAqlSZPZT	1	BSBxhBd Ht	yatgwsOrWi	1	-888	 tjiWYtaMR	-9999	 z naATKeO	EGYkwzYhEt	TCrnLXtths	-888	ePfgRtTMU 	52	-9999	LJUeBmLk h
+001240	002579	119	AnzGeYVHvt	48	-9999	-777	1	 KLTEfMlko	-888	oBWbcKGPIV	-9999	IvnhkHsgee	GYkkrgrgRl	1	FeTWosqsid	KGpgkzGdAc	-888	 UQTDilNZ 	MTrdpfpjjU	lUh FFyGAl	SfDCUmS pv	TcbOpurWTR	74	1	
+001241	002580	123	EfAMq tEd 	189	1	BzSRkAuLOz	1	-888	4	K yKDtWaEO	-888	NcwJkeo  s	-777	1	-9999	liIWdBX  e	FbrBspGiur	-9999	qQSMvpqpJh	WxqXt nRRc	pjnaMbYDKn	KHiX wJWbP	140	2	BM  FPlqdR
+001242	002581	124	NLameILfwt	176	2	ZJqNBqPVDw	4	-9999	3	WtrmMoHnEQ	2	eK wlBFgvX	-777	2	vdNgmm sE 	GgGlUPpXag	zwxUXpOroA	-9999	uDNgZzsLvk	LbMxjDJwvX	igoXXrqsmG	E ELnnAdO 	58	-9999	
+001243	002582	117	iZejVANyHp	28	2	-888	4	-888	1	nxE ESIzHX	-888	FeXzDT GCx	KrVuyhkLvM	-888	lKeztoIxaf	-888	 LnXKnGSGy	p jzktLIDA	-9999	cOI  dYK r	-888	-888	33	5	WDR eYnRfm
+001243	002583	114	pyDkVXTdnL	73	1	bACbKYXGKN	4	wBULnxHPTJ	1	BPxBk gYMC	-9999	YleYgJkY n	uAhcoGQ pl	2	rwg PBxoVh	stfbrNtmTV	Q bLuNBjMn	-9999	VxxBhqmjsG	-888	KowAywU WR	aDOlLBCHEF	-888	1	vCRVpXjWGc
+001243	002584	126	-888	166	8	oXAIVJKkds	8	FcQWWydoyl	6	fpePtvqwKK	-777	-777	yBZ VoMMuY	-777	y vFpUpDTY	oxKGRIrnZi	qTvmPtHwYd	AlzpHeQllh	Q oAwTilph	 IglBZL jy	sdWSC KUCL	NuIoFyncTo	87	2	HoUSRUwBpc
+001243	002585	117	JMdrtYbFpM	75	8	msuc hjRqA	3	GlzlWxGbaN	2	RULWnyijvB	-777	ZGxmoXEGQZ	lZYOdHppUN	1	-888	-777	-888	NnILK PfJd	-888	-888	iWoRiunBzL	znACGEqjo 	-888	4	zsnrGRGViM
+001244	002586	123	KcjpWxNi p	104	4	n XRgX mM 	7	UpUeDnnZBa	1	fVevsFVZVw	2	kVWxmGxtts	FE WBNcebi	1	-888	GB iqt Sws	StrBmhiBET	-777	zyDr BhlXn	aXB WdMYxo	 cOTWlfXdm	mW RaqNfeq	142	3	OHXoPlvWWq
+001245	002587	111	-777	-888	-888	-9999	-888	A ATBaivYX	5	ptnYXbJiEN	-888	ooWwtPSQwP	TQMkkAdNpp	1	zycICRTPQf	PYCbGoLWKy	ULL Iu XSf	yMlYSpUPJT	-9999	vSZLIsHRVy	QbFcUAgsPf	-888	49	3	INV iCaI z
+001245	002588	109	YTkxgSjuYQ	68	2	jfIvEblCHf	4	-777	-888	UwnITEBNxy	1	-9999	euMsbLCfBS	2	-9999	rvsghyUs d	-888	-9999	UD KBnJDf 	n TbIKlqaf	 UBAbkARJY	EukjL QoPb	165	5	omZIlJjrLP
+001246	002589	120	-9999	-888	6	l fN vaksJ	2	-9999	3	UPnZXvysRv	1	-777	-777	1	zfLEtjvvAh	FZhakK xDx	TXdYLsYunG	JtmdoEUrpO	WbwJouofTY	BWOxWFeUZm	-888	-777	53	3	D fcuNHysQ
+001246	002590	117	qjmxoReY f	13	2	-777	9	DepHzlWCLb	7	FeCBTiPJGO	1	-888	-777	-777	et xoJTuiB	jysdFfdyLY	rJMBJWfLbU	-888	IaIKqNcraI	-777	WJnOLdJm m	 KvYjX xTt	152	-777	EtoQHoBN h
+001247	002591	104	-888	171	1	NeeSxgiReM	3	-777	6	-777	-777	mIAoObjCyN	JvTgQ  lg 	1	clgKGIx Lc	-888	CCtzwPgDEv	TCPD HSXTl	 hPVU mAfN	frffSeMyNJ	PglishTZvx	-9999	92	-888	PSURGJSuDb
+001247	002592	103	hqGTxVGRVH	-777	6	-777	7	rQdQLp XCw	-9999	iEnNEWzSTd	2	kChWoyqcIx	xXK wFIWzA	2	slScHQHJ M	 XTPtoS tg	-888	aGEscsPwTR	ryrxAIrhnr	-9999	-9999	AykMveLlej	-888	3	uVqMjTeIpv
+001247	002593	108	-9999	104	3	-777	3	VfgaFodyWn	1	-777	-888	 YYzNUIUzo	a cZNHWvDv	2	-9999	vnUVXlHyRF	qCzkpIB Zx	PcOrxbbSBw	rZ GCdvTmQ	-888	ThGfqqFTfB	-888	187	4	
+001247	002594	108	-9999	-9999	4	FOEh VJLIc	1	UaGvIVhfgz	-9999	-9999	-888	YuRyqefimD	yUTGnoB Am	1	-777	-9999	kKHY PpDbw	-777	wRvTWdMsuL	 TNppeXzuV	-888	-777	107	3	hnrPaqouPy
+001248	002595	105	-888	-9999	1	-777	6	-888	4	-777	1	XNCWpXVdYO	wAgkAjZRvd	1	LXbvPP CTv	yPPoudBwd 	-9999	tBdGXOM Rg	UyPFIFqPRd	eLGVmAfPMp	XJNmsHvmne	JywsOZrApu	-777	4	iSGrBbqYoD
+001248	002596	124	HKtzioiREB	31	4	UeiytV BBs	1	Ae wwpOAGg	2	xbFCsc Jaa	2	Gpw ayrGIj	XVEkgo ZPl	2	XfcUoidcpf	-9999	Yc  kuOhRi	zSjQ CAMnU	-9999	-777	-888	 r buaHEDQ	89	5	
+001249	002597	106	-888	54	-888	-777	9	uICHNJffmu	3	mp suMhglR	1	mWRwZrhhmK	 R oxlylgv	2	dSYRaXLBRT	nbbE RSVUx	Aa seOdAha	HDFXKXYrxR	-888	-777	Uz DNbdbwD	qKXCnGUVuy	63	3	Uzgm xyAbc
+001250	002598	102	mcPA driTD	-888	-888	zuhuN IVIX	-777	duNKSkRp U	-888	PCtZdZVHoB	1	CfEDiGfyhe	-888	1	DMuE KAUaG	BIhXoQIAcH	oeqhJS mYr	AeMxEDLnAB	-888	-888	qJDtCJQdZw	LPRAHqjVKC	9	-888	NnDm yPQrH
+001250	002599	122	YnMvmmmE k	87	-888	cydaa YU Q	-777	HKRkECGJ F	1	VwwK mPqN 	1	lESzwfzpvo	-888	-888	SrHEItydnS	t kaVzHFhX	-777	 HkxHvgyqO	WBUfgmBahQ	bBxbpXE UX	rNXmgLaL f	yAUiSXEgAT	21	5	gCYBDMUXnT
+001250	002600	104	-888	-9999	1	-888	-777	yYWJglzoWM	-9999	 FiUSygyEQ	2	nSccyxEVtO	 pOMaYSQlh	1	aUUtEOERoU	XRAhdFNEgO	lONxcgMEp 	uQcyqWDWVz	zAjeCNE Ex	iqjCcXRKU 	-777	-777	85	1	wHwEafORKK
+001250	002601	102	IqHUn wt Q	-777	5	yDJQoJRINK	5	BYUJdB QgW	-9999	sJdiJ xWcA	2	 TOZBIYHkU	kcbFmTEScs	1	nwfwmmDQWd	DvOfMRaOcx	NOOjvzBfUu	GNNuwCXjzY	lEtvyuSOvG	UdM YsqkzM	UCanSOQZcq	m VuuAxoVN	102	5	WtSa TGpxV
+001251	002602	116	-888	94	-888	fLdESyY Hj	-9999	z WROPhanR	6	VoeJOAJDFB	-888	LqejKTZADf	XC WBxYArm	2	  XPVyxxQg	lLCilaQZpw	YnWcfaiQrm	PEMqwESyfJ	-9999	tIcmxeGklw	pETFBrLJOF	-9999	63	3	EHGBGDKWzE
+001251	002603	118	IelTsSAjwC	-888	4	nCrSvAXuUD	7	-888	3	CqlxSqIOKk	1	 VPuMJIH P	uR I zHDXy	1	-888	WVPOXNXdLJ	-888	dVafcls vS	YQcKtGAE K	MnJAJskkxr	Z XEhpPpTT	-9999	93	-777	zhKhCFFhIM
+001251	002604	125	ie  birf V	44	-777	 je  QtEYt	-9999	YZklxLISls	-9999	tljTduSXkl	1	-777	fMbacDzHYW	1	jBxi zZANT	VCrUU  l E	-888	JhcPSSHVDT	-777	-888	-777	QPCOKxFrdE	23	2	xyZQTPYFi 
+001251	002605	116	AZaWDtnumW	198	4	qGbJYVrrDf	2	-888	1	dwLGvUvyyT	1	-9999	-777	2	-777	-888	fXkNHYOcmG	qSXjQMxQLv	QQqLAACjs 	YNAj ND RW	BcZLPqAELk	-9999	167	1	
+001252	002606	102	-777	116	2	IAhKLxlZny	-888	TSwK Sjidj	-9999	dXQveNmHIz	2	-777	-888	1	lZAleXuRPH	-9999	-888	s CpIulOZL	-9999	-777	uYVhJ JZCS	-777	-9999	3	tnwnatwJAZ
+001253	002607	106	UECDMzqXfd	9	8	IeDAmhHzkd	7	IErdlqQQvN	-888	BpBHshPwqx	1	DzqFMCqAZR	oRaSnOcqIZ	2	-9999	xGiSWXcsjN	IJzzGHfNJr	kZmHdpfaPF	BXIWyIjbOD	-9999	kcwVMzPUVA	z SZ cQXUB	-888	4	
+001253	002608	121	-9999	168	4	DQewLICou 	5	SeUUlwPdh 	1	ViRqPPpDUN	-9999	-9999	bCyMKUPVuG	1	zGlddiLwVk	jNmfrgepof	 BkMKzDRyW	-777	oVKpiBOUzq	CpKSF zlcT	eZp tzBEWK	XqrVoByhtx	186	-777	
+001253	002609	125	-888	78	-777	hOvsnpeIqD	6	-888	6	hJrGcfdsyK	2	-777	-9999	1	crdqvGIaPw	-9999	F xoXeAX d	AyJsyoWpJH	pOHhuBMAOA	kTPAhUp cs	inKLCnlXZf	U eRwtXXnh	154	5	klmaRvBlrv
+001254	002610	124	qaVxOyTRhA	118	6	NEOrXSDUwg	7	-9999	6	Qwiy cvaDj	2	aDwXuXkHwb	sNzb LNuPk	1	lspgnWcpuM	T cmcEJQtZ	YMU j  FEV	-9999	ysiocRhzck	-777	q llHXVhor	-777	-777	1	
+001254	002611	106	eQ ARBhh Z	27	2	GWt uvxmWG	7	-9999	6	qekapX zYe	1	RFErhJmDOm	KSCOdfsyaB	1	ifBmroMooK	nZkaS eJnp	-888	WbLXLokzZw	oKA YfVUUD	urWdWKQdny	-888	YVPD IPdwf	10	1	OvhBfMVQVV
+001255	002612	111	-777	116	-888	-888	3	-9999	1	 nPDpLWczH	-777	xA Vq nLZG	S abREZNFN	2	-777	ndYHUqqOjy	-9999	j sOpIFTgY	yiUJQihePf	p PMNDQTJH	cGTUI oAj 	znqSpIaYng	118	5	XzmGoEmNZk
+001255	002613	122	USrltkHpSo	-777	5	 nhyGIJfxm	1	sqK PUxPmw	5	 CwcBoJJTn	1	 yOoGBMRtG	-9999	1	DdbWpaNqUu	-888	lHdHDBXWmp	-9999	V RXcVxZsT	QIAHyuObIa	BNbAUvIWgV	lTplpsPLiO	150	-777	qkBnFwOjJI
+001255	002614	122	mCsyeUeEko	13	5	IIzBBHGU j	3	DCZaMfy dS	6	NHFuoljtsY	1	-888	NsmKkbbZKS	1	tPrDjEBPwF	-777	-777	vfjjjZUOOA	lUDeS aDtV	-777	-888	-9999	123	3	YXHo a JxQ
+001256	002615	107	VtHsMVyY X	105	-777	M FQsGnjuL	1	-9999	5	pwIUvcpffT	-777	TkTMNFFukW	BCyrXViHIl	1	PDE uEPcXH	-888	dhQPOJCHn 	MpL  Bq je	 SuXCLGg N	aL uifsSng	LZ f jzaff	NpkTBgdqdQ	134	5	UUrvfotcKD
+001256	002616	103	VViUfPgqtF	95	8	-777	-9999	lqagGlowaN	-888	tvFXyJibFw	2	fTjgNonHbM	ymUIICSteL	2	TQGfPgdoTe	-777	 dFZCG bP 	qyNNTCwfhu	urR LBOWRN	gvqGEnywV 	ASqVhhViYk	-777	38	4	
+001256	002617	103	-777	40	6	Ae wO ayuV	7	iqfJXOJVsu	5	-777	1	-9999	bOPVOmMERw	1	mkjAhqptiV	gu iINgreJ	-888	WSkYQYbA Y	-777	-777	txsTxBkryp	YJcEubuYgu	34	-888	zCvPcVWXzO
+001257	002618	113	p HM mAafk	119	1	MFyeM ITHj	2	bVMv plunB	7	vIR C BSNf	-777	-888	mfuTC UAYL	2	ikTreoKwkg	llGEPVGtjq	-777	yNmDPF sti	nh OqvQnyh	yrxhslkeDm	UUDXmEUsjQ	sUjQhHLjUx	41	4	 RZp pwkLF
+001257	002619	109	ctoaFzZrAC	35	7	B  gNOkLLo	7	-888	6	XNJQXeHStK	1	S gTsxcXLb	RVcXfTuL N	2	-888	RmLVbyJhfG	pAwIiaCBqm	itdO bjSZg	eqFEAUtAiL	xKYhheQUOt	-777	YxnalvGGgs	10	5	REjUaK tSn
+001258	002620	126	ZOVviIdDkD	76	4	yifVxawEFm	-888	oQhucT FZg	1	azLgdjjtOm	1	-9999	fGujXlDbtz	1	afcxfCtaBm	kBvxlLiIm 	hManCBzcHm	jEoMmznUWi	OwGhZxXnaB	JSJxTjOAeH	-888	xJhoWVRRGm	200	2	KmWaeeRTdn
+001258	002621	114	ZfxLAmiMdi	20	5	URTlPOYBwo	-9999	-9999	5	Oy tL  ngL	1	-9999	-777	2	LQLMMhgqoz	-9999	-777	-777	 jRAzmLSsZ	-9999	TiiEPFvBCd	MZxGbXFzcS	-888	5	yaDuPtBbLt
+001258	002622	104	rrQS rWbrw	-9999	2	-9999	1	-9999	4	DhwEKRTNYH	1	ldCIJNKfow	EMFusjbkCD	1	kSSNLwYiG 	BGvGlBWJsW	CPIEGFmPeE	-9999	T tF StSxU	BiwsgDxOvC	NnGfuQZEWi	ebOwMVrYOY	-888	-9999	
+001259	002623	109	-777	4	8	rMeX xxIZw	7	l  UrQPqTg	-888	yNNg akxL 	2	Gl FKKyhxx	FxQYfMhASW	1	-777	MtHzNURUIq	-9999	uPC TNeRec	XDBbmBwJzv	gIKcwWNZGj	-777	-888	58	4	wUDyKwEbNj
+001259	002624	119	hDHUyqjy P	-9999	7	-9999	2	DWXcFNNvmH	3	-888	1	-9999	 LqkxUbfjR	1	oddbHvJETc	-888	aRLxnc xuB	PYrNZrZpGl	-888	cMQ ZZxp j	PrYcRPlnLu	qzniTneGAq	-888	4	
+001260	002625	104	rftVQBnyjw	-888	-888	bmHOr cBpn	7	VDX NfIYEN	1	rZe zaSyKO	-777	AOYyxaqEMr	-9999	-888	fMbEfoNSFv	CgWMkbRbvp	-777	MmS SA ZAe	iladKtZsaN	NpJhGKuCjI	ctTuZ ugzu	-888	191	4	PtyICAFapn
+001260	002626	104	JrcAQMLOAg	168	3	 HoZDWRXgb	-888	-888	4	hXpHVgiMCD	2	-9999	qzFJyIyZEQ	2	c fAdvbDrk	-888	KnkBFRoRrl	-777	-888	jNqGhzJhVQ	eCytUgVVkz	WdVfCJSkHI	87	-9999	
+001260	002627	109	-9999	79	5	-9999	9	k rnYjhe e	2	UqhAwrNcOC	2	-777	-888	1	 FwpJ uguC	GJX svrryv	EtLrOXUIW 	fCptuTNRIS	-777	-777	cDfjRndUHZ	-888	121	4	mhPYEqIsRW
+001260	002628	126	 YlKuvLPeI	77	-777	pb y T uvK	-888	wxDeflOegx	6	ZZJQfgDKZy	2	NKLtMyQetR	-9999	-888	RsUXYhDJEG	-777	 DYYLLKmmM	SOSN mz nE	QpBGtJLD o	FNWaWpYmPY	xZqkIF fpd	-9999	132	-9999	
+001261	002629	120	lIJnnm hrs	-888	3	 LRWoshtrS	2	-9999	3	-888	-9999	CQW reFOnA	-777	1	bbUWvpr ca	-777	iMPczNL Es	RMCBH NwFz	-777	yrdOhARGMq	kUlaD qfXG	xNbxvYGvdH	34	1	 JvgDuSMjB
+001261	002630	115	QJhVrCymEi	-9999	2	NhmhuOBjVr	8	GcEZYJEVxx	-777	MExRGPsqdO	1	BWAUY ZiSc	PzMNZqv XC	1	 dDxPdEcVd	-777	VV JiNHAdr	bWSvPqImTl	JRRp gwIxO	rZwqorEYSW	bcL nDaWzQ	LCvV hSmYx	-9999	3	jegfjGfiCY
+001262	002631	104	-888	57	2	l HbGZpZdQ	-777	jffUeNZqoa	-9999	-9999	1	aK taWPlGW	-777	-888	BLciYLjYSC	-9999	-777	aLLPApH Kf	 lmgqnMpMW	eZVximEeBc	 RViMVXFru	TbOlmqFTDO	114	4	WAliphBBlb
+001263	002632	115	-9999	198	2	QTOSiaAbNp	4	kuhPtVNomu	5	bTTl tWGrO	-888	mHxz KpkIU	LbxoPSmfrD	1	yJsbOOXYpy	gVVNXNtg Q	oTTm gIXIs	FukfhBIKhC	ExlFXHJKyl	SJlUUvEUKl	-9999	nsrgJgBdU 	-888	-888	tmyaKVWWAr
+001263	002633	103	-888	-888	-9999	PBJu ejykU	9	pQn LXgsYA	2	vAalDilEjj	-9999	V CPTeCvkQ	-888	-777	-777	-777	EHfytZhYSs	-777	JQagSLxzaT	-777	JxzOYeml W	ADPJJxqjxJ	35	1	J nETXFQDJ
+001263	002634	116	  LlaZhw q	25	6	LY POZzCvm	-888	-777	-888	-888	1	NB goqGq Q	-777	2	-777	OMvwifDsLe	MFbMCRycds	WvYmIwvpVb	-777	-777	NnEnGrIRDl	Jln sVn hX	-9999	5	
+001263	002635	105	fOUOasoQTu	83	1	DwitLJXQEL	-9999	SjjNllXjdl	2	-777	2	uiSFeRnOtk	SAmCJByBWf	1	ENyyPZy Qo	 AVMVuDasn	-9999	-777	-777	-9999	eWcL RFjtc	NUbCrInGQo	-777	5	
+001264	002636	119	v  lTdjrdr	-888	2	-9999	8	-9999	1	mafxZnZpbH	2	-9999	WXoStSDNCi	-9999	aUeNV  sqH	-777	-9999	kdLOZCnouV	-888	YVbSKCacky	VQHsyKjzPl	NHo INaeNy	73	4	BBunNkroZq
+001264	002637	125	 icCtfNjZE	7	2	-9999	1	PfszxPmUlQ	-777	kNHufcNeCA	-9999	No ZwaFCrb	cS r aOnMG	2	jHRJFaMrTJ	 llUwvXHHd	Yyujd pfpq	-9999	FA RpVXLGn	RDkouenfjj	eVlCVtTjbg	bwoIfnd cn	-9999	1	
+001265	002638	106	eyImKgPHNc	-9999	8	aAeUiixHgk	9	-777	1	dHPDVGYkHe	2	GhWplFbZPS	-888	-9999	-9999	-9999	viHcul PdQ	NcFRs CwUB	GpDcmJyHZv	uOiSDOEXRV	-777	ATKl UlUoe	-9999	-777	Fu NhfoQrN
+001266	002639	108	LMbDYkrmcW	33	7	-777	7	ISFG YpXFF	2	laoQ qozyf	1	XUiPUJOakg	sbBSRKuyqP	-9999	TPiAHJABzx	HiQjmKTckP	oheskqCpiA	-888	-777	mNnjeDxEyQ	-777	RrjCSEVOds	119	1	vplMoqFUhG
+001266	002640	108	sNTBDKwCBH	-888	-777	IMKLzIUthV	1	UTfjpuNidf	-777	 dXnkHT ai	1	CNHCnUIOwO	-9999	2	-888	gsIHnzroLo	gpulJkGW  	VbeRESeLjA	FgPZyKbmwG	tCOJzQiOFN	FbiqETmVAB	xfSYRojQtY	-9999	-777	
+001266	002641	107	NDeGxV UJD	67	-888	-9999	2	GTxdvouALf	2	VLoh  gSsh	1	-9999	wDagLLWsRG	1	-9999	ksVvJfEQZZ	EC EJCLoGa	 zNgyTSWi 	-9999	-9999	Kg jLBWwHn	xuVKKCpFYc	166	3	WDnYRC xOQ
+001266	002642	115	-9999	179	2	EzASFNBIGW	-777	  NcJdOaam	2	tHQVjCogBz	2	ijHjSSWyIJ	ZkDcsAOtfx	-9999	WfxtsACzYH	-9999	-888	aE IiDHqGF	-9999	MnDyWMgqwm	ilyfnfwSrN	-9999	103	-888	xTeSSdedsY
+001267	002643	113	sZnBDmTcn 	-777	4	q zWFIkYVb	1	-9999	6	A  GbqXFXt	-9999	-9999	NuAgXeipGE	1	-9999	SVemSzRIVG	kRdcvhtJLu	nDqnSdoUSo	IpDrrpnCyG	OvHAoxEjkC	zfPvSUYokc	IcHrkS Qhg	17	4	
+001267	002644	113	ayHED sa i	35	2	MbEqH oI K	8	PqeVnnkhNz	1	-9999	1	h NCxSbupo	zURcxXBTVP	2	SeigiVpZeO	MrLqhc zjq	WTTzKhliXy	G QAGfLiCK	-777	vnojeraIMS	 rWjDQPPUd	BFRiUcLEPd	48	-9999	HkqqMtULbQ
+001267	002645	113	luU NOMQbF	144	4	UBxCMAGsEx	9	-777	2	-888	2	-888	wEmIBlaOln	1	sh cGXBiQZ	-9999	ePmMe d EU	DPurIOcUmn	VrGWkAWpF 	lTfWsberuA	nYZ rcFLKx	JWNuDIwrQp	82	4	eweRIlLuPX
+001268	002646	102	ubrcXWhXTB	-777	4	-888	-777	KN AGRzhgS	3	 CUHjHhNCH	2	-888	EVhrZbSD i	1	nj gnx KgW	-777	-888	KlHbhrryVs	-9999	DhMUfiEGOs	ePivb epGe	ZafxjG Ygw	109	-888	VdaXrJYYrw
+001268	002647	108	Ke VKBcbXr	-888	6	VKaWweBYTR	-888	sGocWvWyYv	6	hhkOwUfxtB	2	jZI vUccPi	mG KEmEp D	1	haYfuaTVOc	-777	DVgfZUBqsX	oDYZnVwOuK	-888	 okmiVvTvo	dysNcFuxAQ	-777	-9999	-888	wEYxathIMM
+001269	002648	103	-888	25	-888	G vtCJnLOP	-9999	wIviyjisxg	3	AxVAKEQgj 	1	lcQqJfLqur	HrOgpeFDzK	2	vYrndxEUZP	fHVvsVxKSF	wGKRrU Ojf	-9999	TXcHWzGuQE	rXsnpYMfMC	-777	-9999	195	3	sbAWX xVWi
+001270	002649	126	dMe wVN kY	52	1	Tq jShhxJa	2	WZOImiNWBw	5	YInxickuKl	1	QLol HuWzO	-888	-9999	doVfhYVaqv	-9999	XchJdoOwtW	acGSIVogyJ	FpNZGgfHDI	-9999	PjPA  USCs	zTrzaT hj 	63	5	xbryWtLfMY
+001270	002650	118	defzdlqGXJ	-777	6	MkshoLAFQO	2	-777	5	FaDBGmYGFi	2	mqR sxPPan	-888	-777	RlCHSj ZOY	hoHIVWGuSZ	XCYGSbWipi	ZpqPzirins	CqYrXmlGkK	-888	UojUpOjfHb	fHVJXrBkDS	102	3	MuKJTScKBq
+001271	002651	112	pgovZ goiQ	-9999	8	-9999	-9999	 tep NK  I	-777	ML gpJDyRt	1	BmVlUqqgeA	JlpA AQI l	-888	ockv oMrZA	WAyFTilulD	mmxcKrVCla	IAkmvHNGim	V fagysVLJ	cK eyPRfCC	-888	EfyxOu EAJ	86	4	cOBYEkwpko
+001271	002652	101	FixnBYaiIa	99	4	-9999	3	UWgdVrDLMj	5	KICeRTTryb	1	CqMerzUlHh	fojnveybxH	2	scujSTreDq	XSypbDrMRY	pZPwZOxgwf	-9999	-9999	 PkxXnUSmj	OfEBBlNbFa	m uPIFbKdt	-9999	3	htYlPkznpV
+001271	002653	116	kJSPOtUpZo	-888	7	zICZNhVLdC	4	aLqRwrRfbp	1	-888	2	-9999	CsOUEkq uk	1	iIztKOKVnp	xtjJWRMwgy	LvTovVJEPJ	RPiHL tymH	-777	  rcOBWHYl	CoA KRpodD	yZadoPhITd	50	-9999	saKzkLMvPg
+001272	002654	108	bgZBxlGbkQ	39	1	-777	5	NqoykBhFLJ	5	-888	1	IdjSTyytmO	EZNqdRdevM	-777	eA SHPqpKU	-777	g CaBsNTcc	dzMAkvNkhQ	-888	-777	KEPQizvj u	BnAdpevKMO	77	-9999	
+001272	002655	105	TpAp VzAKn	91	4	QpgDwhvVHj	2	MyseIkREhY	3	PLBiQggFBg	1	RqtWIhreVk	DCatTEVOca	1	tdszmjkphl	qdyLYtT qD	FifeoXjMnY	MFhvAEuUmd	dpf YMpDme	CMXZWU  zQ	-9999	xcMbFz Zuo	-9999	2	yguuUINCwl
+001272	002656	101	IdkGwPbrC 	43	5	-777	-9999	-777	-9999	sI NQzEwYg	2	IZPBQRJco 	CxO CGQASC	1	aEDstbIRqF	owjilNHgYr	JseZI h Rv	Blb VGMFGd	WXkqElqMjc	lUCmBXtvFE	issvI FEdQ	PtlTVCWajb	37	3	lWkmVCHhOW
+001272	002657	126	AKDnnFFXjn	32	-888	  iibOAqSw	8	gFJvsgKUkz	5	-9999	-888	omrrZab JB	dM mgxDYxD	1	JigoPBvrYx	tCXYhQNUGo	sED PRWp W	-777	VrXCWmWluk	rmFUEAJsNt	-888	hOZAJtzBmH	159	2	gFoNxurkRJ
+001273	002658	122	ZdZFwOzcaq	165	-888	-9999	9	O FK Kxb y	1	UkeGIYGflh	1	-9999	HylvvQNCbC	2	AHJESxjB P	wKVkrVbYPA	JDBQrTPxaH	RYlFzIGMVz	-888	-9999	-888	-9999	188	5	
+001273	002659	106	IenOoN DS 	124	4	icNaghfrMl	2	AQYPpldMkL	-888	jvySBI cY 	1	 HoREZRiwo	-777	2	DZEkjdqjct	hTisD jSNK	tWtw ki Er	nScqzpiUGO	ZKyMK VZV 	-777	F OhWnX wH	sUsmgrwNwX	13	3	rKOryfCduh
+001273	002660	106	-777	-9999	-888	OCpkkvmWxm	7	JHol PdpSJ	6	TisUIESznS	2	BnrITYGuKx	-9999	-888	CUBbGfcagZ	-888	dUbuNTMU E	AhZNOGIAYo	mZbXrf rQi	ETAI sFfpf	jA kVhBDXC	-9999	-777	4	oKrxIyhkvR
+001274	002661	111	nOPupiAaY 	21	8	-9999	5	-777	4	DZWdOwHXIp	1	vVckztPKSv	-888	1	-777	NID dFy vA	vmyVO Oauk	sx GVPqSLE	-9999	qgslRtKuVW	uhMoSwyvfP	qioiiddIsg	173	4	l HRPIVgGO
+001274	002662	113	 HFFEESNGI	44	-777	w sZiUcO c	1	D KafziTvk	5	-888	2	boZVcy rxs	GlRzAOyZfF	-888	cOrPZ NByY	PuhjcrDRKm	VKdtWzAuu 	QeCHucqtKR	-9999	AAwE nChcI	opdHqBovvI	HzMVy zmSA	40	-9999	NXUmQnl zD
+001274	002663	123	X htjWUf d	-9999	2	-9999	2	fUTzJIlzZZ	-888	eKgWWqbeqr	2	wQQGFeWDgX	rR X ZwLOO	2	dtr odcVxI	-888	-888	PuszwCmowR	-777	ZlqVuROBrt	-777	EcVutWheFN	-777	2	KSGmMIYFXl
+001275	002664	126	VQJyDMiYfA	110	3	-9999	-9999	-888	5	J YwvfYBFV	-888	WkUGvQEYMO	hfBlxJDoIW	-777	Fsi uOcjwF	HwoLxQAMiS	-9999	UU ejtMhFl	cER  kjlDP	sD EQhkIDZ	BNLZItRv a	-888	-9999	1	ugjkPqD Vi
+001275	002665	108	-888	152	1	zASaDnSnaM	-777	TvtWc jENW	6	Yc  SZYrCv	2	qlvzRGmYfW	hgQeQiUc  	1	onpzkY Nt 	YKqMSBWZzD	syN cgmRuC	dttrfNzlX 	-888	ujvIlMyUHD	o pmZwXjlJ	RbrNGcqD p	-777	3	
+001275	002666	105	aXJtmSCLQ 	33	5	XvPIirLPeI	2	cCBLcCniiF	-9999	HIIltYmBOX	2	-888	-9999	2	uQyNI  iUS	hpAbIfgYRn	bbEKHVBgXw	-777	sMcHRXdAxC	YablWxtvRe	dTQTABVMLS	mSLlRMMNDX	48	2	DyxwyF bTA
+001276	002667	108	JCRKjJvuwf	77	2	-9999	2	UFvIcQAgwm	-777	f VhTt mNE	1	 VKRfsKPtJ	aUmgxnOcYK	1	-9999	jWYffdN pQ	Yn xVgVj c	-9999	AMaZsrtwDz	 k jXvQwx 	SIUNynKZST	WiEMTR Glh	79	2	 g SaTYKXx
+001277	002668	121	oEiunlhUXz	113	3	vAOSRUaUsf	-888	TptGSbyQTg	-9999	-9999	-888	-9999	wVN  vydFd	2	PqjBhOorUz	-777	uyGubiMuNL	lfiBsZ RNs	 sCBwekiVV	WrYYftoiVU	-888	QfSHppMMiP	187	3	f  LSDpqiO
+001278	002669	120	cQniCwMchr	110	1	-9999	8	G TksXmH y	3	GhzsHdafvK	2	-777	LwrIAnxmB 	-9999	tPRfnlQXuc	XoegxZ NKx	emLgvWMxyW	 xdAKFky K	pWsVtTCQEN	GtnH AYvID	aJSctHkvKn	DMq elsrUy	197	3	fnMEIWHdRZ
+001278	002670	102	nglKgjyLEU	71	-888	AuhzVJhKva	5	CGdTmUiQ J	4	B  qQEDUaU	1	 YcwnfGDmM	zAMQYtgEVA	2	Ivyu jgDHf	zfSSCmyxIU	hxnKZjjstS	tJje hHfPn	-777	RZ uHfsuXx	zl ndEhawY	xaXooMdoiD	-777	-888	BtRAedhDgm
+001279	002671	111	PklGHq Jkv	179	2	tDlVhnfefU	9	-888	1	OKREEumivN	2	T GpccKbrr	VntCQPZIfF	2	NYcFbnzvEk	JYbNMbmERz	zuotVOkpry	ldFTxWLlfG	fCWGMrT Pw	-888	ZIRSGpJWZq	yTcomNCiNi	186	5	
+001279	002672	109	dRWUluXNRK	122	3	CEZjWsW HQ	6	gfh bZsJgB	-9999	-9999	1	 apOsAQEy 	WiXwLxUyqd	1	-888	ZHZfT UESC	GUsETqsPOT	 vHNUwRIry	 tmTQV HZO	IBEOB JJCM	rBwrjAEhSK	HpZIZwao n	4	5	 J hXSxaIp
+001279	002673	119	vKvwjMB Tf	167	1	tlKTBht Qn	6	-9999	1	Hu  CZ  XL	1	hTXvSJJOlL	-888	2	mFJudLOIHy	qbzsJsbBGh	ODSDoIYig 	SzLox  eLl	GwjzeKuGrU	uSWHFJktnO	Qy qEKDNyN	-9999	185	-9999	HpbPvkWPSM
+001280	002674	119	fVGF xBodd	156	5	w pcUTawCW	-777	kvvKCxMqow	2	JjybqofZiw	2	sVPtmC uaz	BsTlAFuZ v	-777	-9999	-777	-777	 IAknhmPRO	mNDymEfCTS	fLDYQtFxfB	UKRCpmXVPa	qANbs YAem	87	-9999	pVbfybOIil
+001280	002675	126	dLlJOtD qP	168	7	TtfsOTLXIt	-888	UBYBCwmJik	-888	RUBytpQmbu	2	-888	EdgOPpqnC 	2	-888	sxkT QdcJH	EaeGoDrHWR	uGbnbiqpnF	-888	DNueYDwVNt	rN svDVHsa	-888	53	3	ECU ETml r
+001280	002676	125	nVud NxSZH	178	-9999	-888	5	kwEcMOLKeT	-9999	-777	-888	PcwkPPGelD	LmFkeunQrv	2	smVFqhujsP	-9999	-777	QvZGc gNfc	-888	-888	 S umfZcO 	BevHfRRdq 	119	5	pcTmufh Vr
+001280	002677	115	fvqYVpr BV	97	1	IaWmDRnKxW	6	IW ACKcYhV	-9999	UYRbGRyzrl	1	caAUzDCSAZ	VqZFqFHGsn	2	-9999	xpc JWKPdi	UBeCCICuYz	gWSBzUKgIW	XqUmFNPzic	QndzFsMPPW	gBNZVSrDfM	vMOPhcLJGg	75	5	
+001281	002678	108	-777	81	2	HUVTTKNalI	3	mbT ZjGDgh	7	AE idVqNK 	-9999	-9999	b UeJURQEb	2	-777	llXNszgzJh	UKEmhvghEh	qAEzxtCksY	-888	-777	eMPUCSUVmV	XZSyttpPUs	39	5	EnWiUFapzA
+001281	002679	125	-9999	-9999	2	qqJvmoNM w	6	-9999	-777	ExppfvYyvg	1	-9999	EvFNpcXzbF	2	hjwXSwRCyu	llOMrhKAaD	EMjqEPL b 	TpnUBnEEnz	MbhTNvfFTI	IqoccqneDo	ZmGGrELrMl	WEN cg NuE	-888	5	aROr PJdKc
+001282	002680	123	tSOwqCtbMy	137	6	LGWbMWVJiG	8	FbRsHGINpB	-777	JAnWDDtfMO	-777	jtXjjWVvmx	-888	1	BWEXEFUFCA	ulbH LeZKR	PaeBMUjZUW	sjdeQdJyQb	 hkBVKIycA	SlUlPpwvgq	hn HEvvgPg	aPGXCU MRp	40	1	
+001283	002681	122	tYsNlRgvuT	117	5	DWIGLQNZAN	-888	ZeWTxTmjGp	7	Pm fdVawtx	-888	-888	-888	-9999	KjeT aKVt 	JxCjAwRf Q	ZBJCkYucax	APcRb PdAX	MQcnZ Qmid	NBag LQDdg	AzdveVgq J	AZXJozCCsL	75	-9999	fMWDEJgOEK
+001284	002682	118	QjeR MTA b	128	2	-9999	7	-888	5	-9999	1	QddnBDEkVz	p  TXxGcdH	2	eMTxTROJVN	-9999	nRHL Vltyv	-777	uKPmDSaxmO	qnmZgC cQq	NSMsculAsn	FtAakL Xug	-888	-888	IGV flDjmp
+001284	002683	105	JUmBPjdQdQ	-888	7	-9999	2	Okmm FDpvJ	1	fLdUsDPzMN	2	VTmBSFNvHA	QdCGKMva o	1	BDWOWgOJvl	rvPVVCHXub	MR WplGLww	JaOVPDmA t	-888	VuikjmRhUx	-777	EeOJwGYUpp	54	3	HhVcqKRYtm
+001284	002684	105	j JpxuDMRS	98	4	-9999	9	-9999	1	QveDcjwMaq	1	FmcoXrsQtK	WaXBHylNEf	-888	-777	SEndFhlSio	x AOhokkcP	jEVxJeKklV	IkEdZZkHwx	FSPNwGkQjc	 oNSjTvQNG	gv nHDDprg	155	4	
+001285	002685	104	A MXjHYomJ	89	-888	jVmxloTs G	-888	-888	5	aEXjAkloXn	-9999	ntUTQkJsSI	-9999	1	J otznMDPX	-9999	BcCFBDFgKb	XuQtoI epi	-777	DwUSJuBOto	lVp y z hA	-777	59	1	CSurSqlUfV
+001285	002686	117	-888	6	7	PLOYMBUZWi	3	nsNhVQdndD	7	-777	2	qpnt kAJNi	-777	2	-777	xznH  mms 	QXhekoGUhk	uEkKrBWx m	-888	BdaHXZLh G	yBYwFIMUAY	rcr QSSGgE	-9999	-9999	
+001285	002687	104	AbVjgpkWYe	39	-888	kubj wMvgT	2	-9999	7	oMlRQukwfW	2	fILVxkNZWd	-9999	-9999	Tdpll jHda	eQ fDqtWSC	-888	AoeamOygKe	-9999	-888	ccjx yj Bd	GIuurqVyBh	-777	2	 OIHetsR z
+001286	002688	114	-888	146	2	-9999	-777	GItIZTQxTj	4	gSHKGOtTUG	2	XTo  gdepx	QtfgDdQZHk	-888	eMDRZw LOI	z gSNrqKop	SUeb KFXex	vKJMeqfTSr	Gfo mWsOLc	CwupvJ zLj	QzaeyXwFuE	hYtANOQaRL	107	2	
+001286	002689	112	T mUKKpnSt	92	7	rcs aJXrfX	-888	mCJoaoBCsu	4	Q CboKBhXz	1	-777	-777	-9999	B LzBDlWH 	xm IbWsPRl	-888	-888	fpeBFhjnmj	yxJlKrpQZM	ihkRdtOqdt	-9999	159	2	
+001287	002690	124	UgTAtdKZko	-9999	6	jGKKgw HtA	7	eeBHgH khL	5	 vk  ROeOo	-888	haTGbomLpN	-9999	1	xu CbyCFRq	xYAxsnFrhs	 Ebazj V  	-888	-9999	W JkWB kx 	qYlBFiBdwZ	-9999	100	-888	zHIoNqaoKs
+001288	002691	105	sYJLA pFJO	156	8	-9999	1	gnUkv PXVj	-888	-777	-777	-9999	wUCezJy Zj	1	-9999	Rp Yic   h	pk  BCNBc 	YsDEkTZxMJ	FzAOYQFrOJ	VUqHZUUWib	-9999	VqAvkcIWbU	-777	-777	rWHtaVOhKT
+001289	002692	121	XKvHDr kuD	188	8	-888	-888	jUbLcHyVhi	6	-888	2	 YHEL K SK	-888	1	OeGtZDVyDc	-9999	ZtDXqhZ Rq	-9999	VPXQUJjOcX	E bKpILn t	B WDIKntLA	SpA G jykn	77	4	
+001289	002693	116	-777	120	1	-888	2	DM yNUcmAn	3	BaaxLVLuoJ	-9999	 mWIcH xSa	  oOI l AL	-9999	JGYOEo ICV	icmSAMMnZB	-777	pATqvvtLDF	iGGGxVBegN	OeAY wjspg	PsJKfUyAKf	Qgn DcBWDR	180	-777	WOZQwagR  
+001289	002694	103	qh TeUbDyi	125	7	q EEBiOkQu	-888	LokeaBZYyb	-9999	JfaF EoikT	2	PNaKUT uzj	-9999	1	ajxGnK rfo	-777	NDBmsJLCgG	KpLTACzxk 	-777	nZPYTUtNth	 DZnPOurkF	JjdrRzkouF	43	3	QLxvVvcPqP
+001290	002695	111	-888	-9999	-9999	WZdAqdWMd 	4	ZgiluGXkXM	-9999	IRaimLUKGF	1	-777	-777	1	 PMtvIVHdJ	xBuQWXDgcH	-888	-777	iBNFacERHj	ikYetztMad	ciZPgnVUda	 tgrdVVfcg	-9999	5	Krck TcR T
+001290	002696	119	 rb MDanoP	166	6	-777	4	AubFDwWuGb	-888	VoeVBgpsfb	1	RslMDEoVTi	-888	1	-888	XRjaeqvbBe	phaodyFbZe	runoAliACc	srPhoLQgkY	-777	hSLkOKdjiz	kGuTebMZBA	-888	5	 kUUCKuUdy
+001291	002697	125	zFSgpnabfA	-777	6	NUdfNBSjOa	7	bpKoCYhQkG	6	WlgySZZubr	2	rOEmgFsJId	-9999	2	-9999	PtftNwc rm	MrhfytQcYi	cijNVyiCxX	aCnXZcPqoE	-888	furbO nnqt	-777	-777	2	vkaHklEdVq
+001291	002698	124	ixiOJnl By	72	2	WwdWgYnKXo	-9999	tN m gVogS	4	hYfiMbPpFj	-777	bsUiKzcIjB	YHTyeJrDlk	-888	-777	MkI WyHSFv	uLLYjSUIVn	hegL loE m	LXXNGkwIYs	-777	-777	uCYVPrxeJD	-9999	-888	UjPDp q Qf
+001292	002699	113	-9999	170	-888	vRziKIzJIo	-9999	AhTQlbBqNS	1	-888	-888	-9999	-888	-777	DDDrpOhDkm	SevNUubiDs	o XMdZPBsa	jdmjlKxV P	VCBmmWajIF	ThoaGjZbSh	vKnmjBiXAB	-9999	-888	5	VB zTxjtch
+001292	002700	122	dSfziKPRvk	3	3	Vw YP AwjZ	7	BZSPQdgKuO	-777	uUrZUYzFa 	-9999	-777	LmRFUnsiYR	-777	oERqOkPMOd	lRESfP Zvt	odKWbQqCce	mvvXQGeTrv	gdZ YFJaNq	Y AfcBJEFu	-9999	-9999	-888	1	j haSTupdJ
+001292	002701	101	acOZkDbOOS	45	8	UgEPbrVpQI	5	dnyFzgbFia	3	-777	-777	-777	gUMayMAtAg	1	lSX JfV pZ	cHPpWZwKCQ	-777	DEFdrOzxTE	LUczjgrKHu	TCYXvtB SJ	hKmHaCRwbD	-9999	33	-888	gcdNCi  ea
+001292	002702	109	sF AqvCQpU	148	-777	ABVGtbtfjY	-777	WezOkCMCYN	4	TxwnI  hwk	2	GugtGABuCJ	mXucKuFtwv	2	tZWXBzeaHU	 bBisFcmJb	GgzNJcBakd	pIchCIitsK	sbWHrvymLt	lcZGrmxucN	-777	kaeidHqqiS	121	-777	
+001293	002703	103	aAlFrwGyQb	3	1	tHNXGRKAhw	-9999	-888	1	eaXeMOznQe	2	ilfsuNCYKz	e vUmkwwPe	1	xsaF foAvk	RXiBIDkWoA	kcF PuioSf	sjaWtXxdBD	DhRlXzoGDs	aOFOh  bTo	m uairJNdC	hQGrHYrqhE	186	3	WfSGcMA lp
+001293	002704	108	YLrNhVggdF	162	7	XcYpSIKKKL	-777	RsXFI MaiV	1	-777	-777	-9999	-9999	1	J JAItYcdO	SajwCeSmOv	-9999	nV H  eTBQ	uAHGuRaPZF	gszdzFKwMR	rxgX SQsgj	h jShuHyWf	53	3	 Tm wGvkEr
+001294	002705	125	-888	142	8	-9999	4	-9999	1	kApOXeSjvv	1	-888	zLjjBcJcOB	1	HGPOcWiUce	S pdCvT vz	dDjuCVFLwZ	sRUygbKgiR	XzGpCzdFHT	CvOVIiGtdW	ZcTZwuTIjQ	-9999	-888	-9999	KLZpbEUxSF
+001294	002706	121	TjgUyjZYZP	-9999	7	rrn hHn GV	-888	wfcAsqEbeV	4	-777	1	H zswjYVPF	VDvkhrOIGU	1	-888	-9999	 lpa GxXQN	-777	zqetvxUfhy	dgFnilkULl	qijlLWFM Y	kdYvpHhPmA	171	-777	huG iSpkX 
+001294	002707	105	fIytzQrALg	191	-777	-888	7	-777	-777	cbxcglvLhC	2	-888	-9999	2	BaDQkZzFTg	-888	diEHZFpwsb	-888	-777	SS  zowmBg	uWFqHuCj t	-888	71	-9999	
+001294	002708	116	JfaXOdkkwu	-777	8	zVXwQvUObS	3	tTcIzfwDtY	-888	cOQj uVnJF	2	-888	KlGYpjPncu	-888	-888	nsgqlblfOJ	MNxJXCP gX	sBtyppgEwY	rZNGEZSAir	xtrLmjuVTe	hhvYo  eeW	WN NMkDNgl	130	4	RJLeTp Pgp
+001295	002709	123	UySliYPaOu	-9999	6	KZVn LZ WO	4	rAxBWVAGZh	3	YDWkjMSbrI	-777	AnrsTXKgjO	yWLUamL LW	1	MELFaRJkxj	MvIa JCxzq	Ma hMCFcBj	-777	o jfC IwLL	-888	GPXpxZzaBk	iTZWGC CRD	39	2	
+001295	002710	107	BIidZNILPC	-777	4	yveDmeIlCb	-777	qTjqTmEQFb	-888	SDMRnGMZtc	1	UHsTmJxYWe	A yUEaujQr	1	F  rxtycAJ	xVfRRHnncx	-888	iQYaWHcLlA	tQKGQljwft	kXU VSCeUI	NMQiii ezK	KdhsulYyoL	193	3	 tZDrtVteB
+001295	002711	120	-777	85	4	KZKFawqDEl	-9999	niFqJYMumG	7	dg VGQtNM 	-888	RvyQUufIoc	-888	2	paEm OGqGE	GBsWzkUwcq	-888	-9999	TRSdFiThFj	-888	NhDrjiaccR	MccPWxNUvt	-888	4	jqpaOx fZM
+001296	002712	111	QCkjJCZdyJ	166	2	YAzPhqZNnJ	1	FqVkFlXVQz	-888	-777	2	-9999	xKQzlqKn B	1	Uvvw ScXSa	-777	qgGvFNMzUH	PkqPNeMzmP	cLrvhA SgA	JMeROm Ajh	RhBPKWkIPf	EZFGhBGJSX	127	5	
+001296	002713	101	-888	120	3	EkgnutlGNr	-777	whixOJznek	6	PoHsSTvQdg	2	kmvzMKQbDd	-9999	1	UzoZhBPghx	DFB nyvuM 	yKFxdcTvQn	Ow dLPN KD	RyzBdb qqr	SvaOZwaWQh	TZfBFweuRQ	oDloBNDVqV	-777	1	
+001296	002714	115	vp BWifnxX	159	2	EVc XQOeKO	-777	-777	1	-9999	1	KwxWhFbFYe	lmeKZzY Ll	1	zKoXTjYm P	yJaQowWAgg	ayPpxHWQuM	xRPdcGUZcx	SaOhWuDsAK	-9999	CkcqIgXcnb	m CcLkSrXs	79	-777	
+001296	002715	109	wIYqDgdbIX	-777	1	wlBskNANBW	7	WINUyjHyLV	6	aXw ofcH a	-888	-888	mpbwkfYfyc	-888	IMWyArpiLQ	MISjbUSOpo	egUoRgBsLs	grjBTCXyuI	-777	vMEXQXIC r	GYiQwDmZoQ	kBEVENbjvo	14	2	
+001297	002716	120	-888	-888	3	j SEGWRImJ	9	S UPKS YIf	6	NIoHDuNrok	2	VwtntWRAGR	wa ukTOSeX	2	OVdEB bQdU	lkcRoFrHXB	zdaBspipaY	JGfcTrsvEL	ElfagMZmky	-777	aghUxxMYfX	CddUsYnIAi	195	-888	
+001297	002717	115	OiNml iBYP	11	3	wlIzbenlKh	4	DfGyEpiYLs	-9999	-9999	2	Vmr naWUKh	BZonVAUQjP	1	feQxXfeFmz	pdVsTwCkYU	ptNHYcACVp	kIb  svjlS	-888	JEnWYUNGss	UhzcoOjob 	tyBtI RSyL	14	2	FOERNfNaQP
+001297	002718	101	mLCOLOPIm 	33	-777	-9999	7	YtRDhsaLlY	-9999	ZstBlTRtWe	2	R X AZdFoS	JZGFEg heE	1	IfuGvEDLM 	-777	jOpAfymRIT	MjzLCFBCPY	eGiRcvmVDv	wLVKIoNtFs	-777	emPhkXcnjy	-888	3	
+001298	002719	101	-888	160	5	-888	-9999	ojLTWNWDpU	6	oEUDrhg rI	1	lKpErzzw W	VXphUranae	2	-777	-777	bXaOGJTCtY	jCKpVBDiZm	cSjGOMYsEa	cUTFipqMtb	PBJSxlgCyc	LUMgHZUZvg	163	1	
+001298	002720	103	kUAkHUjEtq	162	1	kEhiEijwXs	1	stR Ge keg	4	-777	1	IHeYHzRLWM	emqsjmnXoW	1	yCU cyhDfJ	jTyJBHAwiz	IvTZZJisUF	EoFlCdoRQc	-9999	yhI kTF HJ	NRPOYpVRTS	-9999	66	-888	
+001299	002721	104	 blPXzsfGj	163	3	-888	8	pBhIuHCocc	4	CFKjfxH co	2	-777	golm yiuUB	-9999	FAobsfhWVx	-888	LwWpCKo tF	FqzyLXBuyL	ElZEB Ikwa	HdCDd fHt 	-777	-777	-777	-777	
+001299	002722	109	WxRnNVJNEa	94	2	vlWrdvmjKk	5	kpJAQoySAa	4	-777	-777	OulnCXaJdE	yYMqmBJx b	2	WrnBgAd Ct	cBIOQyxqxT	ZBdFIhIwLs	jyGz SYXbN	eVa Ry KU 	ZnoaMsnSGM	VtAJmUmbPg	NlqfZEMXSe	-888	1	oljrhXrayq
+001300	002723	105	PprukdpI l	104	2	gVleWnxiLG	5	WZAFJD jji	2	-777	-9999	-9999	-888	-888	-777	ndnmzfSTbn	qwWRsuwsdn	vljtdVDF B	FBQOJ SjMJ	-9999	bCQCYgmtGq	ZrYYngShTA	156	4	
+001301	002724	124	-777	7	1	a VJWZFiQo	4	-888	2	PnsgUsuJEb	1	ontLFknWjR	hluS KazKV	1	-777	KKwEhe nts	buOnGQQVqW	-777	aqisDaiCKq	-9999	-777	-888	185	-888	
+001301	002725	122	qWFdSQSQpP	134	1	-888	7	-777	1	-777	2	dBeiMA C v	HkVurlUwQx	2	-777	eS hDYtLHi	phDDdMKmqs	-9999	-777	qbXCuRyXSd	-888	oT NFwoZhq	11	2	meP  aZNLm
+001302	002726	121	zAdvGcJHEy	53	8	pJ VZNDquB	5	oMxYqcqDGh	-9999	HzLgxnJtgZ	1	-888	-888	-777	-777	gCWLeNGwuf	hLKUgkvwZp	LPOjVyc xG	qSDJVEiJgQ	GpExDwFDro	ZWzOtsHq x	JGsIYDrhJK	12	-9999	
+001302	002727	115	cPPbuEfzO 	-9999	8	MBUNXXLrEH	8	erk lts tD	1	UMpqHpSrEl	2	eNplgvobia	UDXXGsVBxL	1	ONkAALdbTB	NkyHU hIbo	-888	WxXMlFjqDS	YoE OqyZ f	oToOAwFHnA	XCaTvVxCKV	-777	-777	-777	
+001302	002728	107	iEZ Blklbx	161	5	krYxsnbzqK	5	 GsMJ LzRx	1	-888	-9999	roZSnwczTd	bzlgfstSiC	2	UOU pCPHPk	mCKLfVZYFk	vAuuXcbguj	jwNCuYrqsC	vqNtXcgzUM	McqsQuioos	-888	QjyyuclujA	-777	1	esJXtQInrY
+001303	002729	122	mp xBVXPUK	169	4	Za sdMRpb 	5	 IHkCOvRAU	4	klkMDUnUhU	-9999	Of SXzNWRQ	BYteoJcyrK	-777	-777	EYfAs rBST	SZMpIieqvv	-888	XbwptzMFtP	 jwywvdlEq	M epShjiZf	-9999	61	4	
+001303	002730	126	UQPEzhrvEQ	-777	8	-9999	-777	-9999	1	nHAGksDdQy	1	 GwcFVZqZj	mtgha tTpJ	2	CuDgEcLGKl	dTy CUcIwc	ekfHitmzfw	-888	-888	 OAY eLQfz	hDKvNhxzHJ	QzVxAUw tF	-777	2	EXNgqcMGsz
+001303	002731	115	omkvWnugqG	142	-888	em fpUnfQa	-888	yZjTvnUijI	3	WoUOkQrVOK	1	K sPoHRkHJ	GIpWhpIeW 	2	Fs ZPwupvG	UEmvqaeuyS	-9999	tDON MHIyD	-9999	dJQGupzMFa	-777	azkHuADNBH	-888	-777	
+001303	002732	118	 XMjLMEimx	139	2	YDqi JxMvs	6	-777	-888	FAEK GElWX	2	-777	-9999	2	umLxHnOZRa	xBtAB qxHs	IzI KbFzqy	RkfnxvtNYQ	-9999	FTCQurBtQG	sFkyN KllW	PvpvKCsmBn	155	4	X mdTDFYzI
+001304	002733	101	-777	-888	6	cxYtR DZzq	7	CDyeserS D	-888	zW luCpjfH	-9999	-9999	d TMDMhxz 	1	rYrtQqZEPk	tSlLiY GNV	-9999	-777	-777	-9999	-777	bzOYEGKaWY	166	-777	mFmWuiGvgS
+001305	002734	119	vVKcGiZLnz	21	3	zqexGMnjUf	2	haPboIstfD	6	seMSApWPuY	2	-888	-777	2	xd dxmVcDG	-777	-888	heirybVOzg	f vdbJVv H	ARVoCXLcch	-777	wxGavLJEX 	169	1	GdGdSGmHNg
+001305	002735	111	-777	118	3	SmuqLuOJkz	3	J JKjAhhVZ	3	IHTMyffaap	2	TOdawMgLnu	vbd nZdhyr	2	-888	UZx injx c	wicXsYvuq 	ReGvEtzGVx	ytNbqhwGC 	qN sILhqDI	CFHWKBzzQF	QQnZSUi k 	-888	4	mTtQZSeNzk
+001305	002736	124	-888	111	-777	Smv WqNVOQ	-9999	SyuysgfuhX	-888	rbWAtEUXcQ	2	wIJvXg OsS	-9999	1	-777	ZEs XZaoXo	rtohsGcJz 	-888	oryTNDfUm 	H xpeW KiP	-888	gahREyzR  	68	4	i JySkQv E
+001305	002737	112	zOkukCBqo 	128	-9999	k cDfbRXQt	4	tsBSOFyiJ 	5	rPW QFTKjm	1	jy jhKgGTi	-777	1	 LWZrC Acz	pnnqAfkPMG	-888	VAvMUCefDR	-9999	UE GJnu ib	-9999	-9999	-777	-888	WREvJ msiJ
+001306	002738	113	yNGl bJahp	43	-9999	XgTiszTiHc	8	ZPVNqTaLaO	5	F  aK IzMe	2	-888	-888	2	-888	-9999	-9999	-888	-777	EPbwMxQfZn	-9999	-777	56	2	DVJduOCvXS
+001306	002739	104	tFJBbMJi Q	16	-9999	UDwACHYmXR	1	kCXQvqv zv	5	ASaOEpuOdg	2	RDOSfxKIVI	-777	1	 tnOgwQJtX	-888	-888	UIEGMPPkBJ	-9999	-777	NvhZXIrIld	mebSBl wO 	147	2	ySHLaCTrcU
+001306	002740	108	rPDbVJqTxH	-888	3	  VYzYuYZJ	5	drZ NmCZdY	-888	SwKWiuGBJg	-888	N TNByDBJF	-777	2	YItmgFJMMk	z qeBCuwEH	-9999	GWiHHenoFY	pj nYnKwiZ	 uTUQcxbol	GT v qams 	r AXW rhMQ	151	3	JTuSmdZFaM
+001306	002741	105	wmBlmKiawQ	151	6	QszSJIvXer	9	oehZeCrTkt	3	fLHaroPenA	1	CBLXDPijuv	Tuy iLYQG 	1	-9999	dNLikX l L	qSY SmZKpa	QVZ ZRxIVM	SUznBpiIEI	-777	oqEOHzHjGI	QoiThQlGEw	52	2	
+001307	002742	103	iYbcUOtvbm	141	5	Di qIh BeQ	-888	-9999	-9999	DjSsrxbsWd	2	cuBEcfylep	-777	2	xGaKcX GFf	-888	NPT DRSpUd	TgBWmFb kx	-9999	XbBcglqqtL	bMADPeKsjd	dNNhlefrle	-888	4	uA ZSvGtIl
+001307	002743	104	sRBYYtrEzJ	129	3	KteC fzfRC	-9999	-9999	-9999	fdARwjWVwN	2	wxvfvGBjpl	ssBCxZlynS	-888	-888	sRwiKNKBFY	-9999	jbFZpbVpjn	gtgsuwIhDB	egm yRrS P	yDgF ViHBe	-9999	11	2	sIUEtP  cN
+001307	002744	106	-888	71	-888	XRfSg cPRH	8	VO ccZGADK	-888	muyvIPfsnG	-777	eWSHfIN NN	FLoEUtO xW	2	aqDhBxFxHp	-9999	ZzuleWFyuG	joQwWEQbnT	qxUzJDjtLo	mOQ xespM 	-9999	IusNUhMZvr	-9999	5	
+001308	002745	117	SElvKNk vl	-9999	3	VCfsJwH Wo	5	HFJdX KrBB	1	-888	2	-9999	-9999	1	-9999	Yxu mgkn N	PPLViVofkg	EVNeJyHIle	qlHiwCEnVa	RgPacpZqjp	 EuMrOwwVS	-9999	-9999	1	
+001308	002746	122	pmXVZXGQAb	136	3	-888	2	UWyQiwwgO 	5	IVrPDbN Ju	-777	IRQddpFder	rKmHJUlvCp	2	-9999	jcgqESnrbY	ORULlVFNcl	TPzcoNSwsf	-9999	-9999	-777	ujFBeRecjb	19	-888	SfhGjgqBlV
+001308	002747	121	mrjqMQROJX	177	5	CnDpsYwHNJ	-888	-888	7	NOgPuCItQl	2	oEkinbRMN 	-9999	2	-9999	-888	-777	AUIy R fZZ	MEeLgSzPh 	WLCajjJ bb	BCmHOI i z	-888	182	4	
+001309	002748	115	-777	-9999	3	-777	2	-777	-9999	DmeEKvTfhV	2	 MOTLoDGoa	azDiLFVacu	2	BgWFZLweqt	KfRtvsMEWT	STCAnkB Cr	-9999	QCgjfueuRT	V C cJuFMu	PgTsBLXGXX	-777	-777	1	TkAEMrMCbi
+001309	002749	101	ogjOoImdmj	-888	-9999	RbbGlgjjxd	5	MTv EiDnDq	5	-888	2	EFLXdklHXk	UnF LyDEjG	2	GGrSroQdkl	-777	ATGmrKEPRM	CCgABBKies	TyWrbJYj Z	BxxFAWYnbf	-777	-777	-888	5	
+001310	002750	119	RyaQVUlKq 	-888	-9999	FJCTSxMZJt	5	vuOTeOuSST	3	-888	2	ofpRHhvbLT	-9999	2	SUrlsIjUZT	eIpOUnLDYS	hHgNgdflWu	-777	-9999	GXOxlV pxz	TQvQFSkzlB	-777	48	-9999	cFgGwyBAoj
+001310	002751	121	SpHueugpTc	-888	7	WCr Bnvgzn	6	XgRPJMozLV	5	-9999	2	niiJHDNhKh	uhYiVlFmKO	2	ZL ikyjvuW	jQZRBqI Z 	IWouMaFj v	-9999	cEOLLcgELY	JXOTSHqqPk	FPNVvkMrkR	zcVgmJhyNb	159	1	ZTykTwfAJc
+001311	002752	110	SnrZdwMMNU	-888	-888	MtucKjFUSH	5	NJtKLXatkj	2	ijMgkytIbf	1	-9999	ZERedexlDa	1	jgtcix tzf	-9999	tMBPOOdUi 	-777	GBvcqpnrIL	-9999	-777	OesSGRl pg	144	2	
+001311	002753	114	XmcifBxPhy	75	6	xVFynUDIns	1	-888	1	YZVbhWNOod	-777	-888	hJRCpYADdC	2	RidXzRygUA	-9999	LSTTWmPPnt	-9999	-777	ioEgyqIKSW	-9999	nWA DJsklI	106	-888	
+001311	002754	101	MPZacHzcGv	97	-888	dhLxhDspIB	-777	FKkxwHMFOj	6	-9999	1	mC vroDabk	 ZbaZfANia	2	-777	YWjyu l lB	dcDNYDRYts	FNfnJgKHhO	v YA eqbvk	FTQspxooZ 	gVb OxldHL	IMvDEMv VK	188	2	mx WoCSsnO
+001312	002755	105	SFylBYoqPE	103	4	RFSSmQvR t	8	rfEDELbkFv	2	 FtputnXvB	2	azFBNPeqaT	ClFmjaiQuU	-9999	-888	oCxfzscDGa	NddB ZNpXU	rYAvtvqKHo	HUTDRlFp g	rffWJeZykc	 DcDTJAa M	MPCqf Gsz 	151	-888	YMIcnmnsbr
+001312	002756	110	-9999	83	3	Q HlYCfzjz	8	-777	5	-777	-777	Lcow AnuHC	aEvXOfAuqO	2	KBFqGvCdOf	-9999	TEDffqTIOO	qhBjKXikQO	-777	-777	OEfxQDBBUO	OBcIbdyZEK	180	5	
+001312	002757	116	-777	156	5	vxuanLGySs	9	 WUOrJZAgU	7	-777	-777	-9999	iMsCDXkLof	-888	-9999	AAKwKaNx E	tYGuhijw b	-777	Hcrzsd baI	-777	FmYiBynsbp	rcATFMdnyU	19	-777	YwKwmtdZqD
+001312	002758	106	OyueXup Qp	48	-888	mZeQs qyRl	1	lrvRxV Czb	5	gTcQItLIn 	-777	-777	ll aqhSpLI	-777	XFurVZaC Y	-777	fAPQImdFFF	DeuTXFiCFh	AcIUHKbyQm	zolMntnyfq	k YAgyylof	MYQuwhTqDe	126	5	HhcMQpDLwa
+001313	002759	116	-9999	-777	1	RRfVNnrnNs	-888	-888	4	-9999	2	rPcHjfkyZL	gH mgry RY	1	-777	xQcBckNOyC	-777	-9999	NNDqtbWlkF	FVWEHLmb v	hHMLvuDHOs	 iULDSvuJZ	9	2	Kb nkaYNbJ
+001314	002760	123	-888	-888	-9999	oOnPAfsJXO	-777	pGGGruKaJy	-888	DHJaboLy I	1	-888	-777	1	KOPttsKXQI	ukqRiGadPE	-777	-9999	rFFj xMmHz	vwGStpmZTx	-9999	-888	-9999	4	jalZowHMEi
+001314	002761	119	pIKGpigQwJ	186	-777	R SAERXSuP	5	oWYAu AcSO	4	-9999	2	GBTUlrmGFy	DXpVrSmUr 	-888	-9999	vCcSpCAPAC	-888	CnKOdCXlgf	VD JanFkDC	FspbeaGKbC	x TIGXDAif	XRsnRRQZub	76	-9999	aqNfkYAvXv
+001314	002762	124	-888	80	1	-9999	-888	eOWYQgYOSl	4	yqMaxkNJZQ	2	-777	GYjcRcwVFr	1	ZTqXVVdsZS	yDdcZJBQMK	DcLET MuNk	ypsdpxLZwt	aIgIbllMCe	-777	gWhvjQPo A	ybMTRfcqUm	96	-888	xpvFFj SVb
+001314	002763	126	 AKMvJqPzD	173	1	FQfzVWkN w	1	-888	6	-888	2	UdGlNvvchu	tBKXRPmLuX	2	RMasHFyVDL	HZmVQzWD b	-888	PfSVYNgKW 	BKzVjcfO t	-888	-777	iMysJN ylb	159	-888	
+001315	002764	116	Bfs UClXDm	46	8	nkeyicjOsn	3	-888	5	UNOBoQ wxD	-777	Qozmr moqQ	HAiRdJm MD	1	wPSlskjRJx	-777	-888	cEHPQKiQBF	AEFKO WJyw	-777	 uGkwkxUdQ	hOJEjPUubf	-9999	1	VRaXKswcnK
+001315	002765	119	E HmNSgHVB	-888	5	-777	9	OVshbMydWc	-777	 fXlIksHir	2	AmpQRbcCLI	RllEfjbUPp	2	-9999	DADNbSzeWr	-888	RQvTM zYrr	W ijnFlyNH	-9999	RywNWnIxWT	VDGsq jmuW	-888	4	BdRkXPTWuX
+001315	002766	124	kkaJEbuFub	118	-9999	-9999	4	dmKVkiUFGB	2	obEWudhLbA	2	pwefZowfK 	-9999	1	BXTzfJNXAq	ztFrzXQS w	-777	idxOcUqoWr	lOJfllJFQo	-9999	oEXwyvunPN	-777	53	4	WqlmsJqnrg
+001315	002767	119	 IuT ooQNT	-888	5	yX CnbtWmI	8	rspWRGyUnL	2	GmEMCXIFyv	1	NjsCNOwkBT	vLGihIVYwI	2	WvagJlKyIk	D UhqukIpI	YYoltVuZuM	-777	iTbVTGq ar	ZnnTLOUkdp	TJpzmTZmYn	gWeve uwjJ	7	5	Iv BCALtdP
+001316	002768	107	-888	191	6	KFbPbhRetl	4	-9999	5	sdyCkhpbWP	-9999	tJCaPOC pO	cnYvypvKjO	2	n yMgvdqWv	MItopCbuEn	gL  voXlHc	eLprORyXKb	XZTEakFExf	CSeqkFVYVr	xnHpHnaksG	cvBfGDyCrY	119	2	HBZXQTLzeU
+001316	002769	113	-888	164	-888	EudcUwVCfk	-777	-888	2	-777	2	-888	HXGJrpBiQf	2	ArVwOOVOWN	latZ yZFfg	-888	bWsPLMlNAE	-777	lOEOrXTyig	-888	TmECHCRWhj	13	1	prgEISLWaL
+001317	002770	115	PgWMHX DSj	-777	-888	RMrnCovmlE	5	VAuzwjFFGv	5	-888	1	hYAQbEIjFM	EyKmESfhqG	1	k FTShOOfh	-9999	-777	e NiZqSY h	-777	-888	hadMjMXpsR	DalGuaj Mc	164	3	tanrWO AsS
+001318	002771	118	svxPfyOjar	192	8	-888	-888	nhnvYYrBpa	-888	-777	-888	igeJSS kNl	GHyTchwIWI	-888	dKDbrrUUEi	sSRudlqLSN	-777	 Wmoo XKvc	NknUCZvTeD	SNucFoWKKh	CDZVJMjqoW	YYNBjRuvgG	-777	-888	kTld FOeSa
+001319	002772	124	-888	-9999	-888	WaLu ogVAG	1	MRtNtcg Ns	-777	-888	2	-9999	qaMgYlpXTT	1	VrLFklHFjT	XYXsZwqAMK	cMNjsWCYa 	gWXcxtUJti	-9999	GCMpnxYLAJ	-9999	-888	1	3	
+001319	002773	124	qxxxvcLgZG	-888	2	tpW CoRYmG	-888	ku VfiQvsy	2	ZWOCPnDevu	2	fRxBXG cQZ	-777	-9999	dkjpFKvpdY	wcMzjuBAvo	eIxlZ l mw	OOIgazLeuH	BMyiypVfut	Q iqMrgVbS	DxhYhR vWI	-9999	6	-9999	niYCBaWtjC
+001319	002774	109	 UpSrcacQq	86	5	-888	-777	NbaTb mNlE	-888	AinqpjOQBL	1	PMfVWCBhQG	pbTvvDKFHt	2	-888	-9999	fbjtYDUXTz	-777	-9999	-777	xZJpAHbwaX	-777	63	-888	As FOVdMVt
+001320	002775	117	wvSfbtjzaU	150	7	wFVkjuDNJL	6	iUveFbYiLO	-777	-9999	-9999	IgrmxlEQCd	-9999	2	 lXPdyXIBo	rgUtdnzdm 	GJbtaGap k	sJ swxVByP	-9999	YNBqHhYe l	XQXLWVTeBd	-777	167	-888	f FlHBfguM
+001320	002776	121	-9999	169	1	Nco jEnlFa	4	xcuBZ HlBE	-888	PUru JJ KY	2	-888	-888	1	nsJrzmvhxm	Pyz ggEeXf	IteOolfhAw	eeQkAXjl g	fOyuLXcoXz	-9999	FkLKVqNvBa	MdFSbFoap 	-888	4	CMetIKuNQb
+001320	002777	119	-777	-888	6	-888	1	srJuscRrXl	1	DDwhamyGyX	1	aTD EtZlAk	eMrrhD ZYY	1	-888	-777	-777	b EjbuQkNh	 nG IbsqoX	IEGWPIQuEL	gPDBhBjb y	msFwVCosaQ	-9999	2	EqJAPvdoUp
+001320	002778	101	FGk oBeipb	-777	7	IQxudBF Wr	-777	Zgucfjg Ff	4	-777	-9999	NAYJBwUNZy	-888	2	-888	VXRzzQAiDr	 EXZmdarOJ	 tjNufLoig	wWCbLxxayl	-888	oSOCjpIEUI	tJRDizgwXL	-888	5	KqTFn RePY
+001321	002779	105	spSNOujiVe	50	6	BSDZDzXoiz	-888	-9999	7	cvQWJJPFFr	1	PXOedOi gH	CVdhqEW Nw	2	-777	-888	NdjUMUnBqv	ygDMYbv Yv	sfGSapYsHb	-888	ImgAKcmZth	tapHdlbNJV	120	-9999	wUlcObgozS
+001322	002780	123	TKJxEKxDFB	-777	5	mVOPvowqBd	-888	BdMGeUxVQQ	5	UGQsOqw fA	1	-777	cgcXGnqLTO	1	-777	-9999	SPKnEMWKqR	rbuvOZSwdb	tSQvtlNMrf	FVXqVec AU	thn OvjZmP	-888	106	5	MyBYXvaVBG
+001322	002781	119	kgTWv gTzQ	87	1	BapiQeLVNV	4	MwKJS kPaN	1	SItzmaqOGv	2	PegOGo eUa	JiivJIUDMB	1	YJCXiMlHCi	ZFjSvGGdtE	-777	-888	sMSseyjrat	D x JjpRGX	-9999	-777	112	1	a ubomXiDt
+001322	002782	105	gyAvPqWcrs	185	8	ojFfrEyaHD	6	UVyRpMse h	2	-777	2	RHSdkUrJ W	-888	2	v lSIDeyMn	-9999	gp HsxLbvZ	vqBUnlGqpC	AeMEnrdyEv	V  fCQklu 	-888	-9999	-9999	2	AjBUWXhlDu
+001323	002783	118	OeMqWn FaE	153	1	ESNKzGkmJr	9	ytvDcFskEQ	2	BkiZYyZMGa	-777	ax LRzRmtu	NoWxVIW oK	-888	rcweHJbRSX	kPrsAmtWwd	OlNBIEYeO 	o awgVQyNp	jwODnyRNKz	VmHllZLjzU	RPDPNJLjqL	xGdFWzvijk	124	4	
+001323	002784	126	uyjzrADAEV	-777	7	ASgecQSfkG	-777	FfnK LjUaX	5	EUhjehTnsr	1	tMqAsssite	BtkidnNjQo	-9999	dWNwCfyAxx	-9999	gBvpYny Qx	pcGNI rIFj	-777	-777	-888	-888	182	-9999	
+001323	002785	111	YQPHHSVYsF	188	6	XFrpAHuGqw	1	VQiE scQri	4	zCChXdspCr	2	fiR VRqebD	-888	-888	-888	j dAZrgOug	kZHMOiYKaN	HgYzDqxWtG	XUEfrWXmtw	-777	hbeUiBSMXu	-9999	23	1	GbCBhhkWYB
+001324	002786	112	hpgOpnQKkq	96	1	-888	-9999	vAvixYBFNp	-9999	-9999	1	h ntnUOEJs	 TSwqBTdxu	2	-888	uayZHXfVyB	-888	KmKASyaxFw	oRJwRBv hp	BTt ehzGrs	EWggfavsdy	EtfRv Xffz	-777	-9999	isoEhHmIrY
+001325	002787	103	JmDUDsUu O	107	4	HYbkdDIFcb	7	TyM KpaX A	-888	dYmqqVvgTw	2	-777	UQBUAsSzxD	1	-777	EoDcgousw 	-9999	zcYkL GwKk	kUkVhOX JB	-888	LFQgxKjj l	YntwuGTdde	-9999	2	NzNTIgn mb
+001325	002788	124	-888	141	2	MihKSSoMUv	2	JTylAieDJi	7	qeUOioyZAT	2	-888	mOTQQkwgUw	1	vSWRQjalli	YVpTpmPjWK	sMtnKiIEpf	jXXwIEpKpe	-777	eMjEfxzdvW	TZjyOlslYx	WJdGd dBqI	-9999	4	
+001326	002789	124	-777	-9999	1	-888	9	-9999	5	-777	1	-9999	qORvzzNkWl	2	MoIO UtnuK	MfXDRAMxgG	-888	FTsHAyZsJZ	sdiuctOujv	UvZNNhSDkA	N  ryFeCLg	NCAHZnahSm	70	1	
+001326	002790	117	QNqVeNlcru	49	-777	bxOnqCbjlj	-9999	DXQT siUgY	-888	EdKGbbhVTE	2	amukDntWfN	-777	2	-888	Mmwk rPwTI	bSynhoSois	aQxzVV VZX	-888	-9999	kmFjm LIts	DHUKbjqV G	122	-888	
+001326	002791	118	Ly UQZAvOR	144	5	GpvwAXgmkM	3	qoCX nyaLF	4	jJhVC WOIa	2	Ni  zUKawW	-777	2	 wKgViNJ k	-888	C MVXfwWhH	VVBlxdE jC	-9999	p MIgQ rch	jieQTUWQrT	WQvcjNFEzc	99	1	HV qGoWXZc
+001326	002792	109	HvJQiOQdyc	37	2	QYbyUuNjnI	5	-777	-9999	EXuNdARPti	1	lhViKEnWMT	ALIyyjO ve	-888	-9999	FVfwLPa fr	NWzmckGmlO	-888	UxyvFbXDeF	QMELJDKIvw	PdO ImkVnJ	-9999	141	-777	aZg WUNJWX
+001327	002793	117	rC pKzfQeb	-777	3	QATV s s j	9	-888	-777	-888	-777	bexqfDMfWJ	s SKayffHx	1	-777	dhbPPXUkSv	EzKVrwZO M	yymgtjPPmD	U lmtkAdp 	pwEwgTCOvF	sKRwceHsOm	 I kxkCw O	17	1	
+001327	002794	108	pMm  uOZlW	-9999	6	SyFBw pCX 	9	OoHRajAxR 	-9999	E oCjcAcnF	2	-888	xtEw jEGLd	-888	cFsJpNJ eJ	Ul dA OCUu	rTeVMRzn  	EqQYyOVLtE	Occ gRQfXf	-9999	-9999	SzWRaJrKJR	21	-9999	GHszu KJHp
+001327	002795	122	-9999	2	3	-888	8	-777	6	leDDNPF Hj	1	JHFigfvgq 	psClhyBMId	2	cXovSywDXW	-777	-888	AgGhEkkssd	mxToDBwojQ	HDWtduqzut	bz CRqepJj	-888	113	3	HJvaieqVdq
+001328	002796	109	yjNMtVXicC	112	7	vDUip oiWQ	5	-888	1	ZLWjMOCafE	2	ySIvAPQSUS	mbJhDNNxHc	-888	-9999	fBIrUlHRKu	-888	ElsCZNRFhT	-888	FVtXOur Ku	UifYqRNO p	nsmVQlVian	126	-888	F ofHDwvyc
+001329	002797	102	-888	67	6	-9999	-777	LnKuTPquyy	7	HjVxsqUw z	2	kwGWj luZJ	vP mHnwaFU	2	GXZlgM OFS	-777	vBblqlINaW	MgWpJryQQb	-888	RRGKxUbsWW	DBfhoIOFeO	PbMOuIdrVG	160	2	 jGmavOwZm
+001329	002798	118	Xl psSctXu	81	1	duEigNNCFF	8	ShfNavZogD	-888	xxxidMnjxE	2	-9999	VsLVIyTpE 	2	-777	sHHiButdti	nLCHraVlIP	Q hmSTsUHf	IXbrvzbnbb	GtWQNVKEte	-9999	ETiNjEegtN	36	5	yazi iLsDM
+001330	002799	108	chu lhIPpe	-9999	-888	mbJnEfcfwk	4	 PvhHhYYyc	5	qVUViKWsFr	-9999	tpLiFBSBf 	-9999	-777	bhvzd bHSI	 yQLcktUDL	lFbPKJLlGw	UYZhSitFQt	-888	sUMEFujig 	-777	dSaUrWUCcs	188	3	YBmRULbn U
+001330	002800	119	yuiARdNZNC	10	5	-9999	6	kDxPmYjJZZ	6	N gvRJpEOm	2	b Qnfj BjQ	C w DWJK Y	1	UCAOWTBZid	msOfyDqYTq	AMGowO bgw	JWvkwsfQpf	AXA Fx jJv	-888	pte ir Xz 	vPRwcUfmxX	-9999	5	SEQFHtcOIQ
+001330	002801	103	lF kbswC o	-888	3	wXwxOuuOLD	8	AYIAqRT yy	-9999	rJPrNOkXsD	2	uRLmjJrRMR	QOpMVomj R	2	BaqzUphlfX	Ycy KYloaw	-9999	-888	ZwBdbyMLgX	-9999	-777	-888	52	-9999	UhHURALEcu
+001331	002802	123	EHnBovZKHQ	120	-888	FHmQPmVmpc	-888	-9999	1	eGOxlFDBuL	-888	vmsrZkhjHO	iBstsxnPTZ	-888	WaLvDpgAbL	-888	N HMwRnYzA	uctfgUyjgF	VsxxGvBPhV	jl ilSpWdU	-777	RuO aQdAxp	75	3	zsgQRIJAQH
+001331	002803	114	AQmuudtE L	-777	-777	aoSGw mzxi	2	njUpDkKE B	3	hrrnwaSkdn	2	lMqBF BPgX	xftGckvwyU	2	-777	aRLBpEiIzk	JlWAztXdDe	RPnyF mODM	R jTbADqpn	-888	gtbdAnNCpm	-777	179	2	
+001331	002804	124	-9999	-777	6	xvSDkiF  L	4	mMR  YD HD	7	MQRwCKkW s	2	-9999	hCuvgTnVZv	2	 LfXxNWC K	yNVejySxRg	-9999	AKCsldcTuY	-777	qEIIsKkfyk	-9999	NFmsvSAbz 	140	3	c gDhkstcD
+001331	002805	106	-777	91	3	-888	4	HDfsy f IA	-777	iwMvkEXaPI	1	bpcUfh ZHH	zQ  vnAJ  	2	-888	-9999	-9999	-888	NFxUlM YlQ	dUNP fXPZt	xYxlCPkjpE	nGqIj  BQV	134	4	RLZuXIaDoy
+001332	002806	111	-9999	-888	-9999	-9999	6	-777	1	KihwtvbliJ	2	Dz FfECiwt	-9999	2	Y  araKcXg	-9999	urf eYOrY 	-777	zgMqYM QP 	-9999	trk YLwYDu	-9999	-9999	2	
+001332	002807	124	vvSMZOocSl	197	6	-9999	1	rugXhTysiP	5	buSiKYgfpj	2	-9999	NFjyZnmuJZ	1	eCVGhqll k	vlJctKwOr 	-777	ypS JcQazD	-777	IiYrzXE jm	un OxWucYG	-9999	185	1	CctHxxAUBj
+001333	002808	121	YzYffOKWyh	98	2	-888	6	-9999	7	WJelG cdeq	1	-777	-777	-777	YA LiiJaXX	NdAbMKjsOh	YaDpGFegIi	ZablWJNpFn	-777	-777	NBCxADtfRh	ZYCguWpuHB	184	2	QOPFGHtzfL
+001333	002809	123	amqFPcKNCz	161	-9999	K czABRli 	-9999	abZMAT aOC	3	lVGSLUIWtO	2	wCdvupjyYm	GmwIrtbVmG	1	-777	 nvFe pVgY	zpxwlu pyR	ozW k eNlF	iYFQ Blsmw	z hP FcLaM	MqftBhNKrq	yauzIuRkzx	129	4	
+001333	002810	101	-9999	27	2	-9999	4	uxCbxrTBJJ	-9999	tuDsW gKit	-9999	bHFyeQpxie	snXgeMXyPW	-777	CPb muJdAh	Sbga dHd e	X LXqnx ih	YIqkTjuYtd	obsKVEHZPU	BnDYCnMpsd	-777	cfc ytOxxI	4	2	NJvOafsSvS
+001334	002811	106	yKelbbWsE 	149	3	mBzifFYEUq	-888	zVJTuJOSVv	6	AODRVe Tnz	1	-9999	gFXcyXsouF	2	JqHaRoXOsi	 wvjuLUBJu	GaaJEmbwWi	pBRAiIwYXC	bpYJVbSwob	pFUrcsyOII	ZsQLMPFdyX	-777	0	2	RKbNFZoCTz
+001335	002812	106	yWAjnqMymi	-9999	5	AhPkSvQdgN	-9999	-9999	5	mHK xP dWR	2	eJipjnkaIc	kXlDqbUB v	2	-777	CFGYqTdHUD	-777	PbBTNhOlqf	gEBCBBeBlM	kWCW jgMPa	dSugOVXCgS	-777	21	-888	vpdzXNrePQ
+001335	002813	122	-777	93	3	zqkuHbPSPM	8	RlCZMqjhj 	-777	SkJtZJaBqg	2	-777	CAXxUvTYuT	-777	-777	LwNGEwehTY	SzwWtIu fR	ggOBvNIzWS	NkANgjixnb	GPzrNerYHZ	JeNcER QcJ	r bVDeAuMt	171	-777	YMclCfomgL
+001335	002814	126	h o ZHTKaX	-9999	8	 AqMffgnxC	3	ITyGJdwCKy	1	otKdNVEWzf	2	FdqTLVnxlV	-888	2	SfLjwURwoL	OKfD OrcmG	-888	LVNGTsfRiH	wO fUVEWmC	zHnFm w AX	-777	eDcJgCdwRf	-888	-777	
+001336	002815	109	-777	107	-888	PnwfiUbHva	3	nxXWZCiAmd	4	Rc AkIOOMk	-9999	JXWJucevBQ	IiyOBniKxA	2	UzyqzvwjfR	-777	-777	-888	uCeGTXIHwS	vaLfexJdDG	TS qXgqfTi	osdFQ FVvm	-777	3	
+001336	002816	118	DNCpeCAzQo	-888	-9999	-888	4	ALU hwNYXX	2	qONKikiQeK	1	EgprHkhePA	PpuDFzvDw 	1	 umoNrCnMK	EWpIKmVbiv	sdd xvEelA	 XTemqEAPA	rVsOwenhwI	C E z JYct	VzlsjDzhZh	-777	191	1	
+001336	002817	118	qRSaTKAUxw	-888	2	-888	6	-9999	-777	HeFQooEmmC	2	PQZHnzT tg	-777	2	 unuyVpUDd	wNkwUDAECg	Cyk JjIfVW	-888	RZzWXdRuTH	xiJjiiizTL	XPksWGoh A	-777	13	-777	zldIgvTdAl
+001336	002818	115	kzJfs dfwm	154	5	PTulKJPseN	-777	-777	2	qdQKmzTlyw	2	-888	-888	1	YdjwhHDUBE	-888	MRaSzsEJzU	fQyYSUKEwA	ExsvAFpcYa	OHMNELNGb 	idKrtiXfTH	dUsPsFeBNS	35	2	JglrR Hqim
+001337	002819	126	VFSZtvWVWJ	167	3	jsbHLA WcM	7	-777	2	kDzdrUJEMI	1	OWobFzFSnd	-888	-9999	YDFFrXInWh	IgLerZTtLR	-9999	UI DweVttK	CjgEbnNVXs	FpeOOGUIkn	KO yqXHJLS	OGOToEPcHl	-9999	1	LbSvTtoahj
+001337	002820	125	lqGbGCLAej	58	3	u Pj dkujt	1	XSvEZfJibG	3	fugghyGlCx	-9999	-888	JawwwOGBCJ	2	GaIwHdHdSk	AAGMtRokQn	nPphrylwjY	HJbIEXWBnk	EeIdFtqCki	-888	kH vSrbE d	-9999	52	1	SknAr yoQs
+001337	002821	101	tyGoKENlJN	78	5	rlNYcegyjj	6	VZJlfnTAJs	2	-777	1	-777	 RAHVhrehx	1	auntIRDvUb	-9999	POFtSyvxfm	gLdYntClGb	-9999	jFMpdiHoxp	uQ Ue CE S	-9999	125	1	BnvUHDj Jf
+001338	002822	115	-888	199	1	rhfRlR XKu	-9999	zkycLjPf A	1	eGjlYaNTlv	1	-777	duetSgGW s	-9999	bXUQYMjiEW	 lLqR TZG 	-9999	zVJvxvMiow	PEULtPc BN	-888	xpLJqQyxDw	kmZf COm j	129	1	PbNzSuRkzc
+001338	002823	108	nPgHqWSapB	142	3	-9999	-777	tnnDKx  iF	5	-9999	-777	kGgVyIaKnp	-9999	2	NaujSEF Aq	-888	-9999	-777	tTSXuUxMQf	ULtRXEM oO	-9999	VEuEGBhqBg	107	1	
+001338	002824	102	 ckWHL OIz	52	-777	-777	-9999	RdGJKjetRR	1	sryVGBEhIN	-777	-888	qCWCMjgSpr	2	-9999	 BfivXfkqK	PFrnGwVGNn	wQpSwafvwb	VWfPndFYLm	MmPXCvIenT	Bkvx MI pS	yOLvGzlzmq	-9999	5	Cw VxFgCnJ
+001339	002825	110	LvmQQzKQXp	-9999	1	MmPRieuOBv	6	-888	1	-777	-888	zwSpDtLSTb	UhJWgMju e	-9999	b sxpFBMbR	lFNuZPbfsg	HkIGmLbMau	-777	 MoKRDRlnL	TvOupvl kB	QHXrRgAprj	XsOLEQZBgU	-888	1	zae gwe om
+001339	002826	101	HtEIHbIlvL	-777	4	MApPuuMLGl	6	yhMNkAaw R	-777	 lPrnRMns 	-888	nWpAvKqawl	-9999	1	lwdoFaW ge	sfZvweORqR	-888	OuGwlEQrpC	qzrupW A x	LxwK sdLFG	iQyLocRodz	nmxmnKxYhX	-888	1	uGIuzXrTAJ
+001339	002827	110	ShqRv pWZS	156	6	KSVpNAdMXX	-888	UORtfKjxYs	-777	-777	2	iR VeAoeaz	OogIuGlTCW	1	joNyEIwbap	fCtptWhoBo	BJgXeivYCC	BiituuIaAy	-777	wcns stmpf	nNXkwfGAUZ	koG iXR rp	-777	-777	
+001340	002828	124	QETFMWRqMX	182	6	-888	1	BByqADKA z	3	-777	2	-888	-777	1	t EMuiNBSS	eZMCwvZXlM	 dPmdMTTgF	looRiLpFJM	CzMmrPrFOg	mBwRVPSnqD	PHAchKLuxh	-888	152	1	VuVar NmYR
+001340	002829	114	qUSuNvJXfH	-777	-9999	yQtD avHQO	-777	fJGTkibItN	6	KvnGaj Uop	1	-888	-9999	2	smRxtPEasQ	WFIGpIBeFx	kXuKnQAlBV	c zSuV gdZ	boIaNJTuOJ	OVZIRjGaSq	-888	-9999	144	3	
+001340	002830	102	ZwUJgqJcic	-777	-9999	YdYPzGKpLG	-777	-9999	5	-9999	2	wtFWaJzuKq	OWbPGTqWYb	2	nlHenhaRHk	Rg fi MjqX	-777	OlH mVkIW 	fYghyoNWPP	pOLJkSvaDF	kJfEbHHQeT	 MzvFCff v	184	1	
+001341	002831	126	-888	90	2	PEMIhLMDOm	5	-888	5	q JwpcZQXu	1	KJVW OICK 	-777	-777	xWaUZEvY s	YWVOyrnvVx	jArHNjFTOP	-888	DSCnTGgUDu	-9999	 XIZIQwUdN	 OkDqHPlWO	121	5	
+001341	002832	122	Pbor Iueac	103	-888	A SGavqODN	1	lAsulDcPCA	7	KOpLVdaClM	2	-777	-888	2	LzoxLnbvyW	-9999	-9999	bdBfPlRjAl	PRqCB ckW 	xxHqXdXauC	PETHswGH s	-777	158	3	PYFEmBiFR 
+001341	002833	104	-9999	57	8	xXmGG iqiW	-777	owZchhAFfI	7	VCuttuQSTW	1	f AhPbLhCj	MJpYvbrDQq	1	-777	-9999	DKtuFKXLMU	tWezESpMPM	ZYWZBxQqEa	-777	SgiGuRVGLg	YmnmDlCjdL	68	2	
+001342	002834	122	DUVGjvbfhT	7	6	tk mAo FLQ	-777	VatQBZpNUo	3	-777	-9999	pSFXtpqTpc	BSQkfbFZmE	-9999	cekOigRAbo	scLFj hKYx	PmtBXRpbxR	SngenCtckF	xbrmVGanKF	ItbAyvMAnX	-9999	ZGTakJuPMO	197	4	APRQghPaLM
+001342	002835	102	gqfabocY j	149	5	-777	6	H HoTZWLPx	4	-9999	2	-777	fLNfIseGTj	1	SNDZjZCbDl	X vAzdDItL	WElGVHsfSj	mKg FzCaFS	RgEJ qb Mq	O ebML rkH	dTwJnnJTer	ewdrEsTouq	-9999	2	EwmTlgWkoJ
+001342	002836	114	fBPBuIBsQl	-777	-9999	ReDNVmitw 	1	-9999	7	-777	-888	ArWs hVNzH	sZnoEzsCMD	2	QZAxjXQrpW	aSqRuhtcEE	MjizoPbwJf	kdhXeuq LH	-9999	Ow ZutdBFJ	 vJGHnrs o	rCKmJwBp u	148	1	KGcNcVITqL
+001343	002837	120	faNo BYV K	64	-777	-9999	3	xd vXfVj r	-777	VnbGZJpSak	-888	 YGcjWJON 	z vZOxIupO	2	-888	QGJEarL fv	MDtttecSdP	-888	-9999	nTLfq qUyP	-888	-9999	33	-888	
+001343	002838	122	-888	-777	6	KLk  xrjr 	2	-777	5	-888	1	LhJeWPjiig	KzNJxSJSZe	-777	YDJXKEQrHX	-888	Titev Gma 	zkRpTbYzwN	-777	-9999	biqVCODGNP	rBqjPkizsU	123	5	aVfxntnk Z
+001343	002839	105	KPbulWWfUy	-888	-9999	H JrXguIWT	6	uxUScoqlQo	7	MRu jRqWhl	2	esKhkvIdTF	IKBxUBqFgl	2	rxltibz BR	MFUDNYhJpg	Ykx jXBhJW	UN WIwPZJ 	gYJDFKXmOE	zHaJqnPYYu	-888	-9999	191	1	RzygyNlVbu
+001343	002840	122	KQxRe dwgv	185	4	bTjtnBTMH 	-777	deeXxgAuVY	2	-777	2	eSV LRD DQ	 LrZKIfA G	-777	FUMbIGSXWS	hnDJUe tLg	c AUUZ xtg	ABmkeNpnrF	JDL RczqMr	HRErPeLEXd	rGAqNdQzGj	bzdvivAAII	-9999	4	 zsINgZkpD
+001344	002841	113	YFefs  hQc	-777	-777	mvCBDv  ve	1	-888	-777	JMvakmKMXj	2	XzLJryf mT	cTjOOcOPbG	1	LA sCzXAIV	hmTlZAAXaG	vhmsg  uSY	 qoPLteURS	W VGIRmaMU	-9999	zEK LhUJS 	HGLbyExlLD	95	1	ovYUnULtsD
+001345	002842	113	lTGF Zrmvz	85	3	NKqRJjcLiI	6	AjTlMwzKkg	-9999	ytkjdpUhpi	1	zXwhNvfptq	-9999	-888	aRhxsdoQAg	fKYXsibAIr	fqEa eqXPK	-777	xctdsjhCTO	UCrqQqrukd	n jeVor Wu	JRByRmcRwW	31	1	vRJZxqlRoa
+001346	002843	110	-9999	83	6	tDZtLqRPJi	2	pLsjjTgRoc	-777	JVRHzHwvmo	1	WnLxDxTkH 	EOl ipLLdq	2	rHvoVjOhPU	ARQFauOnDV	-777	-888	ghdlfwbpr 	SFGfPCuYED	ppHgIeWcpG	eoRVfxztKp	104	2	PoyuHrN dO
+001347	002844	104	dEgSwyNkZQ	-777	8	-777	1	-9999	6	 XxYgNnFdp	1	 FwjlE Ucn	aeZWhXPeEI	-777	-9999	PGjhxnQpxk	-888	-777	-777	PluUEYsHTD	-888	-888	46	5	QiwnMuLYAl
+001347	002845	124	ZxMNJgeJVC	25	2	-777	7	weHqMYjhJI	-888	VgcsHEFpIE	2	NHHXTFI cZ	-888	1	LX  Rznskl	 UQFzgepGV	-888	lDFhiyAiyM	XKRWmLHfPa	QRCmqMLS T	UTduAWyT p	-888	118	-777	
+001347	002846	117	-888	89	4	-888	1	jtOzyAvasd	-888	-9999	1	YGLoWmuZVF	hobnCihxRU	2	fmICrMbbsz	-9999	zZjtdEytHN	IoTZnvOgod	JIdSrRuRBp	BQqCfYYDva	cjNczClcog	zQJuPSgEgd	50	5	mExsE qnKW
+001347	002847	113	KZllnUbMHQ	19	5	MeffgmBCjg	2	NSWGDO SDl	5	cuKNjUIQIu	-9999	-888	-888	1	zSfdw JGxX	JdOaVXvBue	-888	-9999	-777	-9999	EWkU UEhdL	TOBThBfLDG	-777	5	
+001348	002848	124	-9999	116	5	cvQHzCKeqC	3	tIJtLIAtMr	6	-888	-9999	cipazBSLLm	-777	-777	eUSVPNDYMb	qSLCvr KRW	gjHLuwxMy 	UTeqYtlGVC	-9999	vWiWZwtazV	iFy NYob p	iDxg ezDuh	-9999	-888	
+001348	002849	125	uRV URGRWl	-888	5	 Ic eSuFvB	6	ZFDiXkUK X	4	jIUIDuKtKv	-888	XYDXcSRmkg	VrpGUmcAFP	2	KJZCOX  Uz	PolJtRdyO 	-9999	DbDXzNzOOx	-9999	YDghVfkAUr	gHIWGLHIRt	QufTMRArvK	-9999	3	K vTPdlVNx
+001348	002850	120	hbcVvpJJFO	155	2	iUegAQ jxx	5	PvPVDThmpY	-9999	eQidZMEItU	-888	uhErZdMdjH	-888	1	-888	 FCnSEL nk	-9999	kpn pDKUqj	peNIgrwTlT	oAYrHvAZte	kjaTeJqJKK	HFuiOezSJY	91	2	
+001348	002851	117	bvXKQRrEez	98	7	-777	-9999	TFnTgBkTta	2	-888	-777	-777	IxzyYhf xb	1	XvxzlbovQX	gIhXyIRuPu	-9999	-888	SdzlDPUt a	iAeulBFVDP	BgNrpXGfHi	eHmu tjmlD	-777	2	ziBggnNGus
+001349	002852	120	ymDejuyTuF	150	5	MjKeaENFCd	2	fuYiDdMMKy	-777	-888	1	AnmiVrsicQ	VBbwVAeHva	2	Gpndlqfxi 	qzzIcUpqy 	HUAZPyKWMl	qlPXtQ  VQ	bLtRhxhOwu	 kYyCAcEBY	wv qAyIlYQ	htsuwcFVVw	131	2	TZEcuCHvcv
+001349	002853	114	DECAwosCe 	-777	6	VzhHrUiWJq	-888	P TnSqWpZW	5	xzPvDclmPk	-9999	oGzeyEkDVN	 GiMnfyjCe	1	oSNVqmgPnK	EMK RjleTn	-777	YbToK edEU	jURdVWusay	OhJUmhEQP 	hUZoLr SDi	lHWXmvyXIc	133	3	
+001349	002854	122	-9999	44	-888	MnuZzKhosO	9	-9999	1	-888	-777	-888	vICZjceIyo	2	GxBMOZWCXx	QmvLTIACvc	xl Lrzuumg	-9999	-888	OZxRYFDndF	iCHymvQoea	dRtlpqUPHc	161	4	

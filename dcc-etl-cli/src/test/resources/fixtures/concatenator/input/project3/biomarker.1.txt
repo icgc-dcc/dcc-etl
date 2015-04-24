@@ -1,0 +1,249 @@
+donor_id	specimen_id	biomarker_name	biomarker_threshold	biomarker_positive
+hnc_12	0021	 Dq QDcSH 	iDQBIkmCYW	3
+hnc_12	0022	RGVpNPhabr	zwDRBPbHIO	3
+hnc_12	0023	locwH WdtM	PoftiMbaxJ	3
+hnc_12	0023	pUNm LLlno	IOJrQCyyC 	2
+hnc_12	0023	BtnowV  uG	PSS  miboq	3
+hnc_12	0024	ilwbJMi nj	AAvOLjVp B	1
+hnc_12	0024	pyXuSmpTcQ	fWqGKzHTrW	3
+hnc_12	0024	NulSTE NiA	TKitJyWKcP	1
+hnc_12	0025	CMpAiOFHGB	PhbFmZVToC	2
+hnc_12	0025	lUeikJA sy	pBVH rrTau	1
+hnc_12	0026	LXktdNxT p	hHUtKKaSte	3
+hnc_12	0026	tvSNtlmjuu	e vTEXlflS	2
+hnc_12	0026	BeNmGipmlX	nAPDaAB oK	3
+hnc_12	0027	QphEeYnGgK	eVN oVLzvx	2
+hnc_12	0029	nfiNQOBRop	lNYMaf ctg	1
+hnc_12	00212	lArjCeAScf	BJdULGDljp	2
+hnc_12	00212	XAnUMXucKf	 zjiUj Tcc	1
+hnc_12	00213	FwmMbE R G	nQk lWylaK	1
+hnc_12	00213	mcZnQOcuOg	mw jhE  MB	2
+hnc_12	00214	UEbbOmy HH	ymdTbsReYL	1
+hnc_12	00214	JTSNOjJKjc	awqpNmmGgY	3
+hnc_12	00214	lrNrLFIbMG	przeeVFnVv	1
+hnc_12	00218	SFQCcRNQNx	Pttu FzWqG	2
+hnc_12	00218	ocTnnOZzUs	wSqXiFifxC	1
+hnc_12	00219	TPrhsOzJxA	qsvxezNJvF	3
+hnc_12	00219	NnTfpRaNoB	revOPvdTnX	2
+hnc_12	00219	HIpe  jC  	  StbcBQHf	3
+hnc_12	00220	cUrtuuxIWi	iNWgNWwvvL	1
+hnc_12	00220	ubAhxSnqfa	XCMaVziHPG	3
+hnc_12	00222	wIzlEi Lme	zEfTmHgw D	3
+hnc_12	00223	HAF nUeqvx	HiZrGNNNWy	1
+hnc_12	00223	BdIaPUjY O	vMEnufTKEL	3
+hnc_12	00223	NKTEmgLcJU	a nhafGigm	3
+hnc_12	00224	xkmcbSNRUS	QRMB Uzncg	1
+hnc_12	00227	DlBPSvEYd 	jmXGlgreJx	2
+hnc_12	00227	AZfNPZcEwI	NsGKbLViYZ	2
+hnc_12	00229	DVIzRJcBSS	viQuF  Lx 	2
+hnc_12	00229	FMkvb tAQv	ylSuWGNxUt	1
+hnc_12	00231	V D TWWAqB	fiVRLUo pN	3
+hnc_12	00231	wHUFWDEO q	wrtWutbIpa	3
+hnc_12	00231	IkEDv OqtA	dHRWPZyTLy	3
+hnc_12	00232	UPjVskXeaP	x iAhH lMr	2
+hnc_12	00232	sIrHIiYCcX	UZFfVKWvzS	1
+hnc_12	00232	NjYhBhNhMJ	FiCdZawsoa	3
+hnc_12	00233	KsbUrjFBNH	ngT Tt ztj	1
+hnc_12	00233	ZfJTBZ rAU	qRLwgoAmaB	3
+hnc_12	00235	JEFoxyIvaW	IMQmiccZTC	3
+hnc_12	00236	MEWmjtIfm 	HTytQEcrDA	3
+hnc_12	00236	mZAcWUTsLk	SoOFzNZOfQ	2
+hnc_12	00238	oqekVhfVAY	SDKDFLkSGL	2
+hnc_12	00238	UnhKgTp m 	KHuDTGLJEy	3
+hnc_12	00238	FVInaoS rc	QxlqRoqjEc	1
+hnc_12	00239	oiCXDWKfd 	XIwBCDpbHP	3
+hnc_12	00239	pRFwMCPdcH	yeAYQC Ske	1
+hnc_12	00240	UB MaJjhOX	xhZwfeVsNp	3
+hnc_12	00240	YpIRvFjaeC	cYdccfeHvp	2
+hnc_12	00241	kKeJyJprAk	eqoK kptkc	1
+hnc_12	00243	EBlRhyvPib	JhOdjRlUuY	1
+hnc_12	00243	 XeVmUoo n	jbUKSQrzlV	1
+hnc_12	00243	GQWwMcCGuT	SmqikdqkEt	1
+hnc_12	00245	odUbS BQcv	DksamuUET 	2
+hnc_12	00245	MHRyZYlKPX	yAzdiJkzsR	1
+hnc_12	00246	ZAA ipzemm	mmIXVXQpvQ	3
+hnc_12	00246	P  iEsxlLL	pwGbC FiPJ	1
+hnc_12	00247	MPUIZH cgW	omIz XSFsW	3
+hnc_12	00247	qUIYxstkdI	eVcCthbg H	3
+hnc_12	00248	GdWNLpr JG	xitIQvSmP 	2
+hnc_12	00248	aFkZsIXUAp	 WM CtsbZt	2
+hnc_12	00248	Z MOVgMQvG	jeskmmIFzH	2
+hnc_12	00249	dtK uSbVqD	zXoukQcWaw	3
+hnc_12	00249	NqutdFzvip	UYoECJYnff	1
+hnc_12	00249	HcCf ySbzZ	JNSmskIlo 	2
+hnc_12	00252	c f fRKehp	S qYYSGXxx	3
+hnc_12	00252	fhxnEuYpUI	NQUiLnUVsU	1
+hnc_12	00252	eudsGnGgLM	OPnsyjZq H	1
+hnc_12	00254	juznlpHrwQ	oTaEnWrHR 	1
+hnc_12	00254	JkBwPlIgHr	hAWFFhNeku	2
+hnc_12	00254	ViAjYx iFY	mGaWwif qw	3
+hnc_12	00255	wGQINqQlrJ	RRhIsEqf R	1
+hnc_12	00255	WoC uwFsnv	chLZQirlqf	3
+hnc_12	00255	BhoJpkg Nw	wKLsimZZJh	1
+hnc_12	00256	HKNcrsoSat	TJXbqNsCAq	1
+hnc_12	00257	JlHQypTGke	EruyTOsBzU	1
+hnc_12	00258	GXCLUnjECT	NwalbS MTT	3
+hnc_12	00258	wwLDLHsqv 	MzRtTyvB c	2
+hnc_12	00261	gsGlaoPhcs	bxIYmRG rP	3
+hnc_12	00262	VskwQcnuSZ	HiY wFGlna	1
+hnc_12	00263	H TuuzaJcd	 EWnMVxevX	2
+hnc_12	00263	RQYcoJINON	ghadQTa Wz	1
+hnc_12	00263	GKSHNj Vqk	KhDmZzXZDW	3
+hnc_12	00266	MCVckhcWpZ	kLgFChC Ha	3
+hnc_12	00266	dFtpGfPfSi	R IWqpqXK 	2
+hnc_12	00267	rfmoWxKTGo	nKoKHCAhqd	2
+hnc_12	00269	wMVanfetPO	UPPIUyRrNT	3
+hnc_12	00269	SpKoMfUA f	LFADNJZtMB	1
+hnc_12	00270	 NM hB JLP	MkqsPQvbQu	2
+hnc_12	00271	wkHNKQgvrB	gCfaPCRDvV	2
+hnc_12	00271	SZAYheuzBM	PzSwgyzEcW	1
+hnc_12	00271	s WmNTHWTE	AsGV Ei dC	2
+hnc_12	00273	PbxGP KGjk	kryemTrEI 	2
+hnc_12	00273	uFjqQtZPeR	RADgGcSuCO	1
+hnc_12	00273	OhDiOEpMmh	bULmpPQkuY	3
+hnc_12	00274	Ba dDrBvPk	qqNmROtbfz	1
+hnc_12	00274	LwBLbOgoa 	gGXUtuFkKv	1
+hnc_12	00274	LiXktwUeSJ	mGaSHCCJMG	2
+hnc_12	00275	vkmliuEcPy	h TOJHgvzI	3
+hnc_12	00276	HQppjGkVzt	oZIeAw EwH	2
+hnc_12	00276	wBunKxNQli	NWaQAltKM 	1
+hnc_12	00276	lLxDDCokUZ	PnmstuOYLB	3
+hnc_12	00278	WVoWjYAqaZ	udKXFmJpjU	3
+hnc_12	00278	ug MBLneLd	TvUnizhXtH	2
+hnc_12	00279	fjqKMIdQGj	OpjjyakqSN	1
+hnc_12	00280	HMDmjl Krv	PKAVMTBwYc	3
+hnc_12	00280	oeCNEgJUb 	MmoSimbPzS	1
+hnc_12	00280	JZqrBtISKy	rxgIgYtPeR	3
+hnc_12	00281	gzAlujnjkb	gYnIZiyEpg	2
+hnc_12	00281	truYYNTQQT	sFLcXwM mF	3
+hnc_12	00281	JyzO H VIS	n  geZyiiL	3
+hnc_12	00283	AgBIgGJBuq	KkazyrFqDD	2
+hnc_12	00283	pbkmi QrcH	VnfoVW  O 	3
+hnc_12	00283	TkSSi pWCt	 qufxFTWix	1
+hnc_12	00285	debap FlaW	yandIArz m	1
+hnc_12	00285	DrbkmXeDZe	ic lFUQsKa	3
+hnc_12	00285	FZ cZdPmzS	PHkxiLQKlo	2
+hnc_12	00286	EFEzZUvL G	KZdPmAAolo	2
+hnc_12	00286	SVlENATjtL	CBoAqTsGMS	3
+hnc_12	00286	fDUxHNJNFx	IjAuUtYrIz	1
+hnc_12	00287	aNLLWqWCZn	sa kkupMsG	1
+hnc_12	00287	LgJKIZPw g	mMBxNbUMaP	3
+hnc_12	00288	zbQtCBi  n	ZG GrRnmZW	1
+hnc_12	00288	JbFrOqVvQl	nQFqBeoCiE	3
+hnc_12	00288	tYNGwoxxxP	tiNbtUTTqD	2
+hnc_12	00289	TUCGO rPBu	lTgObe KxG	2
+hnc_12	00289	LY nHhOEeq	ofyytHWdOa	1
+hnc_12	00292	JzodkXrcjw	sgwTctFA p	2
+hnc_12	00292	VMeZRXXHed	VdahWj RTw	1
+hnc_12	00293	LWeuDDNVdl	INiIfMucyM	1
+hnc_12	00295	QvFxcZbSTo	iUEwRPjmKv	2
+hnc_12	00295	UPkP IEaq 	qper CWlRX	2
+hnc_12	00295	hSNIg YK D	BMbuSexlc 	1
+hnc_12	00296	HH nGjucp 	wmlHgdGzxn	1
+hnc_12	00297	iBol IuHzd	evixdntsaG	3
+hnc_12	00297	wgrUWXFcCy	tLyuhQrlgn	2
+hnc_12	00297	fXG aYC WF	TXEbOlrarz	3
+hnc_12	00298	Zth RlkBrf	PlGJuLRU i	2
+hnc_12	00298	nFHAR KvEC	yMqNeyauNa	1
+hnc_12	00298	ccHodBqVOH	VwIMVKbbHV	1
+hnc_12	00299	qdyZSWBDcC	NYpXsfBrLh	3
+hnc_12	00299	IGYyRClhhz	dthkuQYifU	3
+hnc_12	00299	VwbJ IbcpQ	GqDbRLFbFp	3
+hnc_12	002101	UIaljTwwRR	QjNquuot f	1
+hnc_12	002101	mSWbCWip W	qfcStV VwE	1
+hnc_12	002101	aoeyScpVoh	O kibzBnNK	1
+hnc_12	002102	oJpRusx Zu	XVrIPkaSeF	3
+hnc_12	002102	  dcuiabyz	qsnGBgWtpW	1
+hnc_12	002103	wYN zhwbeW	 BHMcaBoQO	2
+hnc_12	002103	dOrCiK kko	NtBPVLBYka	1
+hnc_12	002105	 KHWMvaKxo	QtWD KUiJZ	3
+hnc_12	002106	aKmGcd Pvs	QSTlWkiuch	2
+hnc_12	002107	ytHyXkEAkZ	DfoVulPKkf	1
+hnc_12	002108	YNKWwXMWXv	dIcDlINDr 	2
+hnc_12	002108	iaVmdPzJuu	CdulvJUY f	3
+hnc_12	002108	fOmmOmwXpY	Q TmPBSgYu	2
+hnc_12	002110	kcwzYEXlhJ	ZDtXdETYkO	1
+hnc_12	002110	hndqDZqhHK	YCfzytPLdt	3
+hnc_12	002110	wKkK hVxwe	R AtBw RSg	3
+hnc_12	002111	rVJSRdlDci	kWpPELUrkB	3
+hnc_12	002111	usoTnXJdKC	kJMIAvtf P	3
+hnc_12	002111	p TrFbuRyD	ozJUZWLBab	3
+hnc_12	002112	hoIXqWQfcc	GyG TAWBTs	1
+hnc_12	002112	ufJFObznin	OsIsjlhnQj	2
+hnc_12	002112	qwgd EwJE 	yIZPqYPMcY	3
+hnc_12	002113	vLpCj xnKr	DrAlWaDWLJ	1
+hnc_12	002114	YgbapCLuLl	VwXPkTZMDg	3
+hnc_12	002115	JnChKdezyI	xsHzaQbLvY	2
+hnc_12	002116	isVbuP wyG	ZrzDWiVsvL	3
+hnc_12	002117	S xBwribY 	NhpSDlDvPd	3
+hnc_12	002117	T nEBi JmR	AjNEpVTOkx	3
+hnc_12	002117	IVjTKC pDe	 fpuyiLdTk	2
+hnc_12	002118	zZwssCvpHK	lnymjHOvbC	3
+hnc_12	002119	csHNvCrPkR	Xs jsLJuNW	2
+hnc_12	002119	jYLOJjikV 	BYfWjoZcIJ	1
+hnc_12	002119	pJ Usnhznr	bDYQM kkrO	3
+hnc_12	002121	jmCK ZVTWn	oXjMqOjREm	3
+hnc_12	002121	kyxhpMptFo	rRQVeU syK	3
+hnc_12	002121	fYnDBpGv  	zHhhK MqTz	2
+hnc_12	002122	ExAjy BDDd	TXzScgjXyQ	2
+hnc_12	002122	aRvx Szofh	vDaLDKcQH 	3
+hnc_12	002123	jCOMOuXIJY	ROqfDyQocE	1
+hnc_12	002123	gPkVCNdQWw	CJeuiclEcn	2
+hnc_12	002124	gUPQRhdfAZ	lqym NXeeW	2
+hnc_12	002124	P HrtlIMLy	LnxIMNgsOO	2
+hnc_12	002125	EnEqWajhd 	IrxOFfQwgn	1
+hnc_12	002125	VpXYge gou	kWfvvxofbv	2
+hnc_12	002127	IclCeBnkwB	HdoGxkaL c	2
+hnc_12	002127	xFrNSQMx C	vh tqXIAXU	2
+hnc_12	002128	Wkl fSAyuK	 uLQxdTeEA	2
+hnc_12	002128	LWt hF vVQ	kXW qJvrwr	2
+hnc_12	002128	pERdlBsgIX	gVKOSRrBQY	3
+hnc_12	002130	rKBwDlZ BD	OWUGUuJbVL	1
+hnc_12	002130	YRcihzxzQ 	uBEALLWlBz	1
+hnc_12	002130	DPKwH AwkZ	wnOFsu lkQ	1
+hnc_12	002132	NUXHdZBxIa	QfPdjQoWRl	1
+hnc_12	002132	pfDymtQnER	PuhPaXNjPj	3
+hnc_12	002133	QlXwYHivXG	JiqheQvSHY	2
+hnc_12	002133	jetdGLgxrd	zSgywyIIXW	3
+hnc_12	002134	YLHFUSzuMc	osLzC qlo 	1
+hnc_12	002134	TViljIVFbO	FcOvXZykUl	1
+hnc_12	002134	gdmqcpbcYY	fzOCb Mdfz	3
+hnc_12	002135	XhDBXkisoY	iygUtzYsqd	2
+hnc_12	002136	QEYhRDFESr	TVnBSOPjOn	3
+hnc_12	002136	WqDXKicweq	IcWDJsctMD	1
+hnc_12	002137	CWIEmUpqIz	WEy USYWcD	3
+hnc_12	002137	Evk fJgbeV	ZHMTQukotX	3
+hnc_12	002138	u SJZVjXE 	xF CwCEaRI	1
+hnc_12	002139	ObYEXtBGLL	kglSOsW  e	3
+hnc_12	002139	eYfIonuYQE	 ByjoSjqNU	3
+hnc_12	002139	psFIszGsEi	olkSFdLKRF	3
+hnc_12	002143	q qWAqsjfo	ffeNbrrHwV	2
+hnc_12	002143	RRZ o saTs	EMWqklquRl	1
+hnc_12	002147	NaBIopcoBo	AtsAKwRN G	2
+hnc_12	002148	iwvwNBFDLy	Axj fUYpwQ	1
+hnc_12	002148	uzDvXeQWxt	HIqGoJwlc 	2
+hnc_12	002148	SIwCJ FGie	eFbwzJKTkw	2
+hnc_12	002149	O  MmF Sth	FBSpSx xmC	3
+hnc_12	002150	FkO FMTqjW	eJpmoaznOz	2
+hnc_12	002150	EaEPzyaMc 	pj WyKswEx	3
+hnc_12	002150	 JsX GEAhk	FxbxwiULMj	3
+hnc_12	002152	Ygai aXhiR	 hdXIwNepp	2
+hnc_12	002152	nHyWOMWGvW	yRDJhfNp I	2
+hnc_12	002152	gaKE CMhjV	yZCyqrJRVD	1
+hnc_12	002153	xfcQljOV U	DbDygpGruR	1
+hnc_12	002153	 nyjPxJRZd	ApnNBBRSxz	3
+hnc_12	002153	WEmoLqaHMX	ynHRFKRLJP	2
+hnc_12	002154	rwEXjQRMVG	t WWnh Xka	2
+hnc_12	002154	TyfSccsW X	hCigBaL Of	2
+hnc_12	002154	CyZmbQLLxT	iOYGMTfdEU	1
+hnc_12	002156	EmYwto t f	ctQFcWQgfm	3
+hnc_12	002156	qXjmcxXwFX	vsiHsssxsR	3
+hnc_12	002156	tjkhbRXfHS	kmX VXLuse	3
+hnc_12	002158	 jSRxcCOwh	hCTPiPlvrR	3
+hnc_12	002159	FASJYjpqWa	mOyUnc EWE	1
+hnc_12	002162	fgHCdbUEMO	TclOsUGF M	2
+hnc_12	002165	IFyu  L lf	dtUFLEqDQu	2
+hnc_12	002165	iGHodZvqiX	XbCKgBZgTo	2
+hnc_12	002165	 qkE ztebE	gnpYzQsvGC	1
+hnc_12	002166	ulrPjkgwVL	rJLNpamxNA	3
+hnc_12	002166	TcVyarCX r	umNc qGCAZ	1

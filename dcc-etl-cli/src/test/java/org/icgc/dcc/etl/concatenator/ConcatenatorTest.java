@@ -22,11 +22,12 @@ import static com.google.common.io.Resources.getResource;
 import static org.apache.commons.io.FileUtils.listFiles;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Files.contentOf;
-
 import static org.icgc.dcc.common.core.util.Joiners.INDENT;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +46,7 @@ public class ConcatenatorTest {
 
   private static final String PARENT_DIR = getResource("fixtures/concatenator").getFile();
   private static final String PROJECTS_FILE = String.format("%s/%s", PARENT_DIR, "concatenator_projects.json");
-  private static final String PROJECT1_INPUT_DIR = String.format("%s/input/%s", PARENT_DIR, "project1");
-  private static final String PROJECT2_INPUT_DIR = String.format("%s/input/%s", PARENT_DIR, "project2");
-  private static final String PROJECT1_REF_DIR = String.format("%s/ref/%s", PARENT_DIR, "project1");
-  private static final String PROJECT2_REF_DIR = String.format("%s/ref/%s", PARENT_DIR, "project2");
+  private static final List<String> PROJECTS = Arrays.asList("project1", "project2", "project3", "project4");
 
   /**
    * We can't use an actual {@link TemporaryFolder} because the above projects.json file must be able to point to
@@ -57,8 +55,6 @@ public class ConcatenatorTest {
   private static final String TEMPORARY_DIR = "/tmp/dcc/concatenator";
   private static final String TEMPORARY_INPUT_DIR = String.format("%s/%s", TEMPORARY_DIR, "input");
   private static final String TEMPORARY_OUTPUT_DIR = String.format("%s/%s", TEMPORARY_DIR, "output");
-  private static final String TEMPORARY_PROJECT1_OUTPUT_DIR = String.format("%s/%s", TEMPORARY_OUTPUT_DIR, "project1");
-  private static final String TEMPORARY_PROJECT2_OUTPUT_DIR = String.format("%s/%s", TEMPORARY_OUTPUT_DIR, "project2");
 
   @Before
   public void setUp() throws IOException {
@@ -66,12 +62,14 @@ public class ConcatenatorTest {
     new File(TEMPORARY_DIR).mkdir();
     new File(TEMPORARY_INPUT_DIR).mkdir();
     new File(TEMPORARY_OUTPUT_DIR).mkdir();
-    FileUtils.copyDirectory(
-        new File(PROJECT1_INPUT_DIR),
-        new File(String.format("%s/%s", TEMPORARY_INPUT_DIR, "project1")));
-    FileUtils.copyDirectory(
-        new File(PROJECT2_INPUT_DIR),
-        new File(String.format("%s/%s", TEMPORARY_INPUT_DIR, "project2")));
+
+    for (val project : PROJECTS) {
+      val projectInputDir = String.format("%s/input/%s", PARENT_DIR, project);
+      FileUtils.copyDirectory(
+          new File(projectInputDir),
+          new File(String.format("%s/%s", TEMPORARY_INPUT_DIR, project)));
+    }
+
     log.info("Content: \n\t{}", INDENT.join(listFiles(new File(TEMPORARY_DIR), null, true)));
   }
 
@@ -85,8 +83,12 @@ public class ConcatenatorTest {
         TEMPORARY_OUTPUT_DIR)
         .process();
 
-    checkOutput(PROJECT1_REF_DIR, TEMPORARY_PROJECT1_OUTPUT_DIR);
-    checkOutput(PROJECT2_REF_DIR, TEMPORARY_PROJECT2_OUTPUT_DIR);
+    for (val project : PROJECTS) {
+      val projectRefDir = String.format("%s/ref/%s", PARENT_DIR, project);
+      val temporaryProjectOutputDir = String.format("%s/%s", TEMPORARY_OUTPUT_DIR, project);
+      checkOutput(projectRefDir, temporaryProjectOutputDir);
+    }
+
   }
 
   private void checkOutput(String projectRefDir, String temporaryProjectOutputDir) {
