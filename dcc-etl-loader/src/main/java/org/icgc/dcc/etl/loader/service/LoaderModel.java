@@ -385,6 +385,10 @@ public class LoaderModel {
         LoaderFieldNames.AVAILABLE_RAW_SEQUENCE_DATA,
         LoaderFieldNames.SUMMARY);
 
+    public static final Collection<String> SUPPLEMENTAL_FIELD_NAMES = ImmutableSet.of(
+        "supplemental$donor_id",
+        "supplemental$rest");
+
     public static boolean isGeneratedField(
         @NonNull final String fieldName) {
 
@@ -392,6 +396,12 @@ public class LoaderModel {
           Persistence.GENERATED_FIELD_NAMES,
           getGeneratedFieldName()))
           .contains(fieldName);
+    }
+
+    public static boolean isSupplementalField(
+        @NonNull final String fieldName) {
+
+      return SUPPLEMENTAL_FIELD_NAMES.contains(fieldName);
     }
 
     public static boolean isJoinArrayInternalName(

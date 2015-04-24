@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.etl.loader.flow.planner;
 
+import static cascading.tuple.Fields.ALL;
+import static cascading.tuple.Fields.RESULTS;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_CORE_TYPE;
@@ -35,25 +37,26 @@ import org.icgc.dcc.common.core.model.FileTypes.FileSubType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.etl.loader.cascading.RawSequenceDataInfo;
 import org.icgc.dcc.etl.loader.cascading.StainedSectionImageUpdate;
+import org.icgc.dcc.etl.loader.cascading.TuplizeFunction;
 import org.icgc.dcc.etl.loader.core.LoaderContext;
 import org.icgc.dcc.etl.loader.core.LoaderPlan;
 import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 import cascading.flow.FlowDef;
-import cascading.operation.Function;
-import cascading.operation.regex.RegexGenerator;
 import cascading.pipe.CoGroup;
 import cascading.pipe.Each;
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
 
 import com.google.common.collect.Maps;
 
 @Slf4j
 public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
+
+  private static final String DONOR_DONOR_ID = "donor$donor_id";
+  private static final String SUPPLEMENTAL_DONOR_ID_FIELD_NAME = "supplemental$donor_id";
 
   /**
    * List of {@link FeatureType}s available for a given submission (all types are not always provided, though there
@@ -88,26 +91,19 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
         if (fileType.isOptional()) {
           Pipe supplemenalPipe = new Pipe(getStartPipeName(getIdentifiableProjectKey(), fileType));
           heads.put(fileType, supplemenalPipe);
-
           supplemenalPipe = preProcess(supplemenalPipe, fileType);
-
-          String regex = "";
-          Function function = new RegexGenerator(new Fields("word"), regex);
-          Tuple listTuple = new Tuple();
-
-          supplemenalPipe = new Each(supplemenalPipe, new Fields("donor_id"), function);
-
+          supplemenalPipe = new Each(supplemenalPipe, ALL, new TuplizeFunction(), RESULTS);
           supplementalPipes.put(fileType, supplemenalPipe);
         }
       }
     }
 
     Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
-    Pipe supplementalPipe = new GroupBy(pipes, new Fields("donor_id"));
+    Pipe supplementalPipe = new GroupBy(pipes, new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
 
-    // supplementalPipe = new GroupBy(supplementalPipe, new Fields("donor_id"));
-
-    clinicalPipe = new CoGroup(clinicalPipe, new Fields("donor_id"), supplementalPipe, new Fields("donor_id"));
+    clinicalPipe =
+        new CoGroup(clinicalPipe, new Fields(DONOR_DONOR_ID), supplementalPipe, new Fields(
+            SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
 
     // clinicalPipe = new Each(clinicalPipe, new AddClinicalSupplemental());
 
