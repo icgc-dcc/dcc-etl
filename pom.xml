@@ -88,6 +88,11 @@
         <artifactId>dcc-common-client</artifactId>
         <version>${dcc-common.version}</version>
       </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-common-resources</artifactId>
+        <version>${dcc-common.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>${project.groupId}</groupId>
@@ -175,7 +180,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.5.0</dcc-common.version>
+    <dcc-common.version>3.8.5.1</dcc-common.version>
     <dcc-submission-core.version>3.8.2.3</dcc-submission-core.version>
 
     <!-- Versions - JSON -->
