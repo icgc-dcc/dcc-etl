@@ -41,7 +41,16 @@ import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 import cascading.flow.FlowDef;
+import cascading.operation.Function;
+import cascading.operation.regex.RegexGenerator;
+import cascading.pipe.CoGroup;
+import cascading.pipe.Each;
+import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+
+import com.google.common.collect.Maps;
 
 @Slf4j
 public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
@@ -71,6 +80,8 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
   @Override
   protected Pipe process(@NonNull Pipe clinicalPipe) {
 
+    val supplementalPipes = Maps.<FileType, Pipe> newHashMap();
+
     for (FileSubType fileSubType : availableSubTypes) {
       Set<FileType> fileTypes = fileSubType.getCorrespondingFileTypes();
       for (FileType fileType : fileTypes) {
@@ -78,20 +89,26 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
           Pipe supplemenalPipe = new Pipe(getStartPipeName(getIdentifiableProjectKey(), fileType));
           heads.put(fileType, supplemenalPipe);
 
-          // TODO: Add further processing
           supplemenalPipe = preProcess(supplemenalPipe, fileType);
-          // supplemenalPipe = mapTuple(supplemenalPipe);
 
-          // supplementalPipes.put(fileType, supplemenalPipe);
+          String regex = "";
+          Function function = new RegexGenerator(new Fields("word"), regex);
+          Tuple listTuple = new Tuple();
+
+          supplemenalPipe = new Each(supplemenalPipe, new Fields("donor_id"), function);
+
+          supplementalPipes.put(fileType, supplemenalPipe);
         }
       }
     }
 
-    // Pipe supplementalPipe = new Merge(supplementalPipes.values().toArray(new Array[]));
-    //
-    // supplementalPipe = new Group(supplementalPipe, "donor_id");
-    //
-    // clinicalPipe = new Join(clinicalPipe, supplementalPipe, "donor_id");
+    Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
+    Pipe supplementalPipe = new GroupBy(pipes, new Fields("donor_id"));
+
+    // supplementalPipe = new GroupBy(supplementalPipe, new Fields("donor_id"));
+
+    clinicalPipe = new CoGroup(clinicalPipe, new Fields("donor_id"), supplementalPipe, new Fields("donor_id"));
+
     // clinicalPipe = new Each(clinicalPipe, new AddClinicalSupplemental());
 
     summary = new SummaryCollector(clinicalPipe, availableFeatureTypes, getSubmission());

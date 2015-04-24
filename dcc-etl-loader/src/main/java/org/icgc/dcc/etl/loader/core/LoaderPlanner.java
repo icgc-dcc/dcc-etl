@@ -28,13 +28,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileSubType;
 import org.icgc.dcc.etl.loader.flow.RecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.flow.planner.DonorRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.flow.planner.ObservationRecordLoaderFlowPlanner;
-import org.icgc.dcc.etl.loader.flow.planner.SupplementalRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 /**
@@ -107,17 +105,6 @@ public class LoaderPlanner {
       plan.includeFlowPlanner(projectKey, observationFlowPlanner);
     }
 
-    // Include flow planners for the supplemental types available
-    for (val supplementalType : supplementalTypes) {
-      val supplementalTypeFlowPlanner =
-          provider.getSupplementalFlowPlanner(
-              projectKey,
-              supplementalType,
-              submissionDataDigest.getSubTypes(supplementalType),
-              platformStrategy);
-
-      plan.includeFlowPlanner(projectKey, supplementalTypeFlowPlanner);
-    }
   }
 
   /**
@@ -146,15 +133,6 @@ public class LoaderPlanner {
 
       return new ObservationRecordLoaderFlowPlanner(
           context, plan, featureType,
-          submission, availableSubTypes, platformStrategy);
-    }
-
-    private RecordLoaderFlowPlanner getSupplementalFlowPlanner(
-        String submission, ClinicalType supplementalType, Set<FileSubType> availableSubTypes,
-        LoaderPlatformStrategy platformStrategy) {
-
-      return new SupplementalRecordLoaderFlowPlanner(
-          context, plan, supplementalType,
           submission, availableSubTypes, platformStrategy);
     }
 
