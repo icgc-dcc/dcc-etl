@@ -59,12 +59,12 @@ import org.icgc.dcc.common.core.Component;
 import org.icgc.dcc.common.core.util.AppUtils;
 import org.icgc.dcc.common.core.util.Protocol;
 import org.icgc.dcc.common.core.util.URIs;
-import org.icgc.dcc.etl.loader.factory.LoaderServiceFactory;
-import org.icgc.dcc.etl.loader.service.LoaderService;
-import org.icgc.dcc.etl.loader.util.StubIdentifierClient;
 import org.icgc.dcc.common.hadoop.fs.DccFileSystem2;
 import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 import org.icgc.dcc.common.test.mongodb.JsonUtils;
+import org.icgc.dcc.etl.loader.factory.LoaderServiceFactory;
+import org.icgc.dcc.etl.loader.service.LoaderService;
+import org.icgc.dcc.etl.loader.util.StubIdentifierClient;
 
 import com.google.common.base.Optional;
 import com.mongodb.MongoClient;
@@ -238,6 +238,9 @@ public class LoaderIntegrationTestHelper {
    */
   private void verifyExportedFiles() {
     for (File typeDir : new File(FS_REFERENCE_DIR).listFiles()) {
+      if (typeDir.isFile()) {
+        continue;
+      }
       for (File expectedFile : typeDir.listFiles()) {
         String actualTypeDir = PATH.join(OUTPUT_DIR, typeDir.getName());
         String fileName = expectedFile.getName();
