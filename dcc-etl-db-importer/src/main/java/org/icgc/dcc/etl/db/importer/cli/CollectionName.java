@@ -33,7 +33,8 @@ public enum CollectionName {
   GO,
   PATHWAYS,
   GENES,
-  DIAGRAMS;
+  DIAGRAMS,
+  FILES;
 
   public static CollectionName byName(@NonNull String name) {
     for (val value : values()) {

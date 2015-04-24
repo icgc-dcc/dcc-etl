@@ -34,6 +34,7 @@ import org.icgc.dcc.etl.db.importer.diagram.DiagramImporter;
 import org.icgc.dcc.etl.db.importer.gene.GeneImporter;
 import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
+import org.icgc.dcc.etl.db.importer.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.db.importer.project.ProjectImporter;
 
 import com.google.common.base.Stopwatch;
@@ -92,20 +93,22 @@ public class DBImporter {
 
     if (collections.contains(CollectionName.DIAGRAMS)) {
       watch.reset().start();
-      log.info("Importing Diagrams...");
+      log.info("Importing diagrams...");
       importDiagrams(mongoUri);
-      log.info("Finished importing Diagrams in {}", watch);
+      log.info("Finished importing diagrams in {}", watch);
+    }
+
+    if (collections.contains(CollectionName.FILES)) {
+      watch.reset().start();
+      log.info("Importing files...");
+      importFiles(mongoUri);
+      log.info("Finished importing files in {}", watch);
     }
 
   }
 
   private static void importProjects(ICGCClientConfig config, MongoClientURI releaseUri) {
     val projectImporter = new ProjectImporter(config, releaseUri);
-    projectImporter.execute();
-  }
-
-  private static void importDiagrams(MongoClientURI releaseUri) {
-    val projectImporter = new DiagramImporter(releaseUri);
     projectImporter.execute();
   }
 
@@ -127,6 +130,16 @@ public class DBImporter {
   private static void importGo(MongoClientURI releaseUri) {
     val goImporter = new GoImporter(releaseUri);
     goImporter.execute();
+  }
+
+  private static void importDiagrams(MongoClientURI releaseUri) {
+    val projectImporter = new DiagramImporter(releaseUri);
+    projectImporter.execute();
+  }
+
+  private static void importFiles(MongoClientURI releaseUri) {
+    val projectImporter = new PCAWGImporter(releaseUri);
+    projectImporter.execute();
   }
 
 }
