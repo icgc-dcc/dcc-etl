@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,41 +15,19 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.pcawg.writer;
+package org.icgc.dcc.etl.core.id;
 
-import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import java.io.Closeable;
 
-import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
-import org.jongo.MongoCollection;
+public interface IdentifierClient extends Closeable {
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mongodb.MongoClientURI;
+  String getDonorId(String submittedDonorId, String submittedProjectId);
 
-@Slf4j
-public class PCAWGWriter extends AbstractJongoWriter<Iterable<ObjectNode>> {
+  String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
+      String mutation, String mutationType, String assemblyVersion);
 
-  public PCAWGWriter(MongoClientURI mongoUri) {
-    super(mongoUri);
-  }
+  String getSampleId(String submittedSampleId, String submittedProjectId);
 
-  @Override
-  public void write(@NonNull Iterable<ObjectNode> files) {
-    log.info("Clearing file documents...");
-    val fileCollection = getCollection(FILE_COLLECTION);
-    clearFiles(fileCollection);
-
-    log.info("Writing file documents...");
-    for (val file : files) {
-      fileCollection.save(file);
-    }
-  }
-
-  private static void clearFiles(MongoCollection fileCollection) {
-    val result = fileCollection.remove();
-    log.info("Finished clearing file collection {}: {}", fileCollection, result);
-  }
+  String getSpecimenId(String submittedSpecimenId, String submittedProjectId);
 
 }

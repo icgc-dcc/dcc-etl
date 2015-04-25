@@ -15,26 +15,42 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.pcawg;
+package org.icgc.dcc.etl.db.importer.pcawg.writer;
 
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
-
-import java.io.IOException;
-
+import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import lombok.NonNull;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
-import org.junit.Test;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+import org.jongo.MongoCollection;
 
-public class PCAWGImporterTest {
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mongodb.MongoClientURI;
 
-  @Test
-  public void testExecute() throws IOException {
-    val mongoUri = getLocalMongoClientUri("dcc-genome");
-    val identifierClient = new HashIdentifierClient();
+@Slf4j
+public class PCAWGFileWriter extends AbstractJongoWriter<Iterable<ObjectNode>> {
 
-    val pcawgImporter = new PCAWGImporter(mongoUri, identifierClient);
-    pcawgImporter.execute();
+  public PCAWGFileWriter(@NonNull MongoClientURI mongoUri) {
+    super(mongoUri);
+  }
+
+  @Override
+  public void write(@NonNull Iterable<ObjectNode> files) {
+    log.info("Clearing file documents...");
+    val fileCollection = getCollection(FILE_COLLECTION);
+    clearFiles(fileCollection);
+
+    log.info("Writing file documents...");
+    for (val file : files) {
+      fileCollection.save(file);
+    }
+  }
+
+  private static void clearFiles(MongoCollection fileCollection) {
+    val result = fileCollection.remove();
+
+    log.info("Finished clearing file collection {}: {}", fileCollection, result);
   }
 
 }

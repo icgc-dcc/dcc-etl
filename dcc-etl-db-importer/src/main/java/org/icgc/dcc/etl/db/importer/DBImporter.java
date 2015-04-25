@@ -28,6 +28,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
+import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.icgc.dcc.etl.db.importer.cgc.CgcImporter;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.diagram.DiagramImporter;
@@ -138,7 +139,7 @@ public class DBImporter {
   }
 
   private static void importFiles(MongoClientURI releaseUri) {
-    val projectImporter = new PCAWGImporter(releaseUri);
+    val projectImporter = new PCAWGImporter(releaseUri, new HashIdentifierClient());
     projectImporter.execute();
   }
 

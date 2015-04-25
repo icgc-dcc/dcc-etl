@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.db.importer.pcawg;
 import static com.google.common.base.Stopwatch.createStarted;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.URLs.getUrl;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_ARCHIVE_BASE_URL;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,12 +32,12 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.pcawg.core.PCAWGDonorFileConverter;
-import org.icgc.dcc.etl.db.importer.pcawg.reader.PCAWGReader;
-import org.icgc.dcc.etl.db.importer.pcawg.writer.PCAWGWriter;
+import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.db.importer.pcawg.core.PCAWGProcessor;
+import org.icgc.dcc.etl.db.importer.pcawg.reader.PCAWGDonorArchiveReader;
+import org.icgc.dcc.etl.db.importer.pcawg.writer.PCAWGFileWriter;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableList;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
@@ -46,14 +47,28 @@ public class PCAWGImporter {
   /**
    * JSONL (new line delimited JSON file) dump of clean, curated PCAWG donor information.
    */
-  private static final URL PCAWG_DONOR_ARCHIVE_URL =
-      getUrl("http://pancancer.info/gnos_metadata/2015-04-24_02-02-57_UTC/ucsc_polit_donor_r_150424020257.jsonl.gz");
+  private static final URL DEFAULT_PCAWG_DONOR_ARCHIVE_URL =
+      getUrl(PCAWG_ARCHIVE_BASE_URL + "/2015-04-24_02-02-57_UTC/ucsc_polit_donor_r_150424020257.jsonl.gz");
 
   /**
    * Configuration
    */
   @NonNull
   private final MongoClientURI mongoUri;
+  @NonNull
+  private final URL archiveUrl;
+
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  private final IdentifierClient identifierClient;
+
+  public PCAWGImporter(@NonNull MongoClientURI mongoUri, @NonNull IdentifierClient identifierClient) {
+    this.mongoUri = mongoUri;
+    this.archiveUrl = DEFAULT_PCAWG_DONOR_ARCHIVE_URL;
+    this.identifierClient = identifierClient;
+  }
 
   @SneakyThrows
   public void execute() {
@@ -61,37 +76,32 @@ public class PCAWGImporter {
 
     log.info("Reading donors...");
     val donors = readDonors();
+    log.info("Finished reading {} donors", formatCount(donors));
 
-    log.info("Converting donors...");
-    val files = convert(donors);
+    log.info("Processing donor files...");
+    val files = processFiles(donors);
+    log.info("Finished processing {} donor files", formatCount(files));
 
     log.info("Writing files...");
     writeFiles(files);
+    log.info("Finished writing {} donor files", formatCount(files));
 
     log.info("Imported {} files in {}.", formatCount(files), watch);
   }
 
   private Iterable<ObjectNode> readDonors() throws IOException {
-    val reader = new PCAWGReader(PCAWG_DONOR_ARCHIVE_URL);
-    return reader.read();
+    val reader = new PCAWGDonorArchiveReader(archiveUrl);
+    return reader.readDonors();
   }
 
-  private Iterable<ObjectNode> convert(Iterable<ObjectNode> donors) {
-    val converter = new PCAWGDonorFileConverter();
-
-    val files = ImmutableList.<ObjectNode> builder();
-    for (val donor : donors) {
-      val donorFiles = converter.convert(donor);
-
-      files.addAll(donorFiles);
-    }
-
-    return files.build();
+  private Iterable<ObjectNode> processFiles(Iterable<ObjectNode> donors) {
+    val processor = new PCAWGProcessor();
+    return processor.processFiles(donors);
   }
 
   private void writeFiles(Iterable<ObjectNode> files) throws IOException {
     @Cleanup
-    val writer = new PCAWGWriter(mongoUri);
+    val writer = new PCAWGFileWriter(mongoUri);
     writer.write(files);
   }
 

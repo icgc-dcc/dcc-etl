@@ -15,20 +15,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.loader.util;
+package org.icgc.dcc.etl.core.id;
 
 import static com.google.common.base.Joiner.on;
 import static com.google.common.hash.Hashing.md5;
 
 import java.io.IOException;
 
+import lombok.NoArgsConstructor;
+
 import com.google.common.base.Joiner;
 import com.google.common.hash.HashFunction;
 
 /**
- * Stateless stub {@link IdentifierClient} implementation that returns a stable id based on it it's inputs.
+ * Stateless hash based {@link IdentifierClient} implementation that returns a stable id based on it it's inputs.
  */
-public class StubIdentifierClient implements IdentifierClient {
+@NoArgsConstructor
+public class HashIdentifierClient implements IdentifierClient {
 
   /**
    * Id generation strategy state.
@@ -36,7 +39,10 @@ public class StubIdentifierClient implements IdentifierClient {
   private static final HashFunction MD5 = md5();
   private static final Joiner JOINER = on(":");
 
-  public StubIdentifierClient(String serviceUri, String release) {
+  /**
+   * Required for reflection in Loader
+   */
+  public HashIdentifierClient(String serviceUri, String release) {
     // Empty
   }
 

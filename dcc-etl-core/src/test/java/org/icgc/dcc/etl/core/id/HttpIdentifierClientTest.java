@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.loader.util;
+package org.icgc.dcc.etl.core.id;
 
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static java.util.concurrent.TimeUnit.SECONDS;

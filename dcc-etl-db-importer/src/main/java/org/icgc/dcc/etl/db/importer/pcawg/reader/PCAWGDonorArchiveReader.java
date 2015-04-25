@@ -4,7 +4,6 @@ import static com.fasterxml.jackson.core.JsonParser.Feature.AUTO_CLOSE_SOURCE;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
@@ -15,21 +14,21 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.util.AbstractTsvMapReader;
-
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 
 @Slf4j
 @RequiredArgsConstructor
-public class PCAWGReader extends AbstractTsvMapReader {
+public class PCAWGDonorArchiveReader {
 
   /**
    * Constants.
    */
   private static final ObjectMapper MAPPER = new ObjectMapper().configure(AUTO_CLOSE_SOURCE, false);
+  private static final ObjectReader READER = MAPPER.reader(ObjectNode.class);
 
   /**
    * State.
@@ -37,12 +36,11 @@ public class PCAWGReader extends AbstractTsvMapReader {
   @NonNull
   private final URL donorArchiveUrl;
 
-  public Iterable<ObjectNode> read() throws IOException {
+  public Iterable<ObjectNode> readDonors() throws IOException {
     log.info("Reading donors from '{}'...", donorArchiveUrl);
-    val reader = MAPPER.reader(ObjectNode.class);
 
     @Cleanup
-    MappingIterator<ObjectNode> iterator = reader.readValues(openStream());
+    val iterator = readValues();
 
     val donors = Lists.<ObjectNode> newArrayList();
     while (iterator.hasNext()) {
@@ -53,8 +51,12 @@ public class PCAWGReader extends AbstractTsvMapReader {
     return donors;
   }
 
+  private MappingIterator<ObjectNode> readValues() throws IOException {
+    return READER.readValues(openStream());
+  }
+
   @SneakyThrows
-  private InputStream openStream() throws IOException, MalformedURLException {
+  private InputStream openStream() {
     return new GZIPInputStream(donorArchiveUrl.openStream());
   }
 

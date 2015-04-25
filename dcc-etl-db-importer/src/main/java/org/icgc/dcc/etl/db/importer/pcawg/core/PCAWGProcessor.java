@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,26 +15,28 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.pcawg;
+package org.icgc.dcc.etl.db.importer.pcawg.core;
 
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
-
-import java.io.IOException;
-
+import lombok.NonNull;
 import lombok.val;
 
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
-import org.junit.Test;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableList;
 
-public class PCAWGImporterTest {
+public class PCAWGProcessor {
 
-  @Test
-  public void testExecute() throws IOException {
-    val mongoUri = getLocalMongoClientUri("dcc-genome");
-    val identifierClient = new HashIdentifierClient();
+  private final PCAWGDonorFilesConverter converter = new PCAWGDonorFilesConverter();
 
-    val pcawgImporter = new PCAWGImporter(mongoUri, identifierClient);
-    pcawgImporter.execute();
+  public Iterable<ObjectNode> processFiles(@NonNull Iterable<ObjectNode> donors) {
+
+    val files = ImmutableList.<ObjectNode> builder();
+    for (val donor : donors) {
+      val donorFiles = converter.convertDonor(donor);
+
+      files.addAll(donorFiles);
+    }
+
+    return files.build();
   }
 
 }

@@ -17,53 +17,49 @@
  */
 package org.icgc.dcc.etl.db.importer.pcawg.core;
 
-import java.util.List;
-
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_DCC_PROJECT_CODE;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_FILES_FIELD;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_DONOR_ID;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
 import lombok.NonNull;
 import lombok.val;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
-public class PCAWGDonorFileConverter {
+public class PCAWGDonorFilesConverter {
 
-  /**
-   * Constants.
-   */
-  private static final String SUBMITTER_DONOR_ID = "submitter_donor_id";
-  private static final List<String> SPECIMEN_CLASSES = ImmutableList.of("normal_specimen", "normal_specimens",
-      "tumor_specimen", "tumor_specimens");
-  private static final List<String> WORKFLOW_TYPES = ImmutableList.of("star", "tophat", "bwa_alignment",
-      "sanger_variant_calling");
-  private static final List<String> LIBRARY_STRATEGY_NAMES = ImmutableList.of("rna_seq", "wgs");
-
-  @NonNull
-  public Iterable<ObjectNode> convert(ObjectNode donor) {
-    val submittedDonorId = donor.get(SUBMITTER_DONOR_ID);
-    val projectName = donor.get("dcc_project_code");
+  public Iterable<ObjectNode> convertDonor(@NonNull ObjectNode donor) {
+    val submittedDonorId = donor.get(PCAWG_SUBMITTER_DONOR_ID);
+    val projectName = donor.get(PCAWG_DCC_PROJECT_CODE);
 
     val files = ImmutableList.<ObjectNode> builder();
-    for (val name : LIBRARY_STRATEGY_NAMES) {
+    for (val name : PCAWG_LIBRARY_STRATEGY_NAMES) {
       val libraryStrategy = donor.path(name);
 
-      if (libraryStrategy.isObject()) {
-        for (val specimenClass : SPECIMEN_CLASSES) {
-          val specimens = libraryStrategy.path(specimenClass);
-          for (val specimen : specimens) {
-            for (val workflowType : WORKFLOW_TYPES) {
-              val workflow = specimen.path(workflowType);
-              if (workflow.isMissingNode()) {
-                continue;
-              }
+      if (!libraryStrategy.isObject()) {
+        continue;
+      }
 
-              for (val file : convertWorkflowFiles((ObjectNode) workflow)) {
-                file.put("project_name", projectName);
-                file.put("submitted_donor_id", submittedDonorId);
-                file.put("specimen_class", normalizeSpecimenClass(specimenClass));
-                file.put("workflow_type", workflowType);
+      for (val specimenClass : PCAWG_SPECIMEN_CLASSES) {
+        val specimens = libraryStrategy.path(specimenClass);
+        for (val specimen : specimens) {
+          for (val workflowType : PCAWG_WORKFLOW_TYPES) {
+            val workflow = specimen.path(workflowType);
+            if (workflow.isMissingNode()) {
+              continue;
+            }
 
-                files.add(file);
-              }
+            val workflowFiles = convertWorkflowFiles((ObjectNode) workflow);
+            for (val workflowFile : workflowFiles) {
+              workflowFile.put("project_name", projectName);
+              workflowFile.put("submitted_donor_id", submittedDonorId);
+              workflowFile.put("specimen_class", normalizeSpecimenClass(specimenClass));
+              workflowFile.put("workflow_type", workflowType);
+
+              files.add(workflowFile);
             }
           }
         }
@@ -78,10 +74,11 @@ public class PCAWGDonorFileConverter {
   }
 
   private static Iterable<ObjectNode> convertWorkflowFiles(ObjectNode workflow) {
-    val fileProperties = (ObjectNode) workflow.deepCopy().without("files");
+    val fileProperties = (ObjectNode) workflow.deepCopy().without(PCAWG_FILES_FIELD);
+    val workflowFiles = workflow.path(PCAWG_FILES_FIELD);
 
     val files = ImmutableList.<ObjectNode> builder();
-    for (val workflowFile : workflow.path("files")) {
+    for (val workflowFile : workflowFiles) {
       val file = fileProperties.deepCopy();
       file.putAll((ObjectNode) workflowFile);
 
