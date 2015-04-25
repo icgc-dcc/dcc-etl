@@ -50,7 +50,7 @@ public class PCAWGFileWriter extends AbstractJongoWriter<Iterable<ObjectNode>> {
   private static void clearFiles(MongoCollection fileCollection) {
     val result = fileCollection.remove();
 
-    log.info("Finished clearing file collection {}: {}", fileCollection, result);
+    log.info("Finished clearing collection '{}': {}", fileCollection, result);
   }
 
 }

@@ -38,6 +38,8 @@ public class PCAWGArchives {
    */
   public static final String PCAWG_SUBMITTER_DONOR_ID = "submitter_donor_id";
   public static final String PCAWG_DCC_PROJECT_CODE = "dcc_project_code";
+  public static final String PCAWG_SUBMITTER_SPECIMEN_ID = "submitter_specimen_id";
+  public static final String PCAWG_SUBMITTER_SAMPLE_ID = "submitter_sample_id";
   public static final String PCAWG_FILES_FIELD = "files";
 
   /**

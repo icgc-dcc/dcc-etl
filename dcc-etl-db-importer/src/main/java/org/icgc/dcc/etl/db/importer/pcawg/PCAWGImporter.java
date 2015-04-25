@@ -46,6 +46,8 @@ public class PCAWGImporter {
 
   /**
    * JSONL (new line delimited JSON file) dump of clean, curated PCAWG donor information.
+   * 
+   * @see http://jsonlines.org/
    */
   private static final URL DEFAULT_PCAWG_DONOR_ARCHIVE_URL =
       getUrl(PCAWG_ARCHIVE_BASE_URL + "/2015-04-24_02-02-57_UTC/ucsc_polit_donor_r_150424020257.jsonl.gz");

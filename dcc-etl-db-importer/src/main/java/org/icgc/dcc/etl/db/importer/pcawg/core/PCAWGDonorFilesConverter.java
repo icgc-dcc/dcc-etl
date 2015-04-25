@@ -22,6 +22,8 @@ import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_FILES_
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_DONOR_ID;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_SAMPLE_ID;
+import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_SPECIMEN_ID;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
 import lombok.NonNull;
 import lombok.val;
@@ -33,13 +35,13 @@ public class PCAWGDonorFilesConverter {
 
   public Iterable<ObjectNode> convertDonor(@NonNull ObjectNode donor) {
     val submittedDonorId = donor.get(PCAWG_SUBMITTER_DONOR_ID);
-    val projectName = donor.get(PCAWG_DCC_PROJECT_CODE);
+    val projectId = donor.get(PCAWG_DCC_PROJECT_CODE);
 
     val files = ImmutableList.<ObjectNode> builder();
     for (val name : PCAWG_LIBRARY_STRATEGY_NAMES) {
       val libraryStrategy = donor.path(name);
 
-      if (!libraryStrategy.isObject()) {
+      if (libraryStrategy.isMissingNode()) {
         continue;
       }
 
@@ -54,7 +56,7 @@ public class PCAWGDonorFilesConverter {
 
             val workflowFiles = convertWorkflowFiles((ObjectNode) workflow);
             for (val workflowFile : workflowFiles) {
-              workflowFile.put("project_name", projectName);
+              workflowFile.put("_project_id", projectId);
               workflowFile.put("submitted_donor_id", submittedDonorId);
               workflowFile.put("specimen_class", normalizeSpecimenClass(specimenClass));
               workflowFile.put("workflow_type", workflowType);
@@ -80,12 +82,20 @@ public class PCAWGDonorFilesConverter {
     val files = ImmutableList.<ObjectNode> builder();
     for (val workflowFile : workflowFiles) {
       val file = fileProperties.deepCopy();
+      rename(file, PCAWG_SUBMITTER_SAMPLE_ID, "submitted_sample_id");
+      rename(file, PCAWG_SUBMITTER_SPECIMEN_ID, "submitted_specimen_id");
+
       file.putAll((ObjectNode) workflowFile);
 
       files.add(file);
     }
 
     return files.build();
+  }
+
+  @NonNull
+  private static void rename(ObjectNode objectNode, String fromFieldName, String toFieldName) {
+    objectNode.put(toFieldName, objectNode.remove(fromFieldName));
   }
 
 }
