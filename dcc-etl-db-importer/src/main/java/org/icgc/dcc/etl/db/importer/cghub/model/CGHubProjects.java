@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableMap;
 @NoArgsConstructor(access = PRIVATE)
 public class CGHubProjects {
 
-  private static final Map<String, String> diseaseCodeToProjectId = ImmutableMap.<String, String> builder()
+  private static final Map<String, String> DISEASE_CODE_PROJECT_IDS = ImmutableMap.<String, String> builder()
       .put("BLCA", "BLCA-US")
       .put("BRCA", "BRCA-US")
       .put("CESC", "CESC-US")
@@ -54,7 +54,7 @@ public class CGHubProjects {
       .put("PAAD", "PAAD-US")
       .put("PRAD", "PRAD-US")
       .put("READ", "READ-US")
-      .put("SARC", "unknown.8")
+      .put("SARC", "SARC-US")
       .put("SKCM", "SKCM-US")
       .put("STAD", "STAD-US")
       .put("THCA", "THCA-US")
@@ -62,11 +62,11 @@ public class CGHubProjects {
       .build();
 
   public static Set<String> getProjects() {
-    return diseaseCodeToProjectId.keySet();
+    return DISEASE_CODE_PROJECT_IDS.keySet();
   }
 
   public static String getProjectId(String diseaseCode) {
-    return diseaseCodeToProjectId.get(diseaseCode);
+    return DISEASE_CODE_PROJECT_IDS.get(diseaseCode);
   }
 
 }
