@@ -48,6 +48,7 @@ import cascading.pipe.CoGroup;
 import cascading.pipe.Each;
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
+import cascading.pipe.joiner.LeftJoin;
 import cascading.tuple.Fields;
 
 import com.google.common.collect.Maps;
@@ -103,9 +104,7 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
 
     clinicalPipe =
         new CoGroup(clinicalPipe, new Fields(DONOR_DONOR_ID), supplementalPipe, new Fields(
-            SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
-
-    // clinicalPipe = new Each(clinicalPipe, new AddClinicalSupplemental());
+            SUPPLEMENTAL_DONOR_ID_FIELD_NAME), new LeftJoin());
 
     summary = new SummaryCollector(clinicalPipe, availableFeatureTypes, getSubmission());
 

@@ -49,26 +49,31 @@ public class TuplizeFunction extends BaseFunction<Void> {
       FunctionCall<Void> functionCall) {
 
     TupleEntry entry = functionCall.getArguments();
-    val outTuple = new Tuple();
-    val restTuple = new Tuple();
+    val incomingFields = entry.getFields();
+    val incomingTuple = entry.getTupleCopy();
+    val outgoingTuple = new Tuple();
 
     for (val prefixedFieldName : getFieldNames(entry)) {
       val value = entry.getObject(new Fields(prefixedFieldName));
       val unprefixedFieldName = unprefixFieldName(prefixedFieldName);
       if (unprefixedFieldName.equals(DONOR_ID_BASE_FIELD_NAME)) {
-        outTuple.add(value);
-      } else {
-        restTuple.add(value);
+        outgoingTuple.add(value);
+
+        val donorIdField = new Fields(prefixedFieldName);
+        incomingTuple.remove(incomingFields, donorIdField);
+        val outgoingFields = incomingFields.subtract(donorIdField);
+        val outgingTupleEntry = new TupleEntry(outgoingFields, incomingTuple);
+
+        checkState(!outgoingTuple.isEmpty());
+        checkState(outgingTupleEntry.size() != 0);
+
+        outgoingTuple.add(outgingTupleEntry);
+        break;
       }
     }
 
-    checkState(!outTuple.isEmpty());
-    checkState(!restTuple.isEmpty());
-
-    outTuple.add(restTuple);
-
     functionCall
         .getOutputCollector()
-        .add(outTuple);
+        .add(outgoingTuple);
   }
 }
