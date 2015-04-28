@@ -20,6 +20,9 @@ package org.icgc.dcc.etl.loader.cascading;
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.cascading.TupleEntries.getFieldNames;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.unprefixFieldName;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.DONOR_ID_BASE_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_DONOR_ID_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_REST_FIELD_NAME;
 import lombok.val;
 
 import org.icgc.dcc.common.cascading.operation.BaseFunction;
@@ -34,10 +37,6 @@ import cascading.tuple.TupleEntry;
  * Transforms entry a tuple mapping of id field and rest of fields.
  */
 public class TuplizeFunction extends BaseFunction<Void> {
-
-  private static final String DONOR_ID_BASE_FIELD_NAME = "donor_id";
-  private static final String SUPPLEMENTAL_DONOR_ID_FIELD_NAME = "supplemental$donor_id";
-  private static final String SUPPLEMENTAL_REST_FIELD_NAME = "supplemental$rest";
 
   public TuplizeFunction() {
     super(new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME, SUPPLEMENTAL_REST_FIELD_NAME));

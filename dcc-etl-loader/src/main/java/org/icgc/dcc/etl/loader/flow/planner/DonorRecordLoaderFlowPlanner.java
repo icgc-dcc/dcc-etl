@@ -25,6 +25,9 @@ import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_CORE_TYPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.withRawSequenceData;
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getRawSequenceDataInfoPipeName;
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getStartPipeName;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.DONOR_DONOR_ID;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_DONOR_ID_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_MERGED_FIELD_NAME;
 
 import java.util.Set;
 
@@ -35,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileSubType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
+import org.icgc.dcc.etl.loader.cascading.AsList;
 import org.icgc.dcc.etl.loader.cascading.RawSequenceDataInfo;
 import org.icgc.dcc.etl.loader.cascading.StainedSectionImageUpdate;
 import org.icgc.dcc.etl.loader.cascading.TuplizeFunction;
@@ -44,9 +48,9 @@ import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 import cascading.flow.FlowDef;
-import cascading.operation.Debug;
 import cascading.pipe.CoGroup;
 import cascading.pipe.Each;
+import cascading.pipe.Every;
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.pipe.joiner.LeftJoin;
@@ -56,9 +60,6 @@ import com.google.common.collect.Maps;
 
 @Slf4j
 public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
-
-  private static final String DONOR_DONOR_ID = "donor$donor_id";
-  private static final String SUPPLEMENTAL_DONOR_ID_FIELD_NAME = "supplemental$donor_id";
 
   /**
    * List of {@link FeatureType}s available for a given submission (all types are not always provided, though there
@@ -106,11 +107,14 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
       Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
       Pipe supplementalPipe = new GroupBy(pipes, new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
 
-      clinicalPipe = new Each(clinicalPipe, new Debug("clinical"));
+      supplementalPipe =
+          new Every(supplementalPipe, new AsList(new Fields(SUPPLEMENTAL_MERGED_FIELD_NAME), new Fields(
+              SUPPLEMENTAL_DONOR_ID_FIELD_NAME)));
 
       clinicalPipe =
           new CoGroup(clinicalPipe, new Fields(DONOR_DONOR_ID), supplementalPipe, new Fields(
               SUPPLEMENTAL_DONOR_ID_FIELD_NAME), new LeftJoin());
+
     }
 
     summary = new SummaryCollector(clinicalPipe, availableFeatureTypes, getSubmission());

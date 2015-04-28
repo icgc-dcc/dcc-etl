@@ -44,11 +44,13 @@ import static org.icgc.dcc.etl.loader.service.LoaderModel.Occurence.occurenceFie
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.getNestedFileType;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.isGeneratedField;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.isJoinArrayInternalName;
-import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.isSupplementalField;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.potentiallyRenameArray;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.AVAILABLE_RAW_SEQUENCE_DATA_FIELD;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.isAvailableRawSequenceDataField;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Summary.isSummaryField;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_MERGED_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_REST_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.isSupplementalField;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -173,28 +175,37 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
 
   private ObjectNode handleSupplementalValue(ObjectNode document, TupleEntry entry) {
 
-    val supplementalEntry = (TupleEntry) entry.getObject(new Fields("supplemental$rest"));
-    FileType fileType = determineSupplementalType(supplementalEntry);
+    val supplementalTuple = (Tuple) entry.getObject(new Fields(SUPPLEMENTAL_MERGED_FIELD_NAME));
 
-    if (fileType == FileType.BIOMARKER_TYPE || fileType == FileType.SURGERY_TYPE) {
-      // nested under specimen
-      val entrySpecimenId = supplementalEntry.getString(prefixedFieldName(fileType, "specimen_id"));
-      JsonNode specimenNode = document.path("specimen");
-      Iterator<JsonNode> elements = specimenNode.elements();
-      while (elements.hasNext()) {
-        JsonNode specimen = elements.next();
-        val specimenId = specimen.get("specimen_id").asText();
-        if (specimenId.equals(entrySpecimenId)) {
-          ArrayNode existingValues = (ArrayNode) specimen.withArray(fileType.getId());
-          existingValues.add(extractEntry(supplementalEntry));
-          ((ObjectNode) specimen).put(fileType.getId(), existingValues);
+    if (supplementalTuple != null) {
+
+      for (Iterator<Object> i = supplementalTuple.iterator(); i.hasNext();) {
+        TupleEntry tupleEntry = (TupleEntry) i.next();
+        val supplementalEntry = (TupleEntry) tupleEntry.getObject(new Fields(SUPPLEMENTAL_REST_FIELD_NAME));
+
+        FileType fileType = determineSupplementalType(supplementalEntry);
+
+        if (fileType == FileType.BIOMARKER_TYPE || fileType == FileType.SURGERY_TYPE) {
+          // nested under specimen
+          val entrySpecimenId = supplementalEntry.getString(prefixedFieldName(fileType, "specimen_id"));
+          JsonNode specimenNode = document.path("specimen");
+          Iterator<JsonNode> elements = specimenNode.elements();
+          while (elements.hasNext()) {
+            JsonNode specimen = elements.next();
+            val specimenId = specimen.get("specimen_id").asText();
+            if (specimenId.equals(entrySpecimenId)) {
+              ArrayNode existingValues = (ArrayNode) specimen.withArray(fileType.getId());
+              existingValues.add(extractEntry(supplementalEntry));
+              ((ObjectNode) specimen).put(fileType.getId(), existingValues);
+            }
+          }
+        } else if (fileType == FileType.FAMILY_TYPE || fileType == FileType.EXPOSURE_TYPE
+            || fileType == FileType.THERAPY_TYPE) {
+          document.put(fileType.getId(), extractEntry(supplementalEntry));
+        } else {
+          throw new IllegalStateException(String.format("Unexpected file type: '%s'", fileType));
         }
       }
-    } else if (fileType == FileType.FAMILY_TYPE || fileType == FileType.EXPOSURE_TYPE
-        || fileType == FileType.THERAPY_TYPE) {
-      document.put(fileType.getId(), extractEntry(supplementalEntry));
-    } else {
-      throw new IllegalStateException(String.format("Unexpected file type: '%s'", fileType));
     }
 
     return document;

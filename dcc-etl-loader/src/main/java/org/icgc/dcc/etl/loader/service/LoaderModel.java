@@ -263,6 +263,26 @@ public class LoaderModel {
   }
 
   @NoArgsConstructor(access = PRIVATE)
+  public static class Supplemental {
+
+    public static final String DONOR_ID_BASE_FIELD_NAME = "donor_id";
+    public static final String DONOR_DONOR_ID = "donor$donor_id";
+    public static final String SUPPLEMENTAL_DONOR_ID_FIELD_NAME = "supplemental$donor_id";
+    public static final String SUPPLEMENTAL_REST_FIELD_NAME = "supplemental$rest";
+    public static final String SUPPLEMENTAL_MERGED_FIELD_NAME = "supplemental$merged";
+
+    public static final Collection<String> SUPPLEMENTAL_FIELD_NAMES = ImmutableSet.of(
+        SUPPLEMENTAL_DONOR_ID_FIELD_NAME,
+        SUPPLEMENTAL_MERGED_FIELD_NAME);
+
+    public static boolean isSupplementalField(
+        @NonNull final String fieldName) {
+
+      return SUPPLEMENTAL_FIELD_NAMES.contains(fieldName);
+    }
+  }
+
+  @NoArgsConstructor(access = PRIVATE)
   public static class Occurence {
 
     public static final String NO_VALUE_REPLACEMENT = Strings2.EMPTY_STRING;
@@ -385,10 +405,6 @@ public class LoaderModel {
         LoaderFieldNames.AVAILABLE_RAW_SEQUENCE_DATA,
         LoaderFieldNames.SUMMARY);
 
-    public static final Collection<String> SUPPLEMENTAL_FIELD_NAMES = ImmutableSet.of(
-        "supplemental$donor_id",
-        "supplemental$rest");
-
     public static boolean isGeneratedField(
         @NonNull final String fieldName) {
 
@@ -396,12 +412,6 @@ public class LoaderModel {
           Persistence.GENERATED_FIELD_NAMES,
           getGeneratedFieldName()))
           .contains(fieldName);
-    }
-
-    public static boolean isSupplementalField(
-        @NonNull final String fieldName) {
-
-      return SUPPLEMENTAL_FIELD_NAMES.contains(fieldName);
     }
 
     public static boolean isJoinArrayInternalName(
