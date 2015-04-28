@@ -19,7 +19,6 @@ package org.icgc.dcc.etl.loader.core;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -60,14 +59,6 @@ public final class ProvidedDataSubmissionDigest {
   }
 
   @JsonIgnore
-  public Set<FileSubType> getAllSupplementalSubTypes() {
-    return supplementalDataTypes.values()
-        .stream()
-        .flatMap(l -> l.stream()).
-        collect(Collectors.toSet());
-  }
-
-  @JsonIgnore
   public Set<FileSubType> getSubTypes(FeatureType type) {
     return featureDataTypes.get(type);
   }
@@ -75,6 +66,10 @@ public final class ProvidedDataSubmissionDigest {
   @JsonIgnore
   public Set<FileSubType> getSubTypes(ClinicalType type) {
     return supplementalDataTypes.get(type);
+  }
+
+  public boolean hasSupplementalType() {
+    return supplementalDataTypes != null;
   }
 
 }

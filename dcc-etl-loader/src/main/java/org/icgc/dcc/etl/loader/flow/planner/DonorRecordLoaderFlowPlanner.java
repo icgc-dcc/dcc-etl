@@ -44,6 +44,7 @@ import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 import cascading.flow.FlowDef;
+import cascading.operation.Debug;
 import cascading.pipe.CoGroup;
 import cascading.pipe.Each;
 import cascading.pipe.GroupBy;
@@ -85,11 +86,13 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
   protected Pipe process(@NonNull Pipe clinicalPipe) {
 
     val supplementalPipes = Maps.<FileType, Pipe> newHashMap();
+    boolean hasSupplemental = false;
 
     for (FileSubType fileSubType : availableSubTypes) {
       Set<FileType> fileTypes = fileSubType.getCorrespondingFileTypes();
       for (FileType fileType : fileTypes) {
         if (fileType.isOptional()) {
+          hasSupplemental = true;
           Pipe supplemenalPipe = new Pipe(getStartPipeName(getIdentifiableProjectKey(), fileType));
           heads.put(fileType, supplemenalPipe);
           supplemenalPipe = preProcess(supplemenalPipe, fileType);
@@ -99,12 +102,16 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
       }
     }
 
-    Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
-    Pipe supplementalPipe = new GroupBy(pipes, new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
+    if (hasSupplemental) {
+      Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
+      Pipe supplementalPipe = new GroupBy(pipes, new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
 
-    clinicalPipe =
-        new CoGroup(clinicalPipe, new Fields(DONOR_DONOR_ID), supplementalPipe, new Fields(
-            SUPPLEMENTAL_DONOR_ID_FIELD_NAME), new LeftJoin());
+      clinicalPipe = new Each(clinicalPipe, new Debug("clinical"));
+
+      clinicalPipe =
+          new CoGroup(clinicalPipe, new Fields(DONOR_DONOR_ID), supplementalPipe, new Fields(
+              SUPPLEMENTAL_DONOR_ID_FIELD_NAME), new LeftJoin());
+    }
 
     summary = new SummaryCollector(clinicalPipe, availableFeatureTypes, getSubmission());
 

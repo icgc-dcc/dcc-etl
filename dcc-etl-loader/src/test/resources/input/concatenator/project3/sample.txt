@@ -1,9 +1,0 @@
-analyzed_sample_id	specimen_id	analyzed_sample_interval	percentage_cellularity	level_of_cellularity	analyzed_sample_notes	study
-00302	0020	-888	-888	-888	v HIKGFwsK	1
-00312	0020	-888	-888	-888	-888	1
-00322	0021	9	-888	-888	eIhvbeQQwq	1
-00331	0021	79	-888	-888	GQX NkRTVT	1
-00341	0022	141	-888	-888	zfdnpdE vI	1
-00351	0022	21	-888	-888	-888	1
-00361	0023	131	-888	-888	IHaKbAomIa	1
-00371	0024	82	-888	-888	-888	1

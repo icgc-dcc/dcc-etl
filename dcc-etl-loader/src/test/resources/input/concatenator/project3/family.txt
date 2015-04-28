@@ -1,6 +1,0 @@
-donor_id	relationship_type	relationship_type_other	relationship_sex	relationship_age	relationship_disease_icd10	relationship_disease
-0011	5	-888	2	-9999	OFOKkKoiCJ	QAhsbd nmR
-0011	5	 bSs iD ZR	-777	129	XyNVRUzABP	EbxfrMTv Y
-0012	5	BjJTBWlGaA	2	180	-888	QvRMyyrZjk
-0013	5	VP udWPWWk	1	-9999	-888	ODAesSTNdv
-0013	3	TgbHCwdxCz	2	-888	wsFkpz jys	NaCjcQfypD

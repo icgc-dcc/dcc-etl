@@ -1,2 +1,0 @@
-consequence_type	aa_mutation	cds_mutation	protein_domain_affected	gene_affected	transcript_affected	gene_build_version	note	observation_id
-RONtfYLhYE	bKPldMJWlk	adfasdfad	dfasdfdc	ENSG00000262938	ENST00000571812	fSrm tlfHR	NJ i Pordb	v2

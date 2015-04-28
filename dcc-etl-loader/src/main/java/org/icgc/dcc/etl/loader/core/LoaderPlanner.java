@@ -23,6 +23,7 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -84,12 +85,17 @@ public class LoaderPlanner {
     val featureTypes = submissionDataDigest.getFeatureTypes();
     log.info("Available feature types: '{}'", featureTypes);
 
-    val supplementalTypes = submissionDataDigest.getSupplementalTypes();
-    log.info("Available supplemental types: '{}'", supplementalTypes);
-
     Set<FileSubType> availableClinicalSubTypes = new HashSet<FileSubType>(MANDATORY_SUBTYPES);
-    if (!supplementalTypes.isEmpty()) {
-      availableClinicalSubTypes.addAll(submissionDataDigest.getAllSupplementalSubTypes());
+    if (submissionDataDigest.hasSupplementalType()) {
+      val supplementalTypes = submissionDataDigest.getSupplementalTypes();
+      log.info("Available supplemental types: '{}'", supplementalTypes);
+
+      Set<FileSubType> allSupplementalSubTypes = supplementalTypes.stream()
+          .map(type -> submissionDataDigest.getSubTypes(type))
+          .flatMap(l -> l.stream()).
+          collect(Collectors.toSet());
+
+      availableClinicalSubTypes.addAll(allSupplementalSubTypes);
     }
 
     // Include flow planner for donors (always)
