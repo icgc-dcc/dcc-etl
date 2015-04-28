@@ -28,7 +28,6 @@ import static org.icgc.dcc.common.cascading.CascadingOptionals.ABSENT_PIPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.SSM_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_MATCHED_SAMPLE_ID;
-import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.CLINICAL_OPTIONAL_SPECIMEN_SUBTYPES;
 import static org.icgc.dcc.common.core.util.Optionals.ABSENT_FILE_TYPE;
 import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING;
 import static org.icgc.dcc.etl.loader.core.LoaderOptionals.optional;
@@ -461,10 +460,6 @@ public abstract class BaseRecordLoaderFlowPlanner implements RecordLoaderFlowPla
 
   protected boolean isSsm() {
     return SSM_TYPE == getDataType();
-  }
-
-  protected boolean isOptionalNesteds() {
-    return CLINICAL_OPTIONAL_SPECIMEN_SUBTYPES.contains(getDataType());
   }
 
   /**

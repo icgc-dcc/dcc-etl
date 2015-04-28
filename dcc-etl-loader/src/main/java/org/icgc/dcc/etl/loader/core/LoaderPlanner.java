@@ -18,9 +18,10 @@
 package org.icgc.dcc.etl.loader.core;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.CLINICAL_SUBTYPES;
+import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.MANDATORY_SUBTYPES;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -86,11 +87,16 @@ public class LoaderPlanner {
     val supplementalTypes = submissionDataDigest.getSupplementalTypes();
     log.info("Available supplemental types: '{}'", supplementalTypes);
 
+    Set<FileSubType> availableClinicalSubTypes = new HashSet<FileSubType>(MANDATORY_SUBTYPES);
+    if (!supplementalTypes.isEmpty()) {
+      availableClinicalSubTypes.addAll(submissionDataDigest.getAllSupplementalSubTypes());
+    }
+
     // Include flow planner for donors (always)
     plan.includeFlowPlanner(projectKey,
         provider.getDonorFlowPlanner(
             projectKey, featureTypes,
-            CLINICAL_SUBTYPES, platformStrategy));
+            availableClinicalSubTypes, platformStrategy));
 
     // Include flow planners for the feature types available
     for (val featureType : featureTypes) {
