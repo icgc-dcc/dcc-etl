@@ -34,7 +34,8 @@ import static org.icgc.dcc.common.test.Tests.MAVEN_TEST_RESOURCES_DIR;
 import static org.icgc.dcc.common.test.Tests.MONGO_DIR_NAME;
 import static org.icgc.dcc.common.test.Tests.MONGO_PORT;
 import static org.icgc.dcc.common.test.Tests.OUTPUT_DIR_NAME;
-import static org.icgc.dcc.common.test.Tests.PROJECT3;
+import static org.icgc.dcc.common.test.Tests.PROJECT1;
+import static org.icgc.dcc.common.test.Tests.PROJECT2;
 import static org.icgc.dcc.common.test.Tests.REFERENCE_DIR_NAME;
 import static org.icgc.dcc.common.test.Tests.TEST_HOST;
 import static org.icgc.dcc.common.test.Tests.getTestJobId;
@@ -83,7 +84,8 @@ public class LoaderIntegrationTestHelper {
   private static final URL CODELISTS_URL = getCodeListsDccResource();
   private static final Component TESTED_COMPONENT = LOADER;
   private static final String TEST_JOB_ID = getTestJobId(TESTED_COMPONENT);
-  private static final Set<String> PROJECT_KEYS = newLinkedHashSet(newArrayList(PROJECT3));
+  private static final Set<String> PROJECT_KEYS = newLinkedHashSet(newArrayList(PROJECT1, PROJECT2));
+  // private static final Set<String> PROJECT_KEYS = newLinkedHashSet(newArrayList(PROJECT1, PROJECT2, PROJECT3));
 
   /**
    * File system constants.
@@ -237,6 +239,9 @@ public class LoaderIntegrationTestHelper {
    */
   private void verifyExportedFiles() {
     for (File typeDir : new File(FS_REFERENCE_DIR).listFiles()) {
+      if (typeDir.isFile()) {
+        continue;
+      }
       for (File expectedFile : typeDir.listFiles()) {
         String actualTypeDir = PATH.join(OUTPUT_DIR, typeDir.getName());
         String fileName = expectedFile.getName();

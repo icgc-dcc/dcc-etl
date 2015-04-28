@@ -24,7 +24,6 @@ import static org.icgc.dcc.etl.loader.flow.SummaryHelper.getSummaryValueField;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.etl.loader.cascading.ControlledRowsRedacting;
 import org.icgc.dcc.etl.loader.flow.planner.DonorRecordLoaderFlowPlanner;
@@ -51,40 +50,6 @@ public class SummaryPreComputation extends SubAssembly {
         projectKey,
         featureType,
         summaryPipeName));
-  }
-
-  public SummaryPreComputation(
-      @NonNull final Pipe supplementalPipe,
-      @NonNull final String projectKey,
-      @NonNull final ClinicalType supplementalType,
-      @NonNull final String summaryPipeName) {
-    setTails(createSummaryPipe(
-        supplementalPipe,
-        projectKey,
-        supplementalType,
-        summaryPipeName));
-  }
-
-  /**
-   * Creates an extra branch to provide summary information to the {@link DonorRecordLoaderFlowPlanner}.
-   */
-  // TODO Verify logic as applied for supplemental type
-  private static Pipe createSummaryPipe(
-      @NonNull final Pipe supplementalPipe,
-      @NonNull final String projectKey,
-      @NonNull final ClinicalType supplementalType,
-      @NonNull final String summaryPipeName) {
-
-    // Create branching pipe
-    Pipe pipe = new Pipe(
-        summaryPipeName,
-        supplementalPipe);
-
-    // Only keep donor ID and rename it
-    pipe = new Retain(pipe, getDonorIdField());
-    pipe = new Rename(pipe, getDonorIdField(), getSummaryTempDonorIdField());
-
-    return pipe;
   }
 
   /**

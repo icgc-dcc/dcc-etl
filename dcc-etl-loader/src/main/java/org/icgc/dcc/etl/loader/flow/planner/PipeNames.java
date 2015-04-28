@@ -21,8 +21,6 @@ import static lombok.AccessLevel.PRIVATE;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import org.icgc.dcc.common.cascading.Pipes;
-import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.common.core.model.Identifiable;
@@ -31,6 +29,7 @@ import org.icgc.dcc.etl.loader.cascading.RawSequenceDataInfo;
 import org.icgc.dcc.etl.loader.core.LoaderTailType;
 import org.icgc.dcc.etl.loader.flow.ClinicalHack;
 import org.icgc.dcc.etl.loader.flow.SummaryCollector;
+import org.icgc.dcc.common.cascading.Pipes;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class PipeNames {
@@ -65,13 +64,6 @@ public final class PipeNames {
       @NonNull final Identifiable projectKey,
       @NonNull final FeatureType featureType) {
     return Pipes.getName(Identifiables.fromString(RawSequenceDataInfo.class.getSimpleName()), projectKey, featureType);
-  }
-
-  public static String getSummaryPipeName(
-      @NonNull final Identifiable projectKey,
-      @NonNull final ClinicalType supplementalType) {
-    return Pipes
-        .getName(Identifiables.fromString(SummaryCollector.class.getSimpleName()), projectKey, supplementalType);
   }
 
 }

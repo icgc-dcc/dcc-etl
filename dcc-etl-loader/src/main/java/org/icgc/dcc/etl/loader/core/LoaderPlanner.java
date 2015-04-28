@@ -110,7 +110,6 @@ public class LoaderPlanner {
 
       plan.includeFlowPlanner(projectKey, observationFlowPlanner);
     }
-
   }
 
   /**
