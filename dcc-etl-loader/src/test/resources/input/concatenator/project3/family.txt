@@ -1,0 +1,2 @@
+donor_id	relationship_type	relationship_type_other	relationship_sex	relationship_age	relationship_disease_icd10	relationship_disease
+0011	5	-888	2	-9999	OFOKkKoiCJ	QAhsbd nmR

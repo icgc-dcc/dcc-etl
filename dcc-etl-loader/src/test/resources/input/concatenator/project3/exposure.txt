@@ -1,0 +1,2 @@
+donor_id	exposure_type	exposure_intensity	exposure_notes
+0011	LVKkHZPuXN	130	-9999
