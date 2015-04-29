@@ -86,6 +86,7 @@ def exportStaticData(type):
   params["OUT_STATIC_DIR"] = out_static
 
   params["DATATYPE"] = type
+  params["STATIC_FILE_NAME_PREFIX"] = longname[type]
 
   try:
     loader
