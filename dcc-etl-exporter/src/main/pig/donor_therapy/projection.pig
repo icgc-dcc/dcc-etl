@@ -2,25 +2,14 @@
 DEFINE ExtractId org.icgc.dcc.etl.exporter.pig.udf.ExtractId();
 %default JSON_LOADER 'com.twitter.elephantbird.pig.load.JsonLoader'
 
+%default EMPTY_VALUE '';
+%declare EMPTY_THERAPY ['first_therapy_type'#'$EMPTY_VALUE','first_therapy_therapeutic_intent'#'$EMPTY_VALUE','first_therapy_start_interval'#'$EMPTY_VALUE','first_therapy_duration'#'$EMPTY_VALUE','first_therapy_response'#'$EMPTY_VALUE','second_therapy_type'#'$EMPTY_VALUE','second_therapy_therapeutic_intent'#'$EMPTY_VALUE','second_therapy_start_interval'#'$EMPTY_VALUE','second_therapy_duration'#'$EMPTY_VALUE','second_therapy_response'#'$EMPTY_VALUE','other_therapy'#'$EMPTY_VALUE','other_therapy_response'#'$EMPTY_VALUE']
+
 -- load donor 
 donor = LOAD '$OBSERVATION' USING $JSON_LOADER('-nestedLoad') as document:map[];
 
 selected_donor = foreach donor generate ExtractId(document#'_donor_id') as donor_id:int,
-					document#'_donor_id' as icgc_donor_id,
+					                    document#'_donor_id' as icgc_donor_id,
                                         document#'_project_id' as project_code,
                                         document#'donor_id' as submitted_donor_id,
-                                        document#'donor_sex' as donor_sex,
-                                        document#'donor_vital_status' as donor_vital_status,
-                                        document#'disease_status_last_followup' as disease_status_last_followup,
-                                        document#'donor_relapse_type' as donor_relapse_type,
-                                        document#'donor_age_at_diagnosis' as donor_age_at_diagnosis,
-                                        document#'donor_age_at_enrollment' as donor_age_at_enrollment,
-                                        document#'donor_age_at_last_followup' as donor_age_at_last_followup,
-                                        document#'donor_relapse_interval' as donor_relapse_interval,
-                                        document#'donor_diagnosis_icd10' as donor_diagnosis_icd10,
-                                        document#'donor_tumour_staging_system_at_diagnosis' as donor_tumour_staging_system_at_diagnosis,
-                                        document#'donor_tumour_stage_at_diagnosis' as donor_tumour_stage_at_diagnosis,
-                                        document#'donor_tumour_stage_at_diagnosis_supplemental' as donor_tumour_stage_at_diagnosis_supplemental,
-                                        document#'donor_survival_time' as donor_survival_time,
-                                        document#'donor_interval_of_last_followup' as donor_interval_of_last_followup,
-                    (bag{tuple(map[])}) document#'specimen' as specimens;
+                    (bag{tuple(map[])}) document#'therapy' as therapies;

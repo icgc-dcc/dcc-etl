@@ -22,35 +22,8 @@ set job.name dynamic-$DATATYPE;
 import 'projection.pig';
 
 keys = foreach (GROUP selected_donor BY donor_id) {
-	                   content = FOREACH selected_donor GENERATE icgc_donor_id..donor_interval_of_last_followup, 
-             			                                     FLATTEN(((specimens is null or IsEmpty(specimens)) ? {($EMPTY_SPECIMEN)} : specimens)) as specimen;
-
-	          selected_content = FOREACH content GENERATE icgc_donor_id..donor_interval_of_last_followup, 
-                                                              specimen#'_specimen_id' as icgc_specimen_id,
-                                                              specimen#'specimen_id' as submitted_specimen_id,
-                                                              specimen#'specimen_type' as specimen_type,
-                                                              specimen#'specimen_type_other' as specimen_type_other,
-                                                              specimen#'specimen_interval' as specimen_interval,
-                                                              specimen#'specimen_donor_treatment_type' as specimen_donor_treatment_type,
-                                                              specimen#'specimen_donor_treatment_type_other' as specimen_donor_treatment_type_other,
-                                                              specimen#'specimen_processing' as specimen_processing,
-                                                              specimen#'specimen_processing_other' as specimen_processing_other,
-                                                              specimen#'specimen_storage' as specimen_storage,
-                                                              specimen#'specimen_storage_other' as specimen_storage_other,
-                                                              specimen#'tumour_confirmed' as tumour_confirmed,
-                                                              specimen#'specimen_biobank' as specimen_biobank,
-                                                              specimen#'specimen_biobank_id' as specimen_biobank_id,
-                                                              specimen#'specimen_available' as specimen_available,
-                                                              specimen#'tumour_histological_type' as tumour_histological_type,
-                                                              specimen#'tumour_grading_system' as tumour_grading_system,
-                                                              specimen#'tumour_grade' as tumour_grade,
-                                                              specimen#'tumour_grade_supplemental' as tumour_grade_supplemental,
-                                                              specimen#'tumour_stage_system' as tumour_stage_system,
-                                                              specimen#'tumour_stage' as tumour_stage,
-                                                              specimen#'tumour_stage_supplemental' as tumour_stage_supplemental,
-                                                              specimen#'digital_image_of_stained_section' as digital_image_of_stained_section,
-                                                              specimen#'percentage_cellularity' as percentage_cellularity,
-                                                              specimen#'level_of_cellularity' as level_of_cellularity;
+	                   selected_content = FOREACH selected_donor GENERATE icgc_donor_id..cancer_history_first_degree_relative;
              GENERATE FLATTEN(TOHFILE(group, selected_content)) as key;
 }
+
 STORE keys INTO '$TMP_DYNAMIC_DIR' USING $RAW_STORAGE();

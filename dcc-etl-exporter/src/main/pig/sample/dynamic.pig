@@ -25,26 +25,28 @@ set job.name dynamic-$DATATYPE;
 import 'projection.pig';
 
 keys = FOREACH (ORDER (GROUP selected_donor BY donor_id) BY group) {
-                  specimens = FOREACH selected_donor GENERATE project_code,
-                                                              icgc_donor_id,
-                                                              FLATTEN(((specimens is null or IsEmpty(specimens)) ? {($EMPTY_SPECIMEN)} : specimens)) as specimen;
-
-                    content = FOREACH specimens GENERATE project_code, 
-                                                         specimen#'_specimen_id' as icgc_specimen_id, 
-                                                         icgc_donor_id,
-                                                         specimen#'specimen_id' as submitted_specimen_id, 
-     	                             FLATTEN((bag{tuple(map[])}) specimen#'sample') as s;
-
-                    selected_content =  FOREACH content GENERATE s#'_sample_id' as icgc_sample_id,
-                                                          project_code,
-                                                          icgc_specimen_id, 
-                                                          icgc_donor_id,
-                                                          s#'analyzed_sample_id' as submitted_sample_id,
-                                                          submitted_specimen_id, 
-                                                          s#'analyzed_sample_interval' as analyzed_sample_interval,
-                                                          s#'percentage_cellularity' as percentage_cellularity,
-                                                          s#'level_of_cellularity' as level_of_cellularity,
-                                                          s#'study' as study;
+          specimens = FOREACH selected_donor 
+                    GENERATE icgc_donor_id..submitted_donor_id,
+                             FLATTEN(((specimens is null or IsEmpty(specimens)) ? {($EMPTY_SPECIMEN)} : specimens)) as specimen;
+          
+          content = FOREACH specimens 
+                    GENERATE icgc_donor_id..submitted_donor_id,
+                             specimen#'_specimen_id' as icgc_specimen_id, 
+                             specimen#'specimen_id' as submitted_specimen_id, 
+                             FLATTEN((bag{tuple(map[])}) specimen#'sample') as s;
+          
+          selected_content = FOREACH content 
+                       GENERATE s#'_sample_id' as icgc_sample_id,
+                                project_code,
+                                s#'analyzed_sample_id' as submitted_sample_id,
+                                icgc_specimen_id, 
+                                submitted_specimen_id,
+                                icgc_donor_id,
+                                submitted_donor_id,
+                                s#'analyzed_sample_interval' as analyzed_sample_interval,
+                                s#'percentage_cellularity' as percentage_cellularity,
+                                s#'level_of_cellularity' as level_of_cellularity,
+                                s#'study' as study;
 
               GENERATE FLATTEN(TOHFILE(group, selected_content)) as key;
 };
