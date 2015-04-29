@@ -52,6 +52,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableSet;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class IndexService implements Closeable {
   /**
    * Mapping / index files base path.
    */
-  private static final String ES_CONFIG_BASE_PATH = "org/icgc/dcc/etl/indexer";
+  private static final String ES_CONFIG_BASE_PATH = "mappings";
 
   /**
    * Dependencies.
@@ -205,9 +206,19 @@ public class IndexService implements Closeable {
   }
 
   private Set<String> getIndexNames() {
-    val state = getClusterClient().prepareState().execute().actionGet().getState();
+    val state = client.admin()
+        .cluster()
+        .prepareState()
+        .execute()
+        .actionGet()
+        .getState();
 
-    return state.getMetaData().indices().keySet();
+    val result = new ImmutableSet.Builder<String>();
+    for (val key : state.getMetaData().aliases().keys()) {
+      result.add(key.value);
+    }
+
+    return result.build();
   }
 
   @Override

@@ -1,0 +1,16 @@
+donor_id	relationship_type	relationship_type_other	relationship_sex	relationship_age	relationship_disease_icd10	relationship_disease
+4131257	6	daughter	-777	43	-777	breast cancer
+4159421	6	father	-777	-888	-777	gastric carcinoma
+4139696	6	mother	-777	70	-777	intestinal cancer
+4166706	6	father	-777	83	-777	lung carcinoma
+4119279	6	father	-777	-888	-777	pancreatic cancer
+4145177	6	mother	-777	-888	-777	Livercancer
+4157186	6	twin brother	-777	-888	-777	CML
+4188879	6	father	-777	-888	-777	gastrointestinal cancer
+4178655	6	mother	-777	-888	-777	Colon Cancer
+4150895	6	sister	-777	-888	-777	Liver Cancer
+4108992	6	Father, Brother	-777	-888	-777	Father: Stomach-Ca; Brother: Lung-Ca
+4113191	6	Mother	-777	-888	-777	Colon-Ca
+4147081	6	Brother (died with 42 years)	-777	-888	-777	Lymphoma
+4193638	6	Father	-777	66	-777	Brain Tumor
+4181460	6	brother	-777	-888	-777	renal cell carcinoma

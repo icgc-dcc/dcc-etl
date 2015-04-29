@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,41 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import java.io.Closeable;
-import java.io.IOException;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_HIGHLIGHTS;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_XML;
+import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
+import lombok.NonNull;
+import lombok.val;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+public class DiagramNodeConverter {
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+  public JsonNode convertDiagram(@NonNull Diagram diagram, @NonNull String id) {
+    val mapper = new ObjectMapper();
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+    val node = mapper.createObjectNode();
+    node.put(MONGO_INTERNAL_ID, id);
+    node.put(DIAGRAM_ID, id);
+    node.put(DIAGRAM_XML, diagram.diagram);
+    node.put(DIAGRAM_HIGHLIGHTS, diagram.highlights);
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
+    val proteinNode = mapper.createObjectNode();
 
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
+    for (val entry : diagram.proteinMap.entrySet()) {
+      proteinNode.put(entry.getKey(), entry.getValue());
+    }
 
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
+    if (!diagram.proteinMap.isEmpty()) {
+      node.put(DIAGRAM_PROTEIN_MAP, proteinNode);
+    }
 
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
-
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+    return node;
+  }
 
 }

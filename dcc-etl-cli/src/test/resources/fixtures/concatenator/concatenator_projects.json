@@ -3,5 +3,7 @@
 	"project2": {
 		"parent_dir": "/tmp/dcc/concatenator/input",
 		"cnsm_m_file": "/tmp/dcc/concatenator/input/project2/other/cnsm_m.txt"
-	}	
+	},
+  	"project3": {},
+    "project4": {}
 }

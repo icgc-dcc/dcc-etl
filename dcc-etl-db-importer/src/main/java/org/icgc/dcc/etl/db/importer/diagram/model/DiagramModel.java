@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,24 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.model;
 
-import java.io.Closeable;
-import java.io.IOException;
+import java.util.Map;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import lombok.NonNull;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Maps;
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+public class DiagramModel {
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+  Map<String, Diagram> diagrams = Maps.<String, Diagram> newHashMap();;
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
+  public void addDiagram(@NonNull String id, @NonNull Diagram diagram) {
+    diagrams.put(id, diagram);
+  }
 
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
-
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
-
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+  public Map<String, Diagram> getDiagrams() {
+    return diagrams;
+  }
 
 }

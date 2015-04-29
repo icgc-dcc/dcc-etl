@@ -73,6 +73,7 @@ public final class ProjectConverter {
       .put("Stomach", "Stomach")
       .put("Testis and Prostate", "Prostate")
       .put("Uterus", "Uterus")
+      .put("Endocrine Tissues", "Nervous System")
       .build();
 
   public static Iterable<Project> convertCgp(CancerGenomeProject cgp) {

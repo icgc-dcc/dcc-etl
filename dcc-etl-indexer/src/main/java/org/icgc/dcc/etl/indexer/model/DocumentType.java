@@ -22,6 +22,7 @@ import static org.icgc.dcc.common.core.model.Entity.GENE;
 import static org.icgc.dcc.common.core.model.Entity.GENE_SET;
 import static org.icgc.dcc.common.core.model.Entity.MUTATION;
 import static org.icgc.dcc.common.core.model.Entity.OBSERVATION;
+import static org.icgc.dcc.common.core.model.Entity.PATHWAY;
 import static org.icgc.dcc.common.core.model.Entity.PROJECT;
 import static org.icgc.dcc.common.core.model.Entity.RELEASE;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.DONOR_COLLECTION;
@@ -61,6 +62,18 @@ import com.google.common.collect.ImmutableList;
  */
 @Getter
 public enum DocumentType {
+
+  /**
+   * Diagram type(s).
+   */
+  DIAGRAM_TYPE(
+      attributes()
+          .name("diagram")
+          .entity(PATHWAY)
+          .collection(ReleaseCollection.DIAGRAM_COLLECTION)
+          .batchSize(100)
+          .statusInterval(100)
+  ),
 
   /**
    * Release type(s).

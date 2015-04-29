@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,48 +15,38 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.indexer.core;
+package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import java.io.Closeable;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.IOException;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.icgc.dcc.etl.indexer.model.CollectionFields;
+import javax.xml.transform.TransformerException;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.val;
 
-/**
- * Abstract document source collection reader contract.
- */
-public interface CollectionReader extends Closeable {
+import org.junit.Test;
 
-  Iterable<ObjectNode> readReleases(CollectionFields fields);
+public class DiagramListReaderTest {
 
-  Iterable<ObjectNode> readProjects(CollectionFields fields);
+  @Test
+  public void testReadList() throws IOException, TransformerException {
+    val reader = new DiagramListReader();
+    val pathways = reader.readPathwayList();
 
-  Iterable<ObjectNode> readDonors(CollectionFields fields);
+    assertThat(pathways.getDiagrammed()).isNotEmpty();
 
-  Iterable<ObjectNode> readGenes(CollectionFields fields);
+    assertThat(pathways.getDiagrammed().size()).isIn(471, 533);
+    assertThat(pathways.getNotDiagrammed().size()).isIn(1254);
 
-  Iterable<ObjectNode> readGenesPivoted(CollectionFields fields);
+    assertThat(pathways.getNotDiagrammed().contains("917729-199991")).isTrue();
+  }
 
-  Iterable<ObjectNode> readGeneSets(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservations(CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByDonorId(String donorId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByGeneId(String geneId, CollectionFields fields);
-
-  Iterable<ObjectNode> readObservationsByMutationId(String mutationId, CollectionFields observationFields);
-
-  Iterable<ObjectNode> readMutations(CollectionFields fields);
-
-  Iterable<ObjectNode> readDiagrams(CollectionFields fields);
-
-  Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
-
-  @Override
-  void close() throws IOException;
+  @Test
+  public void testIdConvert() throws IOException {
+    val reader = new DiagramListReader();
+    val result = reader.getReactId("1300645");
+    assertThat(result).isEqualTo("REACT_163938");
+  }
 
 }

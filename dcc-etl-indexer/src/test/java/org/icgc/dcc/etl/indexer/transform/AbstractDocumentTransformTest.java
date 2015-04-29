@@ -125,7 +125,7 @@ public abstract class AbstractDocumentTransformTest {
       return client
           .prepareSearch(TEST_INDEX_NAME)
           .setTypes(document.getType().getName())
-          .setFilter(
+          .setPostFilter(
               andFilter(
                   nestedFilter("ssm",
                       termFilter("_mutation_id", document.getSource().get("ssm").get("_mutation_id").asText())),
