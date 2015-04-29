@@ -23,7 +23,6 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +35,8 @@ import org.icgc.dcc.etl.loader.flow.RecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.flow.planner.DonorRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.flow.planner.ObservationRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Plans a release load.
@@ -90,12 +91,11 @@ public class LoaderPlanner {
       val supplementalTypes = submissionDataDigest.getSupplementalTypes();
       log.info("Available supplemental types: '{}'", supplementalTypes);
 
-      Set<FileSubType> allSupplementalSubTypes = supplementalTypes.stream()
-          .map(type -> submissionDataDigest.getSubTypes(type))
-          .flatMap(l -> l.stream()).
-          collect(Collectors.toSet());
-
-      availableClinicalSubTypes.addAll(allSupplementalSubTypes);
+      val allSupplementalSubTypes = new ImmutableSet.Builder<FileSubType>();
+      for (val type : supplementalTypes) {
+        allSupplementalSubTypes.addAll(submissionDataDigest.getSubTypes(type));
+      }
+      availableClinicalSubTypes.addAll(allSupplementalSubTypes.build());
     }
 
     // Include flow planner for donors (always)
