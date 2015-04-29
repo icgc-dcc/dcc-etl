@@ -201,7 +201,9 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
           }
         } else if (fileType == FileType.FAMILY_TYPE || fileType == FileType.EXPOSURE_TYPE
             || fileType == FileType.THERAPY_TYPE) {
-          document.put(fileType.getId(), extractEntry(supplementalEntry));
+          ArrayNode existingValues = document.withArray(fileType.getId());
+          existingValues.add(extractEntry(supplementalEntry));
+          document.put(fileType.getId(), existingValues);
         } else {
           throw new IllegalStateException(String.format("Unexpected file type: '%s'", fileType));
         }
