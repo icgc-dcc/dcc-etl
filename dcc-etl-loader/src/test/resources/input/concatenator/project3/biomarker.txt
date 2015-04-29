@@ -1,2 +1,9 @@
 donor_id	specimen_id	biomarker_name	biomarker_threshold	biomarker_positive
-0011	0020	 Dq QDcSH 	iDQBIkmCYW	3
+0012	0021	 Dq QDcSH 	iDQBIkmCYW	3
+0012	0022	RGVpNPhabr	zwDRBPbHIO	3
+0013	0023	locwH WdtM	PoftiMbaxJ	3
+0013	0023	pUNm LLlno	IOJrQCyyC 	2
+0013	0023	BtnowV  uG	PSS  miboq	3
+0013	0024	ilwbJMi nj	AAvOLjVp B	1
+0013	0024	pyXuSmpTcQ	fWqGKzHTrW	3
+0013	0024	NulSTE NiA	TKitJyWKcP	1
