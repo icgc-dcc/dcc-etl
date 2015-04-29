@@ -15,55 +15,42 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.tcga;
+package org.icgc.dcc.etl.db.importer.cghub.reader;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-
-import java.io.IOException;
-
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.tcga.core.TCGAClinicalFileProcessor;
-import org.icgc.dcc.etl.db.importer.tcga.model.TCGAClinicalFile;
-import org.icgc.dcc.etl.db.importer.tcga.writer.TCGAClinicalFileWriter;
+import org.junit.Test;
 
-import com.mongodb.MongoClientURI;
-
-/**
- * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
- */
 @Slf4j
-@RequiredArgsConstructor
-public class TCGAImporter {
+public class CGHubAnalysisDetailReaderTest {
 
-  /**
-   * Configuration
-   */
-  @NonNull
-  private final MongoClientURI mongoUri;
+  @Test
+  public void testReadDetails() throws Exception {
+    val reader = new CGHubAnalysisDetailReader();
 
-  public void execute() throws IOException {
-    log.info("Reading clinical files...");
-    val clinicalFiles = readClinicalFiles();
-    log.info("Read {} clinical files", formatCount(clinicalFiles));
+    val diseaseCode = "UCEC";
+    val details = reader.readDetails(diseaseCode);
 
-    log.info("Writing clinical files...");
-    writeClinicalFiles(clinicalFiles);
-    log.info("Wrote {} clinical files", formatCount(clinicalFiles));
-  }
+    val results = details.get("result_set").get("results");
+    for (val result : results) {
+      log.info("----------------------------------");
+      log.info("sample_id: {}", result.get("sample_id"));
+      log.info("legacy_sample_id: {}", result.get("legacy_sample_id"));
+      log.info("analyte_code: {}", result.get("analyte_code"));
+      log.info("sample_type: {}", result.get("sample_type"));
+      log.info("platform: {}", result.get("platform"));
+      log.info("aliquot_id: {}", result.get("aliquot_id"));
+      log.info("participant_id: {}", result.get("participant_id"));
+      log.info("library_strategy: {}", result.get("library_strategy"));
+      log.info("last_modified: {}", result.get("last_modified"));
 
-  private Iterable<TCGAClinicalFile> readClinicalFiles() {
-    return new TCGAClinicalFileProcessor().process();
-  }
-
-  private void writeClinicalFiles(Iterable<TCGAClinicalFile> clinicalFiles) throws IOException {
-    @Cleanup
-    val writer = new TCGAClinicalFileWriter(mongoUri);
-    writer.write(clinicalFiles);
+      val files = result.get("files");
+      for (val file : files) {
+        // TODO: Parse filesize, filename; ignore '*.bam.bai'
+        log.info("file: {}", file);
+      }
+    }
   }
 
 }

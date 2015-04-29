@@ -17,70 +17,32 @@
  */
 package org.icgc.dcc.etl.db.importer.cghub.writer;
 
-import java.net.UnknownHostException;
-
-import lombok.NonNull;
-import lombok.SneakyThrows;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
 
-import com.mongodb.DB;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class CGHubWriter {
+public class CGHubWriter extends AbstractJongoWriter<DBObject> {
 
-  /**
-   * The collection name where records will be store.
-   */
-  private static final String COLLECTION_NAME = "CGHub";
-
-  @NonNull
-  private final String mongoUri;
-  @NonNull
-  private final Jongo jongo;
-  @NonNull
-  private final MongoCollection collection;
-
-  public CGHubWriter(String mongoUri) {
-    this.mongoUri = mongoUri;
-    this.jongo = createJongo(mongoUri);
-    this.collection = getCollection(jongo);
+  public CGHubWriter(MongoClientURI mongoUri) {
+    super(mongoUri);
   }
 
-  public void insert(DBObject record) {
-    log.info("Inserting {}...", record);
-    collection.save(record);
+  @Override
+  public void write(DBObject file) {
+    val fileCollection = getCollection(FILE_COLLECTION);
+    fileCollection.save(file);
   }
 
-  public long getCount() {
-    return collection.count();
+  public void clearFiles() {
+    val fileCollection = getCollection(FILE_COLLECTION);
+    val result = fileCollection.remove();
+
+    log.info("Finished clearing collection '{}': {}", fileCollection, result);
   }
-
-  public void drop() {
-    log.info("Dropping collection '{}' from '{}'...", collection.getName(), mongoUri);
-    collection.drop();
-  }
-
-  private static MongoCollection getCollection(Jongo jongo) {
-    return jongo.getCollection(COLLECTION_NAME);
-  }
-
-  @SneakyThrows
-  private static Jongo createJongo(String mongoUri) {
-    return new Jongo(getDb(mongoUri));
-  }
-
-  private static DB getDb(String uri) throws UnknownHostException {
-    val mongoUri = new MongoClientURI(uri);
-    val mongo = new MongoClient(mongoUri);
-
-    return mongo.getDB(mongoUri.getDatabase());
-  }
-
 }

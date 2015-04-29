@@ -31,7 +31,7 @@ public class PCAWGArchives {
   /**
    * URLs.
    */
-  public static final String PCAWG_ARCHIVE_BASE_URL = "http://pancancer.info/gnos_metadata";
+  public static final String PCAWG_ARCHIVE_BASE_URL = "http://pancancer.info";
 
   /**
    * Field names.

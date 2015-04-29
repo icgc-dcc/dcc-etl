@@ -35,7 +35,11 @@ import org.icgc.dcc.etl.db.importer.cghub.writer.CGHubWriter;
 
 import com.google.common.base.Stopwatch;
 import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClientURI;
 
+/**
+ * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
+ */
 @Slf4j
 public class CGHubImporter {
 
@@ -59,7 +63,7 @@ public class CGHubImporter {
     this.processor = new CGHubProcessor();
     this.cache = new CGHubCache(cacheDir);
     this.reader = new CGHubReader();
-    this.writer = new CGHubWriter(mongoUri);
+    this.writer = new CGHubWriter(new MongoClientURI(mongoUri));
   }
 
   public void execute() {
@@ -67,7 +71,7 @@ public class CGHubImporter {
     val watch = Stopwatch.createStarted();
 
     log.info("Dropping previous collection, if any...");
-    writer.drop();
+    writer.clearFiles();
 
     try {
       for (val project : getProjects()) {
@@ -76,8 +80,7 @@ public class CGHubImporter {
         log.info("Finished importing project '{}'.", project);
       }
     } finally {
-      val count = writer.getCount();
-      log.info("Finished importing {} records in {}.", count, watch.stop());
+      log.info("Finished importing records in {}.", watch.stop());
     }
   }
 
@@ -89,7 +92,7 @@ public class CGHubImporter {
       @Override
       public void handle(BasicDBObject document) {
         // Persist
-        writer.insert(document);
+        writer.write(document);
       }
 
     });

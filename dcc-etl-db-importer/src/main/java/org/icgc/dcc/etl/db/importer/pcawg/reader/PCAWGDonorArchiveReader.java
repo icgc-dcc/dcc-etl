@@ -5,7 +5,6 @@ import static com.fasterxml.jackson.core.JsonParser.Feature.AUTO_CLOSE_SOURCE;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.zip.GZIPInputStream;
 
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -57,7 +56,7 @@ public class PCAWGDonorArchiveReader {
 
   @SneakyThrows
   private InputStream openStream() {
-    return new GZIPInputStream(donorArchiveUrl.openStream());
+    return donorArchiveUrl.openStream();
   }
 
 }

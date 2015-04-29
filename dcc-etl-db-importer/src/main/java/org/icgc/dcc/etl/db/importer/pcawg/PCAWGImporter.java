@@ -50,7 +50,7 @@ public class PCAWGImporter {
    * @see http://jsonlines.org/
    */
   private static final URL DEFAULT_PCAWG_DONOR_ARCHIVE_URL =
-      getUrl(PCAWG_ARCHIVE_BASE_URL + "/2015-04-24_02-02-57_UTC/ucsc_polit_donor_r_150424020257.jsonl.gz");
+      getUrl(PCAWG_ARCHIVE_BASE_URL + "/santa_cruz_pilot/santa_cruz_pilot.v1.2015_0425.jsonl");
 
   /**
    * Configuration
