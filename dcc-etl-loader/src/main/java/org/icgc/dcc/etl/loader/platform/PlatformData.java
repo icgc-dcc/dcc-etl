@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
-import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_OPTIONAL_TYPE;
+import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_SUPPLEMENTAL_TYPE;
 import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.PRIMARY_SUBTYPE;
 
 import java.util.Map;
@@ -145,15 +145,15 @@ public class PlatformData {
 
     val supplementalTypeMap = new ImmutableMap.Builder<ClinicalType, Set<FileSubType>>();
 
-    if (hasSupplementalType(projectFiles, CLINICAL_OPTIONAL_TYPE)) {
+    if (hasSupplementalType(projectFiles, CLINICAL_SUPPLEMENTAL_TYPE)) {
       val availableSubTypes = ImmutableSet.copyOf(
           transform(
               filter(
-                  CLINICAL_OPTIONAL_TYPE.getOptionalDataTypeFileTypes(),
+                  CLINICAL_SUPPLEMENTAL_TYPE.getOptionalDataTypeFileTypes(),
                   in(projectFiles.keySet())),
               FileType.getGetSubTypeFunction()));
-      checkConsistency(CLINICAL_OPTIONAL_TYPE, availableSubTypes);
-      supplementalTypeMap.put(CLINICAL_OPTIONAL_TYPE, availableSubTypes);
+      checkConsistency(CLINICAL_SUPPLEMENTAL_TYPE, availableSubTypes);
+      supplementalTypeMap.put(CLINICAL_SUPPLEMENTAL_TYPE, availableSubTypes);
     }
 
     val digest = new ProvidedDataSubmissionDigest();
