@@ -48,6 +48,8 @@ import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.potentiall
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.AVAILABLE_RAW_SEQUENCE_DATA_FIELD;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.isAvailableRawSequenceDataField;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Summary.isSummaryField;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SPECIMEN_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SPECIMEN_ID_FIELD_NAME;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_MERGED_FIELD_NAME;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_REST_FIELD_NAME;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.isSupplementalField;
@@ -97,10 +99,6 @@ import com.mongodb.DBObject;
  */
 @RequiredArgsConstructor
 public class LoaderHandler implements TupleEntryToDBObjectTransformer {
-
-  // TODO Use dcc-common-core fields, if they exist.
-  private static final String SPECIMEN_FIELD_NAME = "specimen";
-  private static final String SPECIMEN_ID_FIELD_NAME = "specimen_id";
 
   private final SubmissionModel submissionModel;
   private final HandlingType handlingType;

@@ -270,6 +270,8 @@ public class LoaderModel {
     public static final String SUPPLEMENTAL_DONOR_ID_FIELD_NAME = "supplemental$donor_id";
     public static final String SUPPLEMENTAL_REST_FIELD_NAME = "supplemental$rest";
     public static final String SUPPLEMENTAL_MERGED_FIELD_NAME = "supplemental$merged";
+    public static final String SPECIMEN_FIELD_NAME = "specimen";
+    public static final String SPECIMEN_ID_FIELD_NAME = "specimen_id";
 
     public static final Collection<String> SUPPLEMENTAL_FIELD_NAMES = ImmutableSet.of(
         SUPPLEMENTAL_DONOR_ID_FIELD_NAME,
