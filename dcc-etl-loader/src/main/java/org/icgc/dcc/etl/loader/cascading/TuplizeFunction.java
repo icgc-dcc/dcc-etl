@@ -47,7 +47,7 @@ public class TuplizeFunction extends BaseFunction<Void> {
       @SuppressWarnings("rawtypes") FlowProcess flowProcess,
       FunctionCall<Void> functionCall) {
 
-    TupleEntry entry = functionCall.getArguments();
+    val entry = functionCall.getArguments();
     val incomingFields = entry.getFields();
     val incomingTuple = entry.getTupleCopy();
     val outgoingTuple = new Tuple();

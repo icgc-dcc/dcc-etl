@@ -87,13 +87,11 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
   protected Pipe process(@NonNull Pipe clinicalPipe) {
 
     val supplementalPipes = Maps.<FileType, Pipe> newHashMap();
-    boolean hasSupplemental = false;
 
-    for (FileSubType fileSubType : availableSubTypes) {
-      Set<FileType> fileTypes = fileSubType.getCorrespondingFileTypes();
-      for (FileType fileType : fileTypes) {
+    for (val fileSubType : availableSubTypes) {
+      val fileTypes = fileSubType.getCorrespondingFileTypes();
+      for (val fileType : fileTypes) {
         if (fileType.isOptional()) {
-          hasSupplemental = true;
           Pipe supplemenalPipe = new Pipe(getStartPipeName(getIdentifiableProjectKey(), fileType));
           heads.put(fileType, supplemenalPipe);
           supplemenalPipe = preProcess(supplemenalPipe, fileType);
@@ -103,7 +101,7 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
       }
     }
 
-    if (hasSupplemental) {
+    if (!supplementalPipes.isEmpty()) {
       Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
       Pipe supplementalPipe = new GroupBy(pipes, new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
 

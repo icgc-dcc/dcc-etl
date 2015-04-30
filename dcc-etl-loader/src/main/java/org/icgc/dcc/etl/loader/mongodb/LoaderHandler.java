@@ -81,7 +81,6 @@ import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Function;
@@ -98,6 +97,10 @@ import com.mongodb.DBObject;
  */
 @RequiredArgsConstructor
 public class LoaderHandler implements TupleEntryToDBObjectTransformer {
+
+  // TODO Use dcc-common-core fields, if they exist.
+  private static final String SPECIMEN_FIELD_NAME = "specimen";
+  private static final String SPECIMEN_ID_FIELD_NAME = "specimen_id";
 
   private final SubmissionModel submissionModel;
   private final HandlingType handlingType;
@@ -154,7 +157,7 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
       }
 
       else if (isSupplementalField(prefixedLoaderFieldName)) {
-        // supplemental data is handled after the rest of the document is prepared
+        // Supplemental data is handled after the rest of the document is prepared
         hasSupplemental = true;
       }
 
@@ -165,63 +168,77 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
     }
 
     if (hasSupplemental) {
-      ObjectNode currentDocument = DEFAULT.convertValue(builder.get(), ObjectNode.class);
-      val updatedDocument = handleSupplementalValue(currentDocument, entry);
-      return DEFAULT.convertValue(updatedDocument, BasicDBObject.class);
+
+      return handleSupplementalValue(builder, entry);
     }
 
     return builder.get();
   }
 
-  private ObjectNode handleSupplementalValue(ObjectNode document, TupleEntry entry) {
+  private BasicDBObject handleSupplementalValue(BasicDBObjectBuilder builder, TupleEntry entry) {
 
+    ObjectNode document = DEFAULT.convertValue(builder.get(), ObjectNode.class);
     val supplementalTuple = (Tuple) entry.getObject(new Fields(SUPPLEMENTAL_MERGED_FIELD_NAME));
 
     if (supplementalTuple != null) {
 
       for (Iterator<Object> i = supplementalTuple.iterator(); i.hasNext();) {
-        TupleEntry tupleEntry = (TupleEntry) i.next();
+        val tupleEntry = (TupleEntry) i.next();
         val supplementalEntry = (TupleEntry) tupleEntry.getObject(new Fields(SUPPLEMENTAL_REST_FIELD_NAME));
+        val fileType = determineSupplementalType(supplementalEntry);
 
-        FileType fileType = determineSupplementalType(supplementalEntry);
-
-        if (fileType == FileType.BIOMARKER_TYPE || fileType == FileType.SURGERY_TYPE) {
-          // nested under specimen
-          val entrySpecimenId = supplementalEntry.getString(prefixedFieldName(fileType, "specimen_id"));
-          JsonNode specimenNode = document.path("specimen");
-          Iterator<JsonNode> elements = specimenNode.elements();
-          while (elements.hasNext()) {
-            JsonNode specimen = elements.next();
-            val specimenId = specimen.get("specimen_id").asText();
-            if (specimenId.equals(entrySpecimenId)) {
-              ArrayNode existingValues = (ArrayNode) specimen.withArray(fileType.getId());
-              existingValues.add(extractEntry(supplementalEntry));
-              ((ObjectNode) specimen).put(fileType.getId(), existingValues);
-            }
-          }
-        } else if (fileType == FileType.FAMILY_TYPE || fileType == FileType.EXPOSURE_TYPE
-            || fileType == FileType.THERAPY_TYPE) {
-          ArrayNode existingValues = document.withArray(fileType.getId());
-          existingValues.add(extractEntry(supplementalEntry));
-          document.put(fileType.getId(), existingValues);
+        if (isSpecimenSupplementalType(fileType)) {
+          handleSpecimenSupplementalFileType(document, supplementalEntry, fileType);
+        } else if (isDonorSupplementalFileType(fileType)) {
+          handleDonorSupplementalFileType(document, supplementalEntry, fileType);
         } else {
           throw new IllegalStateException(String.format("Unexpected file type: '%s'", fileType));
         }
       }
     }
 
-    return document;
+    return DEFAULT.convertValue(document, BasicDBObject.class);
+  }
+
+  private void handleSpecimenSupplementalFileType(ObjectNode document, @NonNull final TupleEntry supplementalEntry,
+      @NonNull final FileType fileType) {
+    // Nest under specimen
+    val entrySpecimenId = supplementalEntry.getString(prefixedFieldName(fileType, SPECIMEN_ID_FIELD_NAME));
+    val specimens = document.path(SPECIMEN_FIELD_NAME);
+
+    for (val specimen : specimens) {
+      val specimenId = specimen.get(SPECIMEN_ID_FIELD_NAME).asText();
+      if (specimenId.equals(entrySpecimenId)) {
+        val existingValues = (ArrayNode) specimen.withArray(fileType.getId());
+        existingValues.add(extractEntry(supplementalEntry));
+        ((ObjectNode) specimen).put(fileType.getId(), existingValues);
+      }
+    }
+  }
+
+  private void handleDonorSupplementalFileType(ObjectNode document, @NonNull final TupleEntry supplementalEntry,
+      @NonNull final FileType fileType) {
+    val existingValues = document.withArray(fileType.getId());
+    existingValues.add(extractEntry(supplementalEntry));
+    document.put(fileType.getId(), existingValues);
+  }
+
+  private boolean isSpecimenSupplementalType(FileType fileType) {
+    return fileType == FileType.BIOMARKER_TYPE || fileType == FileType.SURGERY_TYPE;
+  }
+
+  private boolean isDonorSupplementalFileType(FileType fileType) {
+    return fileType == FileType.FAMILY_TYPE || fileType == FileType.EXPOSURE_TYPE
+        || fileType == FileType.THERAPY_TYPE;
   }
 
   private static JsonNode extractEntry(TupleEntry entry) {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    JsonNode rootNode = objectMapper.createObjectNode();
+    JsonNode rootNode = DEFAULT.createObjectNode();
 
     for (val prefixedFieldName : getFieldNames(entry)) {
       val value = entry.getString(new Fields(prefixedFieldName));
       val unprefixedFieldName = unprefixFieldName(prefixedFieldName);
-
       ((ObjectNode) rootNode).put(unprefixedFieldName, value);
     }
 

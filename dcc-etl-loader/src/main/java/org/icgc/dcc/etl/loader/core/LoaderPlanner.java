@@ -21,7 +21,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.MANDATORY_SUBTYPES;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -37,6 +36,7 @@ import org.icgc.dcc.etl.loader.flow.planner.ObservationRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 /**
  * Plans a release load.
@@ -86,7 +86,7 @@ public class LoaderPlanner {
     val featureTypes = submissionDataDigest.getFeatureTypes();
     log.info("Available feature types: '{}'", featureTypes);
 
-    Set<FileSubType> availableClinicalSubTypes = new HashSet<FileSubType>(MANDATORY_SUBTYPES);
+    val availableClinicalSubTypes = Sets.newHashSet(MANDATORY_SUBTYPES);
     if (submissionDataDigest.hasSupplementalType()) {
       val supplementalTypes = submissionDataDigest.getSupplementalTypes();
       log.info("Available supplemental types: '{}'", supplementalTypes);

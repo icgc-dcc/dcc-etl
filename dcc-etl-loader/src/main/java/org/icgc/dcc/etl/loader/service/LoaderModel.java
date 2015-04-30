@@ -275,9 +275,7 @@ public class LoaderModel {
         SUPPLEMENTAL_DONOR_ID_FIELD_NAME,
         SUPPLEMENTAL_MERGED_FIELD_NAME);
 
-    public static boolean isSupplementalField(
-        @NonNull final String fieldName) {
-
+    public static boolean isSupplementalField(@NonNull final String fieldName) {
       return SUPPLEMENTAL_FIELD_NAMES.contains(fieldName);
     }
   }
