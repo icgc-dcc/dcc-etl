@@ -394,4 +394,45 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
       }
     }
   }
+
+  public static void concatenateAll(String dataTypeLongName, String inputDir, String outputDir, String extension)
+      throws IOException {
+    Path inputPath = new Path(inputDir);
+    Configuration conf = new Configuration();
+    FileSystem fs = FileSystem.get(conf);
+
+    log.info("Concatenating from : {}", inputDir);
+    FSDataInputStream headerReader = fs.open(new Path(inputPath.getParent(), dataTypeLongName + HEADER));
+    ByteArrayOutputStream hos = new ByteArrayOutputStream(512000);
+    IOUtils.copy(headerReader, hos);
+    byte[] header = hos.toByteArray();
+
+    FileStatus[] dirStatus = fs.listStatus(inputPath);
+    Path outputPath = new Path(outputDir);
+    fs.mkdirs(outputPath);
+
+    @Cleanup
+    FSDataOutputStream os =
+        fs.create(new Path(outputPath, dataTypeLongName + ".all_projects.tsv" + extension));
+    IOUtils.write(header, os);
+    for (val file : dirStatus) {
+      log.info("File found : {}", file.getPath());
+      if (file.isDirectory()) {
+        log.info("Directory found: {}", file.getPath());
+        String dirname = file.getPath().getName();
+        if (dirname.startsWith(PREFIX)) {
+          Path projectPath = file.getPath();
+          RemoteIterator<LocatedFileStatus> partItr = fs.listFiles(projectPath, false);
+          if (partItr.hasNext()) {
+            while (partItr.hasNext()) {
+              LocatedFileStatus part = partItr.next();
+              @Cleanup
+              FSDataInputStream is = fs.open(part.getPath());
+              IOUtils.copy(is, os);
+            }
+          }
+        }
+      }
+    }
+  }
 }

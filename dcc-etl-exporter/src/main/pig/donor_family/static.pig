@@ -12,14 +12,15 @@ REGISTER $LIB
 %default DEFAULT_PARALLEL '3';
 set default_parallel $DEFAULT_PARALLEL;
 
+%default EMPTY_VALUE '';
+%declare EMPTY_FAMILY ['donor_has_relative_with_cancer_history'#'$EMPTY_VALUE','relationship_type'#'$EMPTY_VALUE','relationship_type_other'#'$EMPTY_VALUE','relationship_sex'#'$EMPTY_VALUE','relationship_age'#'$EMPTY_VALUE','relationship_disease_icd10'#'$EMPTY_VALUE','relationship_disease'#'$EMPTY_VALUE']
 
 set job.name static-$DATATYPE;
 import 'projection.pig';
 
-
 content = FOREACH selected_donor 
              GENERATE icgc_donor_id..submitted_donor_id, 
-             FLATTEN(((families is null or IsEmpty(families)) ? {($EMPTY_FAMILY)} : families)) as family;
+             FLATTEN(families) as family;
 
 selected_content = FOREACH content GENERATE icgc_donor_id..submitted_donor_id, 
                                       family#'donor_has_relative_with_cancer_history' as donor_has_relative_with_cancer_history,
@@ -30,6 +31,6 @@ selected_content = FOREACH content GENERATE icgc_donor_id..submitted_donor_id,
                                       family#'relationship_disease_icd10' as relationship_disease_icd10,
                                       family#'relationship_disease' as relationship_disease;
 
-static_out = ORDERY selected_content BY icgc_donor_id;
+static_out = ORDER selected_content BY icgc_donor_id;
 
 STORE static_out INTO '$TMP_STATIC_DIR' USING org.icgc.dcc.etl.exporter.pig.storage.StaticMultiStorage('$TMP_STATIC_DIR', '$STATIC_FILE_NAME_PREFIX', 'project_code', 'gz', '\\t');

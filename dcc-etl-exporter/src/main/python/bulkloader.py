@@ -51,8 +51,8 @@ def bulkloadData(type):
     if not stats.isSuccessful():
       print 'skip bulkloading data type: ' + type
       touch(logfile)
-      for errMsg in stats.getAllErrorMessages():
-              print errMsg
+      print stats.getErrorMessage()
+
     else :
       # bulk load to tablename
       #try :

@@ -11,6 +11,9 @@ REGISTER $LIB
 %default TMP_HFILE_DIR     '<hfile_dir>'
 DEFINE TOHFILE org.icgc.dcc.etl.exporter.pig.udf.ToHFile('$DATATYPE', '$UPLOAD_TO_RELEASE', '$TMP_HFILE_DIR', 'true');
 
+%default EMPTY_VALUE '';
+%declare EMPTY_EXPOSURE ['exposure_type'#'$EMPTY_VALUE','exposure_intensity'#'$EMPTY_VALUE','tobacco_smoking_history_indicator'#'$EMPTY_VALUE','tobacco_smoking_intensity'#'$EMPTY_VALUE','alcohol_history'#'$EMPTY_VALUE','alcohol_history_intensity'#'$EMPTY_VALUE']
+
 %default DEFAULT_PARALLEL '3';
 set default_parallel $DEFAULT_PARALLEL;
 
@@ -21,7 +24,7 @@ import 'projection.pig';
 keys = foreach (GROUP selected_donor BY donor_id) {
              content = FOREACH selected_donor 
                           GENERATE icgc_donor_id..submitted_donor_id, 
-                          FLATTEN(((exposures is null or IsEmpty(exposures)) ? {($EMPTY_EXPOSURE)} : exposures)) as exposure;
+                          FLATTEN(exposures) as exposure;
              
              selected_content = FOREACH content GENERATE icgc_donor_id..submitted_donor_id, 
                                                    exposure#'exposure_type' as exposure_type,

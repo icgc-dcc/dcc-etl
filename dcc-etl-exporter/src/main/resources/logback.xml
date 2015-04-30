@@ -5,7 +5,8 @@
     </encoder>
   </appender>
   <logger name="org.icgc.dcc.etl.exporter" level="INFO" />
-  <logger name="org.apache.pig" level="INFO" />
+  <logger name="org.apache.pig" level="WARN" />
+  <logger name="org.apache.hadoop" level="WARN" />
   <root level="WARN">
     <appender-ref ref="STDOUT" />
   </root>

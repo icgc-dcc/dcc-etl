@@ -12,13 +12,16 @@ REGISTER $LIB
 %default DEFAULT_PARALLEL '3';
 set default_parallel $DEFAULT_PARALLEL;
 
+%default EMPTY_VALUE '';
+%declare EMPTY_EXPOSURE ['exposure_type'#'$EMPTY_VALUE','exposure_intensity'#'$EMPTY_VALUE','tobacco_smoking_history_indicator'#'$EMPTY_VALUE','tobacco_smoking_intensity'#'$EMPTY_VALUE','alcohol_history'#'$EMPTY_VALUE','alcohol_history_intensity'#'$EMPTY_VALUE']
+
 set job.name static-$DATATYPE;
 import 'projection.pig';
 
 
 content = FOREACH selected_donor 
              GENERATE icgc_donor_id..submitted_donor_id, 
-             FLATTEN(((exposures is null or IsEmpty(exposures)) ? {($EMPTY_EXPOSURE)} : exposures)) as exposure;
+             FLATTEN(exposures) as exposure;
 
 selected_content = FOREACH content GENERATE icgc_donor_id..submitted_donor_id, 
                                       exposure#'exposure_type' as exposure_type,

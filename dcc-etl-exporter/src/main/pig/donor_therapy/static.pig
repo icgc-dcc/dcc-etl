@@ -12,14 +12,16 @@ REGISTER $LIB
 %default DEFAULT_PARALLEL '3';
 set default_parallel $DEFAULT_PARALLEL;
 
+%default EMPTY_VALUE '';
+%declare EMPTY_THERAPY ['first_therapy_type'#'$EMPTY_VALUE','first_therapy_therapeutic_intent'#'$EMPTY_VALUE','first_therapy_start_interval'#'$EMPTY_VALUE','first_therapy_duration'#'$EMPTY_VALUE','first_therapy_response'#'$EMPTY_VALUE','second_therapy_type'#'$EMPTY_VALUE','second_therapy_therapeutic_intent'#'$EMPTY_VALUE','second_therapy_start_interval'#'$EMPTY_VALUE','second_therapy_duration'#'$EMPTY_VALUE','second_therapy_response'#'$EMPTY_VALUE','other_therapy'#'$EMPTY_VALUE','other_therapy_response'#'$EMPTY_VALUE']
+
 
 set job.name static-$DATATYPE;
 import 'projection.pig';
 
-
 content = FOREACH selected_donor 
-             GENERATE icgc_donor_id..submitted_donor_id, 
-             FLATTEN(((therapies is null or IsEmpty(therapies)) ? {($EMPTY_THERAPY)} : therapies)) as therapy;
+          GENERATE icgc_donor_id..submitted_donor_id, 
+                   FLATTEN(therapies) as therapy;
 
 selected_content = FOREACH content GENERATE icgc_donor_id..submitted_donor_id, 
                                             therapy#'first_therapy_type' as first_therapy_type,

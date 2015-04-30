@@ -88,7 +88,32 @@ data = {
         'exp_array' : 'exp_array',
         'sgv_controlled' : 'sgv'
        }
+       
+summary = {
+        'ssm_controlled': False,
+        'ssm_open': False,
+        'clinical': False,
+        'clinicalsample' : False,
 
+        'donor': True,
+        'specimen': True,
+        'donor_therapy': True,
+        'donor_exposure': True,
+        'donor_family': True,
+        'sample': True,
+
+        'cnsm' : False,
+        'jcn' : False,
+        'meth_seq' : False,
+        'meth_array' : False,
+        'mirna_seq' : False,
+        'stsm' : False,
+        'pexp' : False,
+        'exp_seq' : False,
+        'exp_array' : False,
+        'sgv_controlled' : False
+        }
+        
 # mapping from short name to long name for each data type
 longname = {
         'ssm_controlled' : 'simple_somatic_mutation.controlled',
