@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Maps.newHashMap;
 import static java.lang.String.format;
 import static lombok.AccessLevel.PROTECTED;
+import static org.icgc.dcc.common.cascading.CascadingOptionals.ABSENT_PIPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.SSM_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_MATCHED_SAMPLE_ID;
@@ -36,7 +37,6 @@ import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getEndPipeName;
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getStartPipeName;
 import static org.icgc.dcc.etl.loader.identification.Identifier.requiresIdentification;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Consequence.getConsequenceArrayInternalName;
-import static org.icgc.dcc.common.cascading.CascadingOptionals.ABSENT_PIPE;
 
 import java.util.Map;
 import java.util.Set;
@@ -47,6 +47,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.cascading.CascadingFunctions.CloneField;
+import org.icgc.dcc.common.cascading.Flows;
 import org.icgc.dcc.common.core.model.DataType;
 import org.icgc.dcc.common.core.model.DataType.DataTypes;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
@@ -66,8 +68,6 @@ import org.icgc.dcc.etl.loader.flow.RecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.identification.Identifier;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 import org.icgc.dcc.etl.loader.service.LoaderModel.Persistence;
-import org.icgc.dcc.common.cascading.CascadingFunctions.CloneField;
-import org.icgc.dcc.common.cascading.Flows;
 
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;
@@ -89,7 +89,7 @@ public abstract class BaseRecordLoaderFlowPlanner implements RecordLoaderFlowPla
   // @Override
   private final DataType dataType;
 
-  private final Map<FileType, Pipe> heads = newHashMap();
+  protected final Map<FileType, Pipe> heads = newHashMap();
 
   @NonNull
   @Getter
@@ -102,7 +102,7 @@ public abstract class BaseRecordLoaderFlowPlanner implements RecordLoaderFlowPla
    * {@link FileSubType#PRIMARY_SUBTYPE}, but not {@link FileSubType#SECONDARY_SUBTYPE} (this is VALID for a
    * submission).
    */
-  private final Set<FileSubType> availableSubTypes;
+  protected final Set<FileSubType> availableSubTypes;
 
   /**
    * Only because of DCC-996.

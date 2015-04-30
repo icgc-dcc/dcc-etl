@@ -17,12 +17,17 @@
  */
 package org.icgc.dcc.etl.loader.flow.planner;
 
+import static cascading.tuple.Fields.ALL;
+import static cascading.tuple.Fields.RESULTS;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_CORE_TYPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.withRawSequenceData;
-
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getRawSequenceDataInfoPipeName;
+import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getStartPipeName;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.DONOR_DONOR_ID;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_DONOR_ID_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_MERGED_FIELD_NAME;
 
 import java.util.Set;
 
@@ -33,15 +38,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileSubType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
+import org.icgc.dcc.etl.loader.cascading.AsList;
 import org.icgc.dcc.etl.loader.cascading.RawSequenceDataInfo;
 import org.icgc.dcc.etl.loader.cascading.StainedSectionImageUpdate;
+import org.icgc.dcc.etl.loader.cascading.TuplizeFunction;
 import org.icgc.dcc.etl.loader.core.LoaderContext;
 import org.icgc.dcc.etl.loader.core.LoaderPlan;
 import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
 import cascading.flow.FlowDef;
+import cascading.pipe.CoGroup;
+import cascading.pipe.Each;
+import cascading.pipe.Every;
+import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
+import cascading.pipe.joiner.LeftJoin;
+import cascading.tuple.Fields;
+
+import com.google.common.collect.Maps;
 
 @Slf4j
 public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
@@ -70,6 +85,38 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
 
   @Override
   protected Pipe process(@NonNull Pipe clinicalPipe) {
+
+    val supplementalPipes = Maps.<FileType, Pipe> newHashMap();
+    boolean hasSupplemental = false;
+
+    for (FileSubType fileSubType : availableSubTypes) {
+      Set<FileType> fileTypes = fileSubType.getCorrespondingFileTypes();
+      for (FileType fileType : fileTypes) {
+        if (fileType.isOptional()) {
+          hasSupplemental = true;
+          Pipe supplemenalPipe = new Pipe(getStartPipeName(getIdentifiableProjectKey(), fileType));
+          heads.put(fileType, supplemenalPipe);
+          supplemenalPipe = preProcess(supplemenalPipe, fileType);
+          supplemenalPipe = new Each(supplemenalPipe, ALL, new TuplizeFunction(), RESULTS);
+          supplementalPipes.put(fileType, supplemenalPipe);
+        }
+      }
+    }
+
+    if (hasSupplemental) {
+      Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
+      Pipe supplementalPipe = new GroupBy(pipes, new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
+
+      supplementalPipe =
+          new Every(supplementalPipe, new AsList(new Fields(SUPPLEMENTAL_MERGED_FIELD_NAME), new Fields(
+              SUPPLEMENTAL_DONOR_ID_FIELD_NAME)));
+
+      clinicalPipe =
+          new CoGroup(clinicalPipe, new Fields(DONOR_DONOR_ID), supplementalPipe, new Fields(
+              SUPPLEMENTAL_DONOR_ID_FIELD_NAME), new LeftJoin());
+
+    }
+
     summary = new SummaryCollector(clinicalPipe, availableFeatureTypes, getSubmission());
 
     return summary;
