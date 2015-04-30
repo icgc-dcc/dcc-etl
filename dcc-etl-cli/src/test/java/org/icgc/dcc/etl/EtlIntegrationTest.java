@@ -125,6 +125,7 @@ public class EtlIntegrationTest {
       .add("OV-AU")
       .add("PACA-AU")
       .add("PEME-CA")
+      .add("MALY-DE")
       .build();
 
   /**
