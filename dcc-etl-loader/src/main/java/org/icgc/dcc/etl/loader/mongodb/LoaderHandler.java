@@ -22,9 +22,15 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
+import static org.icgc.dcc.common.cascading.Fields2.field;
+import static org.icgc.dcc.common.cascading.TupleEntries.OBJECT_TO_TUPLE_ENTRY_CAST;
+import static org.icgc.dcc.common.cascading.TupleEntries.getFieldNames;
+import static org.icgc.dcc.common.cascading.TupleEntries.getTuple;
+import static org.icgc.dcc.common.cascading.TupleEntries.getTupleEntry;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
-
+import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.generatedFieldName;
+import static org.icgc.dcc.etl.loader.flow.LoaderFields.getPrefix;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixFieldNames;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFieldName;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.unprefixFieldName;
@@ -42,13 +48,12 @@ import static org.icgc.dcc.etl.loader.service.LoaderModel.Persistence.potentiall
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.AVAILABLE_RAW_SEQUENCE_DATA_FIELD;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.RawSequence.isAvailableRawSequenceDataField;
 import static org.icgc.dcc.etl.loader.service.LoaderModel.Summary.isSummaryField;
-import static org.icgc.dcc.common.cascading.Fields2.field;
-import static org.icgc.dcc.common.cascading.TupleEntries.OBJECT_TO_TUPLE_ENTRY_CAST;
-import static org.icgc.dcc.common.cascading.TupleEntries.getFieldNames;
-import static org.icgc.dcc.common.cascading.TupleEntries.getTuple;
-import static org.icgc.dcc.common.cascading.TupleEntries.getTupleEntry;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_MERGED_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.SUPPLEMENTAL_REST_FIELD_NAME;
+import static org.icgc.dcc.etl.loader.service.LoaderModel.Supplemental.isSupplementalField;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import lombok.NonNull;
@@ -75,11 +80,16 @@ import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
 
@@ -99,6 +109,8 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
 
     val fileType = handlingType.getFileType();
     val optionalMetaFileType = getOptionalMetaFileType(handlingType);
+
+    boolean hasSupplemental = false;
 
     val submissionFieldNames = filter(
         submissionModel.getFieldNames(fileType),
@@ -141,13 +153,85 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
         handleJoinArray(builder, entry, fileType, unprefixedLoaderFieldName);
       }
 
+      else if (isSupplementalField(prefixedLoaderFieldName)) {
+        // supplemental data is handled after the rest of the document is prepared
+        hasSupplemental = true;
+      }
+
       else {
         throw new IllegalStateException(String.format("Unknown field: '%s' for '%s': '%s', '%s'",
             prefixedLoaderFieldName, handlingType, submissionFieldNames, entry.getFields()));
       }
     }
 
+    if (hasSupplemental) {
+      ObjectNode currentDocument = DEFAULT.convertValue(builder.get(), ObjectNode.class);
+      val updatedDocument = handleSupplementalValue(currentDocument, entry);
+      return DEFAULT.convertValue(updatedDocument, BasicDBObject.class);
+    }
+
     return builder.get();
+  }
+
+  private ObjectNode handleSupplementalValue(ObjectNode document, TupleEntry entry) {
+
+    val supplementalTuple = (Tuple) entry.getObject(new Fields(SUPPLEMENTAL_MERGED_FIELD_NAME));
+
+    if (supplementalTuple != null) {
+
+      for (Iterator<Object> i = supplementalTuple.iterator(); i.hasNext();) {
+        TupleEntry tupleEntry = (TupleEntry) i.next();
+        val supplementalEntry = (TupleEntry) tupleEntry.getObject(new Fields(SUPPLEMENTAL_REST_FIELD_NAME));
+
+        FileType fileType = determineSupplementalType(supplementalEntry);
+
+        if (fileType == FileType.BIOMARKER_TYPE || fileType == FileType.SURGERY_TYPE) {
+          // nested under specimen
+          val entrySpecimenId = supplementalEntry.getString(prefixedFieldName(fileType, "specimen_id"));
+          JsonNode specimenNode = document.path("specimen");
+          Iterator<JsonNode> elements = specimenNode.elements();
+          while (elements.hasNext()) {
+            JsonNode specimen = elements.next();
+            val specimenId = specimen.get("specimen_id").asText();
+            if (specimenId.equals(entrySpecimenId)) {
+              ArrayNode existingValues = (ArrayNode) specimen.withArray(fileType.getId());
+              existingValues.add(extractEntry(supplementalEntry));
+              ((ObjectNode) specimen).put(fileType.getId(), existingValues);
+            }
+          }
+        } else if (fileType == FileType.FAMILY_TYPE || fileType == FileType.EXPOSURE_TYPE
+            || fileType == FileType.THERAPY_TYPE) {
+          ArrayNode existingValues = document.withArray(fileType.getId());
+          existingValues.add(extractEntry(supplementalEntry));
+          document.put(fileType.getId(), existingValues);
+        } else {
+          throw new IllegalStateException(String.format("Unexpected file type: '%s'", fileType));
+        }
+      }
+    }
+
+    return document;
+  }
+
+  private static JsonNode extractEntry(TupleEntry entry) {
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    JsonNode rootNode = objectMapper.createObjectNode();
+
+    for (val prefixedFieldName : getFieldNames(entry)) {
+      val value = entry.getString(new Fields(prefixedFieldName));
+      val unprefixedFieldName = unprefixFieldName(prefixedFieldName);
+
+      ((ObjectNode) rootNode).put(unprefixedFieldName, value);
+    }
+
+    return rootNode;
+  }
+
+  private FileType determineSupplementalType(TupleEntry entry) {
+    val prefixedFieldName = entry.getFields().get(0).toString();
+    val prefix = getPrefix(prefixedFieldName);
+    return FileType.from(prefix);
   }
 
   private void handleNormalValue(
