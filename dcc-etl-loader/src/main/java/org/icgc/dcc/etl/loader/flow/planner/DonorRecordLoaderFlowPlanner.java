@@ -85,12 +85,13 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
 
   @Override
   protected Pipe process(@NonNull Pipe clinicalPipe) {
-
     val supplementalPipes = Maps.<FileType, Pipe> newHashMap();
 
     for (val fileSubType : availableSubTypes) {
       val fileTypes = fileSubType.getCorrespondingFileTypes();
+
       for (val fileType : fileTypes) {
+
         if (fileType.isOptional()) {
           Pipe supplemenalPipe = new Pipe(getStartPipeName(getIdentifiableProjectKey(), fileType));
           heads.put(fileType, supplemenalPipe);
@@ -104,11 +105,9 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
     if (!supplementalPipes.isEmpty()) {
       Pipe[] pipes = supplementalPipes.values().toArray(new Pipe[supplementalPipes.size()]);
       Pipe supplementalPipe = new GroupBy(pipes, new Fields(SUPPLEMENTAL_DONOR_ID_FIELD_NAME));
-
       supplementalPipe =
           new Every(supplementalPipe, new AsList(new Fields(SUPPLEMENTAL_MERGED_FIELD_NAME), new Fields(
               SUPPLEMENTAL_DONOR_ID_FIELD_NAME)));
-
       clinicalPipe =
           new CoGroup(clinicalPipe, new Fields(DONOR_DONOR_ID), supplementalPipe, new Fields(
               SUPPLEMENTAL_DONOR_ID_FIELD_NAME), new LeftJoin());

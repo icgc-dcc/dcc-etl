@@ -87,11 +87,13 @@ public class LoaderPlanner {
     log.info("Available feature types: '{}'", featureTypes);
 
     val availableClinicalSubTypes = Sets.newHashSet(MANDATORY_SUBTYPES);
+
     if (submissionDataDigest.hasSupplementalType()) {
       val supplementalTypes = submissionDataDigest.getSupplementalTypes();
       log.info("Available supplemental types: '{}'", supplementalTypes);
 
       val allSupplementalSubTypes = new ImmutableSet.Builder<FileSubType>();
+
       for (val type : supplementalTypes) {
         allSupplementalSubTypes.addAll(submissionDataDigest.getSubTypes(type));
       }

@@ -55,6 +55,7 @@ public class TuplizeFunction extends BaseFunction<Void> {
     for (val prefixedFieldName : getFieldNames(entry)) {
       val value = entry.getObject(new Fields(prefixedFieldName));
       val unprefixedFieldName = unprefixFieldName(prefixedFieldName);
+
       if (unprefixedFieldName.equals(DONOR_ID_BASE_FIELD_NAME)) {
         outgoingTuple.add(value);
 

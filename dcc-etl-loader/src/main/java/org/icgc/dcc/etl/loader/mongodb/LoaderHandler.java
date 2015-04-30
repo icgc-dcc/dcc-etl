@@ -166,7 +166,6 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
     }
 
     if (hasSupplemental) {
-
       return handleSupplementalValue(builder, entry);
     }
 
@@ -206,6 +205,7 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
 
     for (val specimen : specimens) {
       val specimenId = specimen.get(SPECIMEN_ID_FIELD_NAME).asText();
+
       if (specimenId.equals(entrySpecimenId)) {
         val existingValues = (ArrayNode) specimen.withArray(fileType.getId());
         existingValues.add(extractEntry(supplementalEntry));
