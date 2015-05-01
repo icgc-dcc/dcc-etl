@@ -49,7 +49,7 @@ public class Main {
     val dbImporter = new DBImporter(geneMongoUri,
         createICGCConfig(config));
 
-    dbImporter.import_(collections);
+    dbImporter.execute(collections);
   }
 
   private static ICGCClientConfig createICGCConfig(EtlConfig config) {

@@ -18,9 +18,11 @@
 package org.icgc.dcc.etl.db.importer.cghub.core;
 
 import static org.icgc.dcc.etl.db.importer.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_CGHUB_VALUE;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_FIELD_NAME;
+import lombok.NonNull;
 import lombok.val;
+
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.util.FileRepositories;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -28,7 +30,7 @@ import com.google.common.collect.ImmutableList;
 
 public class CGHubAnalysisDetailProcessor {
 
-  public Iterable<ObjectNode> process(JsonNode details) {
+  public Iterable<ObjectNode> process(@NonNull String diseaseCode, @NonNull JsonNode details) {
     val cghubFiles = ImmutableList.<ObjectNode> builder();
 
     val results = details.path("result_set").path("results");
@@ -39,7 +41,7 @@ public class CGHubAnalysisDetailProcessor {
           continue;
         }
 
-        val cghubFile = createCGHubFile(result, (ObjectNode) file);
+        val cghubFile = createCGHubFile(diseaseCode, result, (ObjectNode) file);
 
         cghubFiles.add(cghubFile);
       }
@@ -48,9 +50,10 @@ public class CGHubAnalysisDetailProcessor {
     return cghubFiles.build();
   }
 
-  private static ObjectNode createCGHubFile(JsonNode result, ObjectNode file) {
+  private static ObjectNode createCGHubFile(String diseaseCode, JsonNode result, ObjectNode file) {
     val cghubFile = file.objectNode();
-    cghubFile.put(FILE_REPOSITORY_FIELD_NAME, FILE_REPOSITORY_CGHUB_VALUE);
+    cghubFile.put(FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME, FileRepositoryType.CGHUB.getId());
+    cghubFile.put("_project_id", resolveProjectName(diseaseCode));
     cghubFile.put("gnos_id", result.get("analysis_id"));
     cghubFile.putPOJO("gnos_url", ImmutableList.of(CGHUB_BASE_URL));
     cghubFile.put("filesize", file.get("filesize").longValue());
@@ -72,6 +75,10 @@ public class CGHubAnalysisDetailProcessor {
     val fileName = file.get("filename").textValue();
 
     return fileName.endsWith(".bam.bai");
+  }
+
+  private static String resolveProjectName(String diseaseCode) {
+    return diseaseCode + "-US";
   }
 
 }

@@ -17,42 +17,32 @@
  */
 package org.icgc.dcc.etl.db.importer.tcga.writer;
 
-import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_FIELD_NAME;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_TCGA_VALUE;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
 import org.icgc.dcc.etl.db.importer.tcga.model.TCGAClinicalFile;
-import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
-import org.jongo.MongoCollection;
 
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class TCGAClinicalFileWriter extends AbstractJongoWriter<Iterable<TCGAClinicalFile>> {
+public class TCGAClinicalFileWriter extends AbstractRepositoryFileWriter<Iterable<TCGAClinicalFile>> {
 
   public TCGAClinicalFileWriter(@NonNull MongoClientURI mongoUri) {
-    super(mongoUri);
+    super(mongoUri, FileRepositoryType.TCGA);
   }
 
   @Override
   public void write(@NonNull Iterable<TCGAClinicalFile> clinicalFiles) {
     log.info("Clearing file documents...");
-    val fileCollection = getCollection(FILE_COLLECTION);
-    clearFiles(fileCollection);
+    clearFiles();
 
     log.info("Writing file documents...");
     for (val clinicalFile : clinicalFiles) {
-      fileCollection.save(clinicalFile);
+      saveFile(clinicalFile);
     }
-  }
-
-  private static void clearFiles(MongoCollection fileCollection) {
-    val result = fileCollection.remove("{ " + FILE_REPOSITORY_FIELD_NAME + ": # }", FILE_REPOSITORY_TCGA_VALUE);
-
-    log.info("Finished clearing collection '{}': {}", fileCollection, result);
   }
 
 }

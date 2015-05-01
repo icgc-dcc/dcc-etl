@@ -15,18 +15,19 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.file.util;
+package org.icgc.dcc.etl.db.importer.repo.model;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.NoArgsConstructor;
+import org.icgc.dcc.common.core.model.Identifiable;
 
-@NoArgsConstructor(access = PRIVATE)
-public final class FileRepositories {
+public enum FileRepositoryType implements Identifiable {
 
-  public static final String FILE_REPOSITORY_FIELD_NAME = "repository";
+  CGHUB,
+  TCGA,
+  PCAWG;
 
-  public static final String FILE_REPOSITORY_TCGA_VALUE = "tcga";
-  public static final String FILE_REPOSITORY_PCAWG_VALUE = "pcawg";
-  public static final String FILE_REPOSITORY_CGHUB_VALUE = "cghub";
+  @Override
+  public String getId() {
+    return this.toString().toLowerCase();
+  }
 
 }

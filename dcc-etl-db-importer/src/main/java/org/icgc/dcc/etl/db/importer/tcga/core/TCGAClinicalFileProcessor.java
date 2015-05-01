@@ -18,13 +18,13 @@
 package org.icgc.dcc.etl.db.importer.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_TCGA_VALUE;
 
 import java.util.regex.Pattern;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
 import org.icgc.dcc.etl.db.importer.tcga.model.TCGAArchiveClinicalFile;
 import org.icgc.dcc.etl.db.importer.tcga.model.TCGAClinicalFile;
 import org.icgc.dcc.etl.db.importer.tcga.reader.TCGAArchiveListReader;
@@ -55,7 +55,7 @@ public class TCGAClinicalFileProcessor {
 
         for (val archiveClinicalFile : processArchiveClinicalFiles(entry.getArchiveUrl())) {
           val clinicalFile = new TCGAClinicalFile(
-              FILE_REPOSITORY_TCGA_VALUE,
+              FileRepositoryType.TCGA,
               projectName,
               archiveClinicalFile.getDonorId(),
               archiveClinicalFile.getFileName(),

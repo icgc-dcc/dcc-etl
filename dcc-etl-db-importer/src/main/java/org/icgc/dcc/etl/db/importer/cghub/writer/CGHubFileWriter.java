@@ -17,35 +17,27 @@
  */
 package org.icgc.dcc.etl.db.importer.cghub.writer;
 
-import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_CGHUB_VALUE;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_FIELD_NAME;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType.CGHUB;
 
-import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
-@Slf4j
-public class CGHubFileWriter extends AbstractJongoWriter<ObjectNode> {
+public class CGHubFileWriter extends AbstractRepositoryFileWriter<ObjectNode> {
 
   public CGHubFileWriter(MongoClientURI mongoUri) {
-    super(mongoUri);
+    super(mongoUri, CGHUB);
   }
 
   @Override
   public void write(ObjectNode file) {
-    val fileCollection = getCollection(FILE_COLLECTION);
-    fileCollection.save(file);
+    saveFile(file);
   }
 
+  @Override
   public void clearFiles() {
-    val fileCollection = getCollection(FILE_COLLECTION);
-    val result = fileCollection.remove("{ " + FILE_REPOSITORY_FIELD_NAME + ": # }", FILE_REPOSITORY_CGHUB_VALUE);
-
-    log.info("Finished clearing collection '{}': {}", fileCollection, result);
+    super.clearFiles();
   }
 
 }

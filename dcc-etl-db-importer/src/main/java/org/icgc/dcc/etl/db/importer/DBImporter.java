@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.icgc.dcc.etl.db.importer.cgc.CgcImporter;
+import org.icgc.dcc.etl.db.importer.cghub.CGHubImporter;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.diagram.DiagramImporter;
 import org.icgc.dcc.etl.db.importer.gene.GeneImporter;
@@ -37,6 +38,7 @@ import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
 import org.icgc.dcc.etl.db.importer.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.db.importer.project.ProjectImporter;
+import org.icgc.dcc.etl.db.importer.tcga.TCGAImporter;
 
 import com.google.common.base.Stopwatch;
 import com.mongodb.MongoClientURI;
@@ -53,7 +55,7 @@ public class DBImporter {
   @NonNull
   private final ICGCClientConfig icgcConfig;
 
-  public void import_(List<CollectionName> collections) {
+  public void execute(List<CollectionName> collections) {
 
     val watch = Stopwatch.createStarted();
     val mongoUri = new MongoClientURI(geneMongoUri);
@@ -108,39 +110,45 @@ public class DBImporter {
 
   }
 
-  private static void importProjects(ICGCClientConfig config, MongoClientURI releaseUri) {
-    val projectImporter = new ProjectImporter(config, releaseUri);
+  private static void importProjects(ICGCClientConfig config, MongoClientURI mongoUri) {
+    val projectImporter = new ProjectImporter(config, mongoUri);
     projectImporter.execute();
   }
 
-  private static void importGenes(MongoClientURI releaseUri) {
-    val geneImporter = new GeneImporter(releaseUri, getRemoteGenesBsonUri());
+  private static void importGenes(MongoClientURI mongoUri) {
+    val geneImporter = new GeneImporter(mongoUri, getRemoteGenesBsonUri());
     geneImporter.execute();
   }
 
-  private static void importCgc(MongoClientURI releaseUri) {
-    val cgcImporter = new CgcImporter(releaseUri, getRemoteCgsUri());
+  private static void importCgc(MongoClientURI mongoUri) {
+    val cgcImporter = new CgcImporter(mongoUri, getRemoteCgsUri());
     cgcImporter.execute();
   }
 
-  private static void importPathways(MongoClientURI releaseUri) {
-    val pathwayImporter = new PathwayImporter(releaseUri);
+  private static void importPathways(MongoClientURI mongoUri) {
+    val pathwayImporter = new PathwayImporter(mongoUri);
     pathwayImporter.execute();
   }
 
-  private static void importGo(MongoClientURI releaseUri) {
-    val goImporter = new GoImporter(releaseUri);
+  private static void importGo(MongoClientURI mongoUri) {
+    val goImporter = new GoImporter(mongoUri);
     goImporter.execute();
   }
 
-  private static void importDiagrams(MongoClientURI releaseUri) {
-    val projectImporter = new DiagramImporter(releaseUri);
+  private static void importDiagrams(MongoClientURI mongoUri) {
+    val projectImporter = new DiagramImporter(mongoUri);
     projectImporter.execute();
   }
 
-  private static void importFiles(MongoClientURI releaseUri) {
-    val projectImporter = new PCAWGImporter(releaseUri, new HashIdentifierClient());
+  private static void importFiles(MongoClientURI mongoUri) {
+    val projectImporter = new PCAWGImporter(mongoUri, new HashIdentifierClient());
     projectImporter.execute();
+
+    val cghubImporter = new CGHubImporter(mongoUri);
+    cghubImporter.execute();
+
+    val tcgaImporter = new TCGAImporter(mongoUri);
+    tcgaImporter.execute();
   }
 
 }

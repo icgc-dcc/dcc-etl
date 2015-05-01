@@ -15,54 +15,17 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.tcga;
+package org.icgc.dcc.etl.db.importer.repo.util;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static lombok.AccessLevel.PRIVATE;
+import lombok.NoArgsConstructor;
 
-import org.icgc.dcc.etl.db.importer.tcga.core.TCGAClinicalFileProcessor;
-import org.icgc.dcc.etl.db.importer.tcga.model.TCGAClinicalFile;
-import org.icgc.dcc.etl.db.importer.tcga.writer.TCGAClinicalFileWriter;
-
-import com.mongodb.MongoClientURI;
-
-/**
- * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
- */
-@Slf4j
-@RequiredArgsConstructor
-public class TCGAImporter {
+@NoArgsConstructor(access = PRIVATE)
+public final class FileRepositories {
 
   /**
-   * Configuration
+   * Constants.
    */
-  @NonNull
-  private final MongoClientURI mongoUri;
-
-  public void execute() {
-    log.info("Reading clinical files...");
-    val clinicalFiles = readClinicalFiles();
-    log.info("Read {} clinical files", formatCount(clinicalFiles));
-
-    log.info("Writing clinical files...");
-    writeClinicalFiles(clinicalFiles);
-    log.info("Wrote {} clinical files", formatCount(clinicalFiles));
-  }
-
-  private Iterable<TCGAClinicalFile> readClinicalFiles() {
-    return new TCGAClinicalFileProcessor().process();
-  }
-
-  @SneakyThrows
-  private void writeClinicalFiles(Iterable<TCGAClinicalFile> clinicalFiles) {
-    @Cleanup
-    val writer = new TCGAClinicalFileWriter(mongoUri);
-    writer.write(clinicalFiles);
-  }
+  public static final String FILE_REPOSITORY_TYPE_FIELD_NAME = "repository_type";
 
 }

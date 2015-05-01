@@ -27,14 +27,18 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 import lombok.Cleanup;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
 
 @Slf4j
 public class CGHubAnalysisDetailReader {
@@ -42,11 +46,12 @@ public class CGHubAnalysisDetailReader {
   /**
    * Constants.
    */
+  public static final String CGHUB_TCGA_STUDY = "phs000178";
   public static final String CGHUB_API_URL = CGHUB_BASE_URL + "/cghub/metadata";
   public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";
 
   @SneakyThrows
-  public ObjectNode readDetails(String diseaseCode) {
+  public ObjectNode readDetails(@NonNull String diseaseCode) {
     val watch = createStarted();
     val url = createUrl(diseaseCode);
 
@@ -54,7 +59,7 @@ public class CGHubAnalysisDetailReader {
     @Cleanup
     val inputStream = openInputStream(url);
     val details = readDetails(inputStream);
-    log.info("Finished eading analysis details for disease code '{}' in {} ", diseaseCode, watch);
+    log.info("Finished reading analysis details for disease code '{}' in {} ", diseaseCode, watch);
 
     return details;
   }
@@ -64,10 +69,20 @@ public class CGHubAnalysisDetailReader {
   }
 
   private static URL createUrl(String diseaseCode) throws MalformedURLException {
-    val state = "live"; // Per Junjun
-    val params = "disease_abbr" + "=" + diseaseCode + "&" + "state" + "=" + state;
+    // Per Junjun
+    val study = CGHUB_TCGA_STUDY;
+    val state = "live";
+    val params = ImmutableMap.of(
+        "study", study,
+        "disease_abbr", diseaseCode,
+        "state", state);
 
-    return new URL(CGHUB_ANALYSIS_DETAIL_API_URL + "?" + params);
+    return createUrl(CGHUB_ANALYSIS_DETAIL_API_URL, params);
+  }
+
+  private static URL createUrl(String path, Map<String, String> params) throws MalformedURLException {
+    return new URL(path + "?" + Joiner.on('&').withKeyValueSeparator("=").join(params));
+
   }
 
   private static InputStream openInputStream(URL url) throws IOException {

@@ -17,42 +17,32 @@
  */
 package org.icgc.dcc.etl.db.importer.pcawg.writer;
 
-import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_FIELD_NAME;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_PCAWG_VALUE;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
-import org.jongo.MongoCollection;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class PCAWGFileWriter extends AbstractJongoWriter<Iterable<ObjectNode>> {
+public class PCAWGFileWriter extends AbstractRepositoryFileWriter<Iterable<ObjectNode>> {
 
   public PCAWGFileWriter(@NonNull MongoClientURI mongoUri) {
-    super(mongoUri);
+    super(mongoUri, FileRepositoryType.PCAWG);
   }
 
   @Override
   public void write(@NonNull Iterable<ObjectNode> files) {
     log.info("Clearing file documents...");
-    val fileCollection = getCollection(FILE_COLLECTION);
-    clearFiles(fileCollection);
+    clearFiles();
 
     log.info("Writing file documents...");
     for (val file : files) {
-      fileCollection.save(file);
+      saveFile(file);
     }
-  }
-
-  private static void clearFiles(MongoCollection fileCollection) {
-    val result = fileCollection.remove("{ " + FILE_REPOSITORY_FIELD_NAME + ": # }", FILE_REPOSITORY_PCAWG_VALUE);
-
-    log.info("Finished clearing collection '{}': {}", fileCollection, result);
   }
 
 }

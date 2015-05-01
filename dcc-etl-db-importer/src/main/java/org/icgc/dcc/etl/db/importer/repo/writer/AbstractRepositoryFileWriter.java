@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,63 +15,54 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.cghub;
+package org.icgc.dcc.etl.db.importer.repo.writer;
 
-import static com.google.common.base.Stopwatch.createStarted;
-import static org.icgc.dcc.etl.db.importer.cghub.util.CGHubProjects.getProjects;
-import lombok.Cleanup;
+import static com.google.common.base.Preconditions.checkState;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.etl.db.importer.repo.util.FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.cghub.core.CGHubAnalysisDetailProcessor;
-import org.icgc.dcc.etl.db.importer.cghub.reader.CGHubAnalysisDetailReader;
-import org.icgc.dcc.etl.db.importer.cghub.writer.CGHubFileWriter;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+import org.jongo.MongoCollection;
 
 import com.mongodb.MongoClientURI;
 
-/**
- * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
- */
 @Slf4j
-@RequiredArgsConstructor
-public class CGHubImporter {
+public abstract class AbstractRepositoryFileWriter<T> extends AbstractJongoWriter<T> {
 
   /**
-   * Configuration
+   * Dependencies.
    */
   @NonNull
-  private final MongoClientURI mongoUri;
+  protected final MongoCollection fileCollection;
 
-  @SneakyThrows
-  public void execute() {
-    log.info("Starting import...");
-    val watch = createStarted();
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  protected final FileRepositoryType type;
 
-    val reader = new CGHubAnalysisDetailReader();
-    val processor = new CGHubAnalysisDetailProcessor();
-    @Cleanup
-    val writer = new CGHubFileWriter(mongoUri);
+  public AbstractRepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull FileRepositoryType type) {
+    super(mongoUri);
+    this.fileCollection = getCollection(FILE_COLLECTION);
+    this.type = type;
+  }
 
-    writer.clearFiles();
-    try {
-      for (val diseaseCode : getProjects()) {
-        log.info("Importing project '{}'...", diseaseCode);
+  protected void clearFiles() {
+    log.info("Clearing '{}' documents in collection '{}'", type.getId(), fileCollection.getName());
+    val result = fileCollection.remove("{ " + FILE_REPOSITORY_TYPE_FIELD_NAME + ": # }", type.getId());
+    checkState(result.getLastError().ok(), "Error clearing mongo: %s", result);
 
-        val details = reader.readDetails(diseaseCode);
+    log.info("Finished clearing {} '{}' documents in collection '{}'",
+        formatCount(result.getN()), type.getId(), fileCollection.getName());
+  }
 
-        val cghubFiles = processor.process(diseaseCode, details);
-        for (val cghubFile : cghubFiles) {
-          writer.write(cghubFile);
-        }
-
-        log.info("Finished importing project '{}'.", diseaseCode);
-      }
-    } finally {
-      log.info("Finished importing records in {}.", watch.stop());
-    }
+  protected void saveFile(Object file) {
+    fileCollection.save(file);
   }
 
 }

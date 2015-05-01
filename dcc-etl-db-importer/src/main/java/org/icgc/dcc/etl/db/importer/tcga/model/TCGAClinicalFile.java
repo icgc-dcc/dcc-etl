@@ -19,10 +19,12 @@ package org.icgc.dcc.etl.db.importer.tcga.model;
 
 import lombok.Value;
 
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+
 @Value
 public class TCGAClinicalFile {
 
-  String repository;
+  FileRepositoryType repositoryType;
   String projectName;
   String donorId;
   String fileName;

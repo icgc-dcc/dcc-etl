@@ -86,7 +86,7 @@ public class DBImporterMain {
     val geneMongoUri = config.getGeneMongoUri();
     val dbImporter = new DBImporter(geneMongoUri, createICGCConfig(config));
 
-    dbImporter.import_(collections);
+    dbImporter.execute(collections);
   }
 
   private static void usage(JCommander cli) {

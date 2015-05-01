@@ -17,8 +17,6 @@
  */
 package org.icgc.dcc.etl.db.importer.pcawg.core;
 
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_FIELD_NAME;
-import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_PCAWG_VALUE;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_DCC_PROJECT_CODE;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_FILES_FIELD;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
@@ -29,6 +27,9 @@ import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMIT
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
 import lombok.NonNull;
 import lombok.val;
+
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.util.FileRepositories;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
@@ -58,7 +59,7 @@ public class PCAWGDonorFilesConverter {
 
             val workflowFiles = convertWorkflowFiles((ObjectNode) workflow);
             for (val workflowFile : workflowFiles) {
-              workflowFile.put(FILE_REPOSITORY_FIELD_NAME, FILE_REPOSITORY_PCAWG_VALUE);
+              workflowFile.put(FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME, FileRepositoryType.PCAWG.getId());
               workflowFile.put("_project_id", projectId);
               workflowFile.put("submitted_donor_id", submittedDonorId);
               workflowFile.put("specimen_class", normalizeSpecimenClass(specimenClass));
