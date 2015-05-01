@@ -15,68 +15,37 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.cghub.core;
+package org.icgc.dcc.etl.db.importer.cghub.writer;
 
-import java.io.InputStream;
-
-import lombok.NonNull;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_CGHUB_VALUE;
+import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_FIELD_NAME;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class CGHubProcessor {
+public class CGHubFileWriter extends AbstractJongoWriter<ObjectNode> {
 
-  /**
-   * The name of the project parameter (classified by disease) used with the {@link #RESOURCE_NAME}.
-   */
-  private static final String PROJECT_PARAM_NAME = "disease_abbr";
-
-  /**
-   * The base URL of the CGHub API.
-   */
-  private static final String DEFAULT_URL = "https://cghub.ucsc.edu/cghub/metadata";
-
-  /**
-   * The name of the source HTTP resource.
-   */
-  private static final String RESOURCE_NAME = "analysisObject";
-
-  @NonNull
-  private final Client client;
-  @NonNull
-  private final WebResource resource;
-  @NonNull
-  private final String url;
-
-  public CGHubProcessor() {
-    this(DEFAULT_URL);
+  public CGHubFileWriter(MongoClientURI mongoUri) {
+    super(mongoUri);
   }
 
-  public CGHubProcessor(String url) {
-    this(url, Client.create());
+  @Override
+  public void write(ObjectNode file) {
+    val fileCollection = getCollection(FILE_COLLECTION);
+    fileCollection.save(file);
   }
 
-  public CGHubProcessor(String url, Client client) {
-    this.url = url;
-    this.client = client;
-    this.resource = client.resource(url).path(RESOURCE_NAME);
-  }
+  public void clearFiles() {
+    val fileCollection = getCollection(FILE_COLLECTION);
+    val result = fileCollection.remove("{ " + FILE_REPOSITORY_FIELD_NAME + ": # }", FILE_REPOSITORY_CGHUB_VALUE);
 
-  public InputStream getProject(String diseaseCode) {
-    val request = createProjectRequest(diseaseCode);
-
-    log.info("Finding project '{}' from '{}'...", diseaseCode, request);
-    val response = request.get(ClientResponse.class);
-
-    return response.getEntityInputStream();
-  }
-
-  private WebResource createProjectRequest(String diseaseCode) {
-    return resource.queryParam(PROJECT_PARAM_NAME, diseaseCode);
+    log.info("Finished clearing collection '{}': {}", fileCollection, result);
   }
 
 }

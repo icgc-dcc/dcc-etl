@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.db.importer.cghub.reader;
 import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.net.HttpHeaders.ACCEPT;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
+import static org.icgc.dcc.etl.db.importer.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,9 +42,8 @@ public class CGHubAnalysisDetailReader {
   /**
    * Constants.
    */
-  private static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu";
-  private static final String CGHUB_API_URL = CGHUB_BASE_URL + "/cghub/metadata";
-  private static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";
+  public static final String CGHUB_API_URL = CGHUB_BASE_URL + "/cghub/metadata";
+  public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";
 
   @SneakyThrows
   public ObjectNode readDetails(String diseaseCode) {

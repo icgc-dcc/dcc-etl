@@ -19,45 +19,54 @@ package org.icgc.dcc.etl.db.importer.cghub.util;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import java.util.Map;
 import java.util.Set;
 
 import lombok.NoArgsConstructor;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 
 @NoArgsConstructor(access = PRIVATE)
-public class CGHubXmls {
+public class CGHubProjects {
 
-  /**
-   * The CGHub metadata XML element name for each result record.
-   */
-  public static final String RESULT_ELEMENT_NAME = "Result";
+  private static final Map<String, String> DISEASE_CODE_PROJECT_IDS = ImmutableMap.<String, String> builder()
+      .put("BLCA", "BLCA-US")
+      .put("BRCA", "BRCA-US")
+      .put("CESC", "CESC-US")
+      .put("CNTL", "Control")
+      .put("COAD", "COAD-US")
+      .put("DLBC", "unknown.1")
+      .put("ESCA", "unknown.2")
+      .put("GBM", "GBM-US")
+      .put("HNSC", "HNSC-US")
+      .put("KICH", "unknown.3")
+      .put("KIRC", "KIRC-US")
+      .put("KIRP", "KIRP-US")
+      .put("LAML", "LAML-US")
+      .put("LCLL", "unknown.4")
+      .put("LGG", "LGG-US")
+      .put("LIHC", "LIHC-US")
+      .put("LUAD", "LUAD-US")
+      .put("LUSC", "LUSC-US")
+      .put("MESO", "unknown.5")
+      .put("MM", "unknown.6")
+      .put("OV", "OV-US")
+      .put("PAAD", "PAAD-US")
+      .put("PRAD", "PRAD-US")
+      .put("READ", "READ-US")
+      .put("SARC", "SARC-US")
+      .put("SKCM", "SKCM-US")
+      .put("STAD", "STAD-US")
+      .put("THCA", "THCA-US")
+      .put("UCEC", "UCEC-US")
+      .build();
 
-  /**
-   * The CGHub metadata XML element name for the project id.
-   */
-  public static final String PROJECT_ELEMENT_NAME = "disease_abbr";
+  public static Set<String> getProjects() {
+    return DISEASE_CODE_PROJECT_IDS.keySet();
+  }
 
-  public static final Set<String> XPATHS = ImmutableSet.of(
-      "/ResultSet/Result/analysis_id",
-      "/ResultSet/Result/state",
-      // "/ResultSet/Result/last_modified",
-      // "/ResultSet/Result/published_date",
-      "/ResultSet/Result/center_name",
-      "/ResultSet/Result/files/file/filename",
-      "/ResultSet/Result/files/file/filesize",
-      "/ResultSet/Result/legacy_sample_id",
-      "/ResultSet/Result/disease_abbr",
-      "/ResultSet/Result/tss_id",
-      "/ResultSet/Result/analysis_id",
-      "/ResultSet/Result/participant_id",
-      "/ResultSet/Result/sample_id",
-      "/ResultSet/Result/aliquot_id",
-      "/ResultSet/Result/analyte_code",
-      "/ResultSet/Result/sample_type",
-      "/ResultSet/Result/library_strategy",
-      "/ResultSet/Result/platform",
-      "/ResultSet/Result/refassem_short_name",
-      "/ResultSet/Result/analysis_data_uri");
+  public static String getProjectId(String diseaseCode) {
+    return DISEASE_CODE_PROJECT_IDS.get(diseaseCode);
+  }
 
 }

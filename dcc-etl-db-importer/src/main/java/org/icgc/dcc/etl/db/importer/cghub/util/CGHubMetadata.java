@@ -26,7 +26,12 @@ import lombok.NoArgsConstructor;
 import com.google.common.collect.ImmutableMap;
 
 @NoArgsConstructor(access = PRIVATE)
-public class CGHubValues {
+public class CGHubMetadata {
+
+  /**
+   * Constants.
+   */
+  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu";
 
   private static final Map<String, String> sampleTypeCodeToValue = ImmutableMap.<String, String> builder()
       .put("01", "Primary solid Tumor")

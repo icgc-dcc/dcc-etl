@@ -17,95 +17,61 @@
  */
 package org.icgc.dcc.etl.db.importer.cghub;
 
-import static org.icgc.dcc.etl.db.importer.cghub.model.CGHubProjects.getProjects;
-
-import java.io.File;
-import java.io.InputStream;
-
+import static com.google.common.base.Stopwatch.createStarted;
+import static org.icgc.dcc.etl.db.importer.cghub.util.CGHubProjects.getProjects;
+import lombok.Cleanup;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.cghub.core.CGHubProcessor;
-import org.icgc.dcc.etl.db.importer.cghub.reader.CGHubReader;
-import org.icgc.dcc.etl.db.importer.cghub.reader.CGHubReader.DocumentCallback;
-import org.icgc.dcc.etl.db.importer.cghub.util.CGHubCache;
-import org.icgc.dcc.etl.db.importer.cghub.writer.CGHubWriter;
+import org.icgc.dcc.etl.db.importer.cghub.core.CGHubAnalysisDetailProcessor;
+import org.icgc.dcc.etl.db.importer.cghub.reader.CGHubAnalysisDetailReader;
+import org.icgc.dcc.etl.db.importer.cghub.writer.CGHubFileWriter;
 
-import com.google.common.base.Stopwatch;
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClientURI;
 
 /**
  * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
  */
 @Slf4j
+@RequiredArgsConstructor
 public class CGHubImporter {
 
   /**
-   * The HTTP service used to interact with CGHub.
+   * Configuration
    */
   @NonNull
-  private final CGHubProcessor processor;
+  private final MongoClientURI mongoUri;
 
-  /**
-   * The local path to the cache of CGHub XML responses.
-   */
-  @NonNull
-  private final CGHubCache cache;
-  @NonNull
-  private final CGHubReader reader;
-  @NonNull
-  private final CGHubWriter writer;
-
-  public CGHubImporter(String mongoUri, File cacheDir) {
-    this.processor = new CGHubProcessor();
-    this.cache = new CGHubCache(cacheDir);
-    this.reader = new CGHubReader();
-    this.writer = new CGHubWriter(new MongoClientURI(mongoUri));
-  }
-
+  @SneakyThrows
   public void execute() {
     log.info("Starting import...");
-    val watch = Stopwatch.createStarted();
+    val watch = createStarted();
 
-    log.info("Dropping previous collection, if any...");
+    val reader = new CGHubAnalysisDetailReader();
+    val processor = new CGHubAnalysisDetailProcessor();
+    @Cleanup
+    val writer = new CGHubFileWriter(mongoUri);
+
     writer.clearFiles();
-
     try {
-      for (val project : getProjects()) {
-        log.info("Importing project '{}'...", project);
-        importProject(project);
-        log.info("Finished importing project '{}'.", project);
+      for (val diseaseCode : getProjects()) {
+        log.info("Importing project '{}'...", diseaseCode);
+
+        val details = reader.readDetails(diseaseCode);
+
+        val cghubFiles = processor.process(details);
+        for (val cghubFile : cghubFiles) {
+          writer.write(cghubFile);
+        }
+
+        log.info("Finished importing project '{}'.", diseaseCode);
       }
     } finally {
       log.info("Finished importing records in {}.", watch.stop());
     }
-  }
-
-  private void importProject(String project) {
-    val inputStream = read(project);
-
-    reader.parse(inputStream, new DocumentCallback() {
-
-      @Override
-      public void handle(BasicDBObject document) {
-        // Persist
-        writer.write(document);
-      }
-
-    });
-  }
-
-  @SneakyThrows
-  private InputStream read(String projectId) {
-    if (!cache.isCached(projectId)) {
-      val inputStream = processor.getProject(projectId);
-      cache.cacheFile(inputStream, projectId);
-    }
-
-    return cache.readCache(projectId);
   }
 
 }

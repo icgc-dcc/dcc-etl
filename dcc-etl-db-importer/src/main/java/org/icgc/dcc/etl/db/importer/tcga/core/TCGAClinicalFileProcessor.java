@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.db.importer.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_TCGA_VALUE;
 
 import java.util.regex.Pattern;
 
@@ -54,6 +55,7 @@ public class TCGAClinicalFileProcessor {
 
         for (val archiveClinicalFile : processArchiveClinicalFiles(entry.getArchiveUrl())) {
           val clinicalFile = new TCGAClinicalFile(
+              FILE_REPOSITORY_TCGA_VALUE,
               projectName,
               archiveClinicalFile.getDonorId(),
               archiveClinicalFile.getFileName(),

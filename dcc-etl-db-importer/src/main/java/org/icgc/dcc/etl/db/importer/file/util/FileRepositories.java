@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,34 +15,18 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.cghub.writer;
+package org.icgc.dcc.etl.db.importer.file.util;
 
-import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static lombok.AccessLevel.PRIVATE;
+import lombok.NoArgsConstructor;
 
-import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+@NoArgsConstructor(access = PRIVATE)
+public final class FileRepositories {
 
-import com.mongodb.DBObject;
-import com.mongodb.MongoClientURI;
+  public static final String FILE_REPOSITORY_FIELD_NAME = "repository";
 
-@Slf4j
-public class CGHubWriter extends AbstractJongoWriter<DBObject> {
+  public static final String FILE_REPOSITORY_TCGA_VALUE = "tcga";
+  public static final String FILE_REPOSITORY_PCAWG_VALUE = "pcawg";
+  public static final String FILE_REPOSITORY_CGHUB_VALUE = "cghub";
 
-  public CGHubWriter(MongoClientURI mongoUri) {
-    super(mongoUri);
-  }
-
-  @Override
-  public void write(DBObject file) {
-    val fileCollection = getCollection(FILE_COLLECTION);
-    fileCollection.save(file);
-  }
-
-  public void clearFiles() {
-    val fileCollection = getCollection(FILE_COLLECTION);
-    val result = fileCollection.remove();
-
-    log.info("Finished clearing collection '{}': {}", fileCollection, result);
-  }
 }

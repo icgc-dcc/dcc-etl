@@ -17,29 +17,19 @@
  */
 package org.icgc.dcc.etl.db.importer.cghub;
 
-import java.io.File;
-import java.io.IOException;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
+import lombok.val;
 
-import org.icgc.dcc.etl.db.importer.cghub.CGHubImporter;
-import org.junit.Before;
 import org.junit.Test;
 
 public class CGHubImporterTest {
 
-  final static String DATABASE_URI = "mongodb://localhost/dcc-genome";
-  final static File CACHE_DIR = new File("/tmp/dcc-etl-importer/cghub/cache");
-
-  CGHubImporter importer;
-
-  @Before
-  public void setUp() throws IOException {
-    CACHE_DIR.mkdirs();
-    this.importer = new CGHubImporter(DATABASE_URI, CACHE_DIR);
-  }
-
   @Test
   public void testExecute() {
-    importer.execute();
+    val mongoUri = getLocalMongoClientUri("dcc-genome");
+
+    val cghubImporter = new CGHubImporter(mongoUri);
+    cghubImporter.execute();
   }
 
 }

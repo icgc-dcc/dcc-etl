@@ -18,6 +18,8 @@
 package org.icgc.dcc.etl.db.importer.pcawg.writer;
 
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_FIELD_NAME;
+import static org.icgc.dcc.etl.db.importer.file.util.FileRepositories.FILE_REPOSITORY_PCAWG_VALUE;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +50,7 @@ public class PCAWGFileWriter extends AbstractJongoWriter<Iterable<ObjectNode>> {
   }
 
   private static void clearFiles(MongoCollection fileCollection) {
-    val result = fileCollection.remove();
+    val result = fileCollection.remove("{ " + FILE_REPOSITORY_FIELD_NAME + ": # }", FILE_REPOSITORY_PCAWG_VALUE);
 
     log.info("Finished clearing collection '{}': {}", fileCollection, result);
   }

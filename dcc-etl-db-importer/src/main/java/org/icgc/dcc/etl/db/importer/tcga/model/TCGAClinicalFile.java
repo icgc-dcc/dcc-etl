@@ -22,6 +22,7 @@ import lombok.Value;
 @Value
 public class TCGAClinicalFile {
 
+  String repository;
   String projectName;
   String donorId;
   String fileName;
