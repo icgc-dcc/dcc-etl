@@ -102,6 +102,7 @@ public class EmbeddedDynamicExporter {
       params.put("JSON_LOADER", "com.twitter.elephantbird.pig.load.JsonLoader");
       params.put("OBSERVATION", observation);
       params.put("RAW_STORAGE", "PigStorage");
+      params.put("DEFAULT_PARALLEL", "1");
 
       Properties pigProperty = pigServer.getPigContext().getProperties();
       pigProperty.setProperty("pig.import.search.path", LIB_PATH + "/" + exporter);

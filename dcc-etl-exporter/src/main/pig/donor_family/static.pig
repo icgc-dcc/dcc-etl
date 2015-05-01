@@ -9,7 +9,7 @@ REGISTER $LIB
 %default TMP_STATIC_DIR    '<static_dir>'
 %default OUT_STATIC_DIR    '<dynamic_dir>'
 
-%default DEFAULT_PARALLEL '3';
+%default DEFAULT_PARALLEL '2';
 set default_parallel $DEFAULT_PARALLEL;
 
 %default EMPTY_VALUE '';
