@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
+import static com.google.common.collect.Sets.intersection;
 import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_SUPPLEMENTAL_TYPE;
 import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.PRIMARY_SUBTYPE;
 
@@ -44,8 +45,6 @@ import org.icgc.dcc.etl.loader.core.ProvidedDataSubmissionDigest;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-import com.google.common.collect.Sets.SetView;
 import com.mongodb.MongoClientURI;
 
 /**
@@ -176,8 +175,8 @@ public class PlatformData {
    * {@code dictionary}.
    */
   private static boolean hasSupplementalType(Map<FileType, String> projectFiles, ClinicalType clinicalType) {
-    SetView<FileType> intersection =
-        Sets.intersection(projectFiles.keySet(), clinicalType.getOptionalDataTypeFileTypes());
+    val intersection =
+        intersection(projectFiles.keySet(), clinicalType.getOptionalDataTypeFileTypes());
     return !intersection.isEmpty();
   }
 

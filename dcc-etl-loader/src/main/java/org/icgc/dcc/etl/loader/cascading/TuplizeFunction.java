@@ -47,7 +47,7 @@ public class TuplizeFunction extends BaseFunction<Void> {
       @SuppressWarnings("rawtypes") FlowProcess flowProcess,
       FunctionCall<Void> functionCall) {
 
-    TupleEntry entry = functionCall.getArguments();
+    val entry = functionCall.getArguments();
     val incomingFields = entry.getFields();
     val incomingTuple = entry.getTupleCopy();
     val outgoingTuple = new Tuple();
@@ -55,6 +55,7 @@ public class TuplizeFunction extends BaseFunction<Void> {
     for (val prefixedFieldName : getFieldNames(entry)) {
       val value = entry.getObject(new Fields(prefixedFieldName));
       val unprefixedFieldName = unprefixFieldName(prefixedFieldName);
+
       if (unprefixedFieldName.equals(DONOR_ID_BASE_FIELD_NAME)) {
         outgoingTuple.add(value);
 
