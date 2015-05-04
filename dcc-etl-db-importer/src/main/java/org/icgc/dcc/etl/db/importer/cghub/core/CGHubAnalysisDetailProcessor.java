@@ -64,8 +64,8 @@ public class CGHubAnalysisDetailProcessor {
     cghubFile.put("filename", file.get("filename"));
     cghubFile.put("sample_id", result.get("sample_id"));
     cghubFile.put("legacy_sample_id", result.get("legacy_sample_id"));
-    cghubFile.put("analyte", CGHubMetadata.getAnalyte(result.get("analyte_code").textValue()));
-    cghubFile.put("sample_type", CGHubMetadata.getSampleType(result.get("sample_type").textValue()));
+    cghubFile.put("sample_type", CGHubMetadata.getAnalyte(result.get("analyte_code").textValue()));
+    cghubFile.put("specimen_type", CGHubMetadata.getSampleType(result.get("sample_type").textValue()));
     cghubFile.put("platform", result.get("platform"));
     cghubFile.put("aliquot_id", result.get("aliquot_id"));
     cghubFile.put("participant_id", result.get("participant_id"));
