@@ -55,6 +55,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapLongValues;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapTextValues;
+import static org.icgc.dcc.etl.summarizer.util.JsonNodes.extractStudies;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.textValues;
 
 import java.util.List;
@@ -186,8 +187,6 @@ public class ReleaseRepository {
         .and(
             "{ $unwind: '$study' }")
         .and(
-            "{ $unwind: '$study' }")
-        .and(
             "{ $group: { _id: { donorId: '$donorId' }, study: { $addToSet : '$study' } } }")
         .and(
             "{ $project: { _id: 0, donorId: '$_id.donorId', study: 1 } }")
@@ -198,7 +197,7 @@ public class ReleaseRepository {
     String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_STUDIES;
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
-        .with("{ $set: { " + field + ": # } }", textValues(studies));
+        .with("{ $set: { " + field + ": # } }", extractStudies(studies));
   }
 
   public void setDonorExperimentalAnalysis(String donorId, JsonNode analysisSampleCounts) {
