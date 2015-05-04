@@ -38,6 +38,7 @@ def bulkloadData(type):
   print 'Bulkloading to table: ' + tablename
   params["TABLE_NAME"] = tablename
 
+  bulkload=True
   if not(SchemaUtil.isTableExists(tablename)) :
     tmp_bucket = tmp_bucket_root + "/" + release + "/" + type
     Pig.fs("rm -r -skipTrash " + tmp_bucket)
@@ -48,24 +49,18 @@ def bulkloadData(type):
     bound  = inittable.bind(params)
     stats = bound.runSingle()
 
-    if not stats.isSuccessful():
-      print 'skip bulkloading data type: ' + type
-      touch(logfile)
-      print stats.getErrorMessage()
 
-    else :
-      # bulk load to tablename
-      #try :
-      os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R hbase " + tmp_hfile)
-      os.system("HADOOP_USER_NAME=hbase java -cp `hbase classpath` -Xmx6G org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles -Dhbase.mapreduce.bulkload.max.hfiles.perRegion.perFamily=9999 " + tmp_hfile + " " + tablename)
-      os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R downloader " + tmp_hfile)
+    if not(stats.isSuccessful() and SchemaUtil.isTableExists(tablename)):
+      bulkload = False
+      print 'cannot create table, skip bulkloading data type: ' + type
+      print 'Error Message: ' + stats.getErrorMessage()
 
-  #SchemaUtil.majorCompact(tablename)
-  #except :
-  #  print 'Pig job failed: bulk loading failed for data type: ' + type
-  #  raise 'failed'
-
-  #print 'Pig job succeeded'
+  if bulkload :
+    # bulk load to tablename
+    os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R hbase " + tmp_hfile)
+    os.system("HADOOP_USER_NAME=hbase java -cp `hbase classpath` -Xmx6G org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles -Dhbase.mapreduce.bulkload.max.hfiles.perRegion.perFamily=9999 " + tmp_hfile + " " + tablename)
+    os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R downloader " + tmp_hfile)
+    print 'Pig job succeeded'
   
 if __name__ == "__main__":
   try:
