@@ -18,7 +18,14 @@
 package org.icgc.dcc.etl.db.importer.repo.util;
 
 import static lombok.AccessLevel.PRIVATE;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class FileRepositories {
@@ -27,5 +34,20 @@ public final class FileRepositories {
    * Constants.
    */
   public static final String FILE_REPOSITORY_TYPE_FIELD_NAME = "repository_type";
+
+  @NonNull
+  public static final String formatDateTime(LocalDateTime dateTime) {
+    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
+  }
+
+  @NonNull
+  public static final String formatDateTime(ZonedDateTime dateTime) {
+    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
+  }
+
+  @NonNull
+  public static final String formatDateTime(Instant dateTime) {
+    return dateTime.toString();
+  }
 
 }

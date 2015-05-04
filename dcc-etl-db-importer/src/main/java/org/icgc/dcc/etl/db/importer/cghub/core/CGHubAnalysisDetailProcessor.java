@@ -18,9 +18,13 @@
 package org.icgc.dcc.etl.db.importer.cghub.core;
 
 import static org.icgc.dcc.etl.db.importer.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
+
+import java.time.Instant;
+
 import lombok.NonNull;
 import lombok.val;
 
+import org.icgc.dcc.etl.db.importer.cghub.util.CGHubMetadata;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
 import org.icgc.dcc.etl.db.importer.repo.util.FileRepositories;
 
@@ -60,13 +64,14 @@ public class CGHubAnalysisDetailProcessor {
     cghubFile.put("filename", file.get("filename"));
     cghubFile.put("sample_id", result.get("sample_id"));
     cghubFile.put("legacy_sample_id", result.get("legacy_sample_id"));
-    cghubFile.put("analyte_code", result.get("analyte_code"));
-    cghubFile.put("sample_type", result.get("sample_type"));
+    cghubFile.put("analyte", CGHubMetadata.getAnalyte(result.get("analyte_code").textValue()));
+    cghubFile.put("sample_type", CGHubMetadata.getSampleType(result.get("sample_type").textValue()));
     cghubFile.put("platform", result.get("platform"));
     cghubFile.put("aliquot_id", result.get("aliquot_id"));
     cghubFile.put("participant_id", result.get("participant_id"));
     cghubFile.put("library_strategy", result.get("library_strategy"));
-    cghubFile.put("last_modified", result.get("last_modified"));
+    cghubFile.put("last_modified",
+        FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue())));
 
     return cghubFile;
   }

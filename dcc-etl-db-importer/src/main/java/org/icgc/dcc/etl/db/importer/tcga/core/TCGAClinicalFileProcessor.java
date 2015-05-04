@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.db.importer.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.etl.db.importer.repo.util.FileRepositories.formatDateTime;
 
 import java.util.regex.Pattern;
 
@@ -60,7 +61,7 @@ public class TCGAClinicalFileProcessor {
               archiveClinicalFile.getDonorId(),
               archiveClinicalFile.getFileName(),
               archiveClinicalFile.getUrl(),
-              entry.getDateAdded());
+              archiveClinicalFile.getLastModified().toString());
 
           clinicalFiles.add(clinicalFile);
         }
@@ -80,7 +81,8 @@ public class TCGAClinicalFileProcessor {
       if (matcher.matches()) {
         val donorId = matcher.group(1);
         val url = archiveFolderUrl + "/" + entry.getFileName();
-        val clinicalFile = new TCGAArchiveClinicalFile(donorId, entry.getFileName(), url);
+        val clinicalFile =
+            new TCGAArchiveClinicalFile(donorId, entry.getFileName(), formatDateTime(entry.getLastModified()), url);
 
         clinicalFiles.add(clinicalFile);
       }

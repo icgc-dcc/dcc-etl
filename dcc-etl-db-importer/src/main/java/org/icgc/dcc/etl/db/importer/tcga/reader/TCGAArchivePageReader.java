@@ -18,7 +18,9 @@
 package org.icgc.dcc.etl.db.importer.tcga.reader;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -53,7 +55,9 @@ public class TCGAArchivePageReader {
   /**
    * Parsers.
    */
-  private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+  private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
+      .ofPattern("yyyy-MM-dd HH:mm")
+      .withZone(ZoneId.systemDefault()); // Assume TCGA is on east coast
 
   @SneakyThrows
   public static Iterable<TCGAArchivePageEntry> readEntries(String archiveUrl) {
@@ -97,8 +101,8 @@ public class TCGAArchivePageReader {
     return Longs.tryParse(text);
   }
 
-  private static LocalDateTime parseLastModified(String text) {
-    return LocalDateTime.parse(text, DATE_FORMATTER);
+  private static Instant parseLastModified(String text) {
+    return ZonedDateTime.parse(text, DATE_FORMATTER).toInstant();
   }
 
   private static boolean isLink(Node node) {
@@ -113,7 +117,7 @@ public class TCGAArchivePageReader {
   private static class Columns {
 
     Long size;
-    LocalDateTime lastModified;
+    Instant lastModified;
 
     public boolean isEmpty() {
       return lastModified == null && size == null;

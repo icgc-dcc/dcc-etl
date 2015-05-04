@@ -25,6 +25,10 @@ import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMIT
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_SAMPLE_ID;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_SPECIMEN_ID;
 import static org.icgc.dcc.etl.db.importer.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
+import static org.icgc.dcc.etl.db.importer.repo.util.FileRepositories.formatDateTime;
+
+import java.time.ZonedDateTime;
+
 import lombok.NonNull;
 import lombok.val;
 
@@ -35,6 +39,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
 public class PCAWGDonorFilesConverter {
+
+  /**
+   * TODO: Get from documents
+   */
+  private static final ZonedDateTime LAST_UPDATED = ZonedDateTime.now();
 
   public Iterable<ObjectNode> convertDonor(@NonNull ObjectNode donor) {
     val submittedDonorId = donor.get(PCAWG_SUBMITTER_DONOR_ID);
@@ -61,6 +70,7 @@ public class PCAWGDonorFilesConverter {
             for (val workflowFile : workflowFiles) {
               workflowFile.put(FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME, FileRepositoryType.PCAWG.getId());
               workflowFile.put("_project_id", projectId);
+              workflowFile.put("last_updated", formatDateTime(LAST_UPDATED));
               workflowFile.put("submitted_donor_id", submittedDonorId);
               workflowFile.put("specimen_class", normalizeSpecimenClass(specimenClass));
               workflowFile.put("workflow_type", workflowType);

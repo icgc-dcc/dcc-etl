@@ -29,6 +29,6 @@ public class TCGAClinicalFile {
   String donorId;
   String fileName;
   String url;
-  String dateAdded;
+  String lastModified;
 
 }

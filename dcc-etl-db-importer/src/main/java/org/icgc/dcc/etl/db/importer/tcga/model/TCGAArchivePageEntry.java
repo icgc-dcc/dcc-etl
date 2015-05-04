@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.tcga.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import lombok.Value;
 
@@ -26,6 +26,6 @@ public class TCGAArchivePageEntry {
 
   String fileName;
   Long fileSize;
-  LocalDateTime lastModified;
+  Instant lastModified;
 
 }
