@@ -17,51 +17,21 @@
  */
 package org.icgc.dcc.etl.db.importer.tcga.reader;
 
-import static com.google.common.collect.Iterables.skip;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.icgc.dcc.common.core.util.Splitters.TAB;
-import static org.icgc.dcc.common.core.util.URLs.getUrl;
-
-import java.net.URL;
-import java.util.List;
-
-import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.tcga.model.TCGAArchiveListEntry;
+import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
+@Slf4j
+public class TCGAArchivePageReaderTest {
 
-public class TCGAArchiveListReader {
-
-  private static final URL TCGA_ARCHIVE_LISTING =
-      getUrl("http://tcga-data.nci.nih.gov/datareports/resources/latestarchive");
-
-  public static Iterable<TCGAArchiveListEntry> readEntries() {
-    val entries = ImmutableList.<TCGAArchiveListEntry> builder();
-
-    val lines = readLines();
-    for (val line : lines) {
-      val fields = parseFields(line);
-      val archiveName = fields.get(0);
-      val dateAdded = fields.get(1);
-      val archiveUrl = fields.get(2);
-
-      entries.add(new TCGAArchiveListEntry(archiveName, dateAdded, archiveUrl));
+  @Test
+  public void testReadEntries() {
+    val url = "https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/";
+    val entries = TCGAArchivePageReader.readEntries(url);
+    for (val entry : entries) {
+      log.info("{}", entry);
     }
-
-    return entries.build();
-  }
-
-  @SneakyThrows
-  private static Iterable<String> readLines() {
-    val headerLineCount = 1;
-    return skip(Resources.readLines(TCGA_ARCHIVE_LISTING, UTF_8), headerLineCount);
-  }
-
-  private static List<String> parseFields(String line) {
-    return TAB.splitToList(line);
   }
 
 }

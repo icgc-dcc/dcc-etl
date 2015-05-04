@@ -28,7 +28,7 @@ import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
 import org.icgc.dcc.etl.db.importer.tcga.model.TCGAArchiveClinicalFile;
 import org.icgc.dcc.etl.db.importer.tcga.model.TCGAClinicalFile;
 import org.icgc.dcc.etl.db.importer.tcga.reader.TCGAArchiveListReader;
-import org.icgc.dcc.etl.db.importer.tcga.reader.TCGAArchiveManifestReader;
+import org.icgc.dcc.etl.db.importer.tcga.reader.TCGAArchivePageReader;
 
 import com.google.common.collect.ImmutableList;
 
@@ -74,7 +74,7 @@ public class TCGAClinicalFileProcessor {
     val clinicalFiles = ImmutableList.<TCGAArchiveClinicalFile> builder();
 
     val archiveFolderUrl = resolveArchiveFolderUrl(archiveUrl);
-    for (val entry : TCGAArchiveManifestReader.readEntries(archiveFolderUrl)) {
+    for (val entry : TCGAArchivePageReader.readEntries(archiveFolderUrl)) {
 
       val matcher = CLINICAL_FILENAME_PATTERN.matcher(entry.getFileName());
       if (matcher.matches()) {
