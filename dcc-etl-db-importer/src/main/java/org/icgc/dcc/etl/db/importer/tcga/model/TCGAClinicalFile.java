@@ -28,6 +28,7 @@ public class TCGAClinicalFile {
   String projectName;
   String donorId;
   String fileName;
+  long fileSize;
   String url;
   String lastModified;
 

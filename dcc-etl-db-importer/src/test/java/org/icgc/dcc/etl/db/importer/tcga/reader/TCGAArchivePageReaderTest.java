@@ -27,7 +27,8 @@ public class TCGAArchivePageReaderTest {
 
   @Test
   public void testReadEntries() {
-    val url = "https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/";
+    val url =
+        "https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/cesc/bcr/nationwidechildrens.org/bio/clin/nationwidechildrens.org_CESC.bio.Level_1.200.62.0";
     val entries = TCGAArchivePageReader.readEntries(url);
     for (val entry : entries) {
       log.info("{}", entry);

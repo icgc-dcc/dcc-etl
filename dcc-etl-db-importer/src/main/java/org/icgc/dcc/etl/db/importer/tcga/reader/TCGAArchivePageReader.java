@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.etl.db.importer.tcga.reader;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -43,7 +45,7 @@ public class TCGAArchivePageReader {
    * Regexes.
    */
   private static String LAST_MODIFIED_COLUMN_REGEX = "\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}";
-  private static String SIZE_COLUMN_REGEX = "\\d+";
+  private static String SIZE_COLUMN_REGEX = "\\d+\\w+";
   private static String COLUMNS_REGEX =
       "\\s*(" + LAST_MODIFIED_COLUMN_REGEX + "|-)\\s*" + "(" + SIZE_COLUMN_REGEX + "|-)\\s*$";
 
@@ -98,7 +100,22 @@ public class TCGAArchivePageReader {
   }
 
   private static Long parseSize(String text) {
-    return Longs.tryParse(text);
+    if (text.equals("-")) {
+      return null;
+    }
+
+    val number = Longs.tryParse(text);
+    if (number != null) {
+      return number;
+    }
+
+    val digits = Longs.tryParse(text.substring(0, text.length() - 1));
+    val suffix = text.substring(text.length() - 1);
+    val factor = suffix.equals("K") ? 1024 : -1;
+
+    checkState(suffix.equals("K"), suffix);
+
+    return digits * factor;
   }
 
   private static Instant parseLastModified(String text) {

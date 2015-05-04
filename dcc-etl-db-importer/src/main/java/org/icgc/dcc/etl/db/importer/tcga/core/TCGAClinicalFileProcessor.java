@@ -60,6 +60,7 @@ public class TCGAClinicalFileProcessor {
               projectName,
               archiveClinicalFile.getDonorId(),
               archiveClinicalFile.getFileName(),
+              archiveClinicalFile.getFileSize(),
               archiveClinicalFile.getUrl(),
               archiveClinicalFile.getLastModified().toString());
 
@@ -72,17 +73,18 @@ public class TCGAClinicalFileProcessor {
   }
 
   private ImmutableList<TCGAArchiveClinicalFile> processArchiveClinicalFiles(String archiveUrl) {
+    log.info("Processing archive url '{}'...", archiveUrl);
     val clinicalFiles = ImmutableList.<TCGAArchiveClinicalFile> builder();
 
     val archiveFolderUrl = resolveArchiveFolderUrl(archiveUrl);
     for (val entry : TCGAArchivePageReader.readEntries(archiveFolderUrl)) {
-
       val matcher = CLINICAL_FILENAME_PATTERN.matcher(entry.getFileName());
       if (matcher.matches()) {
         val donorId = matcher.group(1);
         val url = archiveFolderUrl + "/" + entry.getFileName();
         val clinicalFile =
-            new TCGAArchiveClinicalFile(donorId, entry.getFileName(), formatDateTime(entry.getLastModified()), url);
+            new TCGAArchiveClinicalFile(donorId, entry.getFileName(), formatDateTime(entry.getLastModified()),
+                entry.getFileSize(), url);
 
         clinicalFiles.add(clinicalFile);
       }
