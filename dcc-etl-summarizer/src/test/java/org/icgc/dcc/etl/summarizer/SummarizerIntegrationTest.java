@@ -52,6 +52,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AGE_AT_DIA
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_REPOSITORY;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_STUDIES;
 import static org.icgc.dcc.common.core.model.FieldNames.EXPERIMENTAL_ANALYSIS_PERFORMED_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.EXPERIMENTAL_ANALYSIS_PERFORMED_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_DONORS;
@@ -102,10 +103,10 @@ import static org.icgc.dcc.common.test.Tests.getTestJobId;
 import static org.icgc.dcc.common.test.Tests.getTestReleasePrefix;
 import static org.icgc.dcc.common.test.fest.JsonNodeAssert.assertThat;
 import static org.icgc.dcc.common.test.json.JsonNodes.$;
-import static org.icgc.dcc.etl.summarizer.repository.ReleaseRepository.DONOR_SUMMARY_STUDIES;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -129,6 +130,7 @@ import org.junit.rules.TemporaryFolder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.POJONode;
+import com.google.common.collect.ImmutableMap;
 import com.mongodb.DB;
 
 @Slf4j
@@ -148,6 +150,152 @@ public class SummarizerIntegrationTest {
   private static final Component TESTED_COMPONENT = SUMMARIZER;
   private static final String TEST_JOB_ID = getTestJobId(TESTED_COMPONENT);
   private static final String TEST_RELEASE_NAME = getTestReleasePrefix(TESTED_COMPONENT) + TEST_PATCH_NUMBER;
+
+  //@formatter:off
+  private static final Map<String, JsonNode> TEST_DATA = ImmutableMap.<String, JsonNode> builder()
+      .put("donor1", $(
+          "{" +
+              "_id:'1'," +
+              DONOR_ID + ":'" + "donor1" + "'," +
+              PROJECT_ID + ":'project1'," +
+              DONOR_AGE_AT_DIAGNOSIS + ":5," +
+              
+              // Donor-observation summaries
+              DONOR_SUMMARY + ":{" +
+                DONOR_SUMMARY_AFFECTED_GENE_COUNT + ":4," +
+                DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP + ":'1 - 9'," +
+                AVAILABLE_DATA_TYPES + ":['ssm','cnsm']," +
+                SSM_TYPE.getSummaryFieldName()  + ":1," +
+                
+                CNSM_TYPE.getSummaryFieldName() + ":true," +
+                CNGV_TYPE.getSummaryFieldName() + ":false," +
+                SGV_TYPE.getSummaryFieldName()  + ":false," +
+                STGV_TYPE.getSummaryFieldName() + ":false," +
+                STSM_TYPE.getSummaryFieldName() + ":false," +
+                EXP_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
+                EXP_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                METH_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
+                METH_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                MIRNA_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                JCN_TYPE.getSummaryFieldName()   + ":false," +
+                PEXP_TYPE.getSummaryFieldName()  + ":false," +
+                
+                DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS + ":[" +        
+                  "'VALIDATION','WXS'" +
+                "]," +
+                DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS + ":{" +        
+                  "VALIDATION:1," +
+                  "WXS:1" +
+                "}," +
+                DONOR_SUMMARY_REPOSITORY + ":[" +        
+                  "'EGA','CGHub'" +
+                "]," +
+                DONOR_SUMMARY_STUDIES + ":[" +        
+                "'study1'" +
+                "]" +
+              "}," +
+              
+              // Donor-gene summaries
+              DONOR_GENES + ":[" +
+                "{" +
+                DONOR_GENE_SUMMARY + ":{" +
+                  SSM_TYPE.getSummaryFieldName()  + ":0" +
+                "}," +        
+                  DONOR_GENE_GENE_ID + ":''" +
+                "}," +        
+                "{" +
+                  DONOR_GENE_SUMMARY + ":{" +
+                    SSM_TYPE.getSummaryFieldName()  + ":2" +
+                  "}," +        
+                  DONOR_GENE_GENE_ID + ":'gene1'" +
+                "}," +
+                "{" +
+                  DONOR_GENE_SUMMARY + ":{" +          
+                  SSM_TYPE.getSummaryFieldName()  + ":0" +
+                  "}," +               
+                  DONOR_GENE_GENE_ID + ":'gene3'" +
+                "}," +          
+                "{" +
+                  DONOR_GENE_SUMMARY + ":{" +          
+                    SSM_TYPE.getSummaryFieldName()  + ":2" +
+                  "}," +               
+                  DONOR_GENE_GENE_ID + ":'gene2'" +
+                "}" +               
+              "]," +
+              
+              DONOR_SPECIMEN + ":[{" +
+                DONOR_SPECIMEN_ID + ":'specimen1'," +
+                DONOR_SAMPLE + ":[{" +
+                  DONOR_SAMPLE_ID + ":'sample1'," +
+                  DONOR_SAMPLE_SEQUENCE_DATA + ":[{" +
+                    SEQUENCE_DATA_REPOSITORY + ":'CGHub'," +
+                    SEQUENCE_DATA_LIBRARY_STRATEGY + ":'WXS'" +
+                  "},{" +
+                    SEQUENCE_DATA_REPOSITORY + ":'EGA'," +
+                    SEQUENCE_DATA_LIBRARY_STRATEGY + ":'VALIDATION'" +
+                  "}]" +
+                "}]" +
+              "}]" +
+            "}"
+          ))
+          
+      .put("donor2", $(
+          "{" +
+              "_id:'2'," +
+              DONOR_ID + ":'" + "donor2" + "'," +
+              PROJECT_ID + ":'project1'," +
+              DONOR_AGE_AT_DIAGNOSIS + ":5," +
+              
+              // Donor-observation summaries
+              DONOR_SUMMARY + ":{" +
+                DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP + ":'1 - 9'," +
+                AVAILABLE_DATA_TYPES + ":['ssm','cnsm']," +
+                SSM_TYPE.getSummaryFieldName()  + ":1," +
+                
+                CNSM_TYPE.getSummaryFieldName() + ":true," +
+                CNGV_TYPE.getSummaryFieldName() + ":false," +
+                SGV_TYPE.getSummaryFieldName()  + ":false," +
+                STGV_TYPE.getSummaryFieldName() + ":false," +
+                STSM_TYPE.getSummaryFieldName() + ":false," +
+                EXP_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
+                EXP_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                METH_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
+                METH_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                MIRNA_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                JCN_TYPE.getSummaryFieldName()   + ":false," +
+                PEXP_TYPE.getSummaryFieldName()  + ":false," +
+                
+                DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS + ":[" +        
+                  "'VALIDATION','WXS'" +
+                "]," +
+                DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS + ":{" +        
+                  "VALIDATION:1," +
+                  "WXS:1" +
+                "}," +
+                DONOR_SUMMARY_REPOSITORY + ":[" +        
+                  "'CGHub'" +
+                "]," +
+                DONOR_SUMMARY_STUDIES + ":[]" +
+              "}," +
+              
+              DONOR_SPECIMEN + ":[{" +
+                DONOR_SPECIMEN_ID + ":'specimen1'," +
+                DONOR_SAMPLE + ":[{" +
+                  DONOR_SAMPLE_ID + ":'sample1'," +
+                  DONOR_SAMPLE_SEQUENCE_DATA + ":[{" +
+                    SEQUENCE_DATA_REPOSITORY + ":'CGHub'," +
+                    SEQUENCE_DATA_LIBRARY_STRATEGY + ":'WXS'" +
+                  "},{" +
+                    SEQUENCE_DATA_REPOSITORY + ":'CGHub'," +
+                    SEQUENCE_DATA_LIBRARY_STRATEGY + ":'VALIDATION'" +
+                  "}]" +
+                "}]" +
+              "}]" +
+            "}"
+          ))
+      .build();
+  
+  //@formatter:on
 
   /**
    * Test configuration.
@@ -210,98 +358,13 @@ public class SummarizerIntegrationTest {
   private void verifyDonors() {
     MongoCollection donors = getTargetCollection(DONOR_COLLECTION);
 
-    assertThat(donors.count()).isEqualTo(2);
+    assertThat(donors.count()).isEqualTo(TEST_DATA.size());
 
-    String donorId = "donor1";
-    JsonNode donor = donors.findOne("{" + DONOR_ID + ": '" + donorId + "'}").as(JsonNode.class);
+    for (val donorId : TEST_DATA.keySet()) {
+      JsonNode donor = donors.findOne("{" + DONOR_ID + ": '" + donorId + "'}").as(JsonNode.class);
+      assertThat(donor).isEqualTo(TEST_DATA.get(donorId));
+    }
 
-    // @formatter:off
-    assertThat(donor).isEqualTo($(
-      "{" +
-        "_id:'1'," +
-        DONOR_ID + ":'" + donorId + "'," +
-    		PROJECT_ID + ":'project1'," +
-        DONOR_AGE_AT_DIAGNOSIS + ":5," +
-        
-    		// Donor-observation summaries
-        DONOR_SUMMARY + ":{" +
-          DONOR_SUMMARY_AFFECTED_GENE_COUNT + ":4," +
-          DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP + ":'1 - 9'," +
-          AVAILABLE_DATA_TYPES + ":['ssm','cnsm']," +
-          SSM_TYPE.getSummaryFieldName()  + ":1," +
-          
-          CNSM_TYPE.getSummaryFieldName() + ":true," +
-          CNGV_TYPE.getSummaryFieldName() + ":false," +
-          SGV_TYPE.getSummaryFieldName()  + ":false," +
-          STGV_TYPE.getSummaryFieldName() + ":false," +
-          STSM_TYPE.getSummaryFieldName() + ":false," +
-          EXP_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
-          EXP_SEQ_TYPE.getSummaryFieldName()   + ":false," +
-          METH_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
-          METH_SEQ_TYPE.getSummaryFieldName()   + ":false," +
-          MIRNA_SEQ_TYPE.getSummaryFieldName()   + ":false," +
-          JCN_TYPE.getSummaryFieldName()   + ":false," +
-          PEXP_TYPE.getSummaryFieldName()  + ":false," +
-          
-          DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS + ":[" +        
-            "'VALIDATION','WXS'" +
-          "]," +
-          DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS + ":{" +        
-            "VALIDATION:1," +
-            "WXS:1" +
-          "}," +
-          DONOR_SUMMARY_REPOSITORY + ":[" +        
-            "'EGA','CGHub'" +
-          "]," +
-          DONOR_SUMMARY_STUDIES + ":[" +        
-          "'study1'" +
-          "]" +
-        "}," +
-        
-        // Donor-gene summaries
-        DONOR_GENES + ":[" +
-          "{" +
-          DONOR_GENE_SUMMARY + ":{" +
-            SSM_TYPE.getSummaryFieldName()  + ":0" +
-          "}," +        
-            DONOR_GENE_GENE_ID + ":''" +
-          "}," +        
-          "{" +
-            DONOR_GENE_SUMMARY + ":{" +
-              SSM_TYPE.getSummaryFieldName()  + ":2" +
-            "}," +        
-            DONOR_GENE_GENE_ID + ":'gene1'" +
-          "}," +
-          "{" +
-            DONOR_GENE_SUMMARY + ":{" +          
-            SSM_TYPE.getSummaryFieldName()  + ":0" +
-            "}," +               
-            DONOR_GENE_GENE_ID + ":'gene3'" +
-          "}," +          
-          "{" +
-            DONOR_GENE_SUMMARY + ":{" +          
-              SSM_TYPE.getSummaryFieldName()  + ":2" +
-            "}," +               
-            DONOR_GENE_GENE_ID + ":'gene2'" +
-          "}" +               
-        "]," +
-        
-    		DONOR_SPECIMEN + ":[{" +
-    	    DONOR_SPECIMEN_ID + ":'specimen1'," +
-    	    DONOR_SAMPLE + ":[{" +
-            DONOR_SAMPLE_ID + ":'sample1'," +
-            DONOR_SAMPLE_SEQUENCE_DATA + ":[{" +
-              SEQUENCE_DATA_REPOSITORY + ":'CGHub'," +
-              SEQUENCE_DATA_LIBRARY_STRATEGY + ":'WXS'" +
-            "},{" +
-              SEQUENCE_DATA_REPOSITORY + ":'EGA'," +
-              SEQUENCE_DATA_LIBRARY_STRATEGY + ":'VALIDATION'" +
-            "}]" +
-          "}]" +
-        "}]" +
-      "}"
-    ));
-    // @formatter:on
   }
 
   private void verifyProjects() {
@@ -362,6 +425,7 @@ public class SummarizerIntegrationTest {
   		"}"
     ));
     // @formatter:on
+
   }
 
   private void verifyGenes() {

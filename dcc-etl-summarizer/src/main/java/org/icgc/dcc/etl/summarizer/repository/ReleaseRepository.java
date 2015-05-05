@@ -25,6 +25,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_PROJECT_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SAMPLE;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SAMPLE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SAMPLE_SEQUENCE_DATA;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SAMPLE_STUDY;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SPECIMEN;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY;
@@ -33,6 +34,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AGE_AT_DIA
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_REPOSITORY;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_STUDIES;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SETS;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SETS_TYPE;
@@ -53,6 +55,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapLongValues;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapTextValues;
+import static org.icgc.dcc.etl.summarizer.util.JsonNodes.extractStudies;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.textValues;
 
 import java.util.List;
@@ -75,9 +78,6 @@ public class ReleaseRepository {
   /**
    * Constants.
    */
-  // TODO: Move to FieldNames
-  public static final String DONOR_SAMPLE_STUDY = "study";
-  public static final String DONOR_SUMMARY_STUDIES = "_studies";
 
   @NonNull
   private final MongoCollection genes;
@@ -187,8 +187,6 @@ public class ReleaseRepository {
         .and(
             "{ $unwind: '$study' }")
         .and(
-            "{ $unwind: '$study' }")
-        .and(
             "{ $group: { _id: { donorId: '$donorId' }, study: { $addToSet : '$study' } } }")
         .and(
             "{ $project: { _id: 0, donorId: '$_id.donorId', study: 1 } }")
@@ -199,7 +197,7 @@ public class ReleaseRepository {
     String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_STUDIES;
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
-        .with("{ $set: { " + field + ": # } }", textValues(studies));
+        .with("{ $set: { " + field + ": # } }", extractStudies(studies));
   }
 
   public void setDonorExperimentalAnalysis(String donorId, JsonNode analysisSampleCounts) {
