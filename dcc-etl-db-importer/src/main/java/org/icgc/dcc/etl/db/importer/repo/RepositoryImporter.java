@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,79 +15,69 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.project;
+package org.icgc.dcc.etl.db.importer.repo;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-
-import java.io.IOException;
-
-import lombok.Cleanup;
+import static com.google.common.base.Stopwatch.createStarted;
+import static org.apache.commons.lang.StringUtils.repeat;
 import lombok.NonNull;
-import lombok.SneakyThrows;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.client.api.ICGCClient;
-import org.icgc.dcc.common.client.api.ICGCClientConfig;
-import org.icgc.dcc.common.client.api.cgp.CGPClient;
+import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.core.Importer;
-import org.icgc.dcc.etl.db.importer.project.model.Project;
-import org.icgc.dcc.etl.db.importer.project.reader.ProjectReader;
-import org.icgc.dcc.etl.db.importer.project.writer.ProjectWriter;
+import org.icgc.dcc.etl.db.importer.repo.cghub.CGHubImporter;
+import org.icgc.dcc.etl.db.importer.repo.pcawg.PCAWGImporter;
+import org.icgc.dcc.etl.db.importer.repo.tcga.TCGAImporter;
 
-import com.google.common.base.Stopwatch;
 import com.mongodb.MongoClientURI;
 
+/**
+ * Importer for the ICGC "Data Repository" feature which imports file metadata from various external data sources.
+ * 
+ * @see https://wiki.oicr.on.ca/display/DCCSOFT/JSON+structure+for+ICGC+data+repository
+ * @see https://wiki.oicr.on.ca/display/DCCSOFT/UI+-+The+new+ICGC+DCC+data+repository+-+Simplified+version+Phase+1
+ */
 @Slf4j
-public class ProjectImporter implements Importer {
+@RequiredArgsConstructor
+public class RepositoryImporter implements Importer {
 
-  /**
-   * Configuration
-   */
-  private final ICGCClientConfig config;
+  @NonNull
   private final MongoClientURI mongoUri;
-
-  /**
-   * Dependencies.
-   */
-  private final CGPClient client;
-
-  public ProjectImporter(@NonNull ICGCClientConfig config,
-      @NonNull MongoClientURI mongoUri) {
-    this.config = config;
-    this.mongoUri = mongoUri;
-    this.client = ICGCClient.create(config).cgp().details();
-  }
 
   @Override
   public CollectionName getCollectionName() {
-    return CollectionName.PROJECTS;
+    return CollectionName.FILES;
   }
 
   @Override
-  @SneakyThrows
   public void execute() {
-    val watch = Stopwatch.createStarted();
+    val watch = createStarted();
 
-    log.info("Reading projects using {}...", config);
-    val projects = readProjects();
+    logBanner(" Importing PCAWG");
+    val projectImporter = new PCAWGImporter(mongoUri, new HashIdentifierClient());
+    projectImporter.execute();
 
-    log.info("Writing {} projects to {}...", formatCount(projects), mongoUri);
-    writeProjects(projects);
+    logBanner(" Importing CGHub");
+    val cghubImporter = new CGHubImporter(mongoUri);
+    cghubImporter.execute();
 
-    log.info("Finished writing {} of {} projects in {}",
-        formatCount(projects), formatCount(projects), watch);
+    logBanner(" Importing TCGA");
+    val tcgaImporter = new TCGAImporter(mongoUri);
+    tcgaImporter.execute();
+
+    log.info("Finished importing repository in {}", watch);
   }
 
-  private Iterable<Project> readProjects() {
-    return new ProjectReader(client).read();
+  private static void logBanner(String message) {
+    log.info(banner());
+    log.info(message);
+    log.info(banner());
   }
 
-  private void writeProjects(Iterable<Project> specifiedProjects) throws IOException {
-    @Cleanup
-    val writer = new ProjectWriter(mongoUri);
-    writer.write(specifiedProjects);
+  private static String banner() {
+    return repeat("-", 80);
   }
 
 }

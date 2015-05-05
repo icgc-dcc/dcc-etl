@@ -37,6 +37,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.go.core.GoAssociationProcessor;
 import org.icgc.dcc.etl.db.importer.go.core.GoTermProcessor;
 import org.icgc.dcc.etl.db.importer.go.model.GoAssociation;
@@ -62,7 +64,7 @@ import com.mongodb.MongoClientURI;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class GoImporter {
+public class GoImporter implements Importer {
 
   /**
    * These files contain the core GO ontology in two formats, OBO and OWL-RDF/XML. This view includes relationships not
@@ -120,6 +122,12 @@ public class GoImporter {
     this.mongoUri = mongoUri;
   }
 
+  @Override
+  public CollectionName getCollectionName() {
+    return CollectionName.PROJECTS;
+  }
+
+  @Override
   @SneakyThrows
   public void execute() {
     val watch = createStarted();

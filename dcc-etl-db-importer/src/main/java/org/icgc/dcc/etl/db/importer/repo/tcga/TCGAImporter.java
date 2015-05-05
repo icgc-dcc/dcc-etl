@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+j * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,79 +15,54 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.project;
+package org.icgc.dcc.etl.db.importer.repo.tcga;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-
-import java.io.IOException;
-
 import lombok.Cleanup;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.client.api.ICGCClient;
-import org.icgc.dcc.common.client.api.ICGCClientConfig;
-import org.icgc.dcc.common.client.api.cgp.CGPClient;
-import org.icgc.dcc.etl.db.importer.cli.CollectionName;
-import org.icgc.dcc.etl.db.importer.core.Importer;
-import org.icgc.dcc.etl.db.importer.project.model.Project;
-import org.icgc.dcc.etl.db.importer.project.reader.ProjectReader;
-import org.icgc.dcc.etl.db.importer.project.writer.ProjectWriter;
+import org.icgc.dcc.etl.db.importer.repo.tcga.core.TCGAClinicalFileProcessor;
+import org.icgc.dcc.etl.db.importer.repo.tcga.writer.TCGAClinicalFileWriter;
 
-import com.google.common.base.Stopwatch;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
+/**
+ * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
+ */
 @Slf4j
-public class ProjectImporter implements Importer {
+@RequiredArgsConstructor
+public class TCGAImporter {
 
   /**
    * Configuration
    */
-  private final ICGCClientConfig config;
+  @NonNull
   private final MongoClientURI mongoUri;
 
-  /**
-   * Dependencies.
-   */
-  private final CGPClient client;
-
-  public ProjectImporter(@NonNull ICGCClientConfig config,
-      @NonNull MongoClientURI mongoUri) {
-    this.config = config;
-    this.mongoUri = mongoUri;
-    this.client = ICGCClient.create(config).cgp().details();
-  }
-
-  @Override
-  public CollectionName getCollectionName() {
-    return CollectionName.PROJECTS;
-  }
-
-  @Override
-  @SneakyThrows
   public void execute() {
-    val watch = Stopwatch.createStarted();
+    log.info("Reading clinical files...");
+    val clinicalFiles = readClinicalFiles();
+    log.info("Read {} clinical files", formatCount(clinicalFiles));
 
-    log.info("Reading projects using {}...", config);
-    val projects = readProjects();
-
-    log.info("Writing {} projects to {}...", formatCount(projects), mongoUri);
-    writeProjects(projects);
-
-    log.info("Finished writing {} of {} projects in {}",
-        formatCount(projects), formatCount(projects), watch);
+    log.info("Writing clinical files...");
+    writeClinicalFiles(clinicalFiles);
+    log.info("Wrote {} clinical files", formatCount(clinicalFiles));
   }
 
-  private Iterable<Project> readProjects() {
-    return new ProjectReader(client).read();
+  private Iterable<ObjectNode> readClinicalFiles() {
+    return new TCGAClinicalFileProcessor().process();
   }
 
-  private void writeProjects(Iterable<Project> specifiedProjects) throws IOException {
+  @SneakyThrows
+  private void writeClinicalFiles(Iterable<ObjectNode> clinicalFiles) {
     @Cleanup
-    val writer = new ProjectWriter(mongoUri);
-    writer.write(specifiedProjects);
+    val writer = new TCGAClinicalFileWriter(mongoUri);
+    writer.write(clinicalFiles);
   }
 
 }

@@ -17,138 +17,90 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
+import static org.elasticsearch.common.collect.Maps.uniqueIndex;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.icgc.dcc.etl.db.importer.cgc.CgcImporter;
-import org.icgc.dcc.etl.db.importer.cghub.CGHubImporter;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.diagram.DiagramImporter;
 import org.icgc.dcc.etl.db.importer.gene.GeneImporter;
 import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
-import org.icgc.dcc.etl.db.importer.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.db.importer.project.ProjectImporter;
-import org.icgc.dcc.etl.db.importer.tcga.TCGAImporter;
+import org.icgc.dcc.etl.db.importer.repo.RepositoryImporter;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableList;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-@RequiredArgsConstructor
 public class DBImporter {
+
+  /**
+   * Processing order.
+   */
+  private static List<CollectionName> COLLECTION_ORDER = ImmutableList.of(
+      CollectionName.PROJECTS,
+      CollectionName.GENES,
+      CollectionName.CGC,
+      CollectionName.PATHWAYS,
+      CollectionName.GO,
+      CollectionName.DIAGRAMS,
+      CollectionName.FILES
+      );
 
   /**
    * Configuration
    */
   @NonNull
-  private final String geneMongoUri;
+  private final MongoClientURI mongoUri;
   @NonNull
   private final ICGCClientConfig icgcConfig;
+  @NonNull
+  private final Map<CollectionName, Importer> importers;
 
-  public void execute(List<CollectionName> collections) {
-
-    val watch = Stopwatch.createStarted();
-    val mongoUri = new MongoClientURI(geneMongoUri);
-
-    if (collections.contains(CollectionName.PROJECTS)) {
-      log.info("Importing projects...");
-      importProjects(icgcConfig, mongoUri);
-      log.info("Finished importing projects in {}", watch);
-    }
-
-    if (collections.contains(CollectionName.GENES)) {
-      watch.reset().start();
-      log.info("Importing genes...");
-      importGenes(mongoUri);
-      log.info("Finished importing genes in {}", watch);
-    }
-
-    if (collections.contains(CollectionName.CGC)) {
-      watch.reset().start();
-      log.info("Importing CGC...");
-      importCgc(mongoUri);
-      log.info("Finished importing CGC in {}", watch);
-    }
-
-    if (collections.contains(CollectionName.PATHWAYS)) {
-      watch.reset().start();
-      log.info("Importing pathways...");
-      importPathways(mongoUri);
-      log.info("Finished importing pathways in {}", watch);
-    }
-
-    if (collections.contains(CollectionName.GO)) {
-      watch.reset().start();
-      log.info("Importing GO...");
-      importGo(mongoUri);
-      log.info("Finished importing GO in {}", watch);
-    }
-
-    if (collections.contains(CollectionName.DIAGRAMS)) {
-      watch.reset().start();
-      log.info("Importing diagrams...");
-      importDiagrams(mongoUri);
-      log.info("Finished importing diagrams in {}", watch);
-    }
-
-    if (collections.contains(CollectionName.FILES)) {
-      watch.reset().start();
-      log.info("Importing files...");
-      importFiles(mongoUri);
-      log.info("Finished importing files in {}", watch);
-    }
-
+  public DBImporter(@NonNull String mongoUri, @NonNull ICGCClientConfig icgcConfig) {
+    this.mongoUri = new MongoClientURI(mongoUri);
+    this.icgcConfig = icgcConfig;
+    this.importers = createImporters();
   }
 
-  private static void importProjects(ICGCClientConfig config, MongoClientURI mongoUri) {
-    val projectImporter = new ProjectImporter(config, mongoUri);
-    projectImporter.execute();
+  public void execute(@NonNull Collection<CollectionName> collectionNames) {
+    for (val collectionName : COLLECTION_ORDER) {
+      if (collectionNames.contains(collectionName)) {
+        val importer = importers.get(collectionName);
+
+        val watch = Stopwatch.createStarted();
+        log.info("Importing '{}'...", collectionName);
+        importer.execute();
+        log.info("Finished importing '{}' in {}", collectionName, watch);
+      }
+    }
   }
 
-  private static void importGenes(MongoClientURI mongoUri) {
-    val geneImporter = new GeneImporter(mongoUri, getRemoteGenesBsonUri());
-    geneImporter.execute();
-  }
+  private Map<CollectionName, Importer> createImporters() {
+    val importers = ImmutableList.<Importer> of(
+        new ProjectImporter(icgcConfig, mongoUri),
+        new GeneImporter(mongoUri, getRemoteGenesBsonUri()),
+        new CgcImporter(mongoUri, getRemoteCgsUri()),
+        new PathwayImporter(mongoUri),
+        new GoImporter(mongoUri),
+        new DiagramImporter(mongoUri),
+        new RepositoryImporter(mongoUri)
+        );
 
-  private static void importCgc(MongoClientURI mongoUri) {
-    val cgcImporter = new CgcImporter(mongoUri, getRemoteCgsUri());
-    cgcImporter.execute();
-  }
-
-  private static void importPathways(MongoClientURI mongoUri) {
-    val pathwayImporter = new PathwayImporter(mongoUri);
-    pathwayImporter.execute();
-  }
-
-  private static void importGo(MongoClientURI mongoUri) {
-    val goImporter = new GoImporter(mongoUri);
-    goImporter.execute();
-  }
-
-  private static void importDiagrams(MongoClientURI mongoUri) {
-    val projectImporter = new DiagramImporter(mongoUri);
-    projectImporter.execute();
-  }
-
-  private static void importFiles(MongoClientURI mongoUri) {
-    val projectImporter = new PCAWGImporter(mongoUri, new HashIdentifierClient());
-    projectImporter.execute();
-
-    val cghubImporter = new CGHubImporter(mongoUri);
-    cghubImporter.execute();
-
-    val tcgaImporter = new TCGAImporter(mongoUri);
-    tcgaImporter.execute();
+    return uniqueIndex(importers, (Importer importer) -> importer.getCollectionName());
   }
 
 }

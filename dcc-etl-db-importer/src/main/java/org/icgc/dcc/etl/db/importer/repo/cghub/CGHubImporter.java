@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,79 +15,62 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.project;
+package org.icgc.dcc.etl.db.importer.repo.cghub;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-
-import java.io.IOException;
-
+import static com.google.common.base.Stopwatch.createStarted;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubProjects.getProjects;
 import lombok.Cleanup;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.client.api.ICGCClient;
-import org.icgc.dcc.common.client.api.ICGCClientConfig;
-import org.icgc.dcc.common.client.api.cgp.CGPClient;
-import org.icgc.dcc.etl.db.importer.cli.CollectionName;
-import org.icgc.dcc.etl.db.importer.core.Importer;
-import org.icgc.dcc.etl.db.importer.project.model.Project;
-import org.icgc.dcc.etl.db.importer.project.reader.ProjectReader;
-import org.icgc.dcc.etl.db.importer.project.writer.ProjectWriter;
+import org.icgc.dcc.etl.db.importer.repo.cghub.core.CGHubAnalysisDetailProcessor;
+import org.icgc.dcc.etl.db.importer.repo.cghub.reader.CGHubAnalysisDetailReader;
+import org.icgc.dcc.etl.db.importer.repo.cghub.writer.CGHubFileWriter;
 
-import com.google.common.base.Stopwatch;
 import com.mongodb.MongoClientURI;
 
+/**
+ * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
+ */
 @Slf4j
-public class ProjectImporter implements Importer {
+@RequiredArgsConstructor
+public class CGHubImporter {
 
   /**
    * Configuration
    */
-  private final ICGCClientConfig config;
+  @NonNull
   private final MongoClientURI mongoUri;
 
-  /**
-   * Dependencies.
-   */
-  private final CGPClient client;
-
-  public ProjectImporter(@NonNull ICGCClientConfig config,
-      @NonNull MongoClientURI mongoUri) {
-    this.config = config;
-    this.mongoUri = mongoUri;
-    this.client = ICGCClient.create(config).cgp().details();
-  }
-
-  @Override
-  public CollectionName getCollectionName() {
-    return CollectionName.PROJECTS;
-  }
-
-  @Override
   @SneakyThrows
   public void execute() {
-    val watch = Stopwatch.createStarted();
+    log.info("Starting import...");
+    val watch = createStarted();
 
-    log.info("Reading projects using {}...", config);
-    val projects = readProjects();
-
-    log.info("Writing {} projects to {}...", formatCount(projects), mongoUri);
-    writeProjects(projects);
-
-    log.info("Finished writing {} of {} projects in {}",
-        formatCount(projects), formatCount(projects), watch);
-  }
-
-  private Iterable<Project> readProjects() {
-    return new ProjectReader(client).read();
-  }
-
-  private void writeProjects(Iterable<Project> specifiedProjects) throws IOException {
+    val reader = new CGHubAnalysisDetailReader();
+    val processor = new CGHubAnalysisDetailProcessor();
     @Cleanup
-    val writer = new ProjectWriter(mongoUri);
-    writer.write(specifiedProjects);
+    val writer = new CGHubFileWriter(mongoUri);
+
+    writer.clearFiles();
+    try {
+      for (val diseaseCode : getProjects()) {
+        log.info("Reading project details '{}'...", diseaseCode);
+        val details = reader.readDetails(diseaseCode);
+
+        val cghubFiles = processor.process(diseaseCode, details);
+        for (val cghubFile : cghubFiles) {
+          writer.write(cghubFile);
+        }
+
+        log.info("Finished importing project '{}'.", diseaseCode);
+      }
+    } finally {
+      log.info("Finished importing records in {}.", watch.stop());
+    }
   }
 
 }
