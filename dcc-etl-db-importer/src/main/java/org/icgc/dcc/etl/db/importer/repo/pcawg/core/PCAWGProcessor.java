@@ -113,7 +113,8 @@ public class PCAWGProcessor {
               pcawgFile.setDataSubType(null);
               pcawgFile.setDataFormat(null);
 
-              pcawgFile.getRepository().setRepoType("PCAWG");
+              pcawgFile.getRepository().setRepoType("GNOS");
+              pcawgFile.getRepository().setRepoOrg("PCAWG");
               pcawgFile.getRepository().setRepoEntityId(workflow.get("gnos_id").textValue());
 
               pcawgFile.getRepository().getRepoServer().get(0).setRepoName("PCAWG");

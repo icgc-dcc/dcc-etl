@@ -73,7 +73,8 @@ public class CGHubAnalysisDetailProcessor {
     cghubFile.setDataSubType(null);
     cghubFile.setDataFormat(null);
 
-    cghubFile.getRepository().setRepoType("CGHub");
+    cghubFile.getRepository().setRepoType("GNOS");
+    cghubFile.getRepository().setRepoOrg("CGHub");
     cghubFile.getRepository().setRepoEntityId(result.get("analysis_id").textValue());
 
     cghubFile.getRepository().getRepoServer().get(0).setRepoName("CGHub");

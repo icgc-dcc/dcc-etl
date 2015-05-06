@@ -84,6 +84,7 @@ public class TCGAClinicalFileProcessor {
       tcgaFile.setDataFormat("XML");
 
       tcgaFile.getRepository().setRepoType("TCGA");
+      tcgaFile.getRepository().setRepoOrg("TCGA");
       tcgaFile.getRepository().setRepoEntityId(null);
 
       tcgaFile.getRepository().getRepoServer().get(0).setRepoName("TCGA");

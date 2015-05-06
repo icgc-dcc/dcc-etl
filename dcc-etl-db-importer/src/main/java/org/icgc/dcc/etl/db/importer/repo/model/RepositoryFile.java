@@ -42,6 +42,7 @@ public class RepositoryFile {
   public static class Repository {
 
     String repoType;
+    String repoOrg;
     String repoEntityId;
 
     List<RepositoryServer> repoServer = newArrayList(new RepositoryServer());
