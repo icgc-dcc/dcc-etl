@@ -1,9 +1,1 @@
-donor_id	therapy_start_interval	therapy_duration	therapy_type	therapy_response	therapy_notes
-0011	-888	106	GyP oQvgjK	3	-9999
-0011	130	96	dTdqnQMgvr	1	mAh hBtYHq
-0012	15	26	BQ bchPjk 	4	-9999
-0012	22	-777	 XDgwIrSpt	3	DvpvCY NaN
-0013	63	-9999	MJuBNvRzzf	4	 RyNtIuTG 
-0013	-777	100	wSKSmZVJxQ	4	ofuiluJqeA
-0013	35	-888	BkZcTCRdXE	4	-9999
-0013	84	200	bUpqGokgeH	4	WWoUbnKmQD
+donor_id	first_therapy_start_interval	first_therapy_duration	first_therapy_type	first_therapy_response	first_therapy_therapeutic_intent	second_therapy_start_interval	second_therapy_duration	second_therapy_type	second_therapy_response	second_therapy_therapeutic_intent	other_therapy	other_therapy_response	therapy_notes0011	-888	106	GyP oQvgjK	3	-888	-888	-888	-888	-888	-888	-888	-888	-99990011	130	96	dTdqnQMgvr	1	-888	-888	-888	-888	-888	-888	-888	-888	mAh hBtYHq0012	15	26	BQ bchPjk 	4	-888	-888	-888	-888	-888	-888	-888	-888	-99990012	22	-777	 XDgwIrSpt	3	-888	-888	-888	-888	-888	-888	-888	-888	DvpvCY NaN0013	63	-9999	MJuBNvRzzf	4	-888	-888	-888	-888	-888	-888	-888	-888	 RyNtIuTG 0013	-777	100	wSKSmZVJxQ	4	-888	-888	-888	-888	-888	-888	-888	-888	ofuiluJqeA0013	35	-888	BkZcTCRdXE	4	-888	-888	-888	-888	-888	-888	-888	-888	-99990013	84	200	bUpqGokgeH	4	-888	-888	-888	-888	-888	-888	-888	-888	WWoUbnKmQD
