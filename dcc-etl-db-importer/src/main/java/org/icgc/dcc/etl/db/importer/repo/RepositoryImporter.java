@@ -64,7 +64,7 @@ public class RepositoryImporter implements Importer {
   public void execute() {
     val watch = createStarted();
 
-    // write();
+    write();
     index();
 
     log.info("Finished importing repository in {}", watch);
