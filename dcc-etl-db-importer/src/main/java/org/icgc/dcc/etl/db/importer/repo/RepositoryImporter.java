@@ -19,6 +19,12 @@ package org.icgc.dcc.etl.db.importer.repo;
 
 import static com.google.common.base.Stopwatch.createStarted;
 import static org.apache.commons.lang.StringUtils.repeat;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
+import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
+
+import java.util.Map;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -30,7 +36,10 @@ import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.repo.cghub.CGHubImporter;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.db.importer.repo.tcga.TCGAImporter;
+import org.icgc.dcc.etl.db.importer.util.TransportClientFactory;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableMap;
 import com.mongodb.MongoClientURI;
 
 /**
@@ -55,19 +64,26 @@ public class RepositoryImporter implements Importer {
   public void execute() {
     val watch = createStarted();
 
-    logBanner(" Importing PCAWG");
-    val projectImporter = new PCAWGImporter(mongoUri, new HashIdentifierClient());
-    projectImporter.execute();
-
-    logBanner(" Importing CGHub");
-    val cghubImporter = new CGHubImporter(mongoUri);
-    cghubImporter.execute();
-
-    logBanner(" Importing TCGA");
-    val tcgaImporter = new TCGAImporter(mongoUri);
-    tcgaImporter.execute();
+    // write();
+    index();
 
     log.info("Finished importing repository in {}", watch);
+  }
+
+  private void write() {
+    val primarySites = getProjectPrimarySites();
+
+    logBanner(" Importing PCAWG");
+    val projectImporter = new PCAWGImporter(mongoUri, primarySites, new HashIdentifierClient());
+    projectImporter.execute();
+
+    logBanner(" Importing TCGA");
+    val tcgaImporter = new TCGAImporter(mongoUri, primarySites);
+    tcgaImporter.execute();
+
+    logBanner(" Importing CGHub");
+    val cghubImporter = new CGHubImporter(mongoUri, primarySites);
+    cghubImporter.execute();
   }
 
   private static void logBanner(String message) {
@@ -78,6 +94,35 @@ public class RepositoryImporter implements Importer {
 
   private static String banner() {
     return repeat("-", 80);
+  }
+
+  private Map<String, String> getProjectPrimarySites() {
+    val jongo = createJongo(mongoUri);
+
+    val map = ImmutableMap.<String, String> builder();
+    val projects = jongo.getCollection(PROJECT_COLLECTION.getId());
+    for (val project : projects.find().as(ObjectNode.class)) {
+      val projectName = project.get("_project_id").textValue();
+      val primarySite = project.get("primary_site").textValue();
+
+      map.put(projectName, primarySite);
+    }
+
+    return map.build();
+  }
+
+  private void index() {
+    val indexName = "icgc-repository";
+    val typeName = "file";
+    val client = TransportClientFactory.newTransportClient("es://localhost:9300");
+    val jongo = createJongo(mongoUri);
+    client.prepareDelete().setIndex(indexName).execute();
+
+    val files = jongo.getCollection(FILE_COLLECTION.getId());
+    for (val file : files.find().as(ObjectNode.class)) {
+      file.remove("_id");
+      client.prepareIndex(indexName, typeName).setSource(file.toString()).execute();
+    }
   }
 
 }

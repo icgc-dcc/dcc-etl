@@ -20,22 +20,27 @@ package org.icgc.dcc.etl.db.importer.repo.cghub.core;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
 
 import java.time.Instant;
+import java.util.Map;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubMetadata;
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.util.FileRepositories;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
+@RequiredArgsConstructor
 public class CGHubAnalysisDetailProcessor {
 
-  public Iterable<ObjectNode> process(@NonNull String diseaseCode, @NonNull JsonNode details) {
-    val cghubFiles = ImmutableList.<ObjectNode> builder();
+  @NonNull
+  private final Map<String, String> primarySites;
+
+  public Iterable<RepositoryFile> process(@NonNull String diseaseCode, @NonNull JsonNode details) {
+    val cghubFiles = ImmutableList.<RepositoryFile> builder();
 
     val results = getResults(details);
     for (val result : results) {
@@ -54,35 +59,49 @@ public class CGHubAnalysisDetailProcessor {
     return cghubFiles.build();
   }
 
-  private ObjectNode createCGHubFile(String diseaseCode, JsonNode result, ObjectNode file) {
+  private RepositoryFile createCGHubFile(String diseaseCode, JsonNode result, ObjectNode file) {
+    val projectCode = resolveProjectName(diseaseCode);
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
 
-    val cghubFile = file.objectNode();
-    cghubFile.put(FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME, FileRepositoryType.CGHUB.getId());
-    cghubFile.put("_project_id", resolveProjectName(diseaseCode));
-    cghubFile.putNull("study");
+    val cghubFile = new RepositoryFile();
+    cghubFile.setStudy(null);
+    cghubFile.setAccess("controlled");
 
-    cghubFile.put("gnos_id", result.get("analysis_id"));
-    cghubFile.putPOJO("gnos_url", ImmutableList.of(CGHUB_BASE_URL));
-    cghubFile.put("filesize", file.get("filesize").longValue());
-    cghubFile.put("filename", file.get("filename"));
+    cghubFile.setDataType(null);
+    cghubFile.setDataSubType(null);
+    cghubFile.setDataFormat(null);
 
-    cghubFile.put("submitted_sample_id", getSampleId(result));
+    cghubFile.getRepository().setRepoType("CGHub");
+    cghubFile.getRepository().setRepoEntityId(result.get("analysis_id").textValue());
 
-    cghubFile.put("tcga_participant_barcode", legacyDonorId);
-    cghubFile.put("tcga_sample_barcode", legacySpecimenId);
-    cghubFile.put("tcga_aliquot_barcode", legacySampleId);
+    cghubFile.getRepository().getRepoServer().get(0).setRepoName("CGHub");
+    cghubFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
+    cghubFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(CGHUB_BASE_URL);
 
-    cghubFile.put("sample_type", CGHubMetadata.getAnalyte(result.get("analyte_code").textValue()));
-    cghubFile.put("specimen_type", CGHubMetadata.getSampleType(result.get("sample_type").textValue()));
-    cghubFile.put("platform", result.get("platform"));
-    cghubFile.put("aliquot_id", getAliquotId(result));
-    cghubFile.put("participant_id", result.get("participant_id"));
-    cghubFile.put("library_strategy", result.get("library_strategy"));
-    cghubFile.put("last_modified",
+    cghubFile.getRepository().setRepoPath(null);
+    cghubFile.getRepository().setFileName(null);
+    cghubFile.getRepository().setFileMd5sum(file.get("filename").textValue());
+    cghubFile.getRepository().setFileSize(file.get("filesize").longValue());
+    cghubFile.getRepository().setLastModified(
         FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue())));
+
+    cghubFile.getDonor().setProjectCode(projectCode);
+    cghubFile.getDonor().setPrimarySite(primarySites.get(projectCode));
+    cghubFile.getDonor().setProgram(null);
+
+    cghubFile.getDonor().setDonorId(null);
+    cghubFile.getDonor().setSpecimenId(null);
+    cghubFile.getDonor().setSampleId(null);
+
+    cghubFile.getDonor().setSubmittedDonorId(null);
+    cghubFile.getDonor().setSubmittedSpecimenId(getSampleId(result));
+    cghubFile.getDonor().setSubmittedSampleId(getAliquotId(result));
+
+    cghubFile.getDonor().setTcgaParticipantBarcode(legacyDonorId);
+    cghubFile.getDonor().setTcgaSampleBarcode(legacySpecimenId);
+    cghubFile.getDonor().setTcgaAliquotBarcode(legacySampleId);
 
     return cghubFile;
   }

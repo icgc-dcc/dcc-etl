@@ -31,7 +31,7 @@ public class CGHubMetadata {
   /**
    * Constants.
    */
-  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu";
+  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu/";
 
   private static final Map<String, String> sampleTypeCodeToValue = ImmutableMap.<String, String> builder()
       .put("01", "Primary solid Tumor")

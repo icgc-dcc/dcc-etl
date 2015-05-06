@@ -17,17 +17,22 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.model;
 
+import static lombok.AccessLevel.PRIVATE;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import org.icgc.dcc.common.core.model.Identifiable;
 
+@RequiredArgsConstructor(access = PRIVATE)
 public enum FileRepositoryType implements Identifiable {
 
-  CGHUB,
-  TCGA,
-  PCAWG;
+  CGHUB("CGHub"),
+  TCGA("TCGA"),
+  PCAWG("PCAWG");
 
-  @Override
-  public String getId() {
-    return this.toString().toLowerCase();
-  }
+  @Getter
+  @NonNull
+  private final String id;
 
 }

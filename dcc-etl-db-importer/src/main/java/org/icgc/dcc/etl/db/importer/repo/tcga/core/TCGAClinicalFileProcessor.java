@@ -18,34 +18,39 @@
 package org.icgc.dcc.etl.db.importer.repo.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
 @Slf4j
+@RequiredArgsConstructor
 public class TCGAClinicalFileProcessor {
+
+  @NonNull
+  private final Map<String, String> primarySites;
 
   /**
    * Constants.
    */
-  private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final Pattern CLINICAL_ARCHIVE_NAME_PATTERN = Pattern.compile(".*_(\\w+)\\.bio\\..*");
 
-  public Iterable<ObjectNode> process() {
+  public Iterable<RepositoryFile> process() {
     log.info("Reading archive list entries...");
     val entries = TCGAArchiveListReader.readEntries();
     log.info("Read {} archive list entries", formatCount(entries));
 
-    val clinicalFiles = ImmutableList.<ObjectNode> builder();
+    val clinicalFiles = ImmutableList.<RepositoryFile> builder();
     for (val entry : entries) {
       val matcher = CLINICAL_ARCHIVE_NAME_PATTERN.matcher(entry.getArchiveName());
       val clinical = matcher.matches();
@@ -63,31 +68,51 @@ public class TCGAClinicalFileProcessor {
     return clinicalFiles.build();
   }
 
-  private Iterable<ObjectNode> processArchive(String projectName, String archiveUrl) {
+  private Iterable<RepositoryFile> processArchive(String projectName, String archiveUrl) {
     val processor = new TCGAArchiveClinicalFileProcessor();
     val archiveClinicalFiles = processor.process(archiveUrl);
     log.info("Processing {} archive clinical files", formatCount(archiveClinicalFiles));
 
-    val clinicalFiles = ImmutableList.<ObjectNode> builder();
+    val clinicalFiles = ImmutableList.<RepositoryFile> builder();
     for (val archiveClinicalFile : archiveClinicalFiles) {
-      val clinicalFile = MAPPER.createObjectNode();
-      clinicalFile.putNull("study");
-      clinicalFile.put("data_type", "Clinical");
-      clinicalFile.put("data_subtype", "Clinical data");
-      clinicalFile.putNull("experimental_strategy");
-      clinicalFile.put("data_format", "XML");
-      clinicalFile.put("access", "open");
+      val tcgaFile = new RepositoryFile();
+      tcgaFile.setStudy(null);
+      tcgaFile.setAccess("open");
 
-      clinicalFile.putPOJO("repository_type", FileRepositoryType.TCGA);
-      clinicalFile.put("project_name", projectName);
-      clinicalFile.put("donor_id", archiveClinicalFile.getDonorId());
-      clinicalFile.put("file_name", archiveClinicalFile.getFileName());
-      clinicalFile.put("file_size", archiveClinicalFile.getFileSize());
-      clinicalFile.put("file_md5", archiveClinicalFile.getFileMd5());
-      clinicalFile.put("url", archiveClinicalFile.getUrl());
-      clinicalFile.put("last_modified", archiveClinicalFile.getLastModified().toString());
+      tcgaFile.setDataType("Clinical");
+      tcgaFile.setDataSubType("Clinical data");
+      tcgaFile.setDataFormat("XML");
 
-      clinicalFiles.add(clinicalFile);
+      tcgaFile.getRepository().setRepoType("TCGA");
+      tcgaFile.getRepository().setRepoEntityId(null);
+
+      tcgaFile.getRepository().getRepoServer().get(0).setRepoName("TCGA");
+      tcgaFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
+      tcgaFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(CGHUB_BASE_URL);
+
+      tcgaFile.getRepository().setRepoPath(archiveClinicalFile.getUrl());
+      tcgaFile.getRepository().setFileName(archiveClinicalFile.getFileName());
+      tcgaFile.getRepository().setFileMd5sum(archiveClinicalFile.getFileMd5());
+      tcgaFile.getRepository().setFileSize(archiveClinicalFile.getFileSize());
+      tcgaFile.getRepository().setLastModified(archiveClinicalFile.getLastModified().toString());
+
+      tcgaFile.getDonor().setPrimarySite(primarySites.get(projectName));
+      tcgaFile.getDonor().setProgram("TCGA");
+      tcgaFile.getDonor().setProjectCode(projectName);
+
+      tcgaFile.getDonor().setDonorId(null);
+      tcgaFile.getDonor().setSpecimenId(null);
+      tcgaFile.getDonor().setSampleId(null);
+
+      tcgaFile.getDonor().setSubmittedDonorId(archiveClinicalFile.getDonorId());
+      tcgaFile.getDonor().setSubmittedSpecimenId(null);
+      tcgaFile.getDonor().setSubmittedSampleId(null);
+
+      tcgaFile.getDonor().setTcgaParticipantBarcode(null);
+      tcgaFile.getDonor().setTcgaSampleBarcode(null);
+      tcgaFile.getDonor().setTcgaAliquotBarcode(null);
+
+      clinicalFiles.add(tcgaFile);
     }
 
     return clinicalFiles.build();

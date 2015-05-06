@@ -17,13 +17,13 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.tcga;
 
+import static java.util.Collections.emptyMap;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
 
 import java.io.IOException;
 
 import lombok.val;
 
-import org.icgc.dcc.etl.db.importer.repo.tcga.TCGAImporter;
 import org.junit.Test;
 
 public class TCGAImporterTest {
@@ -32,7 +32,7 @@ public class TCGAImporterTest {
   public void testExecute() throws IOException {
     val mongoUri = getLocalMongoClientUri("dcc-genome");
 
-    val tcgaImporter = new TCGAImporter(mongoUri);
+    val tcgaImporter = new TCGAImporter(mongoUri, emptyMap());
     tcgaImporter.execute();
   }
 

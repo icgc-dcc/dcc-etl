@@ -17,10 +17,10 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.cghub;
 
+import static java.util.Collections.emptyMap;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
 import lombok.val;
 
-import org.icgc.dcc.etl.db.importer.repo.cghub.CGHubImporter;
 import org.junit.Test;
 
 public class CGHubImporterTest {
@@ -29,7 +29,7 @@ public class CGHubImporterTest {
   public void testExecute() {
     val mongoUri = getLocalMongoClientUri("dcc-genome");
 
-    val cghubImporter = new CGHubImporter(mongoUri);
+    val cghubImporter = new CGHubImporter(mongoUri, emptyMap());
     cghubImporter.execute();
   }
 

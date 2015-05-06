@@ -19,25 +19,20 @@ package org.icgc.dcc.etl.db.importer.repo.cghub.writer;
 
 import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType.CGHUB;
 
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
-public class CGHubFileWriter extends AbstractRepositoryFileWriter<ObjectNode> {
+public class CGHubFileWriter extends AbstractRepositoryFileWriter<RepositoryFile> {
 
   public CGHubFileWriter(MongoClientURI mongoUri) {
     super(mongoUri, CGHUB);
   }
 
   @Override
-  public void write(ObjectNode file) {
+  public void write(RepositoryFile file) {
     saveFile(file);
-  }
-
-  @Override
-  public void clearFiles() {
-    super.clearFiles();
   }
 
 }

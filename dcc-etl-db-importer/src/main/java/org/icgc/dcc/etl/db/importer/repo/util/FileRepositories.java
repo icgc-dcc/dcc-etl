@@ -33,7 +33,7 @@ public final class FileRepositories {
   /**
    * Constants.
    */
-  public static final String FILE_REPOSITORY_TYPE_FIELD_NAME = "repository_type";
+  public static final String FILE_REPOSITORY_TYPE_FIELD_NAME = "repository.repo_type";
 
   @NonNull
   public static final String formatDateTime(LocalDateTime dateTime) {

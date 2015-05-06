@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,26 +15,74 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.pcawg;
+package org.icgc.dcc.etl.db.importer.repo.model;
 
-import static java.util.Collections.emptyMap;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
+import static com.beust.jcommander.internal.Lists.newArrayList;
 
-import java.io.IOException;
+import java.util.List;
 
-import lombok.val;
+import lombok.Data;
 
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
-import org.junit.Test;
+@Data
+public class RepositoryFile {
 
-public class PCAWGImporterTest {
+  String study;
+  String access;
 
-  @Test
-  public void testExecute() throws IOException {
-    val mongoUri = getLocalMongoClientUri("dcc-genome");
-    val identifierClient = new HashIdentifierClient();
+  String dataType;
+  String dataSubType;
+  String dataFormat;
 
-    val pcawgImporter = new PCAWGImporter(mongoUri, emptyMap(), identifierClient);
-    pcawgImporter.execute();
+  String experimentalStrategy;
+
+  Repository repository = new Repository();
+  RepositoryDonor donor = new RepositoryDonor();
+
+  @Data
+  public static class Repository {
+
+    String repoType;
+    String repoEntityId;
+
+    List<RepositoryServer> repoServer = newArrayList(new RepositoryServer());
+    String repoPath;
+
+    String fileName;
+    Long fileSize;
+    String fileMd5sum;
+    String lastModified;
+
   }
+
+  @Data
+  public static class RepositoryServer {
+
+    String repoName;
+    String repoCountry;
+    String repoBaseUrl;
+
+  }
+
+  @Data
+  public static class RepositoryDonor {
+
+    String projectCode;
+    String program;
+    String study;
+    String primarySite;
+
+    String donorId;
+    String specimenId;
+    String sampleId;
+
+    String submittedDonorId;
+    String submittedSpecimenId;
+    String submittedSampleId;
+
+    String tcgaParticipantBarcode;
+    String tcgaSampleBarcode;
+    String tcgaAliquotBarcode;
+
+  }
+
 }

@@ -18,6 +18,9 @@ j * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights res
 package org.icgc.dcc.etl.db.importer.repo.tcga;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+
+import java.util.Map;
+
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +28,10 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.core.TCGAClinicalFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.tcga.writer.TCGAClinicalFileWriter;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
 /**
@@ -39,10 +42,16 @@ import com.mongodb.MongoClientURI;
 public class TCGAImporter {
 
   /**
-   * Configuration
+   * Configuration.
    */
   @NonNull
   private final MongoClientURI mongoUri;
+
+  /**
+   * Metadata.
+   */
+  @NonNull
+  private final Map<String, String> primarySites;
 
   public void execute() {
     log.info("Reading clinical files...");
@@ -54,12 +63,12 @@ public class TCGAImporter {
     log.info("Wrote {} clinical files", formatCount(clinicalFiles));
   }
 
-  private Iterable<ObjectNode> readClinicalFiles() {
-    return new TCGAClinicalFileProcessor().process();
+  private Iterable<RepositoryFile> readClinicalFiles() {
+    return new TCGAClinicalFileProcessor(primarySites).process();
   }
 
   @SneakyThrows
-  private void writeClinicalFiles(Iterable<ObjectNode> clinicalFiles) {
+  private void writeClinicalFiles(Iterable<RepositoryFile> clinicalFiles) {
     @Cleanup
     val writer = new TCGAClinicalFileWriter(mongoUri);
     writer.write(clinicalFiles);

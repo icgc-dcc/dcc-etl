@@ -24,6 +24,7 @@ import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_A
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -33,6 +34,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.core.PCAWGProcessor;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.reader.PCAWGDonorArchiveReader;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.writer.PCAWGFileWriter;
@@ -53,7 +55,7 @@ public class PCAWGImporter {
       getUrl(PCAWG_ARCHIVE_BASE_URL + "/santa_cruz_pilot/santa_cruz_pilot.v1.2015_0425.jsonl");
 
   /**
-   * Configuration
+   * Configuration.
    */
   @NonNull
   private final MongoClientURI mongoUri;
@@ -61,14 +63,22 @@ public class PCAWGImporter {
   private final URL archiveUrl;
 
   /**
+   * Metadata.
+   */
+  @NonNull
+  private final Map<String, String> primarySites;
+
+  /**
    * Dependencies.
    */
   @NonNull
   private final IdentifierClient identifierClient;
 
-  public PCAWGImporter(@NonNull MongoClientURI mongoUri, @NonNull IdentifierClient identifierClient) {
+  public PCAWGImporter(@NonNull MongoClientURI mongoUri, Map<String, String> primarySites,
+      @NonNull IdentifierClient identifierClient) {
     this.mongoUri = mongoUri;
     this.archiveUrl = DEFAULT_PCAWG_DONOR_ARCHIVE_URL;
+    this.primarySites = primarySites;
     this.identifierClient = identifierClient;
   }
 
@@ -96,12 +106,12 @@ public class PCAWGImporter {
     return reader.readDonors();
   }
 
-  private Iterable<ObjectNode> processFiles(Iterable<ObjectNode> donors) {
-    val processor = new PCAWGProcessor();
+  private Iterable<RepositoryFile> processFiles(Iterable<ObjectNode> donors) {
+    val processor = new PCAWGProcessor(primarySites);
     return processor.processFiles(donors);
   }
 
-  private void writeFiles(Iterable<ObjectNode> files) throws IOException {
+  private void writeFiles(Iterable<RepositoryFile> files) throws IOException {
     @Cleanup
     val writer = new PCAWGFileWriter(mongoUri);
     writer.write(files);

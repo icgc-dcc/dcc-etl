@@ -22,20 +22,20 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class PCAWGFileWriter extends AbstractRepositoryFileWriter<Iterable<ObjectNode>> {
+public class PCAWGFileWriter extends AbstractRepositoryFileWriter<Iterable<RepositoryFile>> {
 
   public PCAWGFileWriter(@NonNull MongoClientURI mongoUri) {
     super(mongoUri, FileRepositoryType.PCAWG);
   }
 
   @Override
-  public void write(@NonNull Iterable<ObjectNode> files) {
+  public void write(@NonNull Iterable<RepositoryFile> files) {
     log.info("Clearing file documents...");
     clearFiles();
 

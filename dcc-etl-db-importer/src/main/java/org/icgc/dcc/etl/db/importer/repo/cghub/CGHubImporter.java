@@ -19,6 +19,9 @@ package org.icgc.dcc.etl.db.importer.repo.cghub;
 
 import static com.google.common.base.Stopwatch.createStarted;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubProjects.getProjects;
+
+import java.util.Map;
+
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +47,8 @@ public class CGHubImporter {
    */
   @NonNull
   private final MongoClientURI mongoUri;
+  @NonNull
+  private final Map<String, String> primarySites;
 
   @SneakyThrows
   public void execute() {
@@ -51,7 +56,7 @@ public class CGHubImporter {
     val watch = createStarted();
 
     val reader = new CGHubAnalysisDetailReader();
-    val processor = new CGHubAnalysisDetailProcessor();
+    val processor = new CGHubAnalysisDetailProcessor(primarySites);
     @Cleanup
     val writer = new CGHubFileWriter(mongoUri);
 

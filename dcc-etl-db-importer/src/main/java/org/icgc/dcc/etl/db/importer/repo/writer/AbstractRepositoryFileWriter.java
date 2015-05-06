@@ -26,6 +26,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
 import org.jongo.MongoCollection;
 
@@ -52,7 +53,7 @@ public abstract class AbstractRepositoryFileWriter<T> extends AbstractJongoWrite
     this.type = type;
   }
 
-  protected void clearFiles() {
+  public void clearFiles() {
     log.info("Clearing '{}' documents in collection '{}'", type.getId(), fileCollection.getName());
     val result = fileCollection.remove("{ " + FILE_REPOSITORY_TYPE_FIELD_NAME + ": # }", type.getId());
     checkState(result.getLastError().ok(), "Error clearing mongo: %s", result);
@@ -61,7 +62,7 @@ public abstract class AbstractRepositoryFileWriter<T> extends AbstractJongoWrite
         formatCount(result.getN()), type.getId(), fileCollection.getName());
   }
 
-  protected void saveFile(Object file) {
+  protected void saveFile(RepositoryFile file) {
     fileCollection.save(file);
   }
 
