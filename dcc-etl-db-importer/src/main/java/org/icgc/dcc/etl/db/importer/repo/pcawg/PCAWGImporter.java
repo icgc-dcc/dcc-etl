@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.db.importer.repo.pcawg.core.PCAWGProcessor;
+import org.icgc.dcc.etl.db.importer.repo.pcawg.core.PCAWGDonorProcessor;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.reader.PCAWGDonorArchiveReader;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.writer.PCAWGFileWriter;
 
@@ -94,7 +94,7 @@ public class PCAWGImporter extends RespositoryTypeImporter {
   }
 
   private Iterable<RepositoryFile> processFiles(Iterable<ObjectNode> donors) {
-    val processor = new PCAWGProcessor(primarySites, identifierClient);
+    val processor = new PCAWGDonorProcessor(primarySites, identifierClient);
     return processor.processFiles(donors);
   }
 

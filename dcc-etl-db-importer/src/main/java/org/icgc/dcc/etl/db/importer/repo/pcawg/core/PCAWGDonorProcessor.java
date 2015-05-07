@@ -49,14 +49,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
-public class PCAWGProcessor extends RepositoryTypeProcessor {
+public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
 
   /**
    * TODO: Get from documents
    */
   private static final ZonedDateTime LAST_UPDATED = ZonedDateTime.now();
 
-  public PCAWGProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
+  public PCAWGDonorProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
     super(primarySites, identifierClient);
   }
 

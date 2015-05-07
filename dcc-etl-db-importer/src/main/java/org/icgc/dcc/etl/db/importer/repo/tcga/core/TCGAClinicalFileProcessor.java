@@ -30,6 +30,7 @@ import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
+import org.icgc.dcc.etl.db.importer.util.UUID5;
 
 import com.google.common.collect.ImmutableList;
 
@@ -77,45 +78,45 @@ public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
     for (val archiveClinicalFile : archiveClinicalFiles) {
       val submittedDonorId = archiveClinicalFile.getDonorId();
 
-      val tcgaFile = new RepositoryFile();
-      tcgaFile.setStudy(null);
-      tcgaFile.setAccess("open");
+      val clinicalFile = new RepositoryFile();
+      clinicalFile.setStudy(null);
+      clinicalFile.setAccess("open");
 
-      tcgaFile.setDataType("Clinical");
-      tcgaFile.setDataSubType("Clinical data");
-      tcgaFile.setDataFormat("XML");
+      clinicalFile.setDataType("Clinical");
+      clinicalFile.setDataSubType("Clinical data");
+      clinicalFile.setDataFormat("XML");
 
-      tcgaFile.getRepository().setRepoType("TCGA");
-      tcgaFile.getRepository().setRepoOrg("TCGA");
-      tcgaFile.getRepository().setRepoEntityId(null);
+      clinicalFile.getRepository().setRepoType("TCGA");
+      clinicalFile.getRepository().setRepoOrg("TCGA");
+      clinicalFile.getRepository().setRepoEntityId(UUID5.fromUTF8(archiveClinicalFile.getUrl()).toString());
 
-      tcgaFile.getRepository().getRepoServer().get(0).setRepoName("TCGA");
-      tcgaFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
-      tcgaFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(CGHUB_BASE_URL);
+      clinicalFile.getRepository().getRepoServer().get(0).setRepoName("TCGA");
+      clinicalFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
+      clinicalFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(CGHUB_BASE_URL);
 
-      tcgaFile.getRepository().setRepoPath(archiveClinicalFile.getUrl());
-      tcgaFile.getRepository().setFileName(archiveClinicalFile.getFileName());
-      tcgaFile.getRepository().setFileMd5sum(archiveClinicalFile.getFileMd5());
-      tcgaFile.getRepository().setFileSize(archiveClinicalFile.getFileSize());
-      tcgaFile.getRepository().setLastModified(archiveClinicalFile.getLastModified().toString());
+      clinicalFile.getRepository().setRepoPath(archiveClinicalFile.getUrl());
+      clinicalFile.getRepository().setFileName(archiveClinicalFile.getFileName());
+      clinicalFile.getRepository().setFileMd5sum(archiveClinicalFile.getFileMd5());
+      clinicalFile.getRepository().setFileSize(archiveClinicalFile.getFileSize());
+      clinicalFile.getRepository().setLastModified(archiveClinicalFile.getLastModified().toString());
 
-      tcgaFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
-      tcgaFile.getDonor().setProgram("TCGA");
-      tcgaFile.getDonor().setProjectCode(projectCode);
+      clinicalFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
+      clinicalFile.getDonor().setProgram("TCGA");
+      clinicalFile.getDonor().setProjectCode(projectCode);
 
-      tcgaFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
-      tcgaFile.getDonor().setSpecimenId(null);
-      tcgaFile.getDonor().setSampleId(null);
+      clinicalFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
+      clinicalFile.getDonor().setSpecimenId(null);
+      clinicalFile.getDonor().setSampleId(null);
 
-      tcgaFile.getDonor().setSubmittedDonorId(submittedDonorId);
-      tcgaFile.getDonor().setSubmittedSpecimenId(null);
-      tcgaFile.getDonor().setSubmittedSampleId(null);
+      clinicalFile.getDonor().setSubmittedDonorId(submittedDonorId);
+      clinicalFile.getDonor().setSubmittedSpecimenId(null);
+      clinicalFile.getDonor().setSubmittedSampleId(null);
 
-      tcgaFile.getDonor().setTcgaParticipantBarcode(null);
-      tcgaFile.getDonor().setTcgaSampleBarcode(null);
-      tcgaFile.getDonor().setTcgaAliquotBarcode(null);
+      clinicalFile.getDonor().setTcgaParticipantBarcode(null);
+      clinicalFile.getDonor().setTcgaSampleBarcode(null);
+      clinicalFile.getDonor().setTcgaAliquotBarcode(null);
 
-      clinicalFiles.add(tcgaFile);
+      clinicalFiles.add(clinicalFile);
     }
 
     return clinicalFiles.build();
