@@ -22,7 +22,10 @@ import static lombok.AccessLevel.PRIVATE;
 import java.util.List;
 
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -51,5 +54,45 @@ public class PCAWGArchives {
       "star", "tophat", "bwa_alignment", "sanger_variant_calling");
   public static final List<String> PCAWG_LIBRARY_STRATEGY_NAMES = ImmutableList.of(
       "rna_seq", "wgs");
+
+  public static long getFileSize(@NonNull JsonNode workflowFile) {
+    return workflowFile.path("file_size").longValue();
+  }
+
+  public static String getFileName(@NonNull JsonNode workflowFile) {
+    return workflowFile.path("file_name").textValue();
+  }
+
+  public static String getBamFileName(@NonNull JsonNode workflowFile) {
+    return workflowFile.path("bam_file_name").textValue();
+  }
+
+  public static long getBamFileSize(@NonNull JsonNode workflowFile) {
+    return workflowFile.path("bam_file_size").longValue();
+  }
+
+  public static String getDccProjectCode(@NonNull ObjectNode donor) {
+    return donor.get(PCAWG_DCC_PROJECT_CODE).textValue();
+  }
+
+  public static String getSubmitterDonorId(@NonNull ObjectNode donor) {
+    return donor.get(PCAWG_SUBMITTER_DONOR_ID).textValue();
+  }
+
+  public static String getSubmitterSpecimenId(@NonNull JsonNode workflow) {
+    return workflow.get(PCAWG_SUBMITTER_SPECIMEN_ID).textValue();
+  }
+
+  public static String getSubmitterSampleId(@NonNull JsonNode workflow) {
+    return workflow.get(PCAWG_SUBMITTER_SAMPLE_ID).textValue();
+  }
+
+  public static String getGnosId(@NonNull JsonNode workflow) {
+    return workflow.get("gnos_id").textValue();
+  }
+
+  public static String getGnosRepo(@NonNull JsonNode workflow) {
+    return workflow.get("gnos_repo").get(0).textValue();
+  }
 
 }

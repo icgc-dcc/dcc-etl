@@ -17,14 +17,22 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.pcawg.core;
 
-import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_DCC_PROJECT_CODE;
+import static com.google.common.base.Objects.firstNonNull;
+import static org.elasticsearch.common.primitives.Longs.max;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_FILES_FIELD;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
-import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_DONOR_ID;
-import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_SAMPLE_ID;
-import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_SUBMITTER_SPECIMEN_ID;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getBamFileName;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getBamFileSize;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getDccProjectCode;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getFileName;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getFileSize;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getGnosId;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getGnosRepo;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterSampleId;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
 import static org.icgc.dcc.etl.db.importer.repo.util.FileRepositories.formatDateTime;
 
 import java.time.ZonedDateTime;
@@ -36,6 +44,7 @@ import lombok.val;
 
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
@@ -66,10 +75,10 @@ public class PCAWGProcessor {
   }
 
   private Iterable<RepositoryFile> processDonor(@NonNull ObjectNode donor) {
-    val submittedDonorId = donor.get(PCAWG_SUBMITTER_DONOR_ID);
-    val projectId = donor.get(PCAWG_DCC_PROJECT_CODE);
+    val projectCode = getDccProjectCode(donor);
+    val submittedDonorId = getSubmitterDonorId(donor);
 
-    val files = ImmutableList.<RepositoryFile> builder();
+    val donorFiles = ImmutableList.<RepositoryFile> builder();
     for (val name : PCAWG_LIBRARY_STRATEGY_NAMES) {
       val libraryStrategy = donor.path(name);
 
@@ -87,71 +96,74 @@ public class PCAWGProcessor {
             }
 
             for (val workflowFile : workflow.path(PCAWG_FILES_FIELD)) {
-              val projectCode = projectId.textValue();
+              val donorFile = createDonorFile(projectCode, submittedDonorId, workflow, workflowFile);
 
-              String fileName = null;
-              if (workflowFile.has("file_name")) {
-                fileName = workflowFile.path("file_name").textValue();
-              }
-              if (workflowFile.has("bam_file_name")) {
-                fileName = workflowFile.path("bam_file_name").textValue();
-              }
-
-              Long fileSize = null;
-              if (workflowFile.has("file_size")) {
-                fileSize = workflowFile.path("file_size").longValue();
-              }
-              if (workflowFile.has("bam_file_size")) {
-                fileSize = workflowFile.path("bam_file_size").longValue();
-              }
-
-              val pcawgFile = new RepositoryFile();
-              pcawgFile.setStudy("PCAWG");
-              pcawgFile.setAccess("controlled");
-
-              pcawgFile.setDataType(null);
-              pcawgFile.setDataSubType(null);
-              pcawgFile.setDataFormat(null);
-
-              pcawgFile.getRepository().setRepoType("GNOS");
-              pcawgFile.getRepository().setRepoOrg("PCAWG");
-              pcawgFile.getRepository().setRepoEntityId(workflow.get("gnos_id").textValue());
-
-              pcawgFile.getRepository().getRepoServer().get(0).setRepoName("PCAWG");
-              pcawgFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
-              pcawgFile.getRepository().getRepoServer().get(0)
-                  .setRepoBaseUrl(workflow.get("gnos_repo").get(0).textValue());
-
-              pcawgFile.getRepository().setRepoPath(null);
-              pcawgFile.getRepository().setFileName(fileName);
-              pcawgFile.getRepository().setFileMd5sum(null);
-              pcawgFile.getRepository().setFileSize(fileSize);
-              pcawgFile.getRepository().setLastModified(formatDateTime(LAST_UPDATED));
-
-              pcawgFile.getDonor().setPrimarySite(primarySites.get(projectCode));
-              pcawgFile.getDonor().setProgram(null);
-              pcawgFile.getDonor().setProjectCode(projectCode);
-
-              pcawgFile.getDonor().setDonorId(null);
-              pcawgFile.getDonor().setSpecimenId(null);
-              pcawgFile.getDonor().setSampleId(null);
-
-              pcawgFile.getDonor().setSubmittedDonorId(submittedDonorId.textValue());
-              pcawgFile.getDonor().setSubmittedSpecimenId(workflow.get(PCAWG_SUBMITTER_SPECIMEN_ID).textValue());
-              pcawgFile.getDonor().setSubmittedSampleId(workflow.get(PCAWG_SUBMITTER_SAMPLE_ID).textValue());
-
-              pcawgFile.getDonor().setTcgaParticipantBarcode(null);
-              pcawgFile.getDonor().setTcgaSampleBarcode(null);
-              pcawgFile.getDonor().setTcgaAliquotBarcode(null);
-
-              files.add(pcawgFile);
+              donorFiles.add(donorFile);
             }
           }
         }
       }
     }
 
-    return files.build();
+    return donorFiles.build();
+  }
+
+  private RepositoryFile createDonorFile(String projectCode, String submittedDonorId, JsonNode workflow,
+      JsonNode workflowFile) {
+    val fileName = resolveFileName(workflowFile);
+    val fileSize = resolveFileSize(workflowFile);
+
+    val donorFile = new RepositoryFile();
+    donorFile.setStudy("PCAWG");
+    donorFile.setAccess("controlled");
+
+    donorFile.setDataType(null);
+    donorFile.setDataSubType(null);
+    donorFile.setDataFormat(null);
+
+    donorFile.getRepository().setRepoType("GNOS");
+    donorFile.getRepository().setRepoOrg("PCAWG");
+    donorFile.getRepository().setRepoEntityId(getGnosId(workflow));
+
+    donorFile.getRepository().getRepoServer().get(0).setRepoName("PCAWG");
+    donorFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
+    donorFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(getGnosRepo(workflow));
+
+    donorFile.getRepository().setRepoPath(null);
+    donorFile.getRepository().setFileName(fileName);
+    donorFile.getRepository().setFileMd5sum(null);
+    donorFile.getRepository().setFileSize(fileSize);
+    donorFile.getRepository().setLastModified(formatDateTime(LAST_UPDATED));
+
+    donorFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
+    donorFile.getDonor().setProgram(null);
+    donorFile.getDonor().setProjectCode(projectCode);
+
+    donorFile.getDonor().setDonorId(null);
+    donorFile.getDonor().setSpecimenId(null);
+    donorFile.getDonor().setSampleId(null);
+
+    donorFile.getDonor().setSubmittedDonorId(submittedDonorId);
+    donorFile.getDonor().setSubmittedSpecimenId(getSubmitterSpecimenId(workflow));
+    donorFile.getDonor().setSubmittedSampleId(getSubmitterSampleId(workflow));
+
+    donorFile.getDonor().setTcgaParticipantBarcode(null);
+    donorFile.getDonor().setTcgaSampleBarcode(null);
+    donorFile.getDonor().setTcgaAliquotBarcode(null);
+
+    return donorFile;
+  }
+
+  private String resolvePrimarySite(String projectCode) {
+    return primarySites.get(projectCode);
+  }
+
+  private static String resolveFileName(JsonNode workflowFile) {
+    return firstNonNull(getFileName(workflowFile), getBamFileName(workflowFile));
+  }
+
+  private static long resolveFileSize(JsonNode workflowFile) {
+    return max(getFileSize(workflowFile), getBamFileSize(workflowFile));
   }
 
 }
