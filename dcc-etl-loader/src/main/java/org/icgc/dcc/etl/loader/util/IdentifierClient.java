@@ -21,14 +21,14 @@ import java.io.Closeable;
 
 public interface IdentifierClient extends Closeable {
 
-  String getDonorId(String submittedDonorId, String submittedProjectId);
+  String createDonorId(String submittedDonorId, String submittedProjectId);
 
-  String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
+  String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
       String mutation,
       String mutationType, String assemblyVersion);
 
-  String getSampleId(String submittedSampleId, String submittedProjectId);
+  String createSampleId(String submittedSampleId, String submittedProjectId);
 
-  String getSpecimenId(String submittedSpecimenId, String submittedProjectId);
+  String createSpecimenId(String submittedSpecimenId, String submittedProjectId);
 
 }

@@ -28,6 +28,7 @@ import java.net.URI;
 import javax.annotation.concurrent.ThreadSafe;
 
 import lombok.SneakyThrows;
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -36,9 +37,17 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import com.google.common.collect.ObjectArrays;
+
 @Slf4j
 @ThreadSafe
 public class HttpIdentifierClient implements IdentifierClient {
+
+  private static final NameValuePair[] COMMON_PARAMS =
+  {
+      new NameValuePair("create", "true")
+
+  };
 
   private final HttpClient http;
   private final String release;
@@ -67,14 +76,16 @@ public class HttpIdentifierClient implements IdentifierClient {
   }
 
   @Override
-  public String getDonorId(String submittedDonorId, String submittedProjectId) {
+  public String createDonorId(String submittedDonorId, String submittedProjectId) {
     NameValuePair[] params =
     {
         new NameValuePair("submittedDonorId", submittedDonorId),
         new NameValuePair("submittedProjectId", submittedProjectId),
         new NameValuePair("release", release)
     };
-    return getBody(DONOR_ID_PATH, params);
+    val allParams = ObjectArrays.concat(params, COMMON_PARAMS, NameValuePair.class);
+
+    return getBody(DONOR_ID_PATH, allParams);
   }
 
   public String getProjectId(String submittedProjectId) {
@@ -83,11 +94,13 @@ public class HttpIdentifierClient implements IdentifierClient {
         new NameValuePair("submittedProjectId", submittedProjectId),
         new NameValuePair("release", release)
     };
-    return getBody(PROJECT_ID_PATH, params);
+    val allParams = ObjectArrays.concat(params, COMMON_PARAMS, NameValuePair.class);
+
+    return getBody(PROJECT_ID_PATH, allParams);
   }
 
   @Override
-  public String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
+  public String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
       String mutationType, String assemblyVersion) {
     NameValuePair[] params =
     {
@@ -99,29 +112,35 @@ public class HttpIdentifierClient implements IdentifierClient {
         new NameValuePair("assemblyVersion", assemblyVersion),
         new NameValuePair("release", release)
     };
-    return getBody(MUTATION_ID_PATH, params);
+    val allParams = ObjectArrays.concat(params, COMMON_PARAMS, NameValuePair.class);
+
+    return getBody(MUTATION_ID_PATH, allParams);
   }
 
   @Override
-  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+  public String createSampleId(String submittedSampleId, String submittedProjectId) {
     NameValuePair[] params =
     {
         new NameValuePair("submittedSampleId", submittedSampleId),
         new NameValuePair("submittedProjectId", submittedProjectId),
         new NameValuePair("release", release)
     };
-    return getBody(SAMPLE_ID_PATH, params);
+    val allParams = ObjectArrays.concat(params, COMMON_PARAMS, NameValuePair.class);
+
+    return getBody(SAMPLE_ID_PATH, allParams);
   }
 
   @Override
-  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+  public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
     NameValuePair[] params =
     {
         new NameValuePair("submittedSpecimenId", submittedSpecimenId),
         new NameValuePair("submittedProjectId", submittedProjectId),
         new NameValuePair("release", release)
     };
-    return getBody(SPECIMEN_ID_PATH, params);
+    val allParams = ObjectArrays.concat(params, COMMON_PARAMS, NameValuePair.class);
+
+    return getBody(SPECIMEN_ID_PATH, allParams);
   }
 
   @Override
