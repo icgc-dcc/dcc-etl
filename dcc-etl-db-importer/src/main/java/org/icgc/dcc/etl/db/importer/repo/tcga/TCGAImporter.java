@@ -57,7 +57,7 @@ public class TCGAImporter extends RespositoryTypeImporter {
   }
 
   private Iterable<RepositoryFile> readClinicalFiles() {
-    return new TCGAClinicalFileProcessor(primarySites, identifierClient).process();
+    return new TCGAClinicalFileProcessor(primarySites, identifierClient, tcgaClient).processClinicalFiles();
   }
 
   @SneakyThrows

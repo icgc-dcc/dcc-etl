@@ -18,10 +18,12 @@
 package org.icgc.dcc.etl.db.importer.repo.core;
 
 import java.util.Map;
+import java.util.Set;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 
 @RequiredArgsConstructor
@@ -38,6 +40,8 @@ public abstract class RepositoryTypeProcessor {
    */
   @NonNull
   private final IdentifierClient identifierClient;
+  @NonNull
+  private final TCGAClient tcgaClient;
 
   @NonNull
   protected String resolvePrimarySite(String projectCode) {
@@ -57,6 +61,14 @@ public abstract class RepositoryTypeProcessor {
   @NonNull
   protected String resolveSampleId(String projectCode, String submittedSampleId) {
     return identifierClient.getSampleId(submittedSampleId, projectCode);
+  }
+
+  protected Map<String, String> resolveUUIDs(Set<String> barcodes) {
+    return tcgaClient.getUUIDs(barcodes);
+  }
+
+  protected Map<String, String> resolveBarcodes(Set<String> uuids) {
+    return tcgaClient.getBarcodes(uuids);
   }
 
 }

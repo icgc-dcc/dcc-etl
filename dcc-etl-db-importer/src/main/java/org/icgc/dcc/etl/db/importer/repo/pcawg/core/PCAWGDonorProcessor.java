@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.db.importer.repo.pcawg.core;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static org.elasticsearch.common.primitives.Longs.max;
+import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.formatDateTime;
 import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.PCAWG;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_FILES_FIELD;
@@ -41,7 +42,10 @@ import java.util.Map;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+import org.elasticsearch.common.collect.Sets;
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
@@ -52,6 +56,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
+@Slf4j
 public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
 
   /**
@@ -59,12 +64,70 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
    */
   private static final ZonedDateTime LAST_UPDATED = ZonedDateTime.now();
 
-  public PCAWGDonorProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
-    super(primarySites, identifierClient);
+  public PCAWGDonorProcessor(Map<String, String> primarySites, IdentifierClient identifierClient, TCGAClient tcgaClient) {
+    super(primarySites, identifierClient, tcgaClient);
   }
 
-  public Iterable<RepositoryFile> processFiles(@NonNull Iterable<ObjectNode> donors) {
+  public Iterable<RepositoryFile> processDonors(@NonNull Iterable<ObjectNode> donors) {
+    val donorFiles = createDonorFiles(donors);
 
+    translateUUIDs(donorFiles);
+
+    assignIds(donorFiles);
+
+    return donorFiles;
+  }
+
+  private void translateUUIDs(Iterable<RepositoryFile> donorFiles) {
+    log.info("Collecting barcodes...");
+    val uuids = Sets.<String> newHashSet();
+    for (val donorFile : donorFiles) {
+      val donorId = donorFile.getDonor().getSubmittedDonorId();
+      val specimenId = donorFile.getDonor().getSubmittedSpecimenId();
+      val sampleId = donorFile.getDonor().getSubmittedSampleId();
+
+      if (isUUID(donorId)) {
+        uuids.add(donorId);
+      }
+      if (isUUID(specimenId)) {
+        uuids.add(specimenId);
+      }
+      if (isUUID(sampleId)) {
+        uuids.add(sampleId);
+      }
+    }
+
+    log.info("Translating barcodes to UUIDs...");
+    val barcodes = resolveBarcodes(uuids);
+    for (val donorFile : donorFiles) {
+      val submittedDonorId = donorFile.getDonor().getSubmittedDonorId();
+      val submittedSpecimenId = donorFile.getDonor().getSubmittedSpecimenId();
+      val submittedSampleId = donorFile.getDonor().getSubmittedSampleId();
+
+      val tcgaParticipantBarcode = barcodes.get(submittedDonorId);
+      val tcgaSampleBarcode = barcodes.get(submittedSpecimenId);
+      val tcgaAliquotBarcode = barcodes.get(submittedSampleId);
+
+      donorFile.getDonor().setTcgaParticipantBarcode(tcgaParticipantBarcode);
+      donorFile.getDonor().setTcgaSampleBarcode(tcgaSampleBarcode);
+      donorFile.getDonor().setTcgaAliquotBarcode(tcgaAliquotBarcode);
+    }
+  }
+
+  private void assignIds(Iterable<RepositoryFile> donorFiles) {
+    for (val donorFile : donorFiles) {
+      val projectCode = donorFile.getDonor().getProjectCode();
+      val submittedDonorId = donorFile.getDonor().getSubmittedDonorId();
+      val submittedSpecimenId = donorFile.getDonor().getSubmittedSpecimenId();
+      val submittedSampleId = donorFile.getDonor().getSubmittedSampleId();
+
+      donorFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
+      donorFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, submittedSpecimenId));
+      donorFile.getDonor().setSampleId(resolveSampleId(projectCode, submittedSampleId));
+    }
+  }
+
+  private Iterable<RepositoryFile> createDonorFiles(Iterable<ObjectNode> donors) {
     val files = ImmutableList.<RepositoryFile> builder();
     for (val donor : donors) {
       val donorFiles = processDonor(donor);
@@ -144,9 +207,9 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
     donorFile.getDonor().setProgram(null);
     donorFile.getDonor().setProjectCode(projectCode);
 
-    donorFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
-    donorFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, submitterSpecimenId));
-    donorFile.getDonor().setSampleId(resolveSampleId(projectCode, submitterSampleId));
+    donorFile.getDonor().setDonorId(null);
+    donorFile.getDonor().setSpecimenId(null);
+    donorFile.getDonor().setSampleId(null);
 
     donorFile.getDonor().setSubmittedDonorId(submittedDonorId);
     donorFile.getDonor().setSubmittedSpecimenId(submitterSpecimenId);

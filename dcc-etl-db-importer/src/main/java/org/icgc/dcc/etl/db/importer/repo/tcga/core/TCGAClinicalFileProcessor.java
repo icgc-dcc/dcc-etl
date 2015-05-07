@@ -27,6 +27,8 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.elasticsearch.common.collect.Sets;
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
@@ -46,8 +48,9 @@ public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
   @NonNull
   private final RepositoryServer server;
 
-  public TCGAClinicalFileProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
-    super(primarySites, identifierClient);
+  public TCGAClinicalFileProcessor(Map<String, String> primarySites, IdentifierClient identifierClient,
+      TCGAClient tcgaClient) {
+    super(primarySites, identifierClient, tcgaClient);
     this.server = resolveServer();
   }
 
@@ -56,7 +59,33 @@ public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
    */
   private static final Pattern CLINICAL_ARCHIVE_NAME_PATTERN = Pattern.compile(".*_(\\w+)\\.bio\\..*");
 
-  public Iterable<RepositoryFile> process() {
+  public Iterable<RepositoryFile> processClinicalFiles() {
+    val clinicalFiles = createClinicalFiles();
+    translateBarcodes(clinicalFiles);
+
+    return clinicalFiles;
+  }
+
+  private void translateBarcodes(Iterable<RepositoryFile> clinicalFiles) {
+    log.info("Collecting barcodes...");
+    val barcodes = Sets.<String> newHashSet();
+    for (val clinicalFile : clinicalFiles) {
+      val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
+
+      barcodes.add(participantBarcode);
+    }
+
+    log.info("Translating barcodes to UUIDs...");
+    val uuids = resolveUUIDs(barcodes);
+    for (val clinicalFile : clinicalFiles) {
+      val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
+
+      val uuid = uuids.get(participantBarcode);
+      clinicalFile.getDonor().setSubmittedDonorId(uuid);
+    }
+  }
+
+  private Iterable<RepositoryFile> createClinicalFiles() {
     log.info("Reading archive list entries...");
     val entries = TCGAArchiveListReader.readEntries();
     log.info("Read {} archive list entries", formatCount(entries));
@@ -118,11 +147,11 @@ public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
       clinicalFile.getDonor().setSpecimenId(null);
       clinicalFile.getDonor().setSampleId(null);
 
-      clinicalFile.getDonor().setSubmittedDonorId(submittedDonorId);
+      clinicalFile.getDonor().setSubmittedDonorId(null);
       clinicalFile.getDonor().setSubmittedSpecimenId(null);
       clinicalFile.getDonor().setSubmittedSampleId(null);
 
-      clinicalFile.getDonor().setTcgaParticipantBarcode(null);
+      clinicalFile.getDonor().setTcgaParticipantBarcode(submittedDonorId);
       clinicalFile.getDonor().setTcgaSampleBarcode(null);
       clinicalFile.getDonor().setTcgaAliquotBarcode(null);
 

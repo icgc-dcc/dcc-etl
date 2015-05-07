@@ -96,8 +96,8 @@ public class PCAWGImporter extends RespositoryTypeImporter {
   }
 
   private Iterable<RepositoryFile> processFiles(Iterable<ObjectNode> donors) {
-    val processor = new PCAWGDonorProcessor(primarySites, identifierClient);
-    return processor.processFiles(donors);
+    val processor = new PCAWGDonorProcessor(primarySites, identifierClient, tcgaClient);
+    return processor.processDonors(donors);
   }
 
   private void writeFiles(Iterable<RepositoryFile> files) throws IOException {

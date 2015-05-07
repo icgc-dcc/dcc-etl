@@ -53,7 +53,7 @@ public class CGHubImporter extends RespositoryTypeImporter {
     val watch = createStarted();
 
     val reader = new CGHubAnalysisDetailReader();
-    val processor = new CGHubAnalysisDetailProcessor(primarySites, identifierClient);
+    val processor = new CGHubAnalysisDetailProcessor(primarySites, identifierClient, tcgaClient);
     @Cleanup
     val writer = new CGHubFileWriter(mongoUri);
 
@@ -63,7 +63,7 @@ public class CGHubImporter extends RespositoryTypeImporter {
         log.info("Reading project details '{}'...", diseaseCode);
         val details = reader.readDetails(diseaseCode);
 
-        val cghubFiles = processor.process(diseaseCode, details);
+        val cghubFiles = processor.processDetails(diseaseCode, details);
         for (val cghubFile : cghubFiles) {
           writer.write(cghubFile);
         }

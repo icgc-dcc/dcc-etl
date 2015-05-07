@@ -25,6 +25,7 @@ import java.util.Map;
 import lombok.NonNull;
 import lombok.val;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
@@ -43,12 +44,13 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
   @NonNull
   private final RepositoryServer server;
 
-  public CGHubAnalysisDetailProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
-    super(primarySites, identifierClient);
+  public CGHubAnalysisDetailProcessor(Map<String, String> primarySites, IdentifierClient identifierClient,
+      TCGAClient tcgaClient) {
+    super(primarySites, identifierClient, tcgaClient);
     this.server = resolveServer();
   }
 
-  public Iterable<RepositoryFile> process(@NonNull String diseaseCode, @NonNull JsonNode details) {
+  public Iterable<RepositoryFile> processDetails(@NonNull String diseaseCode, @NonNull JsonNode details) {
     val analysisFiles = ImmutableList.<RepositoryFile> builder();
 
     val results = getResults(details);
@@ -104,7 +106,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
     analysisFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId));
     analysisFile.getDonor().setSampleId(resolveSampleId(projectCode, legacySampleId));
 
-    analysisFile.getDonor().setSubmittedDonorId(null);
+    analysisFile.getDonor().setSubmittedDonorId(getParticipantId(result));
     analysisFile.getDonor().setSubmittedSpecimenId(getSampleId(result));
     analysisFile.getDonor().setSubmittedSampleId(getAliquotId(result));
 
@@ -129,6 +131,10 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
     return FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue()));
   }
 
+  private static String getAnalysisId(JsonNode result) {
+    return result.get("analysis_id").textValue();
+  }
+
   private static long getFileSize(ObjectNode file) {
     return file.get("filesize").longValue();
   }
@@ -137,12 +143,16 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
     return file.get("filename").textValue();
   }
 
-  private static String getAnalysisId(JsonNode result) {
-    return result.get("analysis_id").textValue();
+  private static String getParticipantId(JsonNode result) {
+    return result.get("participant_id").textValue();
   }
 
   private static String getSampleId(JsonNode result) {
     return result.get("sample_id").textValue();
+  }
+
+  private static String getAliquotId(JsonNode result) {
+    return result.get("aliquot_id").textValue();
   }
 
   private static String getLegacySampleId(JsonNode result) {
@@ -161,10 +171,6 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
     return diseaseCode + "-US";
   }
 
-  private static String getAliquotId(JsonNode result) {
-    return result.get("aliquot_id").textValue();
-  }
-
   private static String getFileName(JsonNode file) {
     return file.get("filename").textValue();
   }
@@ -179,7 +185,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
 
   private static boolean isBaiFile(JsonNode file) {
     val fileName = getFileName(file);
-  
+
     return fileName.endsWith(".bam.bai");
   }
 
