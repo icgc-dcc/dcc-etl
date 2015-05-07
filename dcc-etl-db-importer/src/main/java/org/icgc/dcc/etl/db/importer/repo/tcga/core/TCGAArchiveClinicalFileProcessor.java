@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.tcga.core;
 
-import static org.icgc.dcc.etl.db.importer.repo.util.FileRepositories.formatDateTime;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.formatDateTime;
 
 import java.util.List;
 import java.util.Map;

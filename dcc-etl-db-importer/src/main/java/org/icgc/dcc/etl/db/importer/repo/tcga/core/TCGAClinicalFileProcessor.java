@@ -18,16 +18,19 @@
 package org.icgc.dcc.etl.db.importer.repo.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.TCGA;
 
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
 import org.icgc.dcc.etl.db.importer.util.UUID5;
@@ -37,8 +40,15 @@ import com.google.common.collect.ImmutableList;
 @Slf4j
 public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
 
+  /**
+   * Metadata.
+   */
+  @NonNull
+  private final RepositoryServer server;
+
   public TCGAClinicalFileProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
     super(primarySites, identifierClient);
+    this.server = resolveServer();
   }
 
   /**
@@ -86,13 +96,13 @@ public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
       clinicalFile.setDataSubType("Clinical data");
       clinicalFile.setDataFormat("XML");
 
-      clinicalFile.getRepository().setRepoType("TCGA");
-      clinicalFile.getRepository().setRepoOrg("TCGA");
+      clinicalFile.getRepository().setRepoType(server.getType().getId());
+      clinicalFile.getRepository().setRepoOrg(server.getOrg().getId());
       clinicalFile.getRepository().setRepoEntityId(UUID5.fromUTF8(archiveClinicalFile.getUrl()).toString());
 
-      clinicalFile.getRepository().getRepoServer().get(0).setRepoName("TCGA");
-      clinicalFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
-      clinicalFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(CGHUB_BASE_URL);
+      clinicalFile.getRepository().getRepoServer().get(0).setRepoName(server.getName());
+      clinicalFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
+      clinicalFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
 
       clinicalFile.getRepository().setRepoPath(archiveClinicalFile.getUrl());
       clinicalFile.getRepository().setFileName(archiveClinicalFile.getFileName());
@@ -120,6 +130,16 @@ public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
     }
 
     return clinicalFiles.build();
+  }
+
+  private static RepositoryServer resolveServer() {
+    for (val server : FileRepositories.getServers()) {
+      if (server.getOrg() == TCGA) {
+        return server;
+      }
+    }
+
+    return null;
   }
 
   private static String resolveProjectName(String diseaseCode) {

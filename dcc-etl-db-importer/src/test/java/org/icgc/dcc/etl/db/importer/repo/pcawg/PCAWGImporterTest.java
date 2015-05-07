@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import lombok.val;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.junit.Test;
 
@@ -34,7 +35,8 @@ public class PCAWGImporterTest {
     val mongoUri = getLocalMongoClientUri("dcc-genome");
     val identifierClient = new HashIdentifierClient();
 
-    val pcawgImporter = new PCAWGImporter(mongoUri, emptyMap(), identifierClient);
+    val pcawgImporter = new PCAWGImporter(mongoUri, emptyMap(), identifierClient, new TCGAClient());
     pcawgImporter.execute();
   }
+
 }

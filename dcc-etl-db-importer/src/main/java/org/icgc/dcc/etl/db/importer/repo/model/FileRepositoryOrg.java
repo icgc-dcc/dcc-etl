@@ -15,39 +15,24 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.util;
+package org.icgc.dcc.etl.db.importer.repo.model;
 
 import static lombok.AccessLevel.PRIVATE;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-@NoArgsConstructor(access = PRIVATE)
-public final class FileRepositories {
+import org.icgc.dcc.common.core.model.Identifiable;
 
-  /**
-   * Constants.
-   */
-  public static final String FILE_REPOSITORY_TYPE_FIELD_NAME = "repository.repo_type";
+@RequiredArgsConstructor(access = PRIVATE)
+public enum FileRepositoryOrg implements Identifiable {
 
+  CGHUB("CGHub"),
+  TCGA("TCGA"),
+  PCAWG("PCAWG");
+
+  @Getter
   @NonNull
-  public static final String formatDateTime(LocalDateTime dateTime) {
-    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
-  }
-
-  @NonNull
-  public static final String formatDateTime(ZonedDateTime dateTime) {
-    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
-  }
-
-  @NonNull
-  public static final String formatDateTime(Instant dateTime) {
-    return dateTime.toString();
-  }
+  private final String id;
 
 }

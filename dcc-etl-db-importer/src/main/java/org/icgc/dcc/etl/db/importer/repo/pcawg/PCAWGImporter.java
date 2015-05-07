@@ -32,6 +32,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
@@ -60,13 +61,14 @@ public class PCAWGImporter extends RespositoryTypeImporter {
   private final URL archiveUrl;
 
   public PCAWGImporter(@NonNull URL archiveUrl, MongoClientURI mongoUri, Map<String, String> primarySites,
-      IdentifierClient identifierClient) {
-    super(mongoUri, primarySites, identifierClient);
+      IdentifierClient identifierClient, TCGAClient tcgaClient) {
+    super(mongoUri, primarySites, identifierClient, tcgaClient);
     this.archiveUrl = archiveUrl;
   }
 
-  public PCAWGImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient) {
-    this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, mongoUri, primarySites, identifierClient);
+  public PCAWGImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient,
+      TCGAClient tcgaClient) {
+    this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, mongoUri, primarySites, identifierClient, tcgaClient);
   }
 
   @SneakyThrows

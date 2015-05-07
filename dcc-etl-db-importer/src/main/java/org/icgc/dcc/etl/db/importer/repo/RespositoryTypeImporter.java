@@ -22,6 +22,7 @@ import java.util.Map;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 
 import com.mongodb.MongoClientURI;
@@ -46,5 +47,7 @@ public abstract class RespositoryTypeImporter {
    */
   @NonNull
   protected final IdentifierClient identifierClient;
+  @NonNull
+  protected final TCGAClient tcgaClient;
 
 }

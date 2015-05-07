@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.cghub.core;
 
-import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.CGHUB;
 
 import java.time.Instant;
 import java.util.Map;
@@ -27,8 +27,9 @@ import lombok.val;
 
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.db.importer.repo.util.FileRepositories;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -36,12 +37,19 @@ import com.google.common.collect.ImmutableList;
 
 public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
 
+  /**
+   * Metadata.
+   */
+  @NonNull
+  private final RepositoryServer server;
+
   public CGHubAnalysisDetailProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
     super(primarySites, identifierClient);
+    this.server = resolveServer();
   }
 
   public Iterable<RepositoryFile> process(@NonNull String diseaseCode, @NonNull JsonNode details) {
-    val cghubFiles = ImmutableList.<RepositoryFile> builder();
+    val analysisFiles = ImmutableList.<RepositoryFile> builder();
 
     val results = getResults(details);
     for (val result : results) {
@@ -51,67 +59,86 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
           continue;
         }
 
-        val cghubFile = createCGHubFile(diseaseCode, result, (ObjectNode) file);
+        val analysisFile = createAnalysisFile(diseaseCode, result, (ObjectNode) file);
 
-        cghubFiles.add(cghubFile);
+        analysisFiles.add(analysisFile);
       }
     }
 
-    return cghubFiles.build();
+    return analysisFiles.build();
   }
 
-  private RepositoryFile createCGHubFile(String diseaseCode, JsonNode result, ObjectNode file) {
+  private RepositoryFile createAnalysisFile(String diseaseCode, JsonNode result, ObjectNode file) {
     val projectCode = resolveProjectCode(diseaseCode);
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
 
-    val cghubFile = new RepositoryFile();
-    cghubFile.setStudy(null);
-    cghubFile.setAccess("controlled");
+    val analysisFile = new RepositoryFile();
+    analysisFile.setStudy(null);
+    analysisFile.setAccess("controlled");
 
-    cghubFile.setDataType(null);
-    cghubFile.setDataSubType(null);
-    cghubFile.setDataFormat(null);
+    analysisFile.setDataType(null);
+    analysisFile.setDataSubType(null);
+    analysisFile.setDataFormat(null);
 
-    cghubFile.getRepository().setRepoType("GNOS");
-    cghubFile.getRepository().setRepoOrg("CGHub");
-    cghubFile.getRepository().setRepoEntityId(result.get("analysis_id").textValue());
+    analysisFile.getRepository().setRepoType(server.getType().getId());
+    analysisFile.getRepository().setRepoOrg(server.getOrg().getId());
+    analysisFile.getRepository().setRepoEntityId(getAnalysisId(result));
 
-    cghubFile.getRepository().getRepoServer().get(0).setRepoName("CGHub");
-    cghubFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
-    cghubFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(CGHUB_BASE_URL);
+    analysisFile.getRepository().getRepoServer().get(0).setRepoName(server.getName());
+    analysisFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
+    analysisFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
 
-    cghubFile.getRepository().setRepoPath(null);
-    cghubFile.getRepository().setFileName(null);
-    cghubFile.getRepository().setFileMd5sum(file.get("filename").textValue());
-    cghubFile.getRepository().setFileSize(file.get("filesize").longValue());
-    cghubFile.getRepository().setLastModified(
-        FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue())));
+    analysisFile.getRepository().setRepoPath(null);
+    analysisFile.getRepository().setFileName(getFileName(file));
+    analysisFile.getRepository().setFileMd5sum(null);
+    analysisFile.getRepository().setFileSize(getFileSize(file));
+    analysisFile.getRepository().setLastModified(resolveLastModified(result));
 
-    cghubFile.getDonor().setProjectCode(projectCode);
-    cghubFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
-    cghubFile.getDonor().setProgram(null);
+    analysisFile.getDonor().setProjectCode(projectCode);
+    analysisFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
+    analysisFile.getDonor().setProgram(null);
 
-    cghubFile.getDonor().setDonorId(resolveDonorId(projectCode, legacyDonorId));
-    cghubFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId));
-    cghubFile.getDonor().setSampleId(resolveSampleId(projectCode, legacySampleId));
+    analysisFile.getDonor().setDonorId(resolveDonorId(projectCode, legacyDonorId));
+    analysisFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId));
+    analysisFile.getDonor().setSampleId(resolveSampleId(projectCode, legacySampleId));
 
-    cghubFile.getDonor().setSubmittedDonorId(null);
-    cghubFile.getDonor().setSubmittedSpecimenId(getSampleId(result));
-    cghubFile.getDonor().setSubmittedSampleId(getAliquotId(result));
+    analysisFile.getDonor().setSubmittedDonorId(null);
+    analysisFile.getDonor().setSubmittedSpecimenId(getSampleId(result));
+    analysisFile.getDonor().setSubmittedSampleId(getAliquotId(result));
 
-    cghubFile.getDonor().setTcgaParticipantBarcode(legacyDonorId);
-    cghubFile.getDonor().setTcgaSampleBarcode(legacySpecimenId);
-    cghubFile.getDonor().setTcgaAliquotBarcode(legacySampleId);
+    analysisFile.getDonor().setTcgaParticipantBarcode(legacyDonorId);
+    analysisFile.getDonor().setTcgaSampleBarcode(legacySpecimenId);
+    analysisFile.getDonor().setTcgaAliquotBarcode(legacySampleId);
 
-    return cghubFile;
+    return analysisFile;
   }
 
-  private static boolean isBaiFile(JsonNode file) {
-    val fileName = getFileName(file);
+  private static RepositoryServer resolveServer() {
+    for (val server : FileRepositories.getServers()) {
+      if (server.getOrg() == CGHUB) {
+        return server;
+      }
+    }
 
-    return fileName.endsWith(".bam.bai");
+    return null;
+  }
+
+  private static String resolveLastModified(JsonNode result) {
+    return FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue()));
+  }
+
+  private static long getFileSize(ObjectNode file) {
+    return file.get("filesize").longValue();
+  }
+
+  private static String getFileName(ObjectNode file) {
+    return file.get("filename").textValue();
+  }
+
+  private static String getAnalysisId(JsonNode result) {
+    return result.get("analysis_id").textValue();
   }
 
   private static String getSampleId(JsonNode result) {
@@ -148,6 +175,12 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
 
   private static JsonNode getFiles(JsonNode result) {
     return result.get("files");
+  }
+
+  private static boolean isBaiFile(JsonNode file) {
+    val fileName = getFileName(file);
+  
+    return fileName.endsWith(".bam.bai");
   }
 
 }

@@ -21,6 +21,7 @@ import static java.util.Collections.emptyMap;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
 import lombok.val;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class CGHubImporterTest {
   public void testExecute() {
     val mongoUri = getLocalMongoClientUri("dcc-genome");
 
-    val cghubImporter = new CGHubImporter(mongoUri, emptyMap(), new HashIdentifierClient());
+    val cghubImporter = new CGHubImporter(mongoUri, emptyMap(), new HashIdentifierClient(), new TCGAClient());
     cghubImporter.execute();
   }
 

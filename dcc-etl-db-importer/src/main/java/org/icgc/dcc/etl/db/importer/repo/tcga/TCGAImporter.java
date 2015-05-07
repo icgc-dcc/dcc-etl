@@ -26,6 +26,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
@@ -40,8 +41,9 @@ import com.mongodb.MongoClientURI;
 @Slf4j
 public class TCGAImporter extends RespositoryTypeImporter {
 
-  public TCGAImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient) {
-    super(mongoUri, primarySites, identifierClient);
+  public TCGAImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient,
+      TCGAClient tcgaClient) {
+    super(mongoUri, primarySites, identifierClient, tcgaClient);
   }
 
   public void execute() {

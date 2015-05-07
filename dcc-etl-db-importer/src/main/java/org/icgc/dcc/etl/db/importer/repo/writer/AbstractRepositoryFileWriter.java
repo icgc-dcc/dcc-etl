@@ -20,12 +20,12 @@ package org.icgc.dcc.etl.db.importer.repo.writer;
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.db.importer.repo.util.FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
 import org.jongo.MongoCollection;
@@ -45,9 +45,9 @@ public abstract class AbstractRepositoryFileWriter<T> extends AbstractJongoWrite
    * Dependencies.
    */
   @NonNull
-  protected final FileRepositoryType type;
+  protected final FileRepositoryOrg type;
 
-  public AbstractRepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull FileRepositoryType type) {
+  public AbstractRepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull FileRepositoryOrg type) {
     super(mongoUri);
     this.fileCollection = getCollection(FILE_COLLECTION);
     this.type = type;

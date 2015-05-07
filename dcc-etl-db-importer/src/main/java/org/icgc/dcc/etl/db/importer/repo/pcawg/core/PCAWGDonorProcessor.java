@@ -19,6 +19,8 @@ package org.icgc.dcc.etl.db.importer.repo.pcawg.core;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static org.elasticsearch.common.primitives.Longs.max;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.formatDateTime;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.PCAWG;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_FILES_FIELD;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
@@ -33,7 +35,6 @@ import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getGnos
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterSampleId;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
-import static org.icgc.dcc.etl.db.importer.repo.util.FileRepositories.formatDateTime;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -43,6 +44,8 @@ import lombok.val;
 
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
+import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -112,6 +115,8 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
     val submitterSampleId = getSubmitterSampleId(workflow);
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
+    val genosRepo = getGnosRepo(workflow);
+    val server = resolveServer(genosRepo);
 
     val donorFile = new RepositoryFile();
     donorFile.setStudy("PCAWG");
@@ -121,13 +126,13 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
     donorFile.setDataSubType(null);
     donorFile.setDataFormat(null);
 
-    donorFile.getRepository().setRepoType("GNOS");
-    donorFile.getRepository().setRepoOrg("PCAWG");
+    donorFile.getRepository().setRepoType(server.getType().getId());
+    donorFile.getRepository().setRepoOrg(server.getOrg().getId());
     donorFile.getRepository().setRepoEntityId(getGnosId(workflow));
 
-    donorFile.getRepository().getRepoServer().get(0).setRepoName("PCAWG");
-    donorFile.getRepository().getRepoServer().get(0).setRepoCountry("USA");
-    donorFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(getGnosRepo(workflow));
+    donorFile.getRepository().getRepoServer().get(0).setRepoName(server.getName());
+    donorFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
+    donorFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
 
     donorFile.getRepository().setRepoPath(null);
     donorFile.getRepository().setFileName(fileName);
@@ -152,6 +157,16 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
     donorFile.getDonor().setTcgaAliquotBarcode(null);
 
     return donorFile;
+  }
+
+  private RepositoryServer resolveServer(String genosRepo) {
+    for (val server : FileRepositories.getServers()) {
+      if (server.getOrg() == PCAWG && server.getBaseUrl().equals(genosRepo)) {
+        return server;
+      }
+    }
+
+    return null;
   }
 
   private static String resolveFileName(JsonNode workflowFile) {

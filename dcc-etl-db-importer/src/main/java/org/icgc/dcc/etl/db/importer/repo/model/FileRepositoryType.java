@@ -27,9 +27,8 @@ import org.icgc.dcc.common.core.model.Identifiable;
 @RequiredArgsConstructor(access = PRIVATE)
 public enum FileRepositoryType implements Identifiable {
 
-  CGHUB("CGHub"),
-  TCGA("TCGA"),
-  PCAWG("PCAWG");
+  GNOS("GNOS"),
+  WEB_ARCHIVE("Web Archive");
 
   @Getter
   @NonNull

@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.model;
 
-import static com.beust.jcommander.internal.Lists.newArrayList;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 

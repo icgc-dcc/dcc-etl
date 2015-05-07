@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
@@ -74,17 +75,18 @@ public class RepositoryImporter implements Importer {
   private void write() {
     val primarySites = getProjectPrimarySites();
     val identifierClient = createIdentifierClient();
+    val tcgaClient = createTCGAClient();
 
     logBanner(" Importing PCAWG");
-    val projectImporter = new PCAWGImporter(mongoUri, primarySites, identifierClient);
+    val projectImporter = new PCAWGImporter(mongoUri, primarySites, identifierClient, tcgaClient);
     projectImporter.execute();
 
     logBanner(" Importing TCGA");
-    val tcgaImporter = new TCGAImporter(mongoUri, primarySites, identifierClient);
+    val tcgaImporter = new TCGAImporter(mongoUri, primarySites, identifierClient, tcgaClient);
     tcgaImporter.execute();
 
     logBanner(" Importing CGHub");
-    val cghubImporter = new CGHubImporter(mongoUri, primarySites, identifierClient);
+    val cghubImporter = new CGHubImporter(mongoUri, primarySites, identifierClient, tcgaClient);
     cghubImporter.execute();
   }
 
@@ -114,6 +116,7 @@ public class RepositoryImporter implements Importer {
   }
 
   private void index() {
+    // TODO: Externalize
     val indexName = "icgc-repository";
     val typeName = "file";
     val client = TransportClientFactory.newTransportClient("es://localhost:9300");
@@ -128,7 +131,12 @@ public class RepositoryImporter implements Importer {
   }
 
   private static IdentifierClient createIdentifierClient() {
+    // TODO: Externalize
     return new HashIdentifierClient();
+  }
+
+  private static TCGAClient createTCGAClient() {
+    return new TCGAClient();
   }
 
 }

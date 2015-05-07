@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.cghub.writer;
 
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType.CGHUB;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.CGHUB;
 
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
