@@ -18,7 +18,6 @@ package org.icgc.dcc.etl.identifier.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.icgc.dcc.etl.identifier.repository.SampleRepository;
 import org.junit.Test;
 
 public class SampleRepositoryTest extends BaseRepositoryTest<SampleRepository> {
@@ -26,7 +25,7 @@ public class SampleRepositoryTest extends BaseRepositoryTest<SampleRepository> {
   @Test
   public void test_findId_non_existing() {
     // Execute
-    String id = repository.findId("1", "1", "1");
+    String id = repository.findId(CREATE, "1", "1", "1");
 
     // Verify
     assertThat(id).isEqualTo("SA1");
@@ -35,13 +34,13 @@ public class SampleRepositoryTest extends BaseRepositoryTest<SampleRepository> {
   @Test
   public void test_findId_different_release() {
     // Execute
-    String id = repository.findId("1", "1", "1");
+    String id = repository.findId(CREATE, "1", "1", "1");
 
     // Verify
     assertThat(id).isEqualTo("SA1");
 
     // Execute
-    id = repository.findId("1", "1", "2");
+    id = repository.findId(CREATE, "1", "1", "2");
 
     // Verify
     assertThat(id).isEqualTo("SA1");
@@ -51,9 +50,9 @@ public class SampleRepositoryTest extends BaseRepositoryTest<SampleRepository> {
   @Test
   public void test_findId_increment() {
     // Execute and verify
-    assertThat(repository.findId("1", "1", "1")).isEqualTo("SA1");
-    assertThat(repository.findId("1", "2", "1")).isEqualTo("SA2");
-    assertThat(repository.findId("1", "3", "1")).isEqualTo("SA3");
+    assertThat(repository.findId(CREATE, "1", "1", "1")).isEqualTo("SA1");
+    assertThat(repository.findId(CREATE, "1", "2", "1")).isEqualTo("SA2");
+    assertThat(repository.findId(CREATE, "1", "3", "1")).isEqualTo("SA3");
   }
 
 }

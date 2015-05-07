@@ -37,6 +37,8 @@ public class BaseRepositoryTest<T> {
 
   private static final Joiner JOINER = Joiner.on(',');
 
+  static final boolean CREATE = true;
+
   /**
    * Database access.
    */

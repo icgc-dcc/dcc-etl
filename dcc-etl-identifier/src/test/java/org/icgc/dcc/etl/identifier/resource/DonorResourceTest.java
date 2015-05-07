@@ -20,10 +20,10 @@ import static com.sun.jersey.api.client.ClientResponse.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import lombok.val;
 
 import org.icgc.dcc.etl.identifier.repository.BadRequestException;
 import org.icgc.dcc.etl.identifier.repository.DonorRepository;
-import org.icgc.dcc.etl.identifier.resource.DonorResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,6 +34,8 @@ import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonorResourceTest extends ResourceTest {
+
+  static final boolean CREATE = true;
 
   @Mock
   private DonorRepository repository;
@@ -50,18 +52,19 @@ public class DonorResourceTest extends ResourceTest {
     String submittedProjectId = "project1";
     String release = "release1";
     String donorId = "DO1";
-    when(repository.findId(submittedDonorId, submittedProjectId, release)).thenReturn(donorId);
+    when(repository.findId(CREATE, submittedDonorId, submittedProjectId, release)).thenReturn(donorId);
 
     // Execute
-    ClientResponse response = client()
+    val response = client()
         .resource("/donor/id")
         .queryParam("submittedDonorId", submittedDonorId)
         .queryParam("submittedProjectId", submittedProjectId)
         .queryParam("release", release)
+        .queryParam("create", Boolean.toString(CREATE))
         .get(ClientResponse.class);
 
     // Verify
-    verify(repository).findId(submittedDonorId, submittedProjectId, release);
+    verify(repository).findId(CREATE, submittedDonorId, submittedProjectId, release);
     assertThat(response.getClientResponseStatus()).isEqualTo(OK);
   }
 
@@ -72,13 +75,15 @@ public class DonorResourceTest extends ResourceTest {
     String submittedProjectId = null;
     String release = "release1";
 
-    when(repository.findId(submittedDonorId, submittedProjectId, release)).thenThrow(new BadRequestException(""));
+    when(repository.findId(CREATE, submittedDonorId, submittedProjectId, release)).thenThrow(
+        new BadRequestException(""));
 
     // Execute
     client()
         .resource("/donor/id")
         .queryParam("submittedDonorId", submittedDonorId)
         .queryParam("release", release)
+        .queryParam("create", Boolean.toString(CREATE))
         .get(ClientResponse.class);
   }
 

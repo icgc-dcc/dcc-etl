@@ -23,9 +23,10 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 
 public abstract class MutationRepository extends BaseRepository {
 
-  public String findId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutationType,
-      String mutation, String assemblyVersion, String release) {
-    return super.findId(chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation, assemblyVersion, release);
+  public String findId(boolean create, String chromosome, String chromosomeStart, String chromosomeEnd,
+      String mutationType, String mutation, String assemblyVersion, String release) {
+    return super.findId(create, chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation, assemblyVersion,
+        release);
   }
 
   /**

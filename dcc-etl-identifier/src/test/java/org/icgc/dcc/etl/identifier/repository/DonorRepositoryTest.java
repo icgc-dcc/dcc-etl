@@ -32,8 +32,6 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
-import org.icgc.dcc.etl.identifier.repository.BadRequestException;
-import org.icgc.dcc.etl.identifier.repository.DonorRepository;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
@@ -85,7 +83,7 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
     String creationRelease = "release1";
 
     // Execute
-    String donorId = repository.findId(submittedDonorId, submittedProjectId, creationRelease);
+    String donorId = repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease);
 
     // Verify
     assertThat(donorId).isEqualTo("DO1");
@@ -99,7 +97,7 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
     String creationRelease = "release1";
 
     // Execute
-    String donorId = repository.findId(submittedDonorId, submittedProjectId, creationRelease);
+    String donorId = repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease);
 
     // Verify
     assertThat(donorId).isEqualTo("DO1");
@@ -114,13 +112,13 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
     String creationRelease2 = "release2";
 
     // Execute
-    String donorId = repository.findId(submittedDonorId, submittedProjectId, creationRelease1);
+    String donorId = repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease1);
 
     // Verify
     assertThat(donorId).isEqualTo("DO1");
 
     // Execute
-    donorId = repository.findId(submittedDonorId, submittedProjectId, creationRelease2);
+    donorId = repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease2);
 
     assertThat(donorId).isEqualTo("DO1");
 
@@ -138,7 +136,7 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
     insertDonor(submittedDonorId, submittedProjectId, creationRelease);
 
     // Execute
-    String donorId = repository.findId(submittedDonorId, submittedProjectId, creationRelease);
+    String donorId = repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease);
 
     // Verify
     assertThat(donorId).isEqualTo("DO1");
@@ -152,8 +150,8 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
     String creationRelease = "release1";
 
     // Execute and verify
-    assertThat(repository.findId(submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
-    assertThat(repository.findId(submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
+    assertThat(repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
+    assertThat(repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
   }
 
   @Test
@@ -165,16 +163,16 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
     insertDonor(submittedDonorId, submittedProjectId, creationRelease);
 
     // Execute and verify
-    assertThat(repository.findId(submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
-    assertThat(repository.findId(submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
+    assertThat(repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
+    assertThat(repository.findId(CREATE, submittedDonorId, submittedProjectId, creationRelease)).isEqualTo("DO1");
   }
 
   @Test
   public void test_findId_increment() {
     // Execute and verify
-    assertThat(repository.findId("donor1", "project1", "release1")).isEqualTo("DO1");
-    assertThat(repository.findId("donor2", "project1", "release1")).isEqualTo("DO2");
-    assertThat(repository.findId("donor3", "project1", "release1")).isEqualTo("DO3");
+    assertThat(repository.findId(CREATE, "donor1", "project1", "release1")).isEqualTo("DO1");
+    assertThat(repository.findId(CREATE, "donor2", "project1", "release1")).isEqualTo("DO2");
+    assertThat(repository.findId(CREATE, "donor3", "project1", "release1")).isEqualTo("DO3");
   }
 
   @Test
@@ -194,7 +192,7 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
         barrier.await();
 
         for (int i = 0; i < nReqs; ++i) {
-          ids.add(repository.findId(String.valueOf(i), String.valueOf(i)));
+          ids.add(repository.findId(CREATE, String.valueOf(i), String.valueOf(i)));
         }
         return ids;
       }
@@ -275,7 +273,7 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
         int end = start + nReqs;
         barrier.await();
         for (int i = start; i < end; ++i) {
-          ids.add(repository.findId(String.valueOf(i), String.valueOf(i)));
+          ids.add(repository.findId(CREATE, String.valueOf(i), String.valueOf(i)));
         }
         return ids;
       }
@@ -302,7 +300,7 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
 
     // insert
     for (int i = 0; i < nReqs; ++i) {
-      repository.findId(String.valueOf(i), String.valueOf(i));
+      repository.findId(CREATE, String.valueOf(i), String.valueOf(i));
     }
 
     final CyclicBarrier barrier = new CyclicBarrier(nClients + 1);
@@ -316,7 +314,7 @@ public class DonorRepositoryTest extends BaseRepositoryTest<DonorRepository> {
         List<String> ids = newArrayListWithCapacity(nReqs);
         barrier.await();
         for (int i = 0; i < nReqs; ++i) {
-          ids.add(repository.findId(String.valueOf(i), String.valueOf(i)));
+          ids.add(repository.findId(CREATE, String.valueOf(i), String.valueOf(i)));
         }
         return ids;
       }

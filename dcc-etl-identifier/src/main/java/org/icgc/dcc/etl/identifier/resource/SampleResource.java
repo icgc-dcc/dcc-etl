@@ -18,6 +18,7 @@ package org.icgc.dcc.etl.identifier.resource;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -40,12 +41,11 @@ public class SampleResource {
   @GET
   public String sampleId(
       @QueryParam("submittedSampleId") String submittedSampleId,
-
       @QueryParam("submittedProjectId") String submittedProjectId,
-
-      @QueryParam("release") String release)
+      @QueryParam("release") String release,
+      @QueryParam("create") @DefaultValue("false") boolean create)
   {
-    return repository.findId(submittedSampleId, submittedProjectId, release);
+    return repository.findId(create, submittedSampleId, submittedProjectId, release);
   }
 
 }

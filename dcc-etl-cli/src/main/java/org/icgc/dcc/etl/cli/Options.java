@@ -67,7 +67,7 @@ public class Options {
   @Parameter(names = { "--projects" }, required = true, description = "The list of projects to process")
   public List<String> projects = newArrayList();
 
-  @Parameter(names = { "--index-types" }, converter = DocumentTypeConverter.class, description = "Index types to create. Comma seperated list of: 'donor', 'donor-centric', 'gene-centric', 'gene-project', 'project', 'observation-centric', 'mutation-centric'. By default all index types will be created.")
+  @Parameter(names = { "--index-types" }, converter = DocumentTypeConverter.class, description = "Index types to CREATE. Comma seperated list of: 'donor', 'donor-centric', 'gene-centric', 'gene-project', 'project', 'observation-centric', 'mutation-centric'. By default all index types will be created.")
   public List<DocumentType> types = newArrayList();
 
   @Parameter(names = { "--alias" }, description = "Alias the produced index with the specified value after first removing the alias from all existing indexes")

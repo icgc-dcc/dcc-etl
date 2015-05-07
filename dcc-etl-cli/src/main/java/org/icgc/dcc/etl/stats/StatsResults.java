@@ -36,7 +36,7 @@ import lombok.Data;
 @Data
 public class StatsResults {
 
-  // TODO: create/use enums?
+  // TODO: CREATE/use enums?
   private static final String HDFS = "HDFS";
 
   private static final String MONGO = "Mongo";
