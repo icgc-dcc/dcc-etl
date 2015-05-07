@@ -39,28 +39,26 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
-@RequiredArgsConstructor
-public class PCAWGProcessor {
+public class PCAWGProcessor extends RepositoryTypeProcessor {
 
   /**
    * TODO: Get from documents
    */
   private static final ZonedDateTime LAST_UPDATED = ZonedDateTime.now();
 
-  /**
-   * Metadata.
-   */
-  @NonNull
-  private final Map<String, String> primarySites;
+  public PCAWGProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
+    super(primarySites, identifierClient);
+  }
 
   public Iterable<RepositoryFile> processFiles(@NonNull Iterable<ObjectNode> donors) {
 
@@ -110,6 +108,8 @@ public class PCAWGProcessor {
 
   private RepositoryFile createDonorFile(String projectCode, String submittedDonorId, JsonNode workflow,
       JsonNode workflowFile) {
+    val submitterSpecimenId = getSubmitterSpecimenId(workflow);
+    val submitterSampleId = getSubmitterSampleId(workflow);
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
 
@@ -139,23 +139,19 @@ public class PCAWGProcessor {
     donorFile.getDonor().setProgram(null);
     donorFile.getDonor().setProjectCode(projectCode);
 
-    donorFile.getDonor().setDonorId(null);
-    donorFile.getDonor().setSpecimenId(null);
-    donorFile.getDonor().setSampleId(null);
+    donorFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
+    donorFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, submitterSpecimenId));
+    donorFile.getDonor().setSampleId(resolveSampleId(projectCode, submitterSampleId));
 
     donorFile.getDonor().setSubmittedDonorId(submittedDonorId);
-    donorFile.getDonor().setSubmittedSpecimenId(getSubmitterSpecimenId(workflow));
-    donorFile.getDonor().setSubmittedSampleId(getSubmitterSampleId(workflow));
+    donorFile.getDonor().setSubmittedSpecimenId(submitterSpecimenId);
+    donorFile.getDonor().setSubmittedSampleId(submitterSampleId);
 
     donorFile.getDonor().setTcgaParticipantBarcode(null);
     donorFile.getDonor().setTcgaSampleBarcode(null);
     donorFile.getDonor().setTcgaAliquotBarcode(null);
 
     return donorFile;
-  }
-
-  private String resolvePrimarySite(String projectCode) {
-    return primarySites.get(projectCode);
   }
 
   private static String resolveFileName(JsonNode workflowFile) {

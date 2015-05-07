@@ -28,12 +28,12 @@ import java.util.Map;
 
 import lombok.Cleanup;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.core.PCAWGProcessor;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.reader.PCAWGDonorArchiveReader;
@@ -43,8 +43,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-@RequiredArgsConstructor
-public class PCAWGImporter {
+public class PCAWGImporter extends RespositoryTypeImporter {
 
   /**
    * JSONL (new line delimited JSON file) dump of clean, curated PCAWG donor information.
@@ -58,28 +57,16 @@ public class PCAWGImporter {
    * Configuration.
    */
   @NonNull
-  private final MongoClientURI mongoUri;
-  @NonNull
   private final URL archiveUrl;
 
-  /**
-   * Metadata.
-   */
-  @NonNull
-  private final Map<String, String> primarySites;
+  public PCAWGImporter(@NonNull URL archiveUrl, MongoClientURI mongoUri, Map<String, String> primarySites,
+      IdentifierClient identifierClient) {
+    super(mongoUri, primarySites, identifierClient);
+    this.archiveUrl = archiveUrl;
+  }
 
-  /**
-   * Dependencies.
-   */
-  @NonNull
-  private final IdentifierClient identifierClient;
-
-  public PCAWGImporter(@NonNull MongoClientURI mongoUri, Map<String, String> primarySites,
-      @NonNull IdentifierClient identifierClient) {
-    this.mongoUri = mongoUri;
-    this.archiveUrl = DEFAULT_PCAWG_DONOR_ARCHIVE_URL;
-    this.primarySites = primarySites;
-    this.identifierClient = identifierClient;
+  public PCAWGImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient) {
+    this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, mongoUri, primarySites, identifierClient);
   }
 
   @SneakyThrows
@@ -107,7 +94,7 @@ public class PCAWGImporter {
   }
 
   private Iterable<RepositoryFile> processFiles(Iterable<ObjectNode> donors) {
-    val processor = new PCAWGProcessor(primarySites);
+    val processor = new PCAWGProcessor(primarySites, identifierClient);
     return processor.processFiles(donors);
   }
 

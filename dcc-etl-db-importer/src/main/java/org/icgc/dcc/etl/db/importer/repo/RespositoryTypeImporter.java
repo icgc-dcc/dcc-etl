@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,26 +15,36 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.tcga;
+package org.icgc.dcc.etl.db.importer.repo;
 
-import static java.util.Collections.emptyMap;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
+import java.util.Map;
 
-import java.io.IOException;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-import lombok.val;
+import org.icgc.dcc.etl.core.id.IdentifierClient;
 
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
-import org.junit.Test;
+import com.mongodb.MongoClientURI;
 
-public class TCGAImporterTest {
+@RequiredArgsConstructor
+public abstract class RespositoryTypeImporter {
 
-  @Test
-  public void testExecute() throws IOException {
-    val mongoUri = getLocalMongoClientUri("dcc-genome");
+  /**
+   * Configuration.
+   */
+  @NonNull
+  protected final MongoClientURI mongoUri;
 
-    val tcgaImporter = new TCGAImporter(mongoUri, emptyMap(), new HashIdentifierClient());
-    tcgaImporter.execute();
-  }
+  /**
+   * Metadata.
+   */
+  @NonNull
+  protected final Map<String, String> primarySites;
+
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  protected final IdentifierClient identifierClient;
 
 }

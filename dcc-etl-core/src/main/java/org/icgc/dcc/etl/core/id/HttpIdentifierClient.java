@@ -35,7 +35,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
 
 @Slf4j
 @ThreadSafe
@@ -48,7 +47,6 @@ public class HttpIdentifierClient implements IdentifierClient {
 
   private final static String DONOR_ID_PATH = "/api/donor/id";
   private final static String MUTATION_ID_PATH = "/api/mutation/id";
-  private final static String PROJECT_ID_PATH = "/api/project/id";
   private final static String SAMPLE_ID_PATH = "/api/sample/id";
   private final static String SPECIMEN_ID_PATH = "/api/specimen/id";
   private final static int BUFFER_SIZE = 512;
@@ -67,8 +65,57 @@ public class HttpIdentifierClient implements IdentifierClient {
     }
   }
 
+  /**
+   * Read only
+   */
+
   @Override
   public String getDonorId(String submittedDonorId, String submittedProjectId) {
+    return requestDonorId(false, submittedDonorId, submittedProjectId);
+  }
+
+  @Override
+  public String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
+      String mutationType, String assemblyVersion) {
+    return requestMutationId(false, chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
+  }
+
+  @Override
+  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+    return requestSampleId(false, submittedSampleId, submittedProjectId);
+  }
+
+  @Override
+  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    return requestSpecimenId(false, submittedSpecimenId, submittedProjectId);
+  }
+
+  /**
+   * Write-read
+   */
+
+  @Override
+  public String createDonorId(String submittedDonorId, String submittedProjectId) {
+    return requestDonorId(true, submittedDonorId, submittedProjectId);
+  }
+
+  @Override
+  public String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
+      String mutationType, String assemblyVersion) {
+    return requestMutationId(true, chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
+  }
+
+  @Override
+  public String createSampleId(String submittedSampleId, String submittedProjectId) {
+    return requestSampleId(true, submittedSampleId, submittedProjectId);
+  }
+
+  @Override
+  public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    return requestSpecimenId(true, submittedSpecimenId, submittedProjectId);
+  }
+
+  private String requestDonorId(boolean create, String submittedDonorId, String submittedProjectId) {
     NameValuePair[] params =
     {
         new NameValuePair("submittedDonorId", submittedDonorId),
@@ -78,17 +125,8 @@ public class HttpIdentifierClient implements IdentifierClient {
     return getBody(DONOR_ID_PATH, params);
   }
 
-  public String getProjectId(String submittedProjectId) {
-    NameValuePair[] params =
-    {
-        new NameValuePair("submittedProjectId", submittedProjectId),
-        new NameValuePair("release", release)
-    };
-    return getBody(PROJECT_ID_PATH, params);
-  }
-
-  @Override
-  public String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
+  private String requestMutationId(boolean create, String chromosome, String chromosomeStart, String chromosomeEnd,
+      String mutation,
       String mutationType, String assemblyVersion) {
     NameValuePair[] params =
     {
@@ -103,8 +141,7 @@ public class HttpIdentifierClient implements IdentifierClient {
     return getBody(MUTATION_ID_PATH, params);
   }
 
-  @Override
-  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+  private String requestSampleId(boolean create, String submittedSampleId, String submittedProjectId) {
     NameValuePair[] params =
     {
         new NameValuePair("submittedSampleId", submittedSampleId),
@@ -114,8 +151,7 @@ public class HttpIdentifierClient implements IdentifierClient {
     return getBody(SAMPLE_ID_PATH, params);
   }
 
-  @Override
-  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+  private String requestSpecimenId(boolean create, String submittedSpecimenId, String submittedProjectId) {
     NameValuePair[] params =
     {
         new NameValuePair("submittedSpecimenId", submittedSpecimenId),

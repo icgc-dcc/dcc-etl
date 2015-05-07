@@ -23,22 +23,22 @@ import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubMetadata.CGHUB_B
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
 
 import com.google.common.collect.ImmutableList;
 
 @Slf4j
-@RequiredArgsConstructor
-public class TCGAClinicalFileProcessor {
+public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
 
-  @NonNull
-  private final Map<String, String> primarySites;
+  public TCGAClinicalFileProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
+    super(primarySites, identifierClient);
+  }
 
   /**
    * Constants.
@@ -68,13 +68,15 @@ public class TCGAClinicalFileProcessor {
     return clinicalFiles.build();
   }
 
-  private Iterable<RepositoryFile> processArchive(String projectName, String archiveUrl) {
+  private Iterable<RepositoryFile> processArchive(String projectCode, String archiveUrl) {
     val processor = new TCGAArchiveClinicalFileProcessor();
     val archiveClinicalFiles = processor.process(archiveUrl);
     log.info("Processing {} archive clinical files", formatCount(archiveClinicalFiles));
 
     val clinicalFiles = ImmutableList.<RepositoryFile> builder();
     for (val archiveClinicalFile : archiveClinicalFiles) {
+      val submittedDonorId = archiveClinicalFile.getDonorId();
+
       val tcgaFile = new RepositoryFile();
       tcgaFile.setStudy(null);
       tcgaFile.setAccess("open");
@@ -97,15 +99,15 @@ public class TCGAClinicalFileProcessor {
       tcgaFile.getRepository().setFileSize(archiveClinicalFile.getFileSize());
       tcgaFile.getRepository().setLastModified(archiveClinicalFile.getLastModified().toString());
 
-      tcgaFile.getDonor().setPrimarySite(primarySites.get(projectName));
+      tcgaFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
       tcgaFile.getDonor().setProgram("TCGA");
-      tcgaFile.getDonor().setProjectCode(projectName);
+      tcgaFile.getDonor().setProjectCode(projectCode);
 
-      tcgaFile.getDonor().setDonorId(null);
+      tcgaFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
       tcgaFile.getDonor().setSpecimenId(null);
       tcgaFile.getDonor().setSampleId(null);
 
-      tcgaFile.getDonor().setSubmittedDonorId(archiveClinicalFile.getDonorId());
+      tcgaFile.getDonor().setSubmittedDonorId(submittedDonorId);
       tcgaFile.getDonor().setSubmittedSpecimenId(null);
       tcgaFile.getDonor().setSubmittedSampleId(null);
 

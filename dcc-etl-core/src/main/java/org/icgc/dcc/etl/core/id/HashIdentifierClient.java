@@ -80,6 +80,27 @@ public class HashIdentifierClient implements IdentifierClient {
   }
 
   @Override
+  public String createDonorId(String submittedDonorId, String submittedProjectId) {
+    return getDonorId(submittedDonorId, submittedProjectId);
+  }
+
+  @Override
+  public String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
+      String mutationType, String assemblyVersion) {
+    return getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
+  }
+
+  @Override
+  public String createSampleId(String submittedSampleId, String submittedProjectId) {
+    return getSampleId(submittedSampleId, submittedProjectId);
+  }
+
+  @Override
+  public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    return getSpecimenId(submittedSpecimenId, submittedProjectId);
+  }
+
+  @Override
   public void close() throws IOException {
   }
 

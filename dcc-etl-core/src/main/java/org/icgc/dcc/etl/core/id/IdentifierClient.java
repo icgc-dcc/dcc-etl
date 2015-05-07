@@ -21,6 +21,10 @@ import java.io.Closeable;
 
 public interface IdentifierClient extends Closeable {
 
+  /**
+   * Read-only
+   */
+
   String getDonorId(String submittedDonorId, String submittedProjectId);
 
   String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
@@ -29,5 +33,18 @@ public interface IdentifierClient extends Closeable {
   String getSampleId(String submittedSampleId, String submittedProjectId);
 
   String getSpecimenId(String submittedSpecimenId, String submittedProjectId);
+
+  /**
+   * Create if it doesn't exist
+   */
+
+  String createDonorId(String submittedDonorId, String submittedProjectId);
+
+  String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
+      String mutation, String mutationType, String assemblyVersion);
+
+  String createSampleId(String submittedSampleId, String submittedProjectId);
+
+  String createSpecimenId(String submittedSpecimenId, String submittedProjectId);
 
 }

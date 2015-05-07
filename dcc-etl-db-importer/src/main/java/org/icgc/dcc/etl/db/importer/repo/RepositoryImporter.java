@@ -31,6 +31,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
+import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.repo.cghub.CGHubImporter;
@@ -72,17 +73,18 @@ public class RepositoryImporter implements Importer {
 
   private void write() {
     val primarySites = getProjectPrimarySites();
+    val identifierClient = createIdentifierClient();
 
     logBanner(" Importing PCAWG");
-    val projectImporter = new PCAWGImporter(mongoUri, primarySites, new HashIdentifierClient());
+    val projectImporter = new PCAWGImporter(mongoUri, primarySites, identifierClient);
     projectImporter.execute();
 
     logBanner(" Importing TCGA");
-    val tcgaImporter = new TCGAImporter(mongoUri, primarySites);
+    val tcgaImporter = new TCGAImporter(mongoUri, primarySites, identifierClient);
     tcgaImporter.execute();
 
     logBanner(" Importing CGHub");
-    val cghubImporter = new CGHubImporter(mongoUri, primarySites);
+    val cghubImporter = new CGHubImporter(mongoUri, primarySites, identifierClient);
     cghubImporter.execute();
   }
 
@@ -123,6 +125,10 @@ public class RepositoryImporter implements Importer {
       file.remove("_id");
       client.prepareIndex(indexName, typeName).setSource(file.toString()).execute();
     }
+  }
+
+  private static IdentifierClient createIdentifierClient() {
+    return new HashIdentifierClient();
   }
 
 }

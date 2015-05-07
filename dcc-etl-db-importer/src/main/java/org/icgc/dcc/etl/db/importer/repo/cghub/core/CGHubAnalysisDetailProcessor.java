@@ -23,9 +23,10 @@ import java.time.Instant;
 import java.util.Map;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.util.FileRepositories;
 
@@ -33,11 +34,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
-@RequiredArgsConstructor
-public class CGHubAnalysisDetailProcessor {
+public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
 
-  @NonNull
-  private final Map<String, String> primarySites;
+  public CGHubAnalysisDetailProcessor(Map<String, String> primarySites, IdentifierClient identifierClient) {
+    super(primarySites, identifierClient);
+  }
 
   public Iterable<RepositoryFile> process(@NonNull String diseaseCode, @NonNull JsonNode details) {
     val cghubFiles = ImmutableList.<RepositoryFile> builder();
@@ -60,7 +61,7 @@ public class CGHubAnalysisDetailProcessor {
   }
 
   private RepositoryFile createCGHubFile(String diseaseCode, JsonNode result, ObjectNode file) {
-    val projectCode = resolveProjectName(diseaseCode);
+    val projectCode = resolveProjectCode(diseaseCode);
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
@@ -89,12 +90,12 @@ public class CGHubAnalysisDetailProcessor {
         FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue())));
 
     cghubFile.getDonor().setProjectCode(projectCode);
-    cghubFile.getDonor().setPrimarySite(primarySites.get(projectCode));
+    cghubFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
     cghubFile.getDonor().setProgram(null);
 
-    cghubFile.getDonor().setDonorId(null);
-    cghubFile.getDonor().setSpecimenId(null);
-    cghubFile.getDonor().setSampleId(null);
+    cghubFile.getDonor().setDonorId(resolveDonorId(projectCode, legacyDonorId));
+    cghubFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId));
+    cghubFile.getDonor().setSampleId(resolveSampleId(projectCode, legacySampleId));
 
     cghubFile.getDonor().setSubmittedDonorId(null);
     cghubFile.getDonor().setSubmittedSpecimenId(getSampleId(result));
@@ -129,7 +130,7 @@ public class CGHubAnalysisDetailProcessor {
     return legacySampleId.substring(0, 12);
   }
 
-  private static String resolveProjectName(String diseaseCode) {
+  private static String resolveProjectCode(String diseaseCode) {
     return diseaseCode + "-US";
   }
 

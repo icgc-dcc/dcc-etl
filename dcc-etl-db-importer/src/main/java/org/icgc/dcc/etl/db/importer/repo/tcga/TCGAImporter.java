@@ -22,12 +22,12 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import java.util.Map;
 
 import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.core.TCGAClinicalFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.tcga.writer.TCGAClinicalFileWriter;
@@ -38,20 +38,11 @@ import com.mongodb.MongoClientURI;
  * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
  */
 @Slf4j
-@RequiredArgsConstructor
-public class TCGAImporter {
+public class TCGAImporter extends RespositoryTypeImporter {
 
-  /**
-   * Configuration.
-   */
-  @NonNull
-  private final MongoClientURI mongoUri;
-
-  /**
-   * Metadata.
-   */
-  @NonNull
-  private final Map<String, String> primarySites;
+  public TCGAImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient) {
+    super(mongoUri, primarySites, identifierClient);
+  }
 
   public void execute() {
     log.info("Reading clinical files...");
@@ -64,7 +55,7 @@ public class TCGAImporter {
   }
 
   private Iterable<RepositoryFile> readClinicalFiles() {
-    return new TCGAClinicalFileProcessor(primarySites).process();
+    return new TCGAClinicalFileProcessor(primarySites, identifierClient).process();
   }
 
   @SneakyThrows
