@@ -26,7 +26,7 @@ import lombok.val;
 
 import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.junit.Test;
 
 public class PCAWGImporterTest {
@@ -34,7 +34,7 @@ public class PCAWGImporterTest {
   @Test
   public void testExecute() throws IOException {
     val mongoUri = getLocalMongoClientUri("dcc-genome");
-    val context = new RepositoryContext(mongoUri, emptyMap(), new HashIdentifierClient(), new TCGAClient());
+    val context = new RepositoryFileContext(mongoUri, emptyMap(), new HashIdentifierClient(), new TCGAClient());
     val pcawgImporter = new PCAWGImporter(context);
     pcawgImporter.execute();
   }

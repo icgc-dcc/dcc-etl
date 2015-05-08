@@ -64,7 +64,7 @@ public class GeneWriter extends AbstractJongoWriter<InputStream> {
   }
 
   @Override
-  public void write(@NonNull InputStream inputStream) {
+  public void writeFiles(@NonNull InputStream inputStream) {
     write(inputStream, all());
   }
 

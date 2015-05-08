@@ -44,8 +44,8 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryOrgProcessor;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -54,9 +54,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
 @Slf4j
-public class PCAWGDonorProcessor extends RepositoryOrgProcessor {
+public class PCAWGDonorProcessor extends RepositoryFileProcessor {
 
-  public PCAWGDonorProcessor(RepositoryContext context) {
+  public PCAWGDonorProcessor(RepositoryFileContext context) {
     super(context);
   }
 
@@ -75,7 +75,7 @@ public class PCAWGDonorProcessor extends RepositoryOrgProcessor {
     val uuids = resolveUUIDs(donorFiles);
 
     log.info("Translating barcodes to UUIDs...");
-    val barcodes = resolveBarcodes(uuids);
+    val barcodes = resolveTCGABarcodes(uuids);
     for (val donorFile : donorFiles) {
       val submittedDonorId = donorFile.getDonor().getSubmittedDonorId();
       val submittedSpecimenId = donorFile.getDonor().getSubmittedSpecimenId();
@@ -199,11 +199,6 @@ public class PCAWGDonorProcessor extends RepositoryOrgProcessor {
     return donorFile;
   }
 
-  private static String resolveLastModified(JsonNode workflow) {
-    // TODO: mapping
-    return formatDateTime(ZonedDateTime.now());
-  }
-
   private static Set<String> resolveUUIDs(Iterable<RepositoryFile> donorFiles) {
     val uuids = Sets.<String> newHashSet();
     for (val donorFile : donorFiles) {
@@ -234,7 +229,13 @@ public class PCAWGDonorProcessor extends RepositoryOrgProcessor {
   }
 
   private static long resolveFileSize(JsonNode workflowFile) {
+    // First non-zero
     return max(getFileSize(workflowFile), getBamFileSize(workflowFile));
+  }
+
+  private static String resolveLastModified(JsonNode workflow) {
+    // TODO: mapping
+    return formatDateTime(ZonedDateTime.now());
   }
 
 }

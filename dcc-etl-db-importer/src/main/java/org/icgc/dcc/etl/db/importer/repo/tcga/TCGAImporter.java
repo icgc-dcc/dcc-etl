@@ -23,8 +23,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
-import org.icgc.dcc.etl.db.importer.repo.core.RespositoryOrgImporter;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.core.TCGAClinicalFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.tcga.writer.TCGAClinicalFileWriter;
@@ -33,9 +33,9 @@ import org.icgc.dcc.etl.db.importer.repo.tcga.writer.TCGAClinicalFileWriter;
  * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
  */
 @Slf4j
-public class TCGAImporter extends RespositoryOrgImporter {
+public class TCGAImporter extends RepositoryFileImporter {
 
-  public TCGAImporter(RepositoryContext context) {
+  public TCGAImporter(RepositoryFileContext context) {
     super(context);
   }
 
@@ -57,7 +57,7 @@ public class TCGAImporter extends RespositoryOrgImporter {
   private void writeClinicalFiles(Iterable<RepositoryFile> clinicalFiles) {
     @Cleanup
     val writer = new TCGAClinicalFileWriter(context.getMongoUri());
-    writer.write(clinicalFiles);
+    writer.writeFiles(clinicalFiles);
   }
 
 }

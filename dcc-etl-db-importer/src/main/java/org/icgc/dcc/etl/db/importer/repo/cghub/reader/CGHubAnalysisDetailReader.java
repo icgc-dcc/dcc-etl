@@ -69,20 +69,17 @@ public class CGHubAnalysisDetailReader {
   }
 
   private static URL createUrl(String diseaseCode) throws MalformedURLException {
-    // Per Junjun
-    val study = CGHUB_TCGA_STUDY;
-    val state = "live";
+    // Per requirements
     val params = ImmutableMap.of(
-        "study", study,
+        "study", CGHUB_TCGA_STUDY,
         "disease_abbr", diseaseCode,
-        "state", state);
+        "state", "live");
 
     return createUrl(CGHUB_ANALYSIS_DETAIL_API_URL, params);
   }
 
   private static URL createUrl(String path, Map<String, String> params) throws MalformedURLException {
     return new URL(path + "?" + Joiner.on('&').withKeyValueSeparator("=").join(params));
-
   }
 
   private static InputStream openInputStream(URL url) throws IOException {

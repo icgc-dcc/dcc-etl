@@ -79,6 +79,10 @@ public final class CGHubAnalysisDetails {
     return result.get("files");
   }
 
+  public static String getLastModified(JsonNode result) {
+    return result.get("last_modified").textValue();
+  }
+
   public static boolean isBaiFile(JsonNode file) {
     val fileName = getFileName(file);
 

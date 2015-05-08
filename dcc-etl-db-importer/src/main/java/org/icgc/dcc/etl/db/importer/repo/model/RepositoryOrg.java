@@ -15,18 +15,24 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.core;
+package org.icgc.dcc.etl.db.importer.repo.model;
 
+import static lombok.AccessLevel.PRIVATE;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public abstract class RespositoryOrgImporter {
+import org.icgc.dcc.common.core.model.Identifiable;
 
-  /**
-   * Dependencies.
-   */
+@RequiredArgsConstructor(access = PRIVATE)
+public enum RepositoryOrg implements Identifiable {
+
+  CGHUB("CGHub"),
+  TCGA("TCGA"),
+  PCAWG("PCAWG");
+
+  @Getter
   @NonNull
-  protected RepositoryContext context;
+  private final String id;
 
 }

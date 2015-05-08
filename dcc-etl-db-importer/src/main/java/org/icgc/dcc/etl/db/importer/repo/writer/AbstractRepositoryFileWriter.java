@@ -20,13 +20,13 @@ package org.icgc.dcc.etl.db.importer.repo.writer;
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.FILE_REPOSITORY_TYPE_FIELD_NAME;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.FILE_REPOSITORY_ORG_FIELD_NAME;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg;
 import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
 import org.jongo.MongoCollection;
 
@@ -45,21 +45,21 @@ public abstract class AbstractRepositoryFileWriter<T> extends AbstractJongoWrite
    * Dependencies.
    */
   @NonNull
-  protected final FileRepositoryOrg type;
+  protected final RepositoryOrg organization;
 
-  public AbstractRepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull FileRepositoryOrg type) {
+  public AbstractRepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull RepositoryOrg organization) {
     super(mongoUri);
     this.fileCollection = getCollection(FILE_COLLECTION);
-    this.type = type;
+    this.organization = organization;
   }
 
   public void clearFiles() {
-    log.info("Clearing '{}' documents in collection '{}'", type.getId(), fileCollection.getName());
-    val result = fileCollection.remove("{ " + FILE_REPOSITORY_TYPE_FIELD_NAME + ": # }", type.getId());
+    log.info("Clearing '{}' documents in collection '{}'", organization.getId(), fileCollection.getName());
+    val result = fileCollection.remove("{ " + FILE_REPOSITORY_ORG_FIELD_NAME + ": # }", organization.getId());
     checkState(result.getLastError().ok(), "Error clearing mongo: %s", result);
 
     log.info("Finished clearing {} '{}' documents in collection '{}'",
-        formatCount(result.getN()), type.getId(), fileCollection.getName());
+        formatCount(result.getN()), organization.getId(), fileCollection.getName());
   }
 
   protected void saveFile(RepositoryFile file) {

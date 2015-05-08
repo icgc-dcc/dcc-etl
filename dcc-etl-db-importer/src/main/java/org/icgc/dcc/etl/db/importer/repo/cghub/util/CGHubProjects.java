@@ -61,11 +61,11 @@ public class CGHubProjects {
       .put("UCEC", "UCEC-US")
       .build();
 
-  public static Set<String> getProjects() {
+  public static Set<String> getDiseaseCodes() {
     return DISEASE_CODE_PROJECT_IDS.keySet();
   }
 
-  public static String getProjectId(String diseaseCode) {
+  public static String getDiseaseCodeProjectId(String diseaseCode) {
     return DISEASE_CODE_PROJECT_IDS.get(diseaseCode);
   }
 

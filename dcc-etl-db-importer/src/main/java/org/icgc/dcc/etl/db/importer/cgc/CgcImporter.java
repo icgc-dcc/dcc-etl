@@ -84,7 +84,7 @@ public class CgcImporter implements Importer {
   private void writeCgc(Iterable<Map<String, String>> cgc) throws IOException {
     @Cleanup
     val writer = new CgcWriter(mongoUri);
-    writer.write(cgc);
+    writer.writeFiles(cgc);
   }
 
 }

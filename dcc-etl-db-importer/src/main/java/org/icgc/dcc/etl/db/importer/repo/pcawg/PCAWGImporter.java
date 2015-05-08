@@ -31,8 +31,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
-import org.icgc.dcc.etl.db.importer.repo.core.RespositoryOrgImporter;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.core.PCAWGDonorProcessor;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.reader.PCAWGDonorArchiveReader;
@@ -41,7 +41,7 @@ import org.icgc.dcc.etl.db.importer.repo.pcawg.writer.PCAWGFileWriter;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Slf4j
-public class PCAWGImporter extends RespositoryOrgImporter {
+public class PCAWGImporter extends RepositoryFileImporter {
 
   /**
    * JSONL (new line delimited JSON file) dump of clean, curated PCAWG donor information.
@@ -57,12 +57,12 @@ public class PCAWGImporter extends RespositoryOrgImporter {
   @NonNull
   private final URL archiveUrl;
 
-  public PCAWGImporter(@NonNull URL archiveUrl, @NonNull RepositoryContext context) {
+  public PCAWGImporter(@NonNull URL archiveUrl, @NonNull RepositoryFileContext context) {
     super(context);
     this.archiveUrl = archiveUrl;
   }
 
-  public PCAWGImporter(@NonNull RepositoryContext context) {
+  public PCAWGImporter(@NonNull RepositoryFileContext context) {
     this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, context);
   }
 
@@ -98,7 +98,7 @@ public class PCAWGImporter extends RespositoryOrgImporter {
   private void writeFiles(Iterable<RepositoryFile> files) throws IOException {
     @Cleanup
     val writer = new PCAWGFileWriter(context.getMongoUri());
-    writer.write(files);
+    writer.writeFiles(files);
   }
 
 }

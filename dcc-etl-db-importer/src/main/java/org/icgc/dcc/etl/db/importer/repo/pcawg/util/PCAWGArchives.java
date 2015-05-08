@@ -46,6 +46,10 @@ public class PCAWGArchives {
   public static final List<String> PCAWG_LIBRARY_STRATEGY_NAMES = ImmutableList.of(
       "rna_seq", "wgs");
 
+  public static String getDccProjectCode(@NonNull ObjectNode donor) {
+    return donor.get("dcc_project_code").textValue();
+  }
+
   public static long getFileSize(@NonNull JsonNode workflowFile) {
     return workflowFile.path("file_size").longValue();
   }
@@ -60,10 +64,6 @@ public class PCAWGArchives {
 
   public static long getBamFileSize(@NonNull JsonNode workflowFile) {
     return workflowFile.path("bam_file_size").longValue();
-  }
-
-  public static String getDccProjectCode(@NonNull ObjectNode donor) {
-    return donor.get("dcc_project_code").textValue();
   }
 
   public static String getSubmitterDonorId(@NonNull ObjectNode donor) {

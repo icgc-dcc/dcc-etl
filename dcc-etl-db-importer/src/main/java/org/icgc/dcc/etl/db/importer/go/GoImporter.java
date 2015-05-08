@@ -202,7 +202,7 @@ public class GoImporter implements Importer {
   private static void persistModel(GoModel model, MongoClientURI mongoUri) throws UnknownHostException, IOException {
     @Cleanup
     val writer = new GoWriter(mongoUri);
-    writer.write(model);
+    writer.writeFiles(model);
   }
 
 }

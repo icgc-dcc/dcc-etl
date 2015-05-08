@@ -15,49 +15,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.core;
+package org.icgc.dcc.etl.db.importer.repo.model;
 
-import java.util.Map;
-import java.util.Set;
-
+import static lombok.AccessLevel.PRIVATE;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public abstract class RepositoryOrgProcessor {
+import org.icgc.dcc.common.core.model.Identifiable;
 
-  /**
-   * Dependencies.
-   */
+@RequiredArgsConstructor(access = PRIVATE)
+public enum RepositoryType implements Identifiable {
+
+  GNOS("GNOS"),
+  WEB_ARCHIVE("Web Archive");
+
+  @Getter
   @NonNull
-  private final RepositoryContext context;
-
-  @NonNull
-  protected String resolvePrimarySite(String projectCode) {
-    return context.getPrimarySites().get(projectCode);
-  }
-
-  @NonNull
-  protected String resolveDonorId(String projectCode, String submittedDonorId) {
-    return context.getIdentifierClient().getDonorId(submittedDonorId, projectCode);
-  }
-
-  @NonNull
-  protected String resolveSpecimenId(String projectCode, String submittedSpecimenId) {
-    return context.getIdentifierClient().getSpecimenId(submittedSpecimenId, projectCode);
-  }
-
-  @NonNull
-  protected String resolveSampleId(String projectCode, String submittedSampleId) {
-    return context.getIdentifierClient().getSampleId(submittedSampleId, projectCode);
-  }
-
-  protected Map<String, String> resolveUUIDs(Set<String> barcodes) {
-    return context.getTcgaClient().getUUIDs(barcodes);
-  }
-
-  protected Map<String, String> resolveBarcodes(Set<String> uuids) {
-    return context.getTcgaClient().getBarcodes(uuids);
-  }
+  private final String id;
 
 }

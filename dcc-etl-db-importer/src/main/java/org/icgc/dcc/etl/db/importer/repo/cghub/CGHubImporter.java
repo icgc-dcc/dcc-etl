@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.db.importer.repo.cghub;
 
 import static com.google.common.base.Stopwatch.createStarted;
-import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubProjects.getProjects;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubProjects.getDiseaseCodes;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -27,16 +27,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.db.importer.repo.cghub.core.CGHubAnalysisDetailProcessor;
 import org.icgc.dcc.etl.db.importer.repo.cghub.reader.CGHubAnalysisDetailReader;
 import org.icgc.dcc.etl.db.importer.repo.cghub.writer.CGHubFileWriter;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
-import org.icgc.dcc.etl.db.importer.repo.core.RespositoryOrgImporter;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileImporter;
 
 /**
  * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
  */
 @Slf4j
-public class CGHubImporter extends RespositoryOrgImporter {
+public class CGHubImporter extends RepositoryFileImporter {
 
-  public CGHubImporter(RepositoryContext context) {
+  public CGHubImporter(RepositoryFileContext context) {
     super(context);
   }
 
@@ -52,13 +52,13 @@ public class CGHubImporter extends RespositoryOrgImporter {
 
     writer.clearFiles();
     try {
-      for (val diseaseCode : getProjects()) {
+      for (val diseaseCode : getDiseaseCodes()) {
         log.info("Reading project details '{}'...", diseaseCode);
         val details = reader.readDetails(diseaseCode);
 
         val cghubFiles = processor.processDetails(diseaseCode, details);
         for (val cghubFile : cghubFiles) {
-          writer.write(cghubFile);
+          writer.writeFiles(cghubFile);
         }
 
         log.info("Finished importing project '{}'.", diseaseCode);

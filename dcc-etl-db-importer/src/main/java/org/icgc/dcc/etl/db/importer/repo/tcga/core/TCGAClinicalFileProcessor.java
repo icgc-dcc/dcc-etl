@@ -27,8 +27,8 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.elasticsearch.common.collect.Sets;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryOrgProcessor;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
@@ -37,7 +37,7 @@ import org.icgc.dcc.etl.db.importer.util.UUID5;
 import com.google.common.collect.ImmutableList;
 
 @Slf4j
-public class TCGAClinicalFileProcessor extends RepositoryOrgProcessor {
+public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
   /**
    * Constants.
@@ -50,7 +50,7 @@ public class TCGAClinicalFileProcessor extends RepositoryOrgProcessor {
   @NonNull
   private final RepositoryServer server = getTCGAServer();
 
-  public TCGAClinicalFileProcessor(RepositoryContext context) {
+  public TCGAClinicalFileProcessor(RepositoryFileContext context) {
     super(context);
   }
 
@@ -71,7 +71,7 @@ public class TCGAClinicalFileProcessor extends RepositoryOrgProcessor {
     }
 
     log.info("Translating barcodes to UUIDs...");
-    val uuids = resolveUUIDs(barcodes);
+    val uuids = resolveTCGAUUIDs(barcodes);
     for (val clinicalFile : clinicalFiles) {
       val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
 

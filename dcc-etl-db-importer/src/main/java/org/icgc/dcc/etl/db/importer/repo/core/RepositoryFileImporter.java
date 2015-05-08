@@ -17,40 +17,16 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.core;
 
-import java.util.Map;
-
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-
-import com.mongodb.MongoClientURI;
-
-/**
- */
-@Value
-public class RepositoryContext {
-
-  /**
-   * Configuration.
-   */
-  @Getter
-  protected final MongoClientURI mongoUri;
-
-  /**
-   * Metadata.
-   */
-  @NonNull
-  protected final Map<String, String> primarySites;
+@RequiredArgsConstructor
+public abstract class RepositoryFileImporter {
 
   /**
    * Dependencies.
    */
   @NonNull
-  protected final IdentifierClient identifierClient;
-  @NonNull
-  protected final TCGAClient tcgaClient;
+  protected RepositoryFileContext context;
 
 }

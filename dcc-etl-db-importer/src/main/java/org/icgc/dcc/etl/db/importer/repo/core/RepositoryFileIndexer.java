@@ -15,23 +15,58 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.model;
+package org.icgc.dcc.etl.db.importer.repo.core;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.Getter;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
+
+import java.util.function.Consumer;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+import org.icgc.dcc.etl.db.importer.util.TransportClientFactory;
 
-@RequiredArgsConstructor(access = PRIVATE)
-public enum FileRepositoryType implements Identifiable {
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mongodb.MongoClientURI;
 
-  GNOS("GNOS"),
-  WEB_ARCHIVE("Web Archive");
+@RequiredArgsConstructor
+public class RepositoryFileIndexer {
 
-  @Getter
+  /**
+   * Constants.
+   */
+  private static String INDEX_NAME = "icgc-repository";
+  private static String INDEX_TYPE_NAME = "file";
+
+  /**
+   * Configuration
+   */
   @NonNull
-  private final String id;
+  private final MongoClientURI mongoUri;
+  @NonNull
+  private final String esUri;
+
+  public void indexFiles() {
+    val client = TransportClientFactory.newTransportClient(esUri);
+    client.prepareDelete().setIndex(INDEX_NAME).execute();
+
+    eachFile(file -> {
+      // Need to remove this as to not conflict with Elasticsearch
+      file.remove("_id");
+
+      String source = file.toString();
+      client.prepareIndex(INDEX_NAME, INDEX_TYPE_NAME).setSource(source).execute();
+    });
+  }
+
+  private void eachFile(Consumer<ObjectNode> fileCallback) {
+    val jongo = createJongo(mongoUri);
+    val files = jongo.getCollection(FILE_COLLECTION.getId());
+    for (val file : files.find().as(ObjectNode.class)) {
+      fileCallback.accept(file);
+    }
+  }
 
 }

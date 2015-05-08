@@ -37,7 +37,7 @@ public class GoWriter extends AbstractJongoWriter<GoModel> {
   }
 
   @Override
-  public void write(@NonNull GoModel model) {
+  public void writeFiles(@NonNull GoModel model) {
     val watch = createStarted();
 
     log.info("Writing gene sets to {}...", mongoUri);

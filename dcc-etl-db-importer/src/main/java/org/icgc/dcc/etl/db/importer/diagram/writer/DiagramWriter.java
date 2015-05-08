@@ -39,7 +39,7 @@ public class DiagramWriter extends AbstractJongoWriter<DiagramModel> {
   }
 
   @Override
-  public void write(@NonNull DiagramModel value) {
+  public void writeFiles(@NonNull DiagramModel value) {
     diagramCollection = getCollection(ReleaseCollection.DIAGRAM_COLLECTION);
 
     log.info("Droppping current diagram collection..");

@@ -19,7 +19,6 @@ package org.icgc.dcc.etl.db.importer.repo;
 
 import static com.google.common.base.Stopwatch.createStarted;
 import static org.apache.commons.lang.StringUtils.repeat;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
@@ -36,10 +35,10 @@ import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.repo.cghub.CGHubImporter;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileIndexer;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.db.importer.repo.tcga.TCGAImporter;
-import org.icgc.dcc.etl.db.importer.util.TransportClientFactory;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableMap;
@@ -60,6 +59,7 @@ public class RepositoryImporter implements Importer {
    */
   @NonNull
   private final MongoClientURI mongoUri;
+  @NonNull
   private final String esUri = "es://localhost:9300";
 
   @Override
@@ -95,18 +95,7 @@ public class RepositoryImporter implements Importer {
   }
 
   private void index() {
-    // TODO: Externalize
-    val indexName = "icgc-repository";
-    val typeName = "file";
-    val client = TransportClientFactory.newTransportClient(esUri);
-    val jongo = createJongo(mongoUri);
-    client.prepareDelete().setIndex(indexName).execute();
-
-    val files = jongo.getCollection(FILE_COLLECTION.getId());
-    for (val file : files.find().as(ObjectNode.class)) {
-      file.remove("_id");
-      client.prepareIndex(indexName, typeName).setSource(file.toString()).execute();
-    }
+    new RepositoryFileIndexer(mongoUri, esUri).indexFiles();
   }
 
   private Map<String, String> getProjectPrimarySites() {
@@ -125,13 +114,13 @@ public class RepositoryImporter implements Importer {
     return map.build();
   }
 
-  private RepositoryContext createRepositoryContext() {
+  private RepositoryFileContext createRepositoryContext() {
     // TODO: Externalize
     val primarySites = getProjectPrimarySites();
     val identifierClient = createIdentifierClient();
     val tcgaClient = createTCGAClient();
 
-    return new RepositoryContext(mongoUri, primarySites, identifierClient, tcgaClient);
+    return new RepositoryFileContext(mongoUri, primarySites, identifierClient, tcgaClient);
   }
 
   private static IdentifierClient createIdentifierClient() {

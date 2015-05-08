@@ -18,11 +18,11 @@
 package org.icgc.dcc.etl.db.importer.repo.model;
 
 import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.CGHUB;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.PCAWG;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.TCGA;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType.GNOS;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryType.WEB_ARCHIVE;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.CGHUB;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.PCAWG;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.TCGA;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryType.GNOS;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryType.WEB_ARCHIVE;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,7 +46,7 @@ public final class FileRepositories {
   /**
    * Constants.
    */
-  public static final String FILE_REPOSITORY_TYPE_FIELD_NAME = "repository.repo_type";
+  public static final String FILE_REPOSITORY_ORG_FIELD_NAME = "repository.repo_org";
 
   // @formatter:off
   public static final List<RepositoryServer> SERVERS = ImmutableList.of(
@@ -118,8 +118,8 @@ public final class FileRepositories {
   @Builder
   public static class RepositoryServer {
 
-    FileRepositoryType type;
-    FileRepositoryOrg org;
+    RepositoryType type;
+    RepositoryOrg org;
     String name;
     String location;
     String country;

@@ -22,6 +22,7 @@ import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFileName;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFileSize;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFiles;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getLastModified;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getLegacyDonorId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getLegacySampleId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getLegacySpecimenId;
@@ -37,8 +38,8 @@ import java.time.Instant;
 import lombok.NonNull;
 import lombok.val;
 
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryOrgProcessor;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
@@ -47,7 +48,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
-public class CGHubAnalysisDetailProcessor extends RepositoryOrgProcessor {
+public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
   /**
    * Metadata.
@@ -55,7 +56,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryOrgProcessor {
   @NonNull
   private final RepositoryServer server = getCGHubServer();
 
-  public CGHubAnalysisDetailProcessor(RepositoryContext context) {
+  public CGHubAnalysisDetailProcessor(RepositoryFileContext context) {
     super(context);
   }
 
@@ -127,7 +128,8 @@ public class CGHubAnalysisDetailProcessor extends RepositoryOrgProcessor {
   }
 
   private static String resolveLastModified(JsonNode result) {
-    return FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue()));
+    val text = getLastModified(result);
+    return FileRepositories.formatDateTime(Instant.parse(text));
   }
 
 }
