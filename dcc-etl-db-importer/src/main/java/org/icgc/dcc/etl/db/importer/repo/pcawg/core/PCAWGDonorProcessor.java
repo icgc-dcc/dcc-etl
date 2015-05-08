@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.db.importer.repo.pcawg.core;
 
 import static com.google.common.base.Objects.firstNonNull;
-import static org.elasticsearch.common.primitives.Longs.max;
+import static com.google.common.primitives.Longs.max;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.getPCAWGServer;
@@ -85,9 +85,10 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
       val tcgaSampleBarcode = barcodes.get(submittedSpecimenId);
       val tcgaAliquotBarcode = barcodes.get(submittedSampleId);
 
-      donorFile.getDonor().setTcgaParticipantBarcode(tcgaParticipantBarcode);
-      donorFile.getDonor().setTcgaSampleBarcode(tcgaSampleBarcode);
-      donorFile.getDonor().setTcgaAliquotBarcode(tcgaAliquotBarcode);
+      donorFile.getDonor()
+          .setTcgaParticipantBarcode(tcgaParticipantBarcode)
+          .setTcgaSampleBarcode(tcgaSampleBarcode)
+          .setTcgaAliquotBarcode(tcgaAliquotBarcode);
     }
   }
 
@@ -99,9 +100,10 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
       val submittedSpecimenId = donorFile.getDonor().getSubmittedSpecimenId();
       val submittedSampleId = donorFile.getDonor().getSubmittedSampleId();
 
-      donorFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
-      donorFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, submittedSpecimenId));
-      donorFile.getDonor().setSampleId(resolveSampleId(projectCode, submittedSampleId));
+      donorFile.getDonor()
+          .setDonorId(resolveDonorId(projectCode, submittedDonorId))
+          .setSpecimenId(resolveSpecimenId(projectCode, submittedSpecimenId))
+          .setSampleId(resolveSampleId(projectCode, submittedSampleId));
     }
   }
 
@@ -137,24 +139,6 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
               continue;
             }
 
-            // TODO: Exclude these by querying ES:
-            // "must_not": [
-            // {
-            // "terms": {
-            // "flags.is_manual_qc_failed": [
-            // "T"
-            // ]
-            // }
-            // },
-            // {
-            // "terms": {
-            // "flags.is_donor_blacklisted": [
-            // "T"
-            // ]
-            // }
-            // }
-            // ]
-
             for (val workflowFile : getFiles(workflow)) {
               val donorFile = createDonorFile(projectCode, submittedDonorId, workflow, workflowFile);
 
@@ -180,42 +164,47 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val fileSize = resolveFileSize(workflowFile);
 
     val donorFile = new RepositoryFile();
-    donorFile.setStudy("PCAWG");
-    donorFile.setAccess(resolveAccess(fileName));
+    donorFile
+        .setStudy("PCAWG")
+        .setAccess(resolveAccess(fileName))
 
-    donorFile.setDataType(null);
-    donorFile.setDataSubType(null);
-    donorFile.setDataFormat(null);
+        .setDataType(null)
+        .setDataSubType(null)
+        .setDataFormat(null);
 
-    donorFile.getRepository().setRepoType(server.getType().getId());
-    donorFile.getRepository().setRepoOrg(server.getOrg().getId());
-    donorFile.getRepository().setRepoEntityId(getGnosId(workflow));
+    donorFile.getRepository()
+        .setRepoType(server.getType().getId())
+        .setRepoOrg(server.getOrg().getId())
+        .setRepoEntityId(getGnosId(workflow));
 
-    donorFile.getRepository().getRepoServer().get(0).setRepoName(server.getName());
-    donorFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
-    donorFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
+    donorFile.getRepository().getRepoServer().get(0)
+        .setRepoName(server.getName())
+        .setRepoCountry(server.getCountry())
+        .setRepoBaseUrl(server.getBaseUrl());
 
-    donorFile.getRepository().setRepoPath(server.getType().getPath());
-    donorFile.getRepository().setFileName(fileName);
-    donorFile.getRepository().setFileMd5sum(null);
-    donorFile.getRepository().setFileSize(fileSize);
-    donorFile.getRepository().setLastModified(resolveLastModified(workflow));
+    donorFile.getRepository()
+        .setRepoPath(server.getType().getPath())
+        .setFileName(fileName)
+        .setFileMd5sum(null)
+        .setFileSize(fileSize)
+        .setLastModified(resolveLastModified(workflow));
 
-    donorFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
-    donorFile.getDonor().setProgram(project.getProgram());
-    donorFile.getDonor().setProjectCode(projectCode);
+    donorFile.getDonor()
+        .setPrimarySite(resolvePrimarySite(projectCode))
+        .setProgram(project.getProgram())
+        .setProjectCode(projectCode)
 
-    donorFile.getDonor().setDonorId(null);
-    donorFile.getDonor().setSpecimenId(null);
-    donorFile.getDonor().setSampleId(null);
+        .setDonorId(null)
+        .setSpecimenId(null)
+        .setSampleId(null)
 
-    donorFile.getDonor().setSubmittedDonorId(submittedDonorId);
-    donorFile.getDonor().setSubmittedSpecimenId(submitterSpecimenId);
-    donorFile.getDonor().setSubmittedSampleId(submitterSampleId);
+        .setSubmittedDonorId(submittedDonorId)
+        .setSubmittedSpecimenId(submitterSpecimenId)
+        .setSubmittedSampleId(submitterSampleId)
 
-    donorFile.getDonor().setTcgaParticipantBarcode(null);
-    donorFile.getDonor().setTcgaSampleBarcode(null);
-    donorFile.getDonor().setTcgaAliquotBarcode(null);
+        .setTcgaParticipantBarcode(null)
+        .setTcgaSampleBarcode(null)
+        .setTcgaAliquotBarcode(null);
 
     return donorFile;
   }

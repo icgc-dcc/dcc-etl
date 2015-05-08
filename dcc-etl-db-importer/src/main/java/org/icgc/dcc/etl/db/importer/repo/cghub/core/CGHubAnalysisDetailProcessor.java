@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.db.importer.repo.cghub.core;
 
 import static com.google.common.base.Throwables.propagate;
+import static java.util.Collections.emptyList;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getDiseaseAbbr;
@@ -56,7 +57,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
    * Metadata.
    */
   @NonNull
-  private final RepositoryServer server = getCGHubServer();
+  private final RepositoryServer cghubServer = getCGHubServer();
 
   public CGHubAnalysisDetailProcessor(RepositoryFileContext context) {
     super(context);
@@ -69,20 +70,27 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     for (val detail : details) {
       val results = getResults(detail);
       for (val result : results) {
-        val files = getFiles(result);
-        for (val file : files) {
-          if (isBaiFile(file)) {
-            continue;
-          }
+        analysisFiles.addAll(processResult(result));
+      }
+    }
 
-          try {
-            val analysisFile = createAnalysisFile(result, (ObjectNode) file);
-            analysisFiles.add(analysisFile);
-          } catch (Exception e) {
-            log.error("Error processing result: {}", result);
-            propagate(e);
-          }
-        }
+    return analysisFiles.build();
+  }
+
+  private Iterable<RepositoryFile> processResult(JsonNode result) {
+    val analysisFiles = ImmutableList.<RepositoryFile> builder();
+    val files = getFiles(result);
+    for (val file : files) {
+      if (isBaiFile(file)) {
+        emptyList();
+      }
+
+      try {
+        val analysisFile = createAnalysisFile(result, (ObjectNode) file);
+        analysisFiles.add(analysisFile);
+      } catch (Exception e) {
+        log.error("Error processing result: {}", result);
+        propagate(e);
       }
     }
 
@@ -98,42 +106,47 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val legacyDonorId = getLegacyDonorId(legacySampleId);
 
     val analysisFile = new RepositoryFile();
-    analysisFile.setStudy(null);
-    analysisFile.setAccess("controlled");
+    analysisFile
+        .setStudy(null)
+        .setAccess("controlled")
 
-    analysisFile.setDataType(null);
-    analysisFile.setDataSubType(null);
-    analysisFile.setDataFormat(null);
+        .setDataType(null)
+        .setDataSubType(null)
+        .setDataFormat(null);
 
-    analysisFile.getRepository().setRepoType(server.getType().getId());
-    analysisFile.getRepository().setRepoOrg(server.getOrg().getId());
-    analysisFile.getRepository().setRepoEntityId(getAnalysisId(result));
+    analysisFile.getRepository()
+        .setRepoType(cghubServer.getType().getId())
+        .setRepoOrg(cghubServer.getOrg().getId())
+        .setRepoEntityId(getAnalysisId(result));
 
-    analysisFile.getRepository().getRepoServer().get(0).setRepoName(server.getName());
-    analysisFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
-    analysisFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
+    analysisFile.getRepository().getRepoServer().get(0)
+        .setRepoName(cghubServer.getName())
+        .setRepoCountry(cghubServer.getCountry())
+        .setRepoBaseUrl(cghubServer.getBaseUrl());
 
-    analysisFile.getRepository().setRepoPath(server.getType().getPath());
-    analysisFile.getRepository().setFileName(getFileName(file));
-    analysisFile.getRepository().setFileMd5sum(null);
-    analysisFile.getRepository().setFileSize(getFileSize(file));
-    analysisFile.getRepository().setLastModified(resolveLastModified(result));
+    analysisFile.getRepository()
+        .setRepoPath(cghubServer.getType().getPath())
+        .setFileName(getFileName(file))
+        .setFileMd5sum(null)
+        .setFileSize(getFileSize(file))
+        .setLastModified(resolveLastModified(result));
 
-    analysisFile.getDonor().setProjectCode(projectCode);
-    analysisFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
-    analysisFile.getDonor().setProgram(project.getProgram());
+    analysisFile.getDonor()
+        .setPrimarySite(resolvePrimarySite(projectCode))
+        .setProjectCode(projectCode)
+        .setProgram(project.getProgram())
 
-    analysisFile.getDonor().setDonorId(resolveDonorId(projectCode, legacyDonorId));
-    analysisFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId));
-    analysisFile.getDonor().setSampleId(resolveSampleId(projectCode, legacySampleId));
+        .setDonorId(resolveDonorId(projectCode, legacyDonorId))
+        .setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId))
+        .setSampleId(resolveSampleId(projectCode, legacySampleId))
 
-    analysisFile.getDonor().setSubmittedDonorId(getParticipantId(result));
-    analysisFile.getDonor().setSubmittedSpecimenId(getSampleId(result));
-    analysisFile.getDonor().setSubmittedSampleId(getAliquotId(result));
+        .setSubmittedDonorId(getParticipantId(result))
+        .setSubmittedSpecimenId(getSampleId(result))
+        .setSubmittedSampleId(getAliquotId(result))
 
-    analysisFile.getDonor().setTcgaParticipantBarcode(legacyDonorId);
-    analysisFile.getDonor().setTcgaSampleBarcode(legacySpecimenId);
-    analysisFile.getDonor().setTcgaAliquotBarcode(legacySampleId);
+        .setTcgaParticipantBarcode(legacyDonorId)
+        .setTcgaSampleBarcode(legacySpecimenId)
+        .setTcgaAliquotBarcode(legacySampleId);
 
     return analysisFile;
   }

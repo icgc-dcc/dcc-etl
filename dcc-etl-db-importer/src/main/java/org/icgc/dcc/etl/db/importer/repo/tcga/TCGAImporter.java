@@ -19,8 +19,7 @@ package org.icgc.dcc.etl.db.importer.repo.tcga;
 
 import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import lombok.Cleanup;
-import lombok.SneakyThrows;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.TCGA;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +27,6 @@ import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.core.TCGAClinicalFileProcessor;
-import org.icgc.dcc.etl.db.importer.repo.tcga.writer.TCGAClinicalFileWriter;
 
 /**
  * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
@@ -51,19 +49,12 @@ public class TCGAImporter extends RepositoryFileImporter {
     }
 
     log.info("Writing clinical files...");
-    writeClinicalFiles(clinicalFiles);
+    writeFiles(clinicalFiles, TCGA);
     log.info("Wrote {} clinical files", formatCount(clinicalFiles));
   }
 
   private Iterable<RepositoryFile> readClinicalFiles() {
     return new TCGAClinicalFileProcessor(context).processClinicalFiles();
-  }
-
-  @SneakyThrows
-  private void writeClinicalFiles(Iterable<RepositoryFile> clinicalFiles) {
-    @Cleanup
-    val writer = new TCGAClinicalFileWriter(context.getMongoUri());
-    writer.writeFiles(clinicalFiles);
   }
 
 }

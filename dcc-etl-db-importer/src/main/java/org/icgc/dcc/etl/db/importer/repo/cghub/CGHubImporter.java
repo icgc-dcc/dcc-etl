@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -19,17 +19,13 @@ package org.icgc.dcc.etl.db.importer.repo.cghub;
 
 import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-
-import java.io.IOException;
-
-import lombok.Cleanup;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.CGHUB;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.repo.cghub.core.CGHubAnalysisDetailProcessor;
 import org.icgc.dcc.etl.db.importer.repo.cghub.reader.CGHubAnalysisDetailReader;
-import org.icgc.dcc.etl.db.importer.repo.cghub.writer.CGHubFileWriter;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
@@ -62,7 +58,7 @@ public class CGHubImporter extends RepositoryFileImporter {
     }
 
     log.info("Writing files...");
-    writeFiles(cghubFiles);
+    writeFiles(cghubFiles, CGHUB);
     log.info("Wrote {} files", formatCount(cghubFiles));
   }
 
@@ -73,12 +69,6 @@ public class CGHubImporter extends RepositoryFileImporter {
   private Iterable<RepositoryFile> processDetails(Iterable<ObjectNode> details) {
     val processor = new CGHubAnalysisDetailProcessor(context);
     return processor.processDetails(details);
-  }
-
-  private void writeFiles(Iterable<RepositoryFile> cghubFiles) throws IOException {
-    @Cleanup
-    val writer = new CGHubFileWriter(context.getMongoUri());
-    writer.writeFiles(cghubFiles);
   }
 
 }

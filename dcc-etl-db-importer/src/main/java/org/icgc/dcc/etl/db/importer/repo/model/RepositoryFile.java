@@ -22,8 +22,10 @@ import static com.google.common.collect.Lists.newArrayList;
 import java.util.List;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class RepositoryFile {
 
   String study;
@@ -39,6 +41,7 @@ public class RepositoryFile {
   RepositoryDonor donor = new RepositoryDonor();
 
   @Data
+  @Accessors(chain = true)
   public static class Repository {
 
     String repoType;
@@ -56,6 +59,7 @@ public class RepositoryFile {
   }
 
   @Data
+  @Accessors(chain = true)
   public static class RepositoryServer {
 
     String repoName;
@@ -65,6 +69,7 @@ public class RepositoryFile {
   }
 
   @Data
+  @Accessors(chain = true)
   public static class RepositoryDonor {
 
     String projectCode;

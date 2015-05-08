@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.db.importer.repo.cghub.reader;
 import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.net.HttpHeaders.ACCEPT;
+import static com.google.common.net.MediaType.JSON_UTF_8;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubConverters.CGHUB_BASE_URL;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getProjectDiseaseCodes;
@@ -32,7 +33,6 @@ import java.net.URL;
 import java.util.Map;
 
 import lombok.Cleanup;
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -53,14 +53,14 @@ public class CGHubAnalysisDetailReader {
   public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";
 
   public Iterable<ObjectNode> readDetails() {
-    // Lazy!
+    // Lazy:
     return transform(getProjectDiseaseCodes(), diseaseCode -> readDiseaseCodeDetails(diseaseCode));
   }
 
   @SneakyThrows
-  private ObjectNode readDiseaseCodeDetails(@NonNull String diseaseCode) {
+  private ObjectNode readDiseaseCodeDetails(String diseaseCode) {
     val watch = createStarted();
-    val url = createUrl(diseaseCode);
+    val url = getDiseaseCodeUrl(diseaseCode);
 
     log.info("Reading analysis details for disease code '{}' from '{}'... ", diseaseCode, url);
     @Cleanup
@@ -75,8 +75,7 @@ public class CGHubAnalysisDetailReader {
     return (ObjectNode) DEFAULT.readTree(inputStream);
   }
 
-  private static URL createUrl(String diseaseCode) throws MalformedURLException {
-    // Per requirements
+  private static URL getDiseaseCodeUrl(String diseaseCode) throws MalformedURLException {
     val params = ImmutableMap.of(
         "study", CGHUB_TCGA_STUDY,
         "disease_abbr", diseaseCode,
@@ -91,7 +90,7 @@ public class CGHubAnalysisDetailReader {
 
   private static InputStream openInputStream(URL url) throws IOException {
     val connection = (HttpURLConnection) url.openConnection();
-    connection.setRequestProperty(ACCEPT, "application/json");
+    connection.setRequestProperty(ACCEPT, JSON_UTF_8.toString());
 
     return connection.getInputStream();
   }

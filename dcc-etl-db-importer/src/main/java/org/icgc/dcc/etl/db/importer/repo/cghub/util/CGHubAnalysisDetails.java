@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.db.importer.repo.cghub.util;
 
 import static lombok.AccessLevel.PRIVATE;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -26,59 +27,59 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @NoArgsConstructor(access = PRIVATE)
 public final class CGHubAnalysisDetails {
 
-  public static String getDiseaseAbbr(JsonNode result) {
-    return result.get("disease_abbr").textValue();
-  }
-
-  public static String getAnalysisId(JsonNode result) {
-    return result.get("analysis_id").textValue();
-  }
-
-  public static long getFileSize(ObjectNode file) {
-    return file.get("filesize").longValue();
-  }
-
-  public static String getFileName(ObjectNode file) {
-    return file.get("filename").textValue();
-  }
-
-  public static String getParticipantId(JsonNode result) {
-    return result.get("participant_id").textValue();
-  }
-
-  public static String getSampleId(JsonNode result) {
-    return result.get("sample_id").textValue();
-  }
-
-  public static String getAliquotId(JsonNode result) {
-    return result.get("aliquot_id").textValue();
-  }
-
-  public static String getLegacySampleId(JsonNode result) {
-    return result.get("legacy_sample_id").textValue();
-  }
-
-  public static String getLegacySpecimenId(String legacySampleId) {
-    return legacySampleId.substring(0, 20);
-  }
-
-  public static String getLegacyDonorId(String legacySampleId) {
-    return legacySampleId.substring(0, 12);
-  }
-
-  public static String getFileName(JsonNode file) {
-    return file.get("filename").textValue();
-  }
-
-  public static JsonNode getResults(JsonNode details) {
+  public static JsonNode getResults(@NonNull JsonNode details) {
     return details.path("result_set").path("results");
   }
 
-  public static JsonNode getFiles(JsonNode result) {
+  public static JsonNode getFiles(@NonNull JsonNode result) {
     return result.get("files");
   }
 
-  public static String getLastModified(JsonNode result) {
+  public static String getDiseaseAbbr(@NonNull JsonNode result) {
+    return result.get("disease_abbr").textValue();
+  }
+
+  public static String getAnalysisId(@NonNull JsonNode result) {
+    return result.get("analysis_id").textValue();
+  }
+
+  public static long getFileSize(@NonNull ObjectNode file) {
+    return file.get("filesize").longValue();
+  }
+
+  public static String getFileName(@NonNull ObjectNode file) {
+    return file.get("filename").textValue();
+  }
+
+  public static String getParticipantId(@NonNull JsonNode result) {
+    return result.get("participant_id").textValue();
+  }
+
+  public static String getSampleId(@NonNull JsonNode result) {
+    return result.get("sample_id").textValue();
+  }
+
+  public static String getAliquotId(@NonNull JsonNode result) {
+    return result.get("aliquot_id").textValue();
+  }
+
+  public static String getLegacySampleId(@NonNull JsonNode result) {
+    return result.get("legacy_sample_id").textValue();
+  }
+
+  public static String getLegacySpecimenId(@NonNull String legacySampleId) {
+    return legacySampleId.substring(0, 20);
+  }
+
+  public static String getLegacyDonorId(@NonNull String legacySampleId) {
+    return legacySampleId.substring(0, 12);
+  }
+
+  public static String getFileName(@NonNull JsonNode file) {
+    return file.get("filename").textValue();
+  }
+
+  public static String getLastModified(@NonNull JsonNode result) {
     return result.get("last_modified").textValue();
   }
 

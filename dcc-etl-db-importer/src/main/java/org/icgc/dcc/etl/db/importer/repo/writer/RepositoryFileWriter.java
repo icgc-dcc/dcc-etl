@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,26 +15,50 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.cghub.writer;
+package org.icgc.dcc.etl.db.importer.repo.writer;
 
-import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.CGHUB;
+import static com.google.common.base.Preconditions.checkState;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoWriter;
+import org.jongo.MongoCollection;
 
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class CGHubFileWriter extends AbstractRepositoryFileWriter<Iterable<RepositoryFile>> {
+public class RepositoryFileWriter extends AbstractJongoWriter<Iterable<RepositoryFile>> {
 
-  public CGHubFileWriter(MongoClientURI mongoUri) {
-    super(mongoUri, CGHUB);
+  /**
+   * Constants.
+   */
+  public static final String FILE_REPOSITORY_ORG_FIELD_NAME = "repository.repo_org";
+
+  /**
+   * Metadata.
+   */
+  @NonNull
+  protected final RepositoryOrg organization;
+
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  protected final MongoCollection fileCollection;
+
+  public RepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull RepositoryOrg organization) {
+    super(mongoUri);
+    this.fileCollection = getCollection(FILE_COLLECTION);
+    this.organization = organization;
   }
 
   @Override
-  public void writeFiles(Iterable<RepositoryFile> files) {
+  public void writeFiles(@NonNull Iterable<RepositoryFile> files) {
     log.info("Clearing file documents...");
     clearFiles();
 
@@ -42,6 +66,19 @@ public class CGHubFileWriter extends AbstractRepositoryFileWriter<Iterable<Repos
     for (val file : files) {
       saveFile(file);
     }
+  }
+
+  public void clearFiles() {
+    log.info("Clearing '{}' documents in collection '{}'", organization.getId(), fileCollection.getName());
+    val result = fileCollection.remove("{ " + FILE_REPOSITORY_ORG_FIELD_NAME + ": # }", organization.getId());
+    checkState(result.getLastError().ok(), "Error clearing mongo: %s", result);
+
+    log.info("Finished clearing {} '{}' documents in collection '{}'",
+        formatCount(result.getN()), organization.getId(), fileCollection.getName());
+  }
+
+  protected void saveFile(RepositoryFile file) {
+    fileCollection.save(file);
   }
 
 }

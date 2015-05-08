@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.model;
 
+import static com.google.common.collect.Iterables.tryFind;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.CGHUB;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.PCAWG;
@@ -30,7 +31,6 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.RepositoryServer.RepositoryServerBuilder;
 
@@ -41,16 +41,16 @@ public final class RepositoryServers {
 
   // @formatter:off
   public static final List<RepositoryServer> SERVERS = ImmutableList.of(
-      server().org(CGHUB).type(GNOS).name("CGHub - Santa Cruz").country("US").baseUrl("https://cghub.ucsc.edu/").build(),
-      server().org(TCGA).type(WEB_ARCHIVE).name("TCGA DCC - Washington").country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - Barcelona").country("ES").baseUrl("https://gtrepo-bsc.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - Santa Cruz").country("US").baseUrl("https://cghub.ucsc.edu/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - Tokyo").country("JP").baseUrl("https://gtrepo-riken.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - Seoul").country("KR").baseUrl("https://gtrepo-etri.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - London").country("UK").baseUrl("https://gtrepo-ebi.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - Heidelberg").country("DE").baseUrl("https://gtrepo-dkfz.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - Chicago (ICGC)").country("US").baseUrl("https://gtrepo-osdc-icgc.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS).name("PCAWG - Chicago (TCGA)").country("US").baseUrl("https://gtrepo-osdc-tcga.annailabs.com/").build()
+      server().org(CGHUB).type(GNOS)       .name("CGHub - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
+      server().org(TCGA) .type(WEB_ARCHIVE).name("TCGA DCC - Washington") .country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - Barcelona")     .country("ES").baseUrl("https://gtrepo-bsc.annailabs.com/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - Tokyo")         .country("JP").baseUrl("https://gtrepo-riken.annailabs.com/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - Seoul")         .country("KR").baseUrl("https://gtrepo-etri.annailabs.com/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - London")        .country("UK").baseUrl("https://gtrepo-ebi.annailabs.com/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - Heidelberg")    .country("DE").baseUrl("https://gtrepo-dkfz.annailabs.com/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - Chicago (ICGC)").country("US").baseUrl("https://gtrepo-osdc-icgc.annailabs.com/").build(),
+      server().org(PCAWG).type(GNOS)       .name("PCAWG - Chicago (TCGA)").country("US").baseUrl("https://gtrepo-osdc-tcga.annailabs.com/").build()
       );
   // @formatter:on
 
@@ -60,34 +60,16 @@ public final class RepositoryServers {
   }
 
   public static RepositoryServer getCGHubServer() {
-    for (val server : getServers()) {
-      if (server.getOrg() == CGHUB) {
-        return server;
-      }
-    }
-
-    return null;
+    return tryFind(getServers(), server -> server.getOrg() == CGHUB).orNull();
   }
 
   public static RepositoryServer getTCGAServer() {
-    for (val server : getServers()) {
-      if (server.getOrg() == TCGA) {
-        return server;
-      }
-    }
-
-    return null;
+    return tryFind(getServers(), server -> server.getOrg() == TCGA).orNull();
   }
 
   @NonNull
   public static RepositoryServer getPCAWGServer(String genosRepo) {
-    for (val server : getServers()) {
-      if (server.getOrg() == PCAWG && server.getBaseUrl().equals(genosRepo)) {
-        return server;
-      }
-    }
-
-    return null;
+    return tryFind(getServers(), server -> server.getOrg() == PCAWG && server.getBaseUrl().equals(genosRepo)).orNull();
   }
 
   @Value

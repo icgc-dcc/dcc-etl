@@ -114,7 +114,9 @@ public class RepositoryFileContext {
     return tcgaClient.getBarcodes(tcgaUuids);
   }
 
+  //
   // TODO: Remove after identifier return 404s instead of "<id-prefix>null"
+  //
   private static String filter(String id) {
     if (id.endsWith("null")) {
       return null;

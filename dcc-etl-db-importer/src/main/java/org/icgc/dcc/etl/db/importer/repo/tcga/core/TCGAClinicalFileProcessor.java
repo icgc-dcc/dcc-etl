@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.db.importer.repo.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getDiseaseCodeProject;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.getTCGAServer;
 
 import java.util.regex.Pattern;
@@ -26,7 +27,6 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.elasticsearch.common.collect.Sets;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
@@ -35,6 +35,7 @@ import org.icgc.dcc.etl.db.importer.repo.tcga.model.TCGAArchiveClinicalFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 
 @Slf4j
 public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
@@ -48,7 +49,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
    * Metadata.
    */
   @NonNull
-  private final RepositoryServer server = getTCGAServer();
+  private final RepositoryServer tcgaServer = getTCGAServer();
 
   public TCGAClinicalFileProcessor(RepositoryFileContext context) {
     super(context);
@@ -60,25 +61,6 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
     translateBarcodes(clinicalFiles);
 
     return clinicalFiles;
-  }
-
-  private void translateBarcodes(Iterable<RepositoryFile> clinicalFiles) {
-    log.info("Collecting barcodes...");
-    val barcodes = Sets.<String> newHashSet();
-    for (val clinicalFile : clinicalFiles) {
-      val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
-
-      barcodes.add(participantBarcode);
-    }
-
-    log.info("Translating barcodes to UUIDs...");
-    val uuids = resolveTCGAUUIDs(barcodes);
-    for (val clinicalFile : clinicalFiles) {
-      val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
-
-      val uuid = uuids.get(participantBarcode);
-      clinicalFile.getDonor().setSubmittedDonorId(uuid);
-    }
   }
 
   private Iterable<RepositoryFile> createClinicalFiles() {
@@ -95,8 +77,8 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
       }
 
       val diseaseCode = matcher.group(1);
-      val projectName = resolveProjectName(diseaseCode);
-      val archiveClinicalFiles = processArchive(projectName, entry.getArchiveUrl());
+      val project = getDiseaseCodeProject(diseaseCode);
+      val archiveClinicalFiles = processArchive(project.getProjectCode(), entry.getArchiveUrl());
 
       clinicalFiles.addAll(archiveClinicalFiles);
     }
@@ -114,42 +96,47 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
       val submittedDonorId = archiveClinicalFile.getDonorId();
 
       val clinicalFile = new RepositoryFile();
-      clinicalFile.setStudy(null);
-      clinicalFile.setAccess("open");
+      clinicalFile
+          .setStudy(null)
+          .setAccess("open")
 
-      clinicalFile.setDataType("Clinical");
-      clinicalFile.setDataSubType("Clinical data");
-      clinicalFile.setDataFormat("XML");
+          .setDataType("Clinical")
+          .setDataSubType("Clinical data")
+          .setDataFormat("XML");
 
-      clinicalFile.getRepository().setRepoType(server.getType().getId());
-      clinicalFile.getRepository().setRepoOrg(server.getOrg().getId());
-      clinicalFile.getRepository().setRepoEntityId(resolveRepoEntityId(archiveClinicalFile));
+      clinicalFile.getRepository()
+          .setRepoType(tcgaServer.getType().getId())
+          .setRepoOrg(tcgaServer.getOrg().getId())
+          .setRepoEntityId(resolveRepoEntityId(archiveClinicalFile));
 
-      clinicalFile.getRepository().getRepoServer().get(0).setRepoName(server.getName());
-      clinicalFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
-      clinicalFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
+      clinicalFile.getRepository().getRepoServer().get(0)
+          .setRepoName(tcgaServer.getName())
+          .setRepoCountry(tcgaServer.getCountry())
+          .setRepoBaseUrl(tcgaServer.getBaseUrl());
 
-      clinicalFile.getRepository().setRepoPath(server.getType().getPath());
-      clinicalFile.getRepository().setFileName(archiveClinicalFile.getFileName());
-      clinicalFile.getRepository().setFileMd5sum(archiveClinicalFile.getFileMd5());
-      clinicalFile.getRepository().setFileSize(archiveClinicalFile.getFileSize());
-      clinicalFile.getRepository().setLastModified(archiveClinicalFile.getLastModified().toString());
+      clinicalFile.getRepository()
+          .setRepoPath(tcgaServer.getType().getPath())
+          .setFileName(archiveClinicalFile.getFileName())
+          .setFileMd5sum(archiveClinicalFile.getFileMd5())
+          .setFileSize(archiveClinicalFile.getFileSize())
+          .setLastModified(archiveClinicalFile.getLastModified().toString());
 
-      clinicalFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
-      clinicalFile.getDonor().setProgram("TCGA");
-      clinicalFile.getDonor().setProjectCode(projectCode);
+      clinicalFile.getDonor()
+          .setPrimarySite(resolvePrimarySite(projectCode))
+          .setProgram("TCGA")
+          .setProjectCode(projectCode)
 
-      clinicalFile.getDonor().setDonorId(resolveDonorId(projectCode, submittedDonorId));
-      clinicalFile.getDonor().setSpecimenId(null);
-      clinicalFile.getDonor().setSampleId(null);
+          .setDonorId(resolveDonorId(projectCode, submittedDonorId))
+          .setSpecimenId(null)
+          .setSampleId(null)
 
-      clinicalFile.getDonor().setSubmittedDonorId(null);
-      clinicalFile.getDonor().setSubmittedSpecimenId(null);
-      clinicalFile.getDonor().setSubmittedSampleId(null);
+          .setSubmittedDonorId(null)
+          .setSubmittedSpecimenId(null)
+          .setSubmittedSampleId(null)
 
-      clinicalFile.getDonor().setTcgaParticipantBarcode(submittedDonorId);
-      clinicalFile.getDonor().setTcgaSampleBarcode(null);
-      clinicalFile.getDonor().setTcgaAliquotBarcode(null);
+          .setTcgaParticipantBarcode(submittedDonorId)
+          .setTcgaSampleBarcode(null)
+          .setTcgaAliquotBarcode(null);
 
       clinicalFiles.add(clinicalFile);
     }
@@ -157,13 +144,28 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
     return clinicalFiles.build();
   }
 
-  private String resolveRepoEntityId(TCGAArchiveClinicalFile archiveClinicalFile) {
-    val url = archiveClinicalFile.getUrl();
-    return url.replace(server.getBaseUrl(), "").replace(server.getType().getPath(), "");
+  private void translateBarcodes(Iterable<RepositoryFile> clinicalFiles) {
+    log.info("Collecting TCGA barcodes...");
+    val barcodes = Sets.<String> newHashSet();
+    for (val clinicalFile : clinicalFiles) {
+      val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
+
+      barcodes.add(participantBarcode);
+    }
+
+    log.info("Translating TCGA barcodes to TCGA UUIDs...");
+    val uuids = resolveTCGAUUIDs(barcodes);
+    for (val clinicalFile : clinicalFiles) {
+      val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
+
+      val uuid = uuids.get(participantBarcode);
+      clinicalFile.getDonor().setSubmittedDonorId(uuid);
+    }
   }
 
-  private static String resolveProjectName(String diseaseCode) {
-    return diseaseCode + "-US";
+  private String resolveRepoEntityId(TCGAArchiveClinicalFile archiveClinicalFile) {
+    val url = archiveClinicalFile.getUrl();
+    return url.replace(tcgaServer.getBaseUrl(), "").replace(tcgaServer.getType().getPath(), "");
   }
 
 }
