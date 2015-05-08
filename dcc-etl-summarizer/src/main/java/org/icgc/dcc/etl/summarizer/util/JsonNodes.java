@@ -25,6 +25,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -32,6 +33,7 @@ import lombok.val;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Sets;
 
 /**
  * Common utilities for working with {@code JsonNode}s.
@@ -62,6 +64,20 @@ public final class JsonNodes {
     }
 
     return false;
+  }
+
+  public static Set<String> extractStudies(JsonNode jsonNode) {
+    Set<String> result = Sets.newHashSet();
+    for (JsonNode element : jsonNode) {
+      if (element.isArray()) {
+        result.addAll(extractStudies(element));
+      }
+      if (element.textValue() != null) {
+        result.add(element.textValue());
+      }
+    }
+
+    return result;
   }
 
   public static List<String> textValues(JsonNode jsonNode) {

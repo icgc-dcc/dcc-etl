@@ -35,6 +35,9 @@ import org.icgc.dcc.etl.loader.flow.planner.DonorRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.flow.planner.ObservationRecordLoaderFlowPlanner;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+
 /**
  * Plans a release load.
  */
@@ -83,11 +86,25 @@ public class LoaderPlanner {
     val featureTypes = submissionDataDigest.getFeatureTypes();
     log.info("Available feature types: '{}'", featureTypes);
 
+    val availableClinicalSubTypes = Sets.newHashSet(MANDATORY_SUBTYPES);
+
+    if (submissionDataDigest.hasSupplementalType()) {
+      val supplementalTypes = submissionDataDigest.getSupplementalTypes();
+      log.info("Available supplemental types: '{}'", supplementalTypes);
+
+      val allSupplementalSubTypes = new ImmutableSet.Builder<FileSubType>();
+
+      for (val type : supplementalTypes) {
+        allSupplementalSubTypes.addAll(submissionDataDigest.getSubTypes(type));
+      }
+      availableClinicalSubTypes.addAll(allSupplementalSubTypes.build());
+    }
+
     // Include flow planner for donors (always)
     plan.includeFlowPlanner(projectKey,
         provider.getDonorFlowPlanner(
             projectKey, featureTypes,
-            MANDATORY_SUBTYPES, platformStrategy));
+            availableClinicalSubTypes, platformStrategy));
 
     // Include flow planners for the feature types available
     for (val featureType : featureTypes) {

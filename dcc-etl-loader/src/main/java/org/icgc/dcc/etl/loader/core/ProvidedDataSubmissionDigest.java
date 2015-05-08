@@ -25,6 +25,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import org.icgc.dcc.common.core.model.ClinicalType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileSubType;
 
@@ -41,16 +42,34 @@ public final class ProvidedDataSubmissionDigest {
 
   @Setter
   @JsonProperty
-  private Map<FeatureType, Set<FileSubType>> dataTypes;
+  private Map<FeatureType, Set<FileSubType>> featureDataTypes;
+
+  @Setter
+  @JsonProperty
+  private Map<ClinicalType, Set<FileSubType>> supplementalDataTypes;
 
   @JsonIgnore
   public Set<FeatureType> getFeatureTypes() {
-    return dataTypes.keySet();
+    return featureDataTypes.keySet();
+  }
+
+  @JsonIgnore
+  public Set<ClinicalType> getSupplementalTypes() {
+    return supplementalDataTypes.keySet();
   }
 
   @JsonIgnore
   public Set<FileSubType> getSubTypes(FeatureType type) {
-    return dataTypes.get(type);
+    return featureDataTypes.get(type);
+  }
+
+  @JsonIgnore
+  public Set<FileSubType> getSubTypes(ClinicalType type) {
+    return supplementalDataTypes.get(type);
+  }
+
+  public boolean hasSupplementalType() {
+    return supplementalDataTypes != null;
   }
 
 }

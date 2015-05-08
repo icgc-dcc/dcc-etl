@@ -24,8 +24,10 @@ import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
 import java.util.Map;
 
+import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,30 +74,34 @@ public class RepositoryImporter implements Importer {
     val watch = createStarted();
 
     // The business
-    write();
-    index();
+    writeFiles();
+    indexFiles();
 
     log.info("Finished importing repository in {}", watch);
   }
 
-  private void write() {
+  private void writeFiles() {
     val context = createRepositoryContext();
 
-    logBanner(" Importing PCAWG");
+    logBanner("Importing PCAWG");
     val projectImporter = new PCAWGImporter(context);
     projectImporter.execute();
 
-    logBanner(" Importing TCGA");
+    logBanner("Importing TCGA");
     val tcgaImporter = new TCGAImporter(context);
     tcgaImporter.execute();
 
-    logBanner(" Importing CGHub");
+    logBanner("Importing CGHub");
     val cghubImporter = new CGHubImporter(context);
     cghubImporter.execute();
   }
 
-  private void index() {
-    new RepositoryFileIndexer(mongoUri, esUri).indexFiles();
+  @SneakyThrows
+  private void indexFiles() {
+    logBanner("Indexing files");
+    @Cleanup
+    val indexer = new RepositoryFileIndexer(mongoUri, esUri);
+    indexer.indexFiles();
   }
 
   private Map<String, String> getProjectPrimarySites() {

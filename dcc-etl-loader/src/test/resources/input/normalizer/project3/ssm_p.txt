@@ -1,0 +1,4 @@
+analysis_id	analyzed_sample_id	mutation_type	chromosome	chromosome_start	chromosome_end	chromosome_strand	reference_genome_allele	control_genotype	mutated_from_allele	mutated_to_allele	tumour_genotype	expressed_allele	quality_score	probability	total_read_count	mutant_allele_read_count	verification_status	verification_platform	biological_validation_status	biological_validation_platform	marking	mutation	observation_id
+0040	00312	1	117	0	0	1	XPoZvxAExq	A/T	A	A	A/T	A	-888	18.85941835077424	2	1	4	-888	1	1	OPEN	A>T	v1
+0041	00322	4	9	0	0	1	 bZTHUTKPj	A/T	A	A	A/T	A	35.518543903991215	43.74356044289727	2	1	3	-777	1	1	CONTROLLED	A>T	v2
+0042	00302	2	117	0	0	1	gJOuUfAiP 	A/T	A	A	A/T	A	23.749724683709072	44.548912686021815	2	1	3	-888	1	1	MASKED	A>T	v3
