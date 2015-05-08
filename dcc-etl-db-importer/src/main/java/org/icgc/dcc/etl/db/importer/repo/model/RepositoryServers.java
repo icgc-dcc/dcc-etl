@@ -24,10 +24,6 @@ import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.TCGA;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryType.GNOS;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryType.WEB_ARCHIVE;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import lombok.Builder;
@@ -36,17 +32,12 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer.RepositoryServerBuilder;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.RepositoryServer.RepositoryServerBuilder;
 
 import com.google.common.collect.ImmutableList;
 
 @NoArgsConstructor(access = PRIVATE)
-public final class FileRepositories {
-
-  /**
-   * Constants.
-   */
-  public static final String FILE_REPOSITORY_ORG_FIELD_NAME = "repository.repo_org";
+public final class RepositoryServers {
 
   // @formatter:off
   public static final List<RepositoryServer> SERVERS = ImmutableList.of(
@@ -99,21 +90,6 @@ public final class FileRepositories {
     return null;
   }
 
-  @NonNull
-  public static final String formatDateTime(LocalDateTime dateTime) {
-    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
-  }
-
-  @NonNull
-  public static final String formatDateTime(ZonedDateTime dateTime) {
-    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
-  }
-
-  @NonNull
-  public static final String formatDateTime(Instant dateTime) {
-    return dateTime.toString();
-  }
-
   @Value
   @Builder
   public static class RepositoryServer {
@@ -121,7 +97,6 @@ public final class FileRepositories {
     RepositoryType type;
     RepositoryOrg org;
     String name;
-    String location;
     String country;
     String baseUrl;
 

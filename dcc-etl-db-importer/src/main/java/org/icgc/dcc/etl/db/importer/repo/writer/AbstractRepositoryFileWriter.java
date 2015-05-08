@@ -20,7 +20,6 @@ package org.icgc.dcc.etl.db.importer.repo.writer;
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.FILE_REPOSITORY_ORG_FIELD_NAME;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -36,16 +35,21 @@ import com.mongodb.MongoClientURI;
 public abstract class AbstractRepositoryFileWriter<T> extends AbstractJongoWriter<T> {
 
   /**
-   * Dependencies.
+   * Constants.
+   */
+  public static final String FILE_REPOSITORY_ORG_FIELD_NAME = "repository.repo_org";
+
+  /**
+   * Metadata.
    */
   @NonNull
-  protected final MongoCollection fileCollection;
+  protected final RepositoryOrg organization;
 
   /**
    * Dependencies.
    */
   @NonNull
-  protected final RepositoryOrg organization;
+  protected final MongoCollection fileCollection;
 
   public AbstractRepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull RepositoryOrg organization) {
     super(mongoUri);

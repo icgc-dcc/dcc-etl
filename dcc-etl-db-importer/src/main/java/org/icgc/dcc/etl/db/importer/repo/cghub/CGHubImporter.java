@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.db.importer.repo.cghub;
 
 import static com.google.common.base.Stopwatch.createStarted;
-import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubProjects.getDiseaseCodes;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getProjectDiseaseCodes;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -52,7 +52,7 @@ public class CGHubImporter extends RepositoryFileImporter {
 
     writer.clearFiles();
     try {
-      for (val diseaseCode : getDiseaseCodes()) {
+      for (val diseaseCode : getProjectDiseaseCodes()) {
         log.info("Reading project details '{}'...", diseaseCode);
         val details = reader.readDetails(diseaseCode);
 

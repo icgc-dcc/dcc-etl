@@ -31,7 +31,7 @@ import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getSampleId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.isBaiFile;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.resolveProjectCode;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.getCGHubServer;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.getCGHubServer;
 
 import java.time.Instant;
 
@@ -40,9 +40,8 @@ import lombok.val;
 
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileProcessor;
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.RepositoryServer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -129,7 +128,8 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
   private static String resolveLastModified(JsonNode result) {
     val text = getLastModified(result);
-    return FileRepositories.formatDateTime(Instant.parse(text));
+
+    return formatDateTime(Instant.parse(text));
   }
 
 }
