@@ -35,6 +35,9 @@ public class CGHubFileWriter extends AbstractRepositoryFileWriter<Iterable<Repos
 
   @Override
   public void writeFiles(Iterable<RepositoryFile> files) {
+    log.info("Clearing file documents...");
+    clearFiles();
+
     log.info("Writing file documents...");
     for (val file : files) {
       saveFile(file);

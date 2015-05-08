@@ -17,8 +17,11 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.cghub;
 
-import static com.google.common.base.Stopwatch.createStarted;
-import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getProjectDiseaseCodes;
+import static com.google.common.collect.Iterables.isEmpty;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+
+import java.io.IOException;
+
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -29,6 +32,9 @@ import org.icgc.dcc.etl.db.importer.repo.cghub.reader.CGHubAnalysisDetailReader;
 import org.icgc.dcc.etl.db.importer.repo.cghub.writer.CGHubFileWriter;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileImporter;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
@@ -42,28 +48,37 @@ public class CGHubImporter extends RepositoryFileImporter {
 
   @SneakyThrows
   public void execute() {
-    log.info("Starting import...");
-    val watch = createStarted();
+    log.info("Reading files...");
+    val details = readDetails();
+    log.info("Finished reading files");
 
-    val reader = new CGHubAnalysisDetailReader();
+    log.info("Processing details...");
+    val cghubFiles = processDetails(details);
+    log.info("Finished processing details");
+
+    if (isEmpty(cghubFiles)) {
+      log.error("**** Files are emtpy! Reusing previous imported files");
+      return;
+    }
+
+    log.info("Writing files...");
+    writeFiles(cghubFiles);
+    log.info("Wrote {} files", formatCount(cghubFiles));
+  }
+
+  private Iterable<ObjectNode> readDetails() {
+    return new CGHubAnalysisDetailReader().readDetails();
+  }
+
+  private Iterable<RepositoryFile> processDetails(Iterable<ObjectNode> details) {
     val processor = new CGHubAnalysisDetailProcessor(context);
+    return processor.processDetails(details);
+  }
+
+  private void writeFiles(Iterable<RepositoryFile> cghubFiles) throws IOException {
     @Cleanup
     val writer = new CGHubFileWriter(context.getMongoUri());
-
-    writer.clearFiles();
-    try {
-      for (val diseaseCode : getProjectDiseaseCodes()) {
-        log.info("Reading project details '{}'...", diseaseCode);
-        val details = reader.readDetails(diseaseCode);
-
-        val cghubFiles = processor.processDetails(diseaseCode, details);
-        writer.writeFiles(cghubFiles);
-
-        log.info("Finished importing project '{}'.", diseaseCode);
-      }
-    } finally {
-      log.info("Finished importing records in {}.", watch.stop());
-    }
+    writer.writeFiles(cghubFiles);
   }
 
 }

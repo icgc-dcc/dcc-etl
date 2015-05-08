@@ -19,13 +19,16 @@ package org.icgc.dcc.etl.db.importer.repo.cghub.util;
 
 import static lombok.AccessLevel.PRIVATE;
 import lombok.NoArgsConstructor;
-import lombok.val;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class CGHubAnalysisDetails {
+
+  public static String getDiseaseAbbr(JsonNode result) {
+    return result.get("disease_abbr").textValue();
+  }
 
   public static String getAnalysisId(JsonNode result) {
     return result.get("analysis_id").textValue();
@@ -63,10 +66,6 @@ public final class CGHubAnalysisDetails {
     return legacySampleId.substring(0, 12);
   }
 
-  public static String resolveProjectCode(String diseaseCode) {
-    return diseaseCode + "-US";
-  }
-
   public static String getFileName(JsonNode file) {
     return file.get("filename").textValue();
   }
@@ -81,12 +80,6 @@ public final class CGHubAnalysisDetails {
 
   public static String getLastModified(JsonNode result) {
     return result.get("last_modified").textValue();
-  }
-
-  public static boolean isBaiFile(JsonNode file) {
-    val fileName = getFileName(file);
-
-    return fileName.endsWith(".bam.bai");
   }
 
 }

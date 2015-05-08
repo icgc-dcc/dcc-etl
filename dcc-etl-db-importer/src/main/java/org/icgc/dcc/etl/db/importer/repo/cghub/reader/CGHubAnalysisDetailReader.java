@@ -18,9 +18,11 @@
 package org.icgc.dcc.etl.db.importer.repo.cghub.reader;
 
 import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.collect.Iterables.transform;
 import static com.google.common.net.HttpHeaders.ACCEPT;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubConverters.CGHUB_BASE_URL;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getProjectDiseaseCodes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,8 +52,13 @@ public class CGHubAnalysisDetailReader {
   public static final String CGHUB_API_URL = CGHUB_BASE_URL + "/cghub/metadata";
   public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";
 
+  public Iterable<ObjectNode> readDetails() {
+    // Lazy!
+    return transform(getProjectDiseaseCodes(), diseaseCode -> readDiseaseCodeDetails(diseaseCode));
+  }
+
   @SneakyThrows
-  public ObjectNode readDetails(@NonNull String diseaseCode) {
+  private ObjectNode readDiseaseCodeDetails(@NonNull String diseaseCode) {
     val watch = createStarted();
     val url = createUrl(diseaseCode);
 

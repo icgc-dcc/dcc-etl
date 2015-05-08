@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.db.importer.repo.cghub.core;
 
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getDiseaseAbbr;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFileName;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFileSize;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFiles;
@@ -29,8 +30,7 @@ import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getParticipantId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getResults;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getSampleId;
-import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.isBaiFile;
-import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.resolveProjectCode;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getDiseaseCodeProject;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.getCGHubServer;
 
 import java.time.Instant;
@@ -59,28 +59,32 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     super(context);
   }
 
-  public Iterable<RepositoryFile> processDetails(@NonNull String diseaseCode, @NonNull JsonNode details) {
+  @NonNull
+  public Iterable<RepositoryFile> processDetails(Iterable<ObjectNode> details) {
     val analysisFiles = ImmutableList.<RepositoryFile> builder();
 
-    val results = getResults(details);
-    for (val result : results) {
-      val files = getFiles(result);
-      for (val file : files) {
-        if (isBaiFile(file)) {
-          continue;
+    for (val detail : details) {
+      val results = getResults(detail);
+      for (val result : results) {
+        val files = getFiles(result);
+        for (val file : files) {
+          if (isBaiFile(file)) {
+            continue;
+          }
+
+          val analysisFile = createAnalysisFile(result, (ObjectNode) file);
+          analysisFiles.add(analysisFile);
         }
-
-        val analysisFile = createAnalysisFile(diseaseCode, result, (ObjectNode) file);
-
-        analysisFiles.add(analysisFile);
       }
     }
 
     return analysisFiles.build();
   }
 
-  private RepositoryFile createAnalysisFile(String diseaseCode, JsonNode result, ObjectNode file) {
-    val projectCode = resolveProjectCode(diseaseCode);
+  private RepositoryFile createAnalysisFile(JsonNode result, ObjectNode file) {
+    val diseaseCode = getDiseaseAbbr(result);
+    val project = getDiseaseCodeProject(diseaseCode);
+    val projectCode = project.getProjectCode();
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
@@ -109,7 +113,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
     analysisFile.getDonor().setProjectCode(projectCode);
     analysisFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
-    analysisFile.getDonor().setProgram(null);
+    analysisFile.getDonor().setProgram(project.getProgram());
 
     analysisFile.getDonor().setDonorId(resolveDonorId(projectCode, legacyDonorId));
     analysisFile.getDonor().setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId));
@@ -130,6 +134,12 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val text = getLastModified(result);
 
     return formatDateTime(Instant.parse(text));
+  }
+
+  private static boolean isBaiFile(JsonNode file) {
+    val fileName = getFileName(file);
+
+    return fileName.endsWith(".bam.bai");
   }
 
 }
