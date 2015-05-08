@@ -90,7 +90,7 @@ public class RepositoryFileIndexer implements Closeable {
       file.remove("_id");
 
       String source = file.toString();
-      client.prepareIndex(INDEX_ALIAS, INDEX_TYPE_NAME).setSource(source).execute();
+      client.prepareIndex(indexName, INDEX_TYPE_NAME).setSource(source).execute();
     });
 
     aliasIndex();
