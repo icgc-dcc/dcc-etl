@@ -36,7 +36,7 @@ public abstract class BaseRepository {
    * @param keys - the business key
    * @return the id
    */
-  String findId(String... keys) {
+  String findId(boolean create, String... keys) {
     for (String key : keys) {
       if (key == null) {
         throw new BadRequestException(format("Business key value is null for keys '%s'", formatKeys(keys)));
@@ -44,15 +44,19 @@ public abstract class BaseRepository {
     }
 
     // Resolve the "internal" representation of the id
-    Long id = resolveId(keys);
+    Long id = resolveId(create, keys);
 
     // Format for public consumption
     return formatId(id);
   }
 
-  private Long resolveId(String... keys) {
+  private Long resolveId(boolean create, String... keys) {
     // Try to find the existing key
     Long id = getId(keys);
+
+    if (!create) {
+      return id;
+    }
 
     int attempts = 0;
     while (true) {
@@ -68,7 +72,7 @@ public abstract class BaseRepository {
           formatKeys(keys), attempts);
 
       try {
-        // Newly discovered key, so create
+        // Newly discovered key, so CREATE
         id = insertId(keys);
       } catch (UnableToExecuteStatementException e) {
         // Most likely a race condition due to concurrent inserts, probably caused by a duplicate

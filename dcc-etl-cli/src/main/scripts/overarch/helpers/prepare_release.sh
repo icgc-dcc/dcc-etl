@@ -1,6 +1,6 @@
 #!/bin/bash
 release_number='18'
-dictionary_version='0.10a'
+dictionary_version='0.11c'
 artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-release/org/icgc/dcc/'
 dcc_etl_cli_version='3.7.5.1'
 dcc_etl_annotator_version='3.7.5.1'

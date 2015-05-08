@@ -41,28 +41,28 @@ public class StubIdentifierClient implements IdentifierClient {
   }
 
   @Override
-  public String getDonorId(String submittedDonorId, String submittedProjectId) {
+  public String createDonorId(String submittedDonorId, String submittedProjectId) {
     return "DO" + generateId(
         submittedDonorId,
         submittedProjectId);
   }
 
   @Override
-  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+  public String createSampleId(String submittedSampleId, String submittedProjectId) {
     return "SA" + generateId(
         submittedSampleId,
         submittedProjectId);
   }
 
   @Override
-  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+  public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
     return "SP" + generateId(
         submittedSpecimenId,
         submittedProjectId);
   }
 
   @Override
-  public String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
+  public String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
       String mutationType, String assemblyVersion) {
     return "MU" + generateId(
         chromosome,

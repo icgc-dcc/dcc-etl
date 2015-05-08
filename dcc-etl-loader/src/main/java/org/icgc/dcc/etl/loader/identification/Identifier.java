@@ -204,7 +204,7 @@ public final class Identifier {
         String originalDonorId = entry.getString(
             prefixedFields(fileSchemaType, SUBMISSION_DONOR_ID));
         printDebugLog(originalDonorId, projectId);
-        return idClient.getDonorId(originalDonorId, projectId);
+        return idClient.createDonorId(originalDonorId, projectId);
       }
 
     },
@@ -217,7 +217,7 @@ public final class Identifier {
         String originalSpecimenId = entry.getString(
             prefixedFields(fileSchemaType, SUBMISSION_SPECIMEN_ID));
         printDebugLog(originalSpecimenId, projectId);
-        return idClient.getSpecimenId(originalSpecimenId, projectId);
+        return idClient.createSpecimenId(originalSpecimenId, projectId);
       }
 
     },
@@ -234,7 +234,7 @@ public final class Identifier {
         String originalSpecimenId = entry.getString(
             prefixedFields(fileSchemaType, SUBMISSION_DONOR_ID));
         printDebugLog(originalSpecimenId, projectId);
-        return idClient.getDonorId(originalSpecimenId, projectId);
+        return idClient.createDonorId(originalSpecimenId, projectId);
       }
 
     },
@@ -247,7 +247,7 @@ public final class Identifier {
         String originalSampleId = entry.getString(
             prefixedFields(fileSchemaType, SUBMISSION_ANALYZED_SAMPLE_ID));
         printDebugLog(originalSampleId, projectId);
-        return idClient.getSampleId(originalSampleId, projectId);
+        return idClient.createSampleId(originalSampleId, projectId);
       }
 
     },
@@ -273,7 +273,7 @@ public final class Identifier {
             prefixedFields(metaFileSchemaType, SUBMISSION_OBSERVATION_ASSEMBLY_VERSION));
 
         printDebugLog(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
-        return idClient.getMutationId(
+        return idClient.createMutationId(
             chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
       }
 

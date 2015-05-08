@@ -77,7 +77,7 @@ public class HttpIdentifierClientTest {
         int end = start + nReqs;
         barrier.await();
         for (int i = start; i < end; ++i) {
-          ids.add(idClient.getDonorId(String.valueOf(i), String.valueOf(i)));
+          ids.add(idClient.createDonorId(String.valueOf(i), String.valueOf(i)));
         }
         return ids;
       }
