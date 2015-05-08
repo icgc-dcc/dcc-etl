@@ -101,7 +101,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     analysisFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
     analysisFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
 
-    analysisFile.getRepository().setRepoPath(null);
+    analysisFile.getRepository().setRepoPath(server.getType().getPath());
     analysisFile.getRepository().setFileName(getFileName(file));
     analysisFile.getRepository().setFileMd5sum(null);
     analysisFile.getRepository().setFileSize(getFileSize(file));

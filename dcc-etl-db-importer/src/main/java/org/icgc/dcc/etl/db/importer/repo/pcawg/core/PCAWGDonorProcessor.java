@@ -91,6 +91,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private void assignIds(Iterable<RepositoryFile> donorFiles) {
+    log.info("Assigning ICGC ids...");
     for (val donorFile : donorFiles) {
       val projectCode = donorFile.getDonor().getProjectCode();
       val submittedDonorId = donorFile.getDonor().getSubmittedDonorId();
@@ -173,7 +174,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     donorFile.getRepository().getRepoServer().get(0).setRepoCountry(server.getCountry());
     donorFile.getRepository().getRepoServer().get(0).setRepoBaseUrl(server.getBaseUrl());
 
-    donorFile.getRepository().setRepoPath(null);
+    donorFile.getRepository().setRepoPath(server.getType().getPath());
     donorFile.getRepository().setFileName(fileName);
     donorFile.getRepository().setFileMd5sum(null);
     donorFile.getRepository().setFileSize(fileSize);

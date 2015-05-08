@@ -24,14 +24,16 @@ import lombok.RequiredArgsConstructor;
 
 import org.icgc.dcc.common.core.model.Identifiable;
 
+@Getter
 @RequiredArgsConstructor(access = PRIVATE)
 public enum RepositoryType implements Identifiable {
 
-  GNOS("GNOS"),
-  WEB_ARCHIVE("Web Archive");
+  GNOS("GNOS", "/cghub/metadata/analysisFull/"),
+  WEB_ARCHIVE("Web Archive", "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
 
-  @Getter
   @NonNull
   private final String id;
+  @NonNull
+  private final String path;
 
 }

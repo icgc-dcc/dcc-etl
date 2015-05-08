@@ -38,32 +38,32 @@ public abstract class RepositoryFileProcessor {
 
   @NonNull
   protected String resolvePrimarySite(String projectCode) {
-    return context.getPrimarySites().get(projectCode);
+    return context.getPrimarySite(projectCode);
   }
 
   @NonNull
   protected String resolveDonorId(String projectCode, String submittedDonorId) {
-    return context.getIdentifierClient().getDonorId(submittedDonorId, projectCode);
+    return context.getDonorId(submittedDonorId, projectCode);
   }
 
   @NonNull
   protected String resolveSpecimenId(String projectCode, String submittedSpecimenId) {
-    return context.getIdentifierClient().getSpecimenId(submittedSpecimenId, projectCode);
+    return context.getSpecimenId(submittedSpecimenId, projectCode);
   }
 
   @NonNull
   protected String resolveSampleId(String projectCode, String submittedSampleId) {
-    return context.getIdentifierClient().getSampleId(submittedSampleId, projectCode);
+    return context.getSampleId(submittedSampleId, projectCode);
   }
 
   @NonNull
   protected Map<String, String> resolveTCGAUUIDs(Set<String> tcgaBarcodes) {
-    return context.getTcgaClient().getUUIDs(tcgaBarcodes);
+    return context.getTCGAUUIDs(tcgaBarcodes);
   }
 
   @NonNull
   protected Map<String, String> resolveTCGABarcodes(Set<String> tcgaUuids) {
-    return context.getTcgaClient().getBarcodes(tcgaUuids);
+    return context.getTCGABarcodes(tcgaUuids);
   }
 
   @NonNull

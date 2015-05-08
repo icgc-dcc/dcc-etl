@@ -17,6 +17,7 @@ j * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights res
  */
 package org.icgc.dcc.etl.db.importer.repo.tcga;
 
+import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -43,6 +44,11 @@ public class TCGAImporter extends RepositoryFileImporter {
     log.info("Reading clinical files...");
     val clinicalFiles = readClinicalFiles();
     log.info("Read {} clinical files", formatCount(clinicalFiles));
+
+    if (isEmpty(clinicalFiles)) {
+      log.error("**** Files are emtpy! Reusing previous imported files");
+      return;
+    }
 
     log.info("Writing clinical files...");
     writeClinicalFiles(clinicalFiles);

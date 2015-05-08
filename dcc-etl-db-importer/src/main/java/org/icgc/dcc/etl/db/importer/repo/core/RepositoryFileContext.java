@@ -18,19 +18,22 @@
 package org.icgc.dcc.etl.db.importer.repo.core;
 
 import java.util.Map;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
 
 import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.mongodb.MongoClientURI;
 
 /**
  */
-@Value
+@RequiredArgsConstructor
 public class RepositoryFileContext {
 
   /**
@@ -46,11 +49,78 @@ public class RepositoryFileContext {
   protected final Map<String, String> primarySites;
 
   /**
+   * Caches.
+   */
+  private final Table<String, String, String> donorIdCache = HashBasedTable.create();
+  private final Table<String, String, String> specimenIdCache = HashBasedTable.create();
+  private final Table<String, String, String> sampleIdCache = HashBasedTable.create();
+
+  /**
    * Dependencies.
    */
   @NonNull
   protected final IdentifierClient identifierClient;
   @NonNull
   protected final TCGAClient tcgaClient;
+
+  @NonNull
+  public String getPrimarySite(String projectCode) {
+    return primarySites.get(projectCode);
+  }
+
+  @NonNull
+  public String getDonorId(String submittedDonorId, String submittedProjectId) {
+    String donorId = donorIdCache.get(submittedDonorId, submittedProjectId);
+    if (donorId == null) {
+      donorId = identifierClient.getDonorId(submittedDonorId, submittedProjectId);
+
+      donorIdCache.put(submittedDonorId, submittedProjectId, donorId);
+    }
+
+    return filter(donorId);
+  }
+
+  @NonNull
+  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    String specimenId = specimenIdCache.get(submittedSpecimenId, submittedProjectId);
+    if (specimenId == null) {
+      specimenId = identifierClient.getSpecimenId(submittedSpecimenId, submittedProjectId);
+
+      specimenIdCache.put(submittedSpecimenId, submittedProjectId, specimenId);
+    }
+
+    return filter(specimenId);
+  }
+
+  @NonNull
+  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+    String sampleId = sampleIdCache.get(submittedSampleId, submittedProjectId);
+    if (sampleId == null) {
+      sampleId = identifierClient.getSampleId(submittedSampleId, submittedProjectId);
+
+      sampleIdCache.put(submittedSampleId, submittedProjectId, sampleId);
+    }
+
+    return filter(sampleId);
+  }
+
+  @NonNull
+  protected Map<String, String> getTCGAUUIDs(Set<String> tcgaBarcodes) {
+    return tcgaClient.getUUIDs(tcgaBarcodes);
+  }
+
+  @NonNull
+  protected Map<String, String> getTCGABarcodes(Set<String> tcgaUuids) {
+    return tcgaClient.getBarcodes(tcgaUuids);
+  }
+
+  // TODO: Remove after identifier return 404s instead of "<id-prefix>null"
+  private static String filter(String id) {
+    if (id.endsWith("null")) {
+      return null;
+    }
+
+    return id;
+  }
 
 }

@@ -66,6 +66,8 @@ public class DBImporter {
   @NonNull
   private final MongoClientURI mongoUri;
   @NonNull
+  private final String esUri = "es://localhost:9300";
+  @NonNull
   private final ICGCClientConfig icgcConfig;
   @NonNull
   private final Map<CollectionName, Importer> importers;
@@ -97,7 +99,7 @@ public class DBImporter {
         new PathwayImporter(mongoUri),
         new GoImporter(mongoUri),
         new DiagramImporter(mongoUri),
-        new RepositoryImporter(mongoUri)
+        new RepositoryImporter(mongoUri, esUri)
         );
 
     return uniqueIndex(importers, (Importer importer) -> importer.getCollectionName());

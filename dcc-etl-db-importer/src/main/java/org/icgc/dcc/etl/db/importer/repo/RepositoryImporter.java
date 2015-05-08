@@ -32,7 +32,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
+import org.icgc.dcc.etl.core.id.HttpIdentifierClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.core.Importer;
@@ -62,7 +62,7 @@ public class RepositoryImporter implements Importer {
   @NonNull
   private final MongoClientURI mongoUri;
   @NonNull
-  private final String esUri = "es://localhost:9300";
+  private final String esUri;
 
   @Override
   public CollectionName getCollectionName() {
@@ -131,7 +131,8 @@ public class RepositoryImporter implements Importer {
 
   private static IdentifierClient createIdentifierClient() {
     // TODO: Externalize
-    return new HashIdentifierClient();
+    val dummyRelease = "";
+    return new HttpIdentifierClient("http://hcache-dcc.oicr.on.ca:5391/", dummyRelease);
   }
 
   private static TCGAClient createTCGAClient() {

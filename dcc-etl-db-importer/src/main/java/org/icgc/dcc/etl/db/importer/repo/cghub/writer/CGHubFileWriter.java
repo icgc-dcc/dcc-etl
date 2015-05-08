@@ -18,21 +18,27 @@
 package org.icgc.dcc.etl.db.importer.repo.cghub.writer;
 
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryOrg.CGHUB;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.writer.AbstractRepositoryFileWriter;
 
 import com.mongodb.MongoClientURI;
 
-public class CGHubFileWriter extends AbstractRepositoryFileWriter<RepositoryFile> {
+@Slf4j
+public class CGHubFileWriter extends AbstractRepositoryFileWriter<Iterable<RepositoryFile>> {
 
   public CGHubFileWriter(MongoClientURI mongoUri) {
     super(mongoUri, CGHUB);
   }
 
   @Override
-  public void writeFiles(RepositoryFile file) {
-    saveFile(file);
+  public void writeFiles(Iterable<RepositoryFile> files) {
+    log.info("Writing file documents...");
+    for (val file : files) {
+      saveFile(file);
+    }
   }
 
 }

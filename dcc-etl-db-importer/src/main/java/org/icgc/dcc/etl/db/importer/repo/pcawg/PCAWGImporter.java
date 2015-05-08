@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.db.importer.repo.pcawg;
 
 import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.URLs.getUrl;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_ARCHIVE_BASE_URL;
@@ -77,6 +78,11 @@ public class PCAWGImporter extends RepositoryFileImporter {
     log.info("Processing donor files...");
     val files = processFiles(donors);
     log.info("Finished processing {} donor files", formatCount(files));
+
+    if (isEmpty(files)) {
+      log.error("**** Files are empty! Reusing previous imported files");
+      return;
+    }
 
     log.info("Writing files...");
     writeFiles(files);

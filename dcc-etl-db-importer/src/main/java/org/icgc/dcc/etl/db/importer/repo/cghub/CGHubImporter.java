@@ -57,9 +57,7 @@ public class CGHubImporter extends RepositoryFileImporter {
         val details = reader.readDetails(diseaseCode);
 
         val cghubFiles = processor.processDetails(diseaseCode, details);
-        for (val cghubFile : cghubFiles) {
-          writer.writeFiles(cghubFile);
-        }
+        writer.writeFiles(cghubFiles);
 
         log.info("Finished importing project '{}'.", diseaseCode);
       }

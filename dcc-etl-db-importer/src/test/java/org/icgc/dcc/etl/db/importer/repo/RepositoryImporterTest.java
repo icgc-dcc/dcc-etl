@@ -30,8 +30,9 @@ public class RepositoryImporterTest {
   @Test
   public void testExecute() throws IOException {
     val mongoUri = getLocalMongoClientUri("dcc-genome");
+    val esUri = "es://localhost:9300";
 
-    val repositoryImporter = new RepositoryImporter(mongoUri);
+    val repositoryImporter = new RepositoryImporter(mongoUri, esUri);
     repositoryImporter.execute();
   }
 
