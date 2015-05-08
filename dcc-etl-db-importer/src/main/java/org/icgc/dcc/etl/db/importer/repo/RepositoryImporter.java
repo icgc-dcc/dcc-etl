@@ -83,15 +83,15 @@ public class RepositoryImporter implements Importer {
   private void writeFiles() {
     val context = createRepositoryContext();
 
-    logBanner("Importing PCAWG");
+    logBanner("Importing PCAWG files");
     val projectImporter = new PCAWGImporter(context);
     projectImporter.execute();
 
-    logBanner("Importing TCGA");
+    logBanner("Importing TCGA files");
     val tcgaImporter = new TCGAImporter(context);
     tcgaImporter.execute();
 
-    logBanner("Importing CGHub");
+    logBanner("Importing CGHub files");
     val cghubImporter = new CGHubImporter(context);
     cghubImporter.execute();
   }

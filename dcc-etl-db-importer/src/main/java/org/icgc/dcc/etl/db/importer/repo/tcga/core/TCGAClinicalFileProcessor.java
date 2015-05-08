@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.tcga.core;
 
+import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.getTCGAServer;
 
@@ -29,8 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.collect.Sets;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileProcessor;
-import org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
+import org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
 import org.icgc.dcc.etl.db.importer.util.UUID5;
 
@@ -56,6 +57,13 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
   public Iterable<RepositoryFile> processClinicalFiles() {
     val clinicalFiles = createClinicalFiles();
+
+    if (isEmpty(clinicalFiles)) {
+      // TODO: Use previous days values
+      log.warn("**** TCGA site is down! Returing empty list");
+      return ImmutableList.of();
+    }
+
     translateBarcodes(clinicalFiles);
 
     return clinicalFiles;
