@@ -24,7 +24,6 @@ import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_A
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
 
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -32,19 +31,17 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RespositoryOrgImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.core.PCAWGDonorProcessor;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.reader.PCAWGDonorArchiveReader;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.writer.PCAWGFileWriter;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class PCAWGImporter extends RespositoryTypeImporter {
+public class PCAWGImporter extends RespositoryOrgImporter {
 
   /**
    * JSONL (new line delimited JSON file) dump of clean, curated PCAWG donor information.
@@ -60,15 +57,13 @@ public class PCAWGImporter extends RespositoryTypeImporter {
   @NonNull
   private final URL archiveUrl;
 
-  public PCAWGImporter(@NonNull URL archiveUrl, MongoClientURI mongoUri, Map<String, String> primarySites,
-      IdentifierClient identifierClient, TCGAClient tcgaClient) {
-    super(mongoUri, primarySites, identifierClient, tcgaClient);
+  public PCAWGImporter(@NonNull URL archiveUrl, @NonNull RepositoryContext context) {
+    super(context);
     this.archiveUrl = archiveUrl;
   }
 
-  public PCAWGImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient,
-      TCGAClient tcgaClient) {
-    this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, mongoUri, primarySites, identifierClient, tcgaClient);
+  public PCAWGImporter(@NonNull RepositoryContext context) {
+    this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, context);
   }
 
   @SneakyThrows
@@ -96,13 +91,13 @@ public class PCAWGImporter extends RespositoryTypeImporter {
   }
 
   private Iterable<RepositoryFile> processFiles(Iterable<ObjectNode> donors) {
-    val processor = new PCAWGDonorProcessor(primarySites, identifierClient, tcgaClient);
+    val processor = new PCAWGDonorProcessor(context);
     return processor.processDonors(donors);
   }
 
   private void writeFiles(Iterable<RepositoryFile> files) throws IOException {
     @Cleanup
-    val writer = new PCAWGFileWriter(mongoUri);
+    val writer = new PCAWGFileWriter(context.getMongoUri());
     writer.write(files);
   }
 

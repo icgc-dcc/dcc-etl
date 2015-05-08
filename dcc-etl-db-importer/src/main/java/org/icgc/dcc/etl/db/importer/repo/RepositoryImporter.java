@@ -36,6 +36,7 @@ import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.repo.cghub.CGHubImporter;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.db.importer.repo.tcga.TCGAImporter;
 import org.icgc.dcc.etl.db.importer.util.TransportClientFactory;
@@ -54,8 +55,12 @@ import com.mongodb.MongoClientURI;
 @RequiredArgsConstructor
 public class RepositoryImporter implements Importer {
 
+  /**
+   * Configuration
+   */
   @NonNull
   private final MongoClientURI mongoUri;
+  private final String esUri = "es://localhost:9300";
 
   @Override
   public CollectionName getCollectionName() {
@@ -66,6 +71,7 @@ public class RepositoryImporter implements Importer {
   public void execute() {
     val watch = createStarted();
 
+    // The business
     write();
     index();
 
@@ -73,34 +79,38 @@ public class RepositoryImporter implements Importer {
   }
 
   private void write() {
-    val primarySites = getProjectPrimarySites();
-    val identifierClient = createIdentifierClient();
-    val tcgaClient = createTCGAClient();
+    val context = createRepositoryContext();
 
     logBanner(" Importing PCAWG");
-    val projectImporter = new PCAWGImporter(mongoUri, primarySites, identifierClient, tcgaClient);
+    val projectImporter = new PCAWGImporter(context);
     projectImporter.execute();
 
     logBanner(" Importing TCGA");
-    val tcgaImporter = new TCGAImporter(mongoUri, primarySites, identifierClient, tcgaClient);
+    val tcgaImporter = new TCGAImporter(context);
     tcgaImporter.execute();
 
     logBanner(" Importing CGHub");
-    val cghubImporter = new CGHubImporter(mongoUri, primarySites, identifierClient, tcgaClient);
+    val cghubImporter = new CGHubImporter(context);
     cghubImporter.execute();
   }
 
-  private static void logBanner(String message) {
-    log.info(banner());
-    log.info(message);
-    log.info(banner());
-  }
+  private void index() {
+    // TODO: Externalize
+    val indexName = "icgc-repository";
+    val typeName = "file";
+    val client = TransportClientFactory.newTransportClient(esUri);
+    val jongo = createJongo(mongoUri);
+    client.prepareDelete().setIndex(indexName).execute();
 
-  private static String banner() {
-    return repeat("-", 80);
+    val files = jongo.getCollection(FILE_COLLECTION.getId());
+    for (val file : files.find().as(ObjectNode.class)) {
+      file.remove("_id");
+      client.prepareIndex(indexName, typeName).setSource(file.toString()).execute();
+    }
   }
 
   private Map<String, String> getProjectPrimarySites() {
+    // TODO: Use ICGC API?
     val jongo = createJongo(mongoUri);
 
     val map = ImmutableMap.<String, String> builder();
@@ -115,19 +125,13 @@ public class RepositoryImporter implements Importer {
     return map.build();
   }
 
-  private void index() {
+  private RepositoryContext createRepositoryContext() {
     // TODO: Externalize
-    val indexName = "icgc-repository";
-    val typeName = "file";
-    val client = TransportClientFactory.newTransportClient("es://localhost:9300");
-    val jongo = createJongo(mongoUri);
-    client.prepareDelete().setIndex(indexName).execute();
+    val primarySites = getProjectPrimarySites();
+    val identifierClient = createIdentifierClient();
+    val tcgaClient = createTCGAClient();
 
-    val files = jongo.getCollection(FILE_COLLECTION.getId());
-    for (val file : files.find().as(ObjectNode.class)) {
-      file.remove("_id");
-      client.prepareIndex(indexName, typeName).setSource(file.toString()).execute();
-    }
+    return new RepositoryContext(mongoUri, primarySites, identifierClient, tcgaClient);
   }
 
   private static IdentifierClient createIdentifierClient() {
@@ -136,7 +140,14 @@ public class RepositoryImporter implements Importer {
   }
 
   private static TCGAClient createTCGAClient() {
+    // TODO: Externalize
     return new TCGAClient();
+  }
+
+  private static void logBanner(String message) {
+    log.info(repeat("-", 80));
+    log.info(message);
+    log.info(repeat("-", 80));
   }
 
 }

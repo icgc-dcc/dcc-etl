@@ -17,17 +17,28 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.cghub.core;
 
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.CGHUB;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFileName;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFileSize;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getFiles;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getLegacyDonorId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getLegacySampleId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getLegacySpecimenId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getParticipantId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getResults;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getSampleId;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.isBaiFile;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.resolveProjectCode;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.getCGHubServer;
 
 import java.time.Instant;
-import java.util.Map;
 
 import lombok.NonNull;
 import lombok.val;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryOrgProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
@@ -36,18 +47,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
-public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
+public class CGHubAnalysisDetailProcessor extends RepositoryOrgProcessor {
 
   /**
    * Metadata.
    */
   @NonNull
-  private final RepositoryServer server;
+  private final RepositoryServer server = getCGHubServer();
 
-  public CGHubAnalysisDetailProcessor(Map<String, String> primarySites, IdentifierClient identifierClient,
-      TCGAClient tcgaClient) {
-    super(primarySites, identifierClient, tcgaClient);
-    this.server = resolveServer();
+  public CGHubAnalysisDetailProcessor(RepositoryContext context) {
+    super(context);
   }
 
   public Iterable<RepositoryFile> processDetails(@NonNull String diseaseCode, @NonNull JsonNode details) {
@@ -117,76 +126,8 @@ public class CGHubAnalysisDetailProcessor extends RepositoryTypeProcessor {
     return analysisFile;
   }
 
-  private static RepositoryServer resolveServer() {
-    for (val server : FileRepositories.getServers()) {
-      if (server.getOrg() == CGHUB) {
-        return server;
-      }
-    }
-
-    return null;
-  }
-
   private static String resolveLastModified(JsonNode result) {
     return FileRepositories.formatDateTime(Instant.parse(result.get("last_modified").textValue()));
-  }
-
-  private static String getAnalysisId(JsonNode result) {
-    return result.get("analysis_id").textValue();
-  }
-
-  private static long getFileSize(ObjectNode file) {
-    return file.get("filesize").longValue();
-  }
-
-  private static String getFileName(ObjectNode file) {
-    return file.get("filename").textValue();
-  }
-
-  private static String getParticipantId(JsonNode result) {
-    return result.get("participant_id").textValue();
-  }
-
-  private static String getSampleId(JsonNode result) {
-    return result.get("sample_id").textValue();
-  }
-
-  private static String getAliquotId(JsonNode result) {
-    return result.get("aliquot_id").textValue();
-  }
-
-  private static String getLegacySampleId(JsonNode result) {
-    return result.get("legacy_sample_id").textValue();
-  }
-
-  private static String getLegacySpecimenId(String legacySampleId) {
-    return legacySampleId.substring(0, 20);
-  }
-
-  private static String getLegacyDonorId(String legacySampleId) {
-    return legacySampleId.substring(0, 12);
-  }
-
-  private static String resolveProjectCode(String diseaseCode) {
-    return diseaseCode + "-US";
-  }
-
-  private static String getFileName(JsonNode file) {
-    return file.get("filename").textValue();
-  }
-
-  private static JsonNode getResults(JsonNode details) {
-    return details.path("result_set").path("results");
-  }
-
-  private static JsonNode getFiles(JsonNode result) {
-    return result.get("files");
-  }
-
-  private static boolean isBaiFile(JsonNode file) {
-    val fileName = getFileName(file);
-
-    return fileName.endsWith(".bam.bai");
   }
 
 }

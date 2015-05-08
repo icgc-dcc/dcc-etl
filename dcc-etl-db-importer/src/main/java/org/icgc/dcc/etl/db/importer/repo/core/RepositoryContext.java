@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,25 +15,42 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo.cghub;
+package org.icgc.dcc.etl.db.importer.repo.core;
 
-import static java.util.Collections.emptyMap;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
-import lombok.val;
+import java.util.Map;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Value;
 
 import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
-import org.junit.Test;
+import org.icgc.dcc.etl.core.id.IdentifierClient;
 
-public class CGHubImporterTest {
+import com.mongodb.MongoClientURI;
 
-  @Test
-  public void testExecute() {
-    val mongoUri = getLocalMongoClientUri("dcc-genome");
-    val context = new RepositoryContext(mongoUri, emptyMap(), new HashIdentifierClient(), new TCGAClient());
-    val cghubImporter = new CGHubImporter(context);
-    cghubImporter.execute();
-  }
+/**
+ */
+@Value
+public class RepositoryContext {
+
+  /**
+   * Configuration.
+   */
+  @Getter
+  protected final MongoClientURI mongoUri;
+
+  /**
+   * Metadata.
+   */
+  @NonNull
+  protected final Map<String, String> primarySites;
+
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  protected final IdentifierClient identifierClient;
+  @NonNull
+  protected final TCGAClient tcgaClient;
 
 }

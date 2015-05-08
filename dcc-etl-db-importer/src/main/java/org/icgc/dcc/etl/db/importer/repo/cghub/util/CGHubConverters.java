@@ -26,14 +26,14 @@ import lombok.NoArgsConstructor;
 import com.google.common.collect.ImmutableMap;
 
 @NoArgsConstructor(access = PRIVATE)
-public class CGHubMetadata {
+public final class CGHubConverters {
 
   /**
    * Constants.
    */
   public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu/";
 
-  private static final Map<String, String> sampleTypeCodeToValue = ImmutableMap.<String, String> builder()
+  private static final Map<String, String> SAMPLE_TYPE_CODE_MAPPING = ImmutableMap.<String, String> builder()
       .put("01", "Primary solid Tumor")
       .put("02", "Recurrent Solid Tumor")
       .put("03", "Primary Blood Derived Cancer - Peripheral Blood")
@@ -55,7 +55,7 @@ public class CGHubMetadata {
       .put("61", "Cell Line Derived Xenograft Tissue")
       .build();
 
-  private static final Map<String, String> analyteCodeToValue = ImmutableMap.<String, String> builder()
+  private static final Map<String, String> ANALYTE_CODE_MAPPING = ImmutableMap.<String, String> builder()
       .put("D", "DNA")
       .put("G", "Whole Genome Amplification (WGA) produced using GenomePlex (Rubicon) DNA")
       .put("H", "mirVana RNA (Allprep DNA) produced by hybrid protocol")
@@ -65,12 +65,12 @@ public class CGHubMetadata {
       .put("X", "Whole Genome Amplification (WGA) produced using Repli-G X (Qiagen) DNA (2nd Reaction)")
       .build();
 
-  public static String getAnalyte(String code) {
-    return analyteCodeToValue.get(code);
+  public static String convertAnalyteCode(String code) {
+    return ANALYTE_CODE_MAPPING.get(code);
   }
 
-  public static String getSampleType(String code) {
-    return sampleTypeCodeToValue.get(code);
+  public static String convertSampleTypeCode(String code) {
+    return SAMPLE_TYPE_CODE_MAPPING.get(code);
   }
 
 }

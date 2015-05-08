@@ -15,39 +15,18 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.repo;
-
-import java.util.Map;
+package org.icgc.dcc.etl.db.importer.repo.core;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-
-import com.mongodb.MongoClientURI;
-
 @RequiredArgsConstructor
-public abstract class RespositoryTypeImporter {
-
-  /**
-   * Configuration.
-   */
-  @NonNull
-  protected final MongoClientURI mongoUri;
-
-  /**
-   * Metadata.
-   */
-  @NonNull
-  protected final Map<String, String> primarySites;
+public abstract class RespositoryOrgImporter {
 
   /**
    * Dependencies.
    */
   @NonNull
-  protected final IdentifierClient identifierClient;
-  @NonNull
-  protected final TCGAClient tcgaClient;
+  protected RepositoryContext context;
 
 }

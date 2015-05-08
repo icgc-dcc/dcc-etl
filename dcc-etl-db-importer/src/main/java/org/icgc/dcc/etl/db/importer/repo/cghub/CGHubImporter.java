@@ -19,32 +19,25 @@ package org.icgc.dcc.etl.db.importer.repo.cghub;
 
 import static com.google.common.base.Stopwatch.createStarted;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubProjects.getProjects;
-
-import java.util.Map;
-
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
 import org.icgc.dcc.etl.db.importer.repo.cghub.core.CGHubAnalysisDetailProcessor;
 import org.icgc.dcc.etl.db.importer.repo.cghub.reader.CGHubAnalysisDetailReader;
 import org.icgc.dcc.etl.db.importer.repo.cghub.writer.CGHubFileWriter;
-
-import com.mongodb.MongoClientURI;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RespositoryOrgImporter;
 
 /**
  * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
  */
 @Slf4j
-public class CGHubImporter extends RespositoryTypeImporter {
+public class CGHubImporter extends RespositoryOrgImporter {
 
-  public CGHubImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient,
-      TCGAClient tcgaClient) {
-    super(mongoUri, primarySites, identifierClient, tcgaClient);
+  public CGHubImporter(RepositoryContext context) {
+    super(context);
   }
 
   @SneakyThrows
@@ -53,9 +46,9 @@ public class CGHubImporter extends RespositoryTypeImporter {
     val watch = createStarted();
 
     val reader = new CGHubAnalysisDetailReader();
-    val processor = new CGHubAnalysisDetailProcessor(primarySites, identifierClient, tcgaClient);
+    val processor = new CGHubAnalysisDetailProcessor(context);
     @Cleanup
-    val writer = new CGHubFileWriter(mongoUri);
+    val writer = new CGHubFileWriter(context.getMongoUri());
 
     writer.clearFiles();
     try {

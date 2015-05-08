@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,14 +40,7 @@ public class PCAWGDonorArchiveReader {
 
     @Cleanup
     val iterator = readValues();
-
-    val donors = Lists.<ObjectNode> newArrayList();
-    while (iterator.hasNext()) {
-      val donor = iterator.next();
-      donors.add(donor);
-    }
-
-    return donors;
+    return ImmutableList.copyOf(iterator);
   }
 
   private MappingIterator<ObjectNode> readValues() throws IOException {

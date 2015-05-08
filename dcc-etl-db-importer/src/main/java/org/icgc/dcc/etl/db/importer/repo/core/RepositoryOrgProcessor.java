@@ -23,52 +23,41 @@ import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-
 @RequiredArgsConstructor
-public abstract class RepositoryTypeProcessor {
-
-  /**
-   * Metadata.
-   */
-  @NonNull
-  private final Map<String, String> primarySites;
+public abstract class RepositoryOrgProcessor {
 
   /**
    * Dependencies.
    */
   @NonNull
-  private final IdentifierClient identifierClient;
-  @NonNull
-  private final TCGAClient tcgaClient;
+  private final RepositoryContext context;
 
   @NonNull
   protected String resolvePrimarySite(String projectCode) {
-    return primarySites.get(projectCode);
+    return context.getPrimarySites().get(projectCode);
   }
 
   @NonNull
   protected String resolveDonorId(String projectCode, String submittedDonorId) {
-    return identifierClient.getDonorId(submittedDonorId, projectCode);
+    return context.getIdentifierClient().getDonorId(submittedDonorId, projectCode);
   }
 
   @NonNull
   protected String resolveSpecimenId(String projectCode, String submittedSpecimenId) {
-    return identifierClient.getSpecimenId(submittedSpecimenId, projectCode);
+    return context.getIdentifierClient().getSpecimenId(submittedSpecimenId, projectCode);
   }
 
   @NonNull
   protected String resolveSampleId(String projectCode, String submittedSampleId) {
-    return identifierClient.getSampleId(submittedSampleId, projectCode);
+    return context.getIdentifierClient().getSampleId(submittedSampleId, projectCode);
   }
 
   protected Map<String, String> resolveUUIDs(Set<String> barcodes) {
-    return tcgaClient.getUUIDs(barcodes);
+    return context.getTcgaClient().getUUIDs(barcodes);
   }
 
   protected Map<String, String> resolveBarcodes(Set<String> uuids) {
-    return tcgaClient.getBarcodes(uuids);
+    return context.getTcgaClient().getBarcodes(uuids);
   }
 
 }

@@ -21,8 +21,7 @@ import static com.google.common.base.Objects.firstNonNull;
 import static org.elasticsearch.common.primitives.Longs.max;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.formatDateTime;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.PCAWG;
-import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_FILES_FIELD;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.getPCAWGServer;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
@@ -31,6 +30,7 @@ import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getBamF
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getDccProjectCode;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getFileName;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getFileSize;
+import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getFiles;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getGnosId;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getGnosRepo;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
@@ -38,41 +38,33 @@ import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubm
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
 
 import java.time.ZonedDateTime;
-import java.util.Map;
+import java.util.Set;
 
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.elasticsearch.common.collect.Sets;
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryOrgProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 
 @Slf4j
-public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
+public class PCAWGDonorProcessor extends RepositoryOrgProcessor {
 
-  /**
-   * TODO: Get from documents
-   */
-  private static final ZonedDateTime LAST_UPDATED = ZonedDateTime.now();
-
-  public PCAWGDonorProcessor(Map<String, String> primarySites, IdentifierClient identifierClient, TCGAClient tcgaClient) {
-    super(primarySites, identifierClient, tcgaClient);
+  public PCAWGDonorProcessor(RepositoryContext context) {
+    super(context);
   }
 
   public Iterable<RepositoryFile> processDonors(@NonNull Iterable<ObjectNode> donors) {
     val donorFiles = createDonorFiles(donors);
 
+    // The business
     translateUUIDs(donorFiles);
-
     assignIds(donorFiles);
 
     return donorFiles;
@@ -80,22 +72,7 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
 
   private void translateUUIDs(Iterable<RepositoryFile> donorFiles) {
     log.info("Collecting barcodes...");
-    val uuids = Sets.<String> newHashSet();
-    for (val donorFile : donorFiles) {
-      val donorId = donorFile.getDonor().getSubmittedDonorId();
-      val specimenId = donorFile.getDonor().getSubmittedSpecimenId();
-      val sampleId = donorFile.getDonor().getSubmittedSampleId();
-
-      if (isUUID(donorId)) {
-        uuids.add(donorId);
-      }
-      if (isUUID(specimenId)) {
-        uuids.add(specimenId);
-      }
-      if (isUUID(sampleId)) {
-        uuids.add(sampleId);
-      }
-    }
+    val uuids = resolveUUIDs(donorFiles);
 
     log.info("Translating barcodes to UUIDs...");
     val barcodes = resolveBarcodes(uuids);
@@ -159,7 +136,7 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
               continue;
             }
 
-            for (val workflowFile : workflow.path(PCAWG_FILES_FIELD)) {
+            for (val workflowFile : getFiles(workflow)) {
               val donorFile = createDonorFile(projectCode, submittedDonorId, workflow, workflowFile);
 
               donorFiles.add(donorFile);
@@ -179,11 +156,11 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
     val genosRepo = getGnosRepo(workflow);
-    val server = resolveServer(genosRepo);
+    val server = getPCAWGServer(genosRepo);
 
     val donorFile = new RepositoryFile();
     donorFile.setStudy("PCAWG");
-    donorFile.setAccess("controlled");
+    donorFile.setAccess(resolveAccess(fileName));
 
     donorFile.setDataType(null);
     donorFile.setDataSubType(null);
@@ -201,7 +178,7 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
     donorFile.getRepository().setFileName(fileName);
     donorFile.getRepository().setFileMd5sum(null);
     donorFile.getRepository().setFileSize(fileSize);
-    donorFile.getRepository().setLastModified(formatDateTime(LAST_UPDATED));
+    donorFile.getRepository().setLastModified(resolveLastModified(workflow));
 
     donorFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
     donorFile.getDonor().setProgram(null);
@@ -222,14 +199,34 @@ public class PCAWGDonorProcessor extends RepositoryTypeProcessor {
     return donorFile;
   }
 
-  private RepositoryServer resolveServer(String genosRepo) {
-    for (val server : FileRepositories.getServers()) {
-      if (server.getOrg() == PCAWG && server.getBaseUrl().equals(genosRepo)) {
-        return server;
+  private static String resolveLastModified(JsonNode workflow) {
+    // TODO: mapping
+    return formatDateTime(ZonedDateTime.now());
+  }
+
+  private static Set<String> resolveUUIDs(Iterable<RepositoryFile> donorFiles) {
+    val uuids = Sets.<String> newHashSet();
+    for (val donorFile : donorFiles) {
+      val donorId = donorFile.getDonor().getSubmittedDonorId();
+      val specimenId = donorFile.getDonor().getSubmittedSpecimenId();
+      val sampleId = donorFile.getDonor().getSubmittedSampleId();
+
+      if (isUUID(donorId)) {
+        uuids.add(donorId);
+      }
+      if (isUUID(specimenId)) {
+        uuids.add(specimenId);
+      }
+      if (isUUID(sampleId)) {
+        uuids.add(sampleId);
       }
     }
+    return uuids;
+  }
 
-    return null;
+  private static String resolveAccess(String fileName) {
+    // TODO: mapping
+    return "controlled";
   }
 
   private static String resolveFileName(JsonNode workflowFile) {

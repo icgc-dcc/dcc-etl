@@ -34,6 +34,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer.RepositoryServerBuilder;
 
@@ -65,6 +66,37 @@ public final class FileRepositories {
   @NonNull
   public static Iterable<RepositoryServer> getServers() {
     return SERVERS;
+  }
+
+  public static RepositoryServer getCGHubServer() {
+    for (val server : getServers()) {
+      if (server.getOrg() == CGHUB) {
+        return server;
+      }
+    }
+
+    return null;
+  }
+
+  public static RepositoryServer getTCGAServer() {
+    for (val server : getServers()) {
+      if (server.getOrg() == TCGA) {
+        return server;
+      }
+    }
+
+    return null;
+  }
+
+  @NonNull
+  public static RepositoryServer getPCAWGServer(String genosRepo) {
+    for (val server : getServers()) {
+      if (server.getOrg() == PCAWG && server.getBaseUrl().equals(genosRepo)) {
+        return server;
+      }
+    }
+
+    return null;
   }
 
   @NonNull

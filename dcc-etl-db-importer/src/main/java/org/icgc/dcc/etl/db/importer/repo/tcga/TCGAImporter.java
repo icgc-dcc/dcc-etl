@@ -18,32 +18,25 @@ j * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights res
 package org.icgc.dcc.etl.db.importer.repo.tcga;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-
-import java.util.Map;
-
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.RespositoryTypeImporter;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RespositoryOrgImporter;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.core.TCGAClinicalFileProcessor;
 import org.icgc.dcc.etl.db.importer.repo.tcga.writer.TCGAClinicalFileWriter;
-
-import com.mongodb.MongoClientURI;
 
 /**
  * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
  */
 @Slf4j
-public class TCGAImporter extends RespositoryTypeImporter {
+public class TCGAImporter extends RespositoryOrgImporter {
 
-  public TCGAImporter(MongoClientURI mongoUri, Map<String, String> primarySites, IdentifierClient identifierClient,
-      TCGAClient tcgaClient) {
-    super(mongoUri, primarySites, identifierClient, tcgaClient);
+  public TCGAImporter(RepositoryContext context) {
+    super(context);
   }
 
   public void execute() {
@@ -57,13 +50,13 @@ public class TCGAImporter extends RespositoryTypeImporter {
   }
 
   private Iterable<RepositoryFile> readClinicalFiles() {
-    return new TCGAClinicalFileProcessor(primarySites, identifierClient, tcgaClient).processClinicalFiles();
+    return new TCGAClinicalFileProcessor(context).processClinicalFiles();
   }
 
   @SneakyThrows
   private void writeClinicalFiles(Iterable<RepositoryFile> clinicalFiles) {
     @Cleanup
-    val writer = new TCGAClinicalFileWriter(mongoUri);
+    val writer = new TCGAClinicalFileWriter(context.getMongoUri());
     writer.write(clinicalFiles);
   }
 

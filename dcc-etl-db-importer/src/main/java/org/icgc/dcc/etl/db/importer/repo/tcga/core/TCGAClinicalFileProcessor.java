@@ -18,9 +18,8 @@
 package org.icgc.dcc.etl.db.importer.repo.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositoryOrg.TCGA;
+import static org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.getTCGAServer;
 
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import lombok.NonNull;
@@ -28,10 +27,8 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.elasticsearch.common.collect.Sets;
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
-import org.icgc.dcc.etl.db.importer.repo.core.RepositoryTypeProcessor;
-import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryContext;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryOrgProcessor;
 import org.icgc.dcc.etl.db.importer.repo.model.FileRepositories.RepositoryServer;
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.db.importer.repo.tcga.reader.TCGAArchiveListReader;
@@ -40,24 +37,22 @@ import org.icgc.dcc.etl.db.importer.util.UUID5;
 import com.google.common.collect.ImmutableList;
 
 @Slf4j
-public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
-
-  /**
-   * Metadata.
-   */
-  @NonNull
-  private final RepositoryServer server;
-
-  public TCGAClinicalFileProcessor(Map<String, String> primarySites, IdentifierClient identifierClient,
-      TCGAClient tcgaClient) {
-    super(primarySites, identifierClient, tcgaClient);
-    this.server = resolveServer();
-  }
+public class TCGAClinicalFileProcessor extends RepositoryOrgProcessor {
 
   /**
    * Constants.
    */
   private static final Pattern CLINICAL_ARCHIVE_NAME_PATTERN = Pattern.compile(".*_(\\w+)\\.bio\\..*");
+
+  /**
+   * Metadata.
+   */
+  @NonNull
+  private final RepositoryServer server = getTCGAServer();
+
+  public TCGAClinicalFileProcessor(RepositoryContext context) {
+    super(context);
+  }
 
   public Iterable<RepositoryFile> processClinicalFiles() {
     val clinicalFiles = createClinicalFiles();
@@ -159,16 +154,6 @@ public class TCGAClinicalFileProcessor extends RepositoryTypeProcessor {
     }
 
     return clinicalFiles.build();
-  }
-
-  private static RepositoryServer resolveServer() {
-    for (val server : FileRepositories.getServers()) {
-      if (server.getOrg() == TCGA) {
-        return server;
-      }
-    }
-
-    return null;
   }
 
   private static String resolveProjectName(String diseaseCode) {

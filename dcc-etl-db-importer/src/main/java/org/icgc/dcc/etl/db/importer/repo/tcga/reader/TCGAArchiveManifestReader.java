@@ -17,15 +17,19 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.tcga.reader;
 
+import static com.google.common.io.Resources.readLines;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.icgc.dcc.common.core.util.URLs.getUrl;
+
+import java.io.IOException;
+import java.util.List;
+
 import lombok.SneakyThrows;
 import lombok.val;
 
 import org.icgc.dcc.etl.db.importer.repo.tcga.model.TCGAArchiveManifestEntry;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 
 public class TCGAArchiveManifestReader {
 
@@ -33,7 +37,7 @@ public class TCGAArchiveManifestReader {
   public static Iterable<TCGAArchiveManifestEntry> readEntries(String archiveUrl) {
     val entries = ImmutableList.<TCGAArchiveManifestEntry> builder();
 
-    val lines = Resources.readLines(getUrl(archiveUrl + "/MANIFEST.txt"), UTF_8);
+    val lines = readManifest(archiveUrl);
     for (val line : lines) {
       String[] fields = parseFields(line);
       val md5 = fields[0];
@@ -43,6 +47,11 @@ public class TCGAArchiveManifestReader {
     }
 
     return entries.build();
+  }
+
+  private static List<String> readManifest(String archiveUrl) throws IOException {
+    val manifestUrl = getUrl(archiveUrl + "/MANIFEST.txt");
+    return readLines(manifestUrl, UTF_8);
   }
 
   private static String[] parseFields(String line) {

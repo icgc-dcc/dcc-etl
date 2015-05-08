@@ -20,7 +20,7 @@ package org.icgc.dcc.etl.db.importer.repo.cghub.reader;
 import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.net.HttpHeaders.ACCEPT;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
-import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubMetadata.CGHUB_BASE_URL;
+import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubConverters.CGHUB_BASE_URL;
 
 import java.io.IOException;
 import java.io.InputStream;

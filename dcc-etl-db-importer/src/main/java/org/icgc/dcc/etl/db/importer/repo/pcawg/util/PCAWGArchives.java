@@ -37,15 +37,6 @@ public class PCAWGArchives {
   public static final String PCAWG_ARCHIVE_BASE_URL = "http://pancancer.info";
 
   /**
-   * Field names.
-   */
-  public static final String PCAWG_SUBMITTER_DONOR_ID = "submitter_donor_id";
-  public static final String PCAWG_DCC_PROJECT_CODE = "dcc_project_code";
-  public static final String PCAWG_SUBMITTER_SPECIMEN_ID = "submitter_specimen_id";
-  public static final String PCAWG_SUBMITTER_SAMPLE_ID = "submitter_sample_id";
-  public static final String PCAWG_FILES_FIELD = "files";
-
-  /**
    * Field values.
    */
   public static final List<String> PCAWG_SPECIMEN_CLASSES = ImmutableList.of(
@@ -72,19 +63,19 @@ public class PCAWGArchives {
   }
 
   public static String getDccProjectCode(@NonNull ObjectNode donor) {
-    return donor.get(PCAWG_DCC_PROJECT_CODE).textValue();
+    return donor.get("dcc_project_code").textValue();
   }
 
   public static String getSubmitterDonorId(@NonNull ObjectNode donor) {
-    return donor.get(PCAWG_SUBMITTER_DONOR_ID).textValue();
+    return donor.get("submitter_donor_id").textValue();
   }
 
   public static String getSubmitterSpecimenId(@NonNull JsonNode workflow) {
-    return workflow.get(PCAWG_SUBMITTER_SPECIMEN_ID).textValue();
+    return workflow.get("submitter_specimen_id").textValue();
   }
 
   public static String getSubmitterSampleId(@NonNull JsonNode workflow) {
-    return workflow.get(PCAWG_SUBMITTER_SAMPLE_ID).textValue();
+    return workflow.get("submitter_sample_id").textValue();
   }
 
   public static String getGnosId(@NonNull JsonNode workflow) {
@@ -95,4 +86,7 @@ public class PCAWGArchives {
     return workflow.get("gnos_repo").get(0).textValue();
   }
 
+  public static JsonNode getFiles(@NonNull JsonNode workflow) {
+    return workflow.path("files");
+  }
 }
