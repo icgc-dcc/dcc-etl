@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer.repo.cghub.core;
 
+import static com.google.common.base.Throwables.propagate;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
 import static org.icgc.dcc.etl.db.importer.repo.cghub.util.CGHubAnalysisDetails.getDiseaseAbbr;
@@ -37,6 +38,7 @@ import java.time.Instant;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileProcessor;
@@ -47,6 +49,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
+@Slf4j
 public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
   /**
@@ -72,8 +75,13 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
             continue;
           }
 
-          val analysisFile = createAnalysisFile(result, (ObjectNode) file);
-          analysisFiles.add(analysisFile);
+          try {
+            val analysisFile = createAnalysisFile(result, (ObjectNode) file);
+            analysisFiles.add(analysisFile);
+          } catch (Exception e) {
+            log.error("Error processing result: {}", result);
+            propagate(e);
+          }
         }
       }
     }

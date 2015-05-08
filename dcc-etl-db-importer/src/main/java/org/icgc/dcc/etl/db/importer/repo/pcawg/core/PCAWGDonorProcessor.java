@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.db.importer.repo.pcawg.core;
 import static com.google.common.base.Objects.firstNonNull;
 import static org.elasticsearch.common.primitives.Longs.max;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
+import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.getPCAWGServer;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
@@ -136,6 +137,24 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
               continue;
             }
 
+            // TODO: Exclude these by querying ES:
+            // "must_not": [
+            // {
+            // "terms": {
+            // "flags.is_manual_qc_failed": [
+            // "T"
+            // ]
+            // }
+            // },
+            // {
+            // "terms": {
+            // "flags.is_donor_blacklisted": [
+            // "T"
+            // ]
+            // }
+            // }
+            // ]
+
             for (val workflowFile : getFiles(workflow)) {
               val donorFile = createDonorFile(projectCode, submittedDonorId, workflow, workflowFile);
 
@@ -151,12 +170,14 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
 
   private RepositoryFile createDonorFile(String projectCode, String submittedDonorId, JsonNode workflow,
       JsonNode workflowFile) {
+    val project = getProjectCodeProject(projectCode);
+    val genosRepo = getGnosRepo(workflow);
+    val server = getPCAWGServer(genosRepo);
+
     val submitterSpecimenId = getSubmitterSpecimenId(workflow);
     val submitterSampleId = getSubmitterSampleId(workflow);
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
-    val genosRepo = getGnosRepo(workflow);
-    val server = getPCAWGServer(genosRepo);
 
     val donorFile = new RepositoryFile();
     donorFile.setStudy("PCAWG");
@@ -181,7 +202,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     donorFile.getRepository().setLastModified(resolveLastModified(workflow));
 
     donorFile.getDonor().setPrimarySite(resolvePrimarySite(projectCode));
-    donorFile.getDonor().setProgram(null);
+    donorFile.getDonor().setProgram(project.getProgram());
     donorFile.getDonor().setProjectCode(projectCode);
 
     donorFile.getDonor().setDonorId(null);

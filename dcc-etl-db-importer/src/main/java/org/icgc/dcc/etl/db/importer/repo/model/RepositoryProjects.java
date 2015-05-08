@@ -60,6 +60,7 @@ public final class RepositoryProjects {
       project().projectCode("CMDI-UK").diseaseCode(null).program(null).build(),
       project().projectCode("COAD-US").diseaseCode("COAD").program("TCGA").build(),
       project().projectCode("COCA-CN").diseaseCode(null).program(null).build(),
+      project().projectCode("DLBC-US").diseaseCode("DLBC").program("TCGA").build(),
       project().projectCode("EOPC-DE").diseaseCode(null).program(null).build(),
       project().projectCode("ESAD-UK").diseaseCode(null).program(null).build(),
       project().projectCode("ESCA-CN").diseaseCode(null).program(null).build(),
@@ -68,6 +69,7 @@ public final class RepositoryProjects {
       project().projectCode("GBM-US").diseaseCode("GBM").program("TCGA").build(),
       project().projectCode("HNCA-MX").diseaseCode(null).program(null).build(),
       project().projectCode("HNSC-US").diseaseCode("HNSC").program("TCGA").build(),
+      project().projectCode("KICH-US").diseaseCode("KICH").program("TCGA").build(),
       project().projectCode("KIRC-US").diseaseCode("KIRC").program("TCGA").build(),
       project().projectCode("KIRP-US").diseaseCode("KIRP").program("TCGA").build(),
       project().projectCode("LAML-CN").diseaseCode(null).program(null).build(),
@@ -109,6 +111,7 @@ public final class RepositoryProjects {
       project().projectCode("RECA-CN").diseaseCode(null).program(null).build(),
       project().projectCode("RECA-EU").diseaseCode(null).program(null).build(),
       project().projectCode("RTBL-FR").diseaseCode(null).program(null).build(),
+      project().projectCode("SARC-US").diseaseCode("SARC").program("TCGA").build(),
       project().projectCode("SKCA-BR").diseaseCode(null).program(null).build(),
       project().projectCode("SKCM-US").diseaseCode("SKCM").program("TCGA").build(),
       project().projectCode("STAD-US").diseaseCode("STAD").program("TCGA").build(),
@@ -126,16 +129,21 @@ public final class RepositoryProjects {
   }
 
   @NonNull
+  public static RepositoryProject getProjectCodeProject(String projectCode) {
+    return find(PROJECTS, project -> projectCode.equals(project.getProjectCode()));
+  }
+
+  @NonNull
   public static RepositoryProject getDiseaseCodeProject(String diseaseCode) {
-    return find(PROJECTS, project -> project.getDiseaseCode().equals(diseaseCode));
+    return find(PROJECTS, project -> diseaseCode.equals(project.getDiseaseCode()));
   }
 
   public static Iterable<RepositoryProject> getTCGAProjects() {
-    return filter(PROJECTS, project -> project.getProgram().equals("TCGA"));
+    return filter(PROJECTS, project -> "TCGA".equals(project.getProgram()));
   }
 
   public static Iterable<RepositoryProject> getTARGETProjects() {
-    return filter(PROJECTS, project -> project.getProgram().equals("TARGET"));
+    return filter(PROJECTS, project -> "TARGET".equals(project.getProgram()));
   }
 
   public static Iterable<String> getProjectDiseaseCodes() {
