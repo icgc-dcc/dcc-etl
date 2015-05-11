@@ -16,5 +16,5 @@ java_opts="-Xmx4g"
 
 java \
 	${java_opts} \
-	-Dlogback.configurationFile=${base_dir}/conf/logback.xml
+	-Dlogback.configurationFile=${base_dir}/conf/logback.xml \
 	-jar ${base_dir}/lib/dcc-etl-repo.jar --config ${base_dir}/conf/config.yaml "$@"
