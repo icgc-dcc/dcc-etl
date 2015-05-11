@@ -130,24 +130,24 @@ public final class RepositoryProjects {
 
   @NonNull
   public static RepositoryProject getProjectCodeProject(String projectCode) {
-    return find(PROJECTS, project -> projectCode.equals(project.getProjectCode()));
+    return find(getProjects(), project -> projectCode.equals(project.getProjectCode()));
   }
 
   @NonNull
   public static RepositoryProject getDiseaseCodeProject(String diseaseCode) {
-    return find(PROJECTS, project -> diseaseCode.equals(project.getDiseaseCode()));
+    return find(getProjects(), project -> diseaseCode.equals(project.getDiseaseCode()));
   }
 
   public static Iterable<RepositoryProject> getTCGAProjects() {
-    return filter(PROJECTS, project -> "TCGA".equals(project.getProgram()));
+    return filter(getProjects(), project -> "TCGA".equals(project.getProgram()));
   }
 
   public static Iterable<RepositoryProject> getTARGETProjects() {
-    return filter(PROJECTS, project -> "TARGET".equals(project.getProgram()));
+    return filter(getProjects(), project -> "TARGET".equals(project.getProgram()));
   }
 
   public static Iterable<String> getProjectDiseaseCodes() {
-    return filter(transform(PROJECTS, project -> project.getDiseaseCode()), notNull());
+    return filter(transform(getProjects(), project -> project.getDiseaseCode()), notNull());
   }
 
   @Value

@@ -40,6 +40,7 @@ public class RepositoryFileContext {
    * Configuration.
    */
   @Getter
+  @NonNull
   protected final MongoClientURI mongoUri;
 
   /**

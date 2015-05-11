@@ -116,17 +116,17 @@ public class RepositoryFileIndexer implements Closeable {
   }
 
   private void initializeIndex() {
-    val client = client.admin().indices();
+    val indexClient = client.admin().indices();
 
     log.info("Checking index '{}' for existence...", indexName);
-    boolean exists = client.prepareExists(indexName)
+    boolean exists = indexClient.prepareExists(indexName)
         .execute()
         .actionGet()
         .isExists();
 
     if (exists) {
       log.info("Deleting index '{}'...", indexName);
-      checkState(client.prepareDelete(indexName)
+      checkState(indexClient.prepareDelete(indexName)
           .execute()
           .actionGet()
           .isAcknowledged(),
@@ -135,7 +135,7 @@ public class RepositoryFileIndexer implements Closeable {
 
     try {
       log.info("Creating index '{}'...", indexName);
-      checkState(client
+      checkState(indexClient
           .prepareCreate(indexName)
           .setSettings(getSettings().toString())
           .execute()
@@ -147,7 +147,7 @@ public class RepositoryFileIndexer implements Closeable {
       String source = getTypeMapping(typeName).toString();
 
       log.info("Creating index '{}' mapping for type '{}'...", indexName, typeName);
-      checkState(client.preparePutMapping(indexName)
+      checkState(indexClient.preparePutMapping(indexName)
           .setType(typeName)
           .setSource(source)
           .execute()
