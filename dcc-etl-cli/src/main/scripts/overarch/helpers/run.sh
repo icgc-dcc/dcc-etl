@@ -71,7 +71,7 @@ if $use_docker; then
   }
 fi
 
-release_number=18
+release_number=19
 patch_number=0
 dictionary_version="0.11c"
 release_name="${release_prefix?}${release_number?}"
