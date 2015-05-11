@@ -24,7 +24,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import lombok.Cleanup;
@@ -32,7 +31,6 @@ import lombok.SneakyThrows;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.pig.ExecType;
 import org.apache.pig.data.Tuple;
@@ -48,6 +46,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Test;
+
+import com.google.common.collect.Iterators;
 
 public class DonorTherapyExporterTest extends EmbeddedDynamicExporter {
 
@@ -80,12 +80,7 @@ public class DonorTherapyExporterTest extends EmbeddedDynamicExporter {
     @Cleanup
     HTable table = new HTable(conf, DATA_TYPE);
     ResultScanner scan = table.getScanner(ArchiverConstant.DATA_CONTENT_FAMILY);
-    Iterator<Result> itr = scan.iterator();
-    long lines = 0;
-    while (itr.hasNext()) {
-      itr.next();
-      ++lines;
-    }
+    long lines = Iterators.size(scan.iterator());
     assertEquals(2, lines);
   }
 
