@@ -19,9 +19,9 @@ package org.icgc.dcc.etl.repo.model;
 
 import static com.google.common.collect.Iterables.tryFind;
 import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.etl.repo.model.RepositoryOrg.CGHUB;
-import static org.icgc.dcc.etl.repo.model.RepositoryOrg.PCAWG;
-import static org.icgc.dcc.etl.repo.model.RepositoryOrg.TCGA;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.CGHUB;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.PCAWG;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
 import static org.icgc.dcc.etl.repo.model.RepositoryType.GNOS;
 import static org.icgc.dcc.etl.repo.model.RepositoryType.WEB_ARCHIVE;
 
@@ -41,16 +41,16 @@ public final class RepositoryServers {
 
   // @formatter:off
   public static final List<RepositoryServer> SERVERS = ImmutableList.of(
-      server().org(CGHUB).type(GNOS)       .name("CGHub - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
-      server().org(TCGA) .type(WEB_ARCHIVE).name("TCGA DCC - Washington") .country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - Barcelona")     .country("ES").baseUrl("https://gtrepo-bsc.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - Tokyo")         .country("JP").baseUrl("https://gtrepo-riken.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - Seoul")         .country("KR").baseUrl("https://gtrepo-etri.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - London")        .country("UK").baseUrl("https://gtrepo-ebi.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - Heidelberg")    .country("DE").baseUrl("https://gtrepo-dkfz.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - Chicago (ICGC)").country("US").baseUrl("https://gtrepo-osdc-icgc.annailabs.com/").build(),
-      server().org(PCAWG).type(GNOS)       .name("PCAWG - Chicago (TCGA)").country("US").baseUrl("https://gtrepo-osdc-tcga.annailabs.com/").build()
+      server().source(CGHUB).type(GNOS)       .name("CGHub - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
+      server().source(TCGA) .type(WEB_ARCHIVE).name("TCGA DCC - Washington") .country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Barcelona")     .country("ES").baseUrl("https://gtrepo-bsc.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Tokyo")         .country("JP").baseUrl("https://gtrepo-riken.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Seoul")         .country("KR").baseUrl("https://gtrepo-etri.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - London")        .country("UK").baseUrl("https://gtrepo-ebi.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Heidelberg")    .country("DE").baseUrl("https://gtrepo-dkfz.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (ICGC)").country("US").baseUrl("https://gtrepo-osdc-icgc.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (TCGA)").country("US").baseUrl("https://gtrepo-osdc-tcga.annailabs.com/").build()
       );
   // @formatter:on
 
@@ -60,16 +60,17 @@ public final class RepositoryServers {
   }
 
   public static RepositoryServer getCGHubServer() {
-    return tryFind(getServers(), server -> server.getOrg() == CGHUB).orNull();
+    return tryFind(getServers(), server -> server.getSource() == CGHUB).orNull();
   }
 
   public static RepositoryServer getTCGAServer() {
-    return tryFind(getServers(), server -> server.getOrg() == TCGA).orNull();
+    return tryFind(getServers(), server -> server.getSource() == TCGA).orNull();
   }
 
   @NonNull
   public static RepositoryServer getPCAWGServer(String genosRepo) {
-    return tryFind(getServers(), server -> server.getOrg() == PCAWG && server.getBaseUrl().equals(genosRepo)).orNull();
+    return tryFind(getServers(), server -> server.getSource() == PCAWG && server.getBaseUrl().equals(genosRepo))
+        .orNull();
   }
 
   @Value
@@ -77,7 +78,7 @@ public final class RepositoryServers {
   public static class RepositoryServer {
 
     RepositoryType type;
-    RepositoryOrg org;
+    RepositorySource source;
     String name;
     String country;
     String baseUrl;

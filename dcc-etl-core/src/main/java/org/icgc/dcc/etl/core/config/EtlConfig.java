@@ -45,6 +45,8 @@ public class EtlConfig {
 
   String releaseMongoUri;
 
+  String repoMongoUri;
+
   String etlAdminMongoUri;
 
   String projectMongoUri;

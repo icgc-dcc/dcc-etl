@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,24 +15,26 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.model;
+package org.icgc.dcc.etl.repo.cli;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+import org.icgc.dcc.etl.repo.model.RepositorySource;
 
-@RequiredArgsConstructor(access = PRIVATE)
-public enum RepositoryOrg implements Identifiable {
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.ParameterException;
 
-  CGHUB("CGHub"),
-  TCGA("TCGA"),
-  PCAWG("PCAWG");
+public class RepositorySourceConverter implements IStringConverter<RepositorySource> {
 
-  @Getter
-  @NonNull
-  private final String id;
+  @Override
+  public RepositorySource convert(String value) {
+    for (val source : RepositorySource.values()) {
+      if (source.getId().toLowerCase().equals(value.toLowerCase())) {
+        return source;
+      }
+    }
+
+    throw new ParameterException("Unexpected repository source value:" + value);
+  }
 
 }

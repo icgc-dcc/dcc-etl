@@ -18,17 +18,24 @@
 package org.icgc.dcc.etl.repo.core;
 
 import lombok.Cleanup;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.model.RepositoryOrg;
-import org.icgc.dcc.etl.repo.writer.RepositoryFileWriter;
+import org.icgc.dcc.etl.repo.model.RepositorySource;
 
 @RequiredArgsConstructor
-public abstract class RepositoryFileImporter {
+public abstract class RepositorySourceFileImporter {
+
+  /**
+   * Metadata.
+   */
+  @NonNull
+  @Getter
+  protected RepositorySource source;
 
   /**
    * Dependencies.
@@ -36,10 +43,12 @@ public abstract class RepositoryFileImporter {
   @NonNull
   protected RepositoryFileContext context;
 
+  public abstract void execute();
+
   @SneakyThrows
-  protected void writeFiles(Iterable<RepositoryFile> files, RepositoryOrg organization) {
+  protected void writeFiles(Iterable<RepositoryFile> files, RepositorySource organization) {
     @Cleanup
-    val writer = new RepositoryFileWriter(context.getMongoUri(), organization);
+    val writer = new RepositorySourceFileWriter(context.getMongoUri(), organization);
     writer.writeFiles(files);
   }
 

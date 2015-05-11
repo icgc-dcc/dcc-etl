@@ -23,7 +23,7 @@ import java.util.List;
 
 import lombok.ToString;
 
-import org.icgc.dcc.etl.repo.model.RepositoryOrg;
+import org.icgc.dcc.etl.repo.model.RepositorySource;
 
 import com.beust.jcommander.Parameter;
 
@@ -33,8 +33,8 @@ import com.beust.jcommander.Parameter;
 @ToString
 public class Options {
 
-  @Parameter(names = { "--orgs" }, converter = RepositoryOrgConverter.class, description = "Organizations to import. Comma seperated list of: 'pcawg', 'tcga', 'cghub'. By default all organizations will be imported.")
-  public List<RepositoryOrg> orgs = newArrayList(RepositoryOrg.values());
+  @Parameter(names = { "--sources" }, converter = RepositorySourceConverter.class, description = "Organizations to import. Comma seperated list of: 'pcawg', 'tcga', 'cghub'. By default all organizations will be imported.")
+  public List<RepositorySource> sources = newArrayList(RepositorySource.values());
 
   @Parameter(names = { "--config" }, required = true, description = "Path to the repository config file")
   public String configFilePath;

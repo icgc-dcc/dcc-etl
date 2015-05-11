@@ -29,10 +29,11 @@ public class RepositoryImporterTest {
 
   @Test
   public void testExecute() throws IOException {
-    val mongoUri = getLocalMongoClientUri("dcc-genome");
+    val geneMongoUri = getLocalMongoClientUri("dcc-genome");
+    val repoMongoUri = getLocalMongoClientUri("dcc-repo");
     val esUri = "es://localhost:9300";
 
-    val repositoryImporter = new RepositoryImporter(mongoUri, esUri);
+    val repositoryImporter = new RepositoryImporter(geneMongoUri, repoMongoUri, esUri);
     repositoryImporter.execute();
   }
 

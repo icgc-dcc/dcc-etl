@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.repo.cghub;
 
 import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.repo.model.RepositoryOrg.CGHUB;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.CGHUB;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.repo.cghub.core.CGHubAnalysisDetailProcessor;
 import org.icgc.dcc.etl.repo.cghub.reader.CGHubAnalysisDetailReader;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositoryFileImporter;
+import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -36,10 +36,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
  */
 @Slf4j
-public class CGHubImporter extends RepositoryFileImporter {
+public class CGHubImporter extends RepositorySourceFileImporter {
 
   public CGHubImporter(RepositoryFileContext context) {
-    super(context);
+    super(CGHUB, context);
   }
 
   @SneakyThrows

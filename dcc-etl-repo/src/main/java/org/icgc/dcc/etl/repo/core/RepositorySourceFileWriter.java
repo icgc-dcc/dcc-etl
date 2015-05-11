@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.writer;
+package org.icgc.dcc.etl.repo.core;
 
 import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
@@ -25,14 +25,14 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.model.RepositoryOrg;
+import org.icgc.dcc.etl.repo.model.RepositorySource;
 import org.icgc.dcc.etl.repo.util.AbstractJongoWriter;
 import org.jongo.MongoCollection;
 
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class RepositoryFileWriter extends AbstractJongoWriter<Iterable<RepositoryFile>> {
+public class RepositorySourceFileWriter extends AbstractJongoWriter<Iterable<RepositoryFile>> {
 
   /**
    * Constants.
@@ -43,7 +43,7 @@ public class RepositoryFileWriter extends AbstractJongoWriter<Iterable<Repositor
    * Metadata.
    */
   @NonNull
-  protected final RepositoryOrg organization;
+  protected final RepositorySource source;
 
   /**
    * Dependencies.
@@ -51,10 +51,10 @@ public class RepositoryFileWriter extends AbstractJongoWriter<Iterable<Repositor
   @NonNull
   protected final MongoCollection fileCollection;
 
-  public RepositoryFileWriter(@NonNull MongoClientURI mongoUri, @NonNull RepositoryOrg organization) {
+  public RepositorySourceFileWriter(@NonNull MongoClientURI mongoUri, @NonNull RepositorySource organization) {
     super(mongoUri);
     this.fileCollection = getCollection(FILE_COLLECTION);
-    this.organization = organization;
+    this.source = organization;
   }
 
   @Override
@@ -69,12 +69,12 @@ public class RepositoryFileWriter extends AbstractJongoWriter<Iterable<Repositor
   }
 
   public void clearFiles() {
-    log.info("Clearing '{}' documents in collection '{}'", organization.getId(), fileCollection.getName());
-    val result = fileCollection.remove("{ " + FILE_REPOSITORY_ORG_FIELD_NAME + ": # }", organization.getId());
+    log.info("Clearing '{}' documents in collection '{}'", source.getId(), fileCollection.getName());
+    val result = fileCollection.remove("{ " + FILE_REPOSITORY_ORG_FIELD_NAME + ": # }", source.getId());
     checkState(result.getLastError().ok(), "Error clearing mongo: %s", result);
 
     log.info("Finished clearing {} '{}' documents in collection '{}'",
-        formatCount(result.getN()), organization.getId(), fileCollection.getName());
+        formatCount(result.getN()), source.getId(), fileCollection.getName());
   }
 
   protected void saveFile(RepositoryFile file) {

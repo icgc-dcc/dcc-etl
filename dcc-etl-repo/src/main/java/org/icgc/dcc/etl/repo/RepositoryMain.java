@@ -75,16 +75,21 @@ public class RepositoryMain {
   @SneakyThrows
   private static void run(Options options) {
     val configFilePath = options.configFilePath;
-
-    log.info("         config file    - {}", options.configFilePath);
-
     EtlConfig config = EtlConfigFile.read(new File(configFilePath));
 
-    val geneMongoUri = config.getGeneMongoUri();
-    val esUri = config.getEsUri();
-    val repoImporter = new RepositoryImporter(new MongoClientURI(geneMongoUri), esUri);
+    log.info("         sources        - {}", options.sources);
+    log.info("         config file    - {}", options.configFilePath);
+    log.info("         gene mongo uri - {}", config.getGeneMongoUri());
+    log.info("         repo mongo uri - {}", config.getGeneMongoUri());
 
-    repoImporter.execute();
+    val sources = options.sources;
+    val geneMongoUri = new MongoClientURI(config.getGeneMongoUri());
+    val repoMongoUri = new MongoClientURI(config.getRepoMongoUri());
+    val esUri = config.getEsUri();
+
+    val repoImporter = new RepositoryImporter(geneMongoUri, repoMongoUri, esUri);
+
+    repoImporter.execute(sources);
   }
 
   private static void usage(JCommander cli) {

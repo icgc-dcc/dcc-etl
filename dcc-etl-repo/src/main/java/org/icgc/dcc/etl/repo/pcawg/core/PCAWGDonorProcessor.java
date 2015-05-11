@@ -175,7 +175,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
 
     donorFile.getRepository()
         .setRepoType(server.getType().getId())
-        .setRepoOrg(server.getOrg().getId())
+        .setRepoOrg(server.getSource().getId())
         .setRepoEntityId(getGnosId(workflow));
 
     donorFile.getRepository().getRepoServer().get(0)

@@ -21,7 +21,7 @@ import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.URLs.getUrl;
-import static org.icgc.dcc.etl.repo.model.RepositoryOrg.PCAWG;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.PCAWG;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_ARCHIVE_BASE_URL;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositoryFileImporter;
+import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorProcessor;
 import org.icgc.dcc.etl.repo.pcawg.reader.PCAWGDonorArchiveReader;
@@ -41,7 +41,7 @@ import org.icgc.dcc.etl.repo.pcawg.reader.PCAWGDonorArchiveReader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Slf4j
-public class PCAWGImporter extends RepositoryFileImporter {
+public class PCAWGImporter extends RepositorySourceFileImporter {
 
   /**
    * JSONL (new line delimited JSON file) dump of clean, curated PCAWG donor information.
@@ -58,7 +58,7 @@ public class PCAWGImporter extends RepositoryFileImporter {
   private final URL archiveUrl;
 
   public PCAWGImporter(@NonNull URL archiveUrl, @NonNull RepositoryFileContext context) {
-    super(context);
+    super(PCAWG, context);
     this.archiveUrl = archiveUrl;
   }
 

@@ -6,13 +6,13 @@
 #   Runs dcc-etl-repo
 #
 # Usage:
-#   ./dcc-etl-repo.sh [--orgs cghub,pcawg,tcga]
+#   ./dcc-etl-repo.sh [--sources <sources>]
 #
 # Example:
-#   ./dcc-etl-repo.sh --orgs cghub,pcawg,tcga
+#   ./dcc-etl-repo.sh --sources cghub,pcawg,tcga
 
 base_dir=$(dirname $0)/..
-java_opts="-Xmx4g -Xms4g"
+java_opts="-Xmx4g"
 
 java \
 	${java_opts} \

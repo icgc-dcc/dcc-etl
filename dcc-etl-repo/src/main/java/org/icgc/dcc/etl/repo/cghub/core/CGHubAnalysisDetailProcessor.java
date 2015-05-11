@@ -116,7 +116,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
     analysisFile.getRepository()
         .setRepoType(cghubServer.getType().getId())
-        .setRepoOrg(cghubServer.getOrg().getId())
+        .setRepoOrg(cghubServer.getSource().getId())
         .setRepoEntityId(getAnalysisId(result));
 
     analysisFile.getRepository().getRepoServer().get(0)

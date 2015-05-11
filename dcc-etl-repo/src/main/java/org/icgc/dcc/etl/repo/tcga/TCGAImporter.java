@@ -19,12 +19,12 @@ package org.icgc.dcc.etl.repo.tcga;
 
 import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.repo.model.RepositoryOrg.TCGA;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositoryFileImporter;
+import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.repo.tcga.core.TCGAClinicalFileProcessor;
 
@@ -32,10 +32,10 @@ import org.icgc.dcc.etl.repo.tcga.core.TCGAClinicalFileProcessor;
  * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
  */
 @Slf4j
-public class TCGAImporter extends RepositoryFileImporter {
+public class TCGAImporter extends RepositorySourceFileImporter {
 
   public TCGAImporter(RepositoryFileContext context) {
-    super(context);
+    super(TCGA, context);
   }
 
   public void execute() {

@@ -110,7 +110,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
       clinicalFile.getRepository()
           .setRepoType(tcgaServer.getType().getId())
-          .setRepoOrg(tcgaServer.getOrg().getId())
+          .setRepoOrg(tcgaServer.getSource().getId())
           .setRepoEntityId(resolveRepoEntityId(archiveClinicalFile));
 
       clinicalFile.getRepository().getRepoServer().get(0)
