@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
-import static org.elasticsearch.common.collect.Maps.uniqueIndex;
+import static com.google.common.collect.Maps.uniqueIndex;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
@@ -38,7 +38,6 @@ import org.icgc.dcc.etl.db.importer.gene.GeneImporter;
 import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
 import org.icgc.dcc.etl.db.importer.project.ProjectImporter;
-import org.icgc.dcc.etl.db.importer.repo.RepositoryImporter;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
@@ -56,8 +55,7 @@ public class DBImporter {
       CollectionName.CGC,
       CollectionName.PATHWAYS,
       CollectionName.GO,
-      CollectionName.DIAGRAMS,
-      CollectionName.FILES
+      CollectionName.DIAGRAMS
       );
 
   /**
@@ -98,8 +96,7 @@ public class DBImporter {
         new CgcImporter(mongoUri, getRemoteCgsUri()),
         new PathwayImporter(mongoUri),
         new GoImporter(mongoUri),
-        new DiagramImporter(mongoUri),
-        new RepositoryImporter(mongoUri, esUri)
+        new DiagramImporter(mongoUri)
         );
 
     return uniqueIndex(importers, (Importer importer) -> importer.getCollectionName());
