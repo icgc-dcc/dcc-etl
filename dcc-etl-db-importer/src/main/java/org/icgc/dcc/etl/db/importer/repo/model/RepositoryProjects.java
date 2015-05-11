@@ -19,8 +19,8 @@ package org.icgc.dcc.etl.db.importer.repo.model;
 
 import static com.google.common.base.Predicates.notNull;
 import static com.google.common.collect.Iterables.filter;
-import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.transform;
+import static com.google.common.collect.Iterables.tryFind;
 import static lombok.AccessLevel.PRIVATE;
 
 import java.util.List;
@@ -32,6 +32,7 @@ import lombok.Value;
 
 import org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.RepositoryProject.RepositoryProjectBuilder;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -129,13 +130,13 @@ public final class RepositoryProjects {
   }
 
   @NonNull
-  public static RepositoryProject getProjectCodeProject(String projectCode) {
-    return find(getProjects(), project -> projectCode.equals(project.getProjectCode()));
+  public static Optional<RepositoryProject> getProjectCodeProject(String projectCode) {
+    return tryFind(getProjects(), project -> projectCode.equals(project.getProjectCode()));
   }
 
   @NonNull
-  public static RepositoryProject getDiseaseCodeProject(String diseaseCode) {
-    return find(getProjects(), project -> diseaseCode.equals(project.getDiseaseCode()));
+  public static Optional<RepositoryProject> getDiseaseCodeProject(String diseaseCode) {
+    return tryFind(getProjects(), project -> diseaseCode.equals(project.getDiseaseCode()));
   }
 
   public static Iterable<RepositoryProject> getTCGAProjects() {

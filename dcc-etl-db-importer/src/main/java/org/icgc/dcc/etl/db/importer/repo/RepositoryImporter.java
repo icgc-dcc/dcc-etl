@@ -19,8 +19,6 @@ package org.icgc.dcc.etl.db.importer.repo;
 
 import static com.google.common.base.Stopwatch.createStarted;
 import static org.apache.commons.lang.StringUtils.repeat;
-import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
-import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
 import java.util.Map;
 
@@ -39,11 +37,10 @@ import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.repo.cghub.CGHubImporter;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.db.importer.repo.core.RepositoryFileIndexer;
+import org.icgc.dcc.etl.db.importer.repo.core.RepositoryProjectReader;
 import org.icgc.dcc.etl.db.importer.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.db.importer.repo.tcga.TCGAImporter;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableMap;
 import com.mongodb.MongoClientURI;
 
 /**
@@ -104,22 +101,6 @@ public class RepositoryImporter implements Importer {
     indexer.indexFiles();
   }
 
-  private Map<String, String> getProjectPrimarySites() {
-    // TODO: Use ICGC API?
-    val jongo = createJongo(mongoUri);
-
-    val map = ImmutableMap.<String, String> builder();
-    val projects = jongo.getCollection(PROJECT_COLLECTION.getId());
-    for (val project : projects.find().as(ObjectNode.class)) {
-      val projectName = project.get("_project_id").textValue();
-      val primarySite = project.get("primary_site").textValue();
-
-      map.put(projectName, primarySite);
-    }
-
-    return map.build();
-  }
-
   private RepositoryFileContext createRepositoryContext() {
     // TODO: Externalize
     val primarySites = getProjectPrimarySites();
@@ -138,6 +119,14 @@ public class RepositoryImporter implements Importer {
   private static TCGAClient createTCGAClient() {
     // TODO: Externalize
     return new TCGAClient();
+  }
+
+  @SneakyThrows
+  private Map<String, String> getProjectPrimarySites() {
+    // TODO: Externalize
+    @Cleanup
+    val projectReader = new RepositoryProjectReader(mongoUri);
+    return projectReader.getPrimarySites();
   }
 
   private static void logBanner(String message) {

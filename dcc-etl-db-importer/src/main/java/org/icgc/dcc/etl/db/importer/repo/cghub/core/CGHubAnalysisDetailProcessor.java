@@ -99,7 +99,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
   private RepositoryFile createAnalysisFile(JsonNode result, ObjectNode file) {
     val diseaseCode = getDiseaseAbbr(result);
-    val project = getDiseaseCodeProject(diseaseCode);
+    val project = getDiseaseCodeProject(diseaseCode).orNull();
     val projectCode = project.getProjectCode();
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);

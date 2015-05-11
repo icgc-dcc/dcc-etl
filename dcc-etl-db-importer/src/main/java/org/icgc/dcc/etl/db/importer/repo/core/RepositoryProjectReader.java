@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,57 +15,35 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.db.importer.util;
+package org.icgc.dcc.etl.db.importer.repo.core;
 
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
-import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.function.Consumer;
+import java.util.Map;
 
-import lombok.NonNull;
 import lombok.val;
 
-import org.icgc.dcc.common.core.model.ReleaseCollection;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
+import org.icgc.dcc.etl.db.importer.util.AbstractJongoComponent;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableMap;
 import com.mongodb.MongoClientURI;
 
-public abstract class AbstractJongoComponent implements Closeable {
+public class RepositoryProjectReader extends AbstractJongoComponent {
 
-  /**
-   * Configuration.
-   */
-  protected final MongoClientURI mongoUri;
-
-  /**
-   * Dependencies.
-   */
-  protected final Jongo jongo;
-
-  public AbstractJongoComponent(@NonNull MongoClientURI mongoUri) {
-    this.mongoUri = mongoUri;
-    this.jongo = createJongo(mongoUri);
+  public RepositoryProjectReader(MongoClientURI mongoUri) {
+    super(mongoUri);
   }
 
-  @Override
-  public void close() throws IOException {
-    jongo.getDatabase().getMongo().close();
-  }
+  public Map<String, String> getPrimarySites() {
+    val map = ImmutableMap.<String, String> builder();
+    eachDocument(PROJECT_COLLECTION, project -> {
+      String projectName = project.get("_project_id").textValue();
+      String primarySite = project.get("primary_site").textValue();
 
-  protected MongoCollection getCollection(ReleaseCollection releaseCollection) {
-    return jongo.getCollection(releaseCollection.getId());
-  }
+      map.put(projectName, primarySite);
+    });
 
-  @NonNull
-  protected void eachDocument(ReleaseCollection collection, Consumer<ObjectNode> consumer) {
-    val documents = getCollection(PROJECT_COLLECTION);
-    for (val document : documents.find().as(ObjectNode.class)) {
-      consumer.accept(document);
-    }
+    return map.build();
   }
 
 }

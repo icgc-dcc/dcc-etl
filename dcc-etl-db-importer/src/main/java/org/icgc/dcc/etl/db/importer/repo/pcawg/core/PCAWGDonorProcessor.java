@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.db.importer.repo.pcawg.core;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.primitives.Longs.max;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.db.importer.repo.model.RepositoryServers.getPCAWGServer;
 import static org.icgc.dcc.etl.db.importer.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
@@ -71,10 +72,10 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private void translateUUIDs(Iterable<RepositoryFile> donorFiles) {
-    log.info("Collecting barcodes...");
+    log.info("Collecting TCGA barcodes...");
     val uuids = resolveUUIDs(donorFiles);
 
-    log.info("Translating barcodes to UUIDs...");
+    log.info("Translating {} TCGA barcodes to TCGA UUIDs...", formatCount(uuids));
     val barcodes = resolveTCGABarcodes(uuids);
     for (val donorFile : donorFiles) {
       val submittedDonorId = donorFile.getDonor().getSubmittedDonorId();
@@ -154,7 +155,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
 
   private RepositoryFile createDonorFile(String projectCode, String submittedDonorId, JsonNode workflow,
       JsonNode workflowFile) {
-    val project = getProjectCodeProject(projectCode);
+    val project = getProjectCodeProject(projectCode).orNull();
     val genosRepo = getGnosRepo(workflow);
     val server = getPCAWGServer(genosRepo);
 

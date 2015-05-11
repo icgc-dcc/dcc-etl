@@ -78,7 +78,11 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
       val diseaseCode = matcher.group(1);
       val project = getDiseaseCodeProject(diseaseCode);
-      val archiveClinicalFiles = processArchive(project.getProjectCode(), entry.getArchiveUrl());
+      if (!project.isPresent()) {
+        continue;
+      }
+
+      val archiveClinicalFiles = processArchive(project.get().getProjectCode(), entry.getArchiveUrl());
 
       clinicalFiles.addAll(archiveClinicalFiles);
     }
@@ -153,7 +157,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
       barcodes.add(participantBarcode);
     }
 
-    log.info("Translating TCGA barcodes to TCGA UUIDs...");
+    log.info("Translating {} TCGA barcodes to TCGA UUIDs...", formatCount(barcodes));
     val uuids = resolveTCGAUUIDs(barcodes);
     for (val clinicalFile : clinicalFiles) {
       val participantBarcode = clinicalFile.getDonor().getTcgaParticipantBarcode();
@@ -165,7 +169,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
   private String resolveRepoEntityId(TCGAArchiveClinicalFile archiveClinicalFile) {
     val url = archiveClinicalFile.getUrl();
-    return url.replace(tcgaServer.getBaseUrl(), "").replace(tcgaServer.getType().getPath(), "");
+    return url.replace(tcgaServer.getBaseUrl(), "/").replace(tcgaServer.getType().getPath(), "");
   }
 
 }

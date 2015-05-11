@@ -49,7 +49,7 @@ public class PCAWGImporter extends RepositoryFileImporter {
    * @see http://jsonlines.org/
    */
   private static final URL DEFAULT_PCAWG_DONOR_ARCHIVE_URL =
-      getUrl(PCAWG_ARCHIVE_BASE_URL + "/santa_cruz_pilot/santa_cruz_pilot.v1.2015_0425.jsonl");
+      getUrl(PCAWG_ARCHIVE_BASE_URL + "/santa_cruz_pilot/santa_cruz_pilot.v2.2015_0504.jsonl");
 
   /**
    * Configuration.
@@ -99,4 +99,5 @@ public class PCAWGImporter extends RepositoryFileImporter {
     val processor = new PCAWGDonorProcessor(context);
     return processor.processDonors(donors);
   }
+
 }
