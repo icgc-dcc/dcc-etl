@@ -17,79 +17,16 @@
  */
 package org.icgc.dcc.etl.repo.model;
 
-import static com.google.common.collect.Lists.newArrayList;
-
-import java.util.List;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class RepositoryFile {
-
-  String study;
-  String access;
+public class RepositoryFileDataType {
 
   String dataType;
   String dataFormat;
-
   String experimentalStrategy;
-
-  Repository repository = new Repository();
-  RepositoryDonor donor = new RepositoryDonor();
-
-  @Data
-  @Accessors(chain = true)
-  public static class Repository {
-
-    String repoType;
-    String repoOrg;
-    String repoEntityId;
-
-    List<RepositoryServer> repoServer = newArrayList(new RepositoryServer());
-    String repoMetadataPath;
-    String repoDataPath;
-
-    String fileName;
-    Long fileSize;
-    String fileMd5sum;
-    String lastModified;
-
-  }
-
-  @Data
-  @Accessors(chain = true)
-  public static class RepositoryServer {
-
-    String repoName;
-    String repoCode;
-    String repoCountry;
-    String repoBaseUrl;
-
-  }
-
-  @Data
-  @Accessors(chain = true)
-  public static class RepositoryDonor {
-
-    String projectCode;
-    String program;
-    String study;
-    String primarySite;
-
-    String donorId;
-    String specimenId;
-    String sampleId;
-
-    String submittedDonorId;
-    String submittedSpecimenId;
-    String submittedSampleId;
-
-    String tcgaParticipantBarcode;
-    String tcgaSampleBarcode;
-    String tcgaAliquotBarcode;
-
-  }
+  String access;
 
 }

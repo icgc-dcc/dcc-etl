@@ -92,7 +92,7 @@ public class RepositoryImporter {
 
     for (val importer : importers) {
       if (Iterables.contains(sources, importer.getSource())) {
-        logBanner("Importing " + importer.getSource() + "files");
+        logBanner("Importing " + importer.getSource() + " files");
         importer.execute();
       }
     }
@@ -108,9 +108,9 @@ public class RepositoryImporter {
 
   private List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
     return ImmutableList.of(
+        new CGHubImporter(context),
         new PCAWGImporter(context),
-        new TCGAImporter(context),
-        new CGHubImporter(context)
+        new TCGAImporter(context)
         );
 
   }

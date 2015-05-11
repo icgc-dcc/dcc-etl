@@ -80,7 +80,7 @@ public class RepositoryMain {
     log.info("         sources        - {}", options.sources);
     log.info("         config file    - {}", options.configFilePath);
     log.info("         gene mongo uri - {}", config.getGeneMongoUri());
-    log.info("         repo mongo uri - {}", config.getGeneMongoUri());
+    log.info("         repo mongo uri - {}", config.getRepoMongoUri());
 
     val sources = options.sources;
     val geneMongoUri = new MongoClientURI(config.getGeneMongoUri());

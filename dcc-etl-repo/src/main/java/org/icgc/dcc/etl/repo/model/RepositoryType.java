@@ -28,12 +28,13 @@ import org.icgc.dcc.common.core.model.Identifiable;
 @RequiredArgsConstructor(access = PRIVATE)
 public enum RepositoryType implements Identifiable {
 
-  GNOS("GNOS", "/cghub/metadata/analysisFull/"),
-  WEB_ARCHIVE("Web Archive", "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
+  GNOS("GNOS", "/cghub/metadata/analysisFull/", "/cghub/data/analysis/download/"),
+  WEB_ARCHIVE("Web Archive", null, "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
 
   @NonNull
   private final String id;
+  private final String metadataPath;
   @NonNull
-  private final String path;
+  private final String dataPath;
 
 }

@@ -41,16 +41,16 @@ public final class RepositoryServers {
 
   // @formatter:off
   public static final List<RepositoryServer> SERVERS = ImmutableList.of(
-      server().source(CGHUB).type(GNOS)       .name("CGHub - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
-      server().source(TCGA) .type(WEB_ARCHIVE).name("TCGA DCC - Washington") .country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - Barcelona")     .country("ES").baseUrl("https://gtrepo-bsc.annailabs.com/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - Santa Cruz")    .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - Tokyo")         .country("JP").baseUrl("https://gtrepo-riken.annailabs.com/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - Seoul")         .country("KR").baseUrl("https://gtrepo-etri.annailabs.com/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - London")        .country("UK").baseUrl("https://gtrepo-ebi.annailabs.com/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - Heidelberg")    .country("DE").baseUrl("https://gtrepo-dkfz.annailabs.com/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (ICGC)").country("US").baseUrl("https://gtrepo-osdc-icgc.annailabs.com/").build(),
-      server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (TCGA)").country("US").baseUrl("https://gtrepo-osdc-tcga.annailabs.com/").build()
+      server().source(CGHUB).type(GNOS)       .name("CGHub - Santa Cruz")    .code("cghub")             .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
+      server().source(TCGA) .type(WEB_ARCHIVE).name("TCGA DCC - Washington") .code("tcga")              .country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Barcelona")     .code("pcawg-barcelona")   .country("ES").baseUrl("https://gtrepo-bsc.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Santa Cruz")    .code("pcawg-cghub")       .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Tokyo")         .code("pcawg-tokyo")       .country("JP").baseUrl("https://gtrepo-riken.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Seoul")         .code("pcawg-seoul")       .country("KR").baseUrl("https://gtrepo-etri.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - London")        .code("pcawg-london")      .country("UK").baseUrl("https://gtrepo-ebi.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Heidelberg")    .code("pcawg-heidelberg")  .country("DE").baseUrl("https://gtrepo-dkfz.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (ICGC)").code("pcawg-chicago-icgc").country("US").baseUrl("https://gtrepo-osdc-icgc.annailabs.com/").build(),
+      server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (TCGA)").code("pcawg-chicago-tcga").country("US").baseUrl("https://gtrepo-osdc-tcga.annailabs.com/").build()
       );
   // @formatter:on
 
@@ -80,6 +80,7 @@ public final class RepositoryServers {
     RepositoryType type;
     RepositorySource source;
     String name;
+    String code;
     String country;
     String baseUrl;
 

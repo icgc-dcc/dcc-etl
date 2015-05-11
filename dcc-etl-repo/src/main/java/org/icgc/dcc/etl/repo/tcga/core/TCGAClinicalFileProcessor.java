@@ -102,11 +102,11 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
       val clinicalFile = new RepositoryFile();
       clinicalFile
           .setStudy(null)
-          .setAccess("open")
 
+          .setAccess("open")
           .setDataType("Clinical")
-          .setDataSubType("Clinical data")
-          .setDataFormat("XML");
+          .setDataFormat("XML")
+          .setExperimentalStrategy(null);
 
       clinicalFile.getRepository()
           .setRepoType(tcgaServer.getType().getId())
@@ -115,11 +115,13 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
       clinicalFile.getRepository().getRepoServer().get(0)
           .setRepoName(tcgaServer.getName())
+          .setRepoCode(tcgaServer.getCode())
           .setRepoCountry(tcgaServer.getCountry())
           .setRepoBaseUrl(tcgaServer.getBaseUrl());
 
       clinicalFile.getRepository()
-          .setRepoPath(tcgaServer.getType().getPath())
+          .setRepoMetadataPath(tcgaServer.getType().getMetadataPath())
+          .setRepoDataPath(tcgaServer.getType().getDataPath())
           .setFileName(archiveClinicalFile.getFileName())
           .setFileMd5sum(archiveClinicalFile.getFileMd5())
           .setFileSize(archiveClinicalFile.getFileSize())
@@ -169,7 +171,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
   private String resolveRepoEntityId(TCGAArchiveClinicalFile archiveClinicalFile) {
     val url = archiveClinicalFile.getUrl();
-    return url.replace(tcgaServer.getBaseUrl(), "/").replace(tcgaServer.getType().getPath(), "");
+    return url.replace(tcgaServer.getBaseUrl(), "/").replace(tcgaServer.getType().getDataPath(), "");
   }
 
 }

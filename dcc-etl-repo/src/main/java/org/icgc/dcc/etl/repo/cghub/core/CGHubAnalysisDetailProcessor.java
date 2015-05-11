@@ -104,15 +104,16 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
+    val experimentalStrategy = getLibraryStrategy(result);
 
     val analysisFile = new RepositoryFile();
     analysisFile
         .setStudy(null)
-        .setAccess("controlled")
 
-        .setDataType(null)
-        .setDataSubType(null)
-        .setDataFormat(null);
+        .setAccess("controlled")
+        .setDataType("Sequencing reads")
+        .setDataFormat("BAM")
+        .setExperimentalStrategy(experimentalStrategy);
 
     analysisFile.getRepository()
         .setRepoType(cghubServer.getType().getId())
@@ -121,11 +122,13 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
     analysisFile.getRepository().getRepoServer().get(0)
         .setRepoName(cghubServer.getName())
+        .setRepoCode(cghubServer.getCode())
         .setRepoCountry(cghubServer.getCountry())
         .setRepoBaseUrl(cghubServer.getBaseUrl());
 
     analysisFile.getRepository()
-        .setRepoPath(cghubServer.getType().getPath())
+        .setRepoMetadataPath(cghubServer.getType().getMetadataPath())
+        .setRepoDataPath(cghubServer.getType().getDataPath())
         .setFileName(getFileName(file))
         .setFileMd5sum(null)
         .setFileSize(getFileSize(file))
@@ -149,6 +152,10 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setTcgaAliquotBarcode(legacySampleId);
 
     return analysisFile;
+  }
+
+  private String getLibraryStrategy(JsonNode result) {
+    return result.get("library_strategy").textValue();
   }
 
   private static String resolveLastModified(JsonNode result) {
