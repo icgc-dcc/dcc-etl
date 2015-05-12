@@ -30,7 +30,15 @@ declare -A typeMappings
 typeMappings=(["ssm"]="ssm_open,ssm_controlled" 
               ["ssm_open"]="ssm_open" 
               ["ssm_controlled"]="ssm_controlled" 
-              ["donor"]="clinical,clinicalsample" 
+
+              ["donor_only"]="donor" 
+              ["specimen"]="specimen" 
+              ["sample"]="sample" 
+              ["donor_family"]="donor_family" 
+              ["donor_exposure"]="donor_exposure" 
+              ["donor_therapy"]="donor_therapy" 
+
+              ["donor"]="donor,specimen,sample,donor_family,donor_exposure,donor_therapy" 
               ["clinical"]="clinical" 
               ["clinicalsample"]="clinicalsample" 
               ["sgv"]="sgv_controlled" 
@@ -45,7 +53,7 @@ typeMappings=(["ssm"]="ssm_open,ssm_controlled"
               ["cnsm"]="cnsm" 
               ["stsm"]="stsm")
 
-declare -a datatypes="ssm_open,ssm_controlled,sgv_controlled,pexp,mirna_seq,meth_seq,meth_array,jcn,exp_seq,exp_array,clinical,clinicalsample,cnsm,stsm"
+declare -a datatypes="ssm_open,ssm_controlled,sgv_controlled,pexp,mirna_seq,meth_seq,meth_array,jcn,exp_seq,exp_array,clinical,clinicalsample,cnsm,stsm,donor,specimen,sample,donor_family,donor_exposure,donor_therapy"
 
 if [ $# -eq 3 ]
 then

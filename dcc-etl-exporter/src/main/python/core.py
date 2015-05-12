@@ -69,6 +69,14 @@ data = {
         'ssm_open': 'ssm',
         'clinical': 'donor',
         'clinicalsample' : 'donor',
+
+        'donor': 'donor',
+        'specimen': 'donor',
+        'donor_therapy': 'donor',
+        'donor_exposure': 'donor',
+        'donor_family': 'donor',
+        'sample': 'donor',
+
         'cnsm' : 'cnsm',
         'jcn' : 'jcn',
         'meth_seq' : 'meth_seq',
@@ -80,12 +88,43 @@ data = {
         'exp_array' : 'exp_array',
         'sgv_controlled' : 'sgv'
        }
+       
+summary = {
+        'ssm_controlled': False,
+        'ssm_open': False,
+        'clinical': False,
+        'clinicalsample' : False,
 
+        'donor': True,
+        'specimen': True,
+        'donor_therapy': True,
+        'donor_exposure': True,
+        'donor_family': True,
+        'sample': True,
+
+        'cnsm' : False,
+        'jcn' : False,
+        'meth_seq' : False,
+        'meth_array' : False,
+        'mirna_seq' : False,
+        'stsm' : False,
+        'pexp' : False,
+        'exp_seq' : False,
+        'exp_array' : False,
+        'sgv_controlled' : False
+        }
+        
 # mapping from short name to long name for each data type
 longname = {
         'ssm_controlled' : 'simple_somatic_mutation.controlled',
         'ssm_open' : 'simple_somatic_mutation.open',
         'clinical' : 'clinical',
+        'donor': 'donor',
+        'specimen': 'specimen',
+        'donor_therapy': 'donor_therapy',
+        'donor_exposure': 'donor_exposure',
+        'donor_family': 'donor_family',
+        'sample': 'sample',
         'clinicalsample' : 'clinicalsample',
         'cnsm' : 'copy_number_somatic_mutation',
         'jcn' : 'splice_variant',

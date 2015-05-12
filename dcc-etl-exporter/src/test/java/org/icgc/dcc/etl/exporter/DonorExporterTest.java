@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -48,96 +48,32 @@ import org.junit.Test;
 
 import com.google.common.collect.Iterators;
 
-public class SGVControlledExporterTest extends EmbeddedDynamicExporter {
+public class DonorExporterTest extends EmbeddedDynamicExporter {
 
   final private static String LIB_PATH = StaticMultiStorage.class.getProtectionDomain().getCodeSource().getLocation()
       .getPath();
 
-  final String[] SGV_TSV_SCHEMA = { "icgc_donor_id", //
-  "project_code", //
-  "icgc_specimen_id", //
-  "icgc_sample_id", //
-  "submitted_sample_id", //
-  "analysis_id", //
-  "chromosome", //
-  "chromosome_start", //
-  "chromosome_end", //
-  "chromosome_strand", //
-  "assembly_version", //
-  "variant_type", //
-  "reference_genome_allele", //
-  "genotype", //
-  "variant_allele", //
-  "quality_score", //
-  "probability", //
-  "total_read_count", //
-  "variant_allele_read_count", //
-  "verification_status", //
-  "verification_platform", //
-  "consequence_type", //
-  "aa_change", //
-  "cds_change", //
-  "gene_affected", //
-  "transcript_affected", //
-  "platform", //
-  "experimental_protocol", //
-  "base_calling_algorithm", //
-  "alignment_algorithm", //
-  "variation_calling_algorithm", //
-  "other_analysis_algorithm", //
-  "sequencing_strategy", //
-  "seq_coverage", //
-  "raw_data_repository", //
-  "raw_data_accession", //
-  "note" };
+  final private static String EMPTY_VALUE = "NO_VAL";
+  final String[] DONOR_TSV_SCHEMA =
+      { "icgc_donor_id", "project_code", "study_donor_involved_in", "submitted_donor_id", "donor_sex", "donor_vital_status", "disease_status_last_followup", "donor_relapse_type", "donor_age_at_diagnosis", "donor_age_at_enrollment", "donor_age_at_last_followup", "donor_relapse_interval", "donor_diagnosis_icd10", "donor_tumour_staging_system_at_diagnosis", "donor_tumour_stage_at_diagnosis", "donor_tumour_stage_at_diagnosis_supplemental", "donor_survival_time", "donor_interval_of_last_followup", "prior_malignancy", "cancer_type_prior_malignancy", "cancer_history_first_degree_relative" };
 
-  final String[] SGV_JSON_SCHEMA = { "_donor_id", //
-  "_project_id", //
-  "_specimen_id", //
-  "_sample_id", //
-  "analyzed_sample_id",//
-  "analysis_id",//
-  "chromosome", "chromosome_start",//
-  "chromosome_end",//
-  "chromosome_strand", "assembly_version",//
-  "variant_type",//
-  "reference_genome_allele", "genotype",//
-  "variant_allele",//
-  "quality_score",//
-  "probability", //
-  "total_read_count",//
-  "variant_allele_read_count", //
-  "verification_status",//
-  "verification_platform",//
-  "consequence_type", //
-  "aa_change", //
-  "cds_change", //
-  "gene_affected", //
-  "transcript_affected", //
-  "platform", //
-  "experimental_protocol",//
-  "base_calling_algorithm", //
-  "alignment_algorithm",//
-  "variation_calling_algorithm", //
-  "other_analysis_algorithm",//
-  "sequencing_strategy",//
-  "seq_coverage", //
-  "raw_data_repository",//
-  "raw_data_accession",//
-  "note" };
+  final List<String> DONORS = newArrayList("exposure_intensity", "exposure_type");
 
-  final private static String DATA_TYPE = "sgv_controlled";
+  final String[] DONOR_JSON_SCHEMA =
+      { "_donor_id", "_project_id", "study_donor_involved_in", "donor_id", "donor_sex", "donor_vital_status", "disease_status_last_followup", "donor_relapse_type", "donor_age_at_diagnosis", "donor_age_at_enrollment", "donor_age_at_last_followup", "donor_relapse_interval", "donor_diagnosis_icd10", "donor_tumour_staging_system_at_diagnosis", "donor_tumour_stage_at_diagnosis", "donor_tumour_stage_at_diagnosis_supplemental", "donor_survival_time", "donor_interval_of_last_followup", "prior_malignancy", "cancer_type_prior_malignancy", "cancer_history_first_degree_relative" };
+
+  final private static String DATA_TYPE = "donor";
 
   @Test
   @SneakyThrows
   public void testDynamic() {
-    exportToHBase(DATA_TYPE, "src/test/data/sgv_nc.json");
+    exportToHBase(DATA_TYPE, "src/test/data/clinical_mc.json");
     Configuration conf = hbase.getConfiguration();
     @Cleanup
     ArchiveMetaManager archive = new ArchiveMetaManager(conf);
     List<String> header = archive.getHeader(DATA_TYPE);
-    assertEquals(SGV_TSV_SCHEMA.length, header.size());
-    for (String fieldname : SGV_TSV_SCHEMA) {
+    assertEquals(DONOR_TSV_SCHEMA.length, header.size());
+    for (String fieldname : DONOR_TSV_SCHEMA) {
       assertTrue(header.contains(fieldname));
     }
     @Cleanup
@@ -149,31 +85,33 @@ public class SGVControlledExporterTest extends EmbeddedDynamicExporter {
 
   @Test
   public void sanity() throws IOException, ParseException, org.json.simple.parser.ParseException {
+
     PigServer pig = new PigServer(ExecType.LOCAL);
-    pig.getPigContext().getProperties().setProperty("pig.import.search.path", LIB_PATH + "/sgv_controlled");
+    pig.getPigContext().getProperties().setProperty("pig.import.search.path", LIB_PATH + "/" + DATA_TYPE);
     Cluster cluster = new Cluster(pig.getPigContext());
     ScriptState.start("", pig.getPigContext());
-
     PigTest ssmTest =
-        new PigTest(LIB_PATH + "/sgv_controlled/static.pig",
-            new String[] { "OBSERVATION=src/test/data/sgv_nc.json", "LIB=" + LIB_PATH }, pig, cluster);
+        new PigTest(LIB_PATH + "/" + DATA_TYPE + "/static.pig",
+            new String[] { "OBSERVATION=src/test/data/clinical_nc.json", "LIB=" + LIB_PATH, "EMPTY_VALUE="
+                + EMPTY_VALUE, "DEFAULT_PARALLEL=1" }, pig, cluster);
 
     JSONParser parser = new JSONParser();
-    JSONObject json = (JSONObject) parser.parse(new FileReader("src/test/data/sgv_nc.json"));
+    JSONObject json = (JSONObject) parser.parse(new FileReader("src/test/data/clinical_nc.json"));
 
     ArrayList<Tuple> staticTuples = newArrayList(ssmTest.getAlias("static_out"));
 
     assertEquals("expect only 1 tuple in the result", 1, staticTuples.size());
-    assertEquals("expect number columns", SGV_TSV_SCHEMA.length, staticTuples.get(0).size());
+    assertEquals("expect number columns", DONOR_JSON_SCHEMA.length, staticTuples.get(0).size());
 
     for (int i = 0; i < staticTuples.get(0).size(); ++i) {
       Object field = staticTuples.get(0).get(i);
-      String fieldValue = field == null ? null : (field.equals("") ? null : (String) field);
+      String fieldValue = field == null ? EMPTY_VALUE : (field.equals("") ? EMPTY_VALUE : (String) field);
 
-      Object result = json.get(SGV_JSON_SCHEMA[i]);
-      String expectedValue = result == null ? null : String.valueOf(result);
-      assertEquals("Field: " + SGV_JSON_SCHEMA[i], expectedValue, fieldValue);
+      Object result = json.get(DONOR_JSON_SCHEMA[i]);
+      String expectedValue = result == null ? EMPTY_VALUE : String.valueOf(result);
+      assertEquals("Field: " + DONOR_JSON_SCHEMA[i], expectedValue, fieldValue);
     }
 
   }
+
 }
