@@ -21,6 +21,7 @@ import static com.google.common.base.Throwables.propagate;
 import static java.util.Collections.emptyList;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
+import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAnalyteCode;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getDiseaseAbbr;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getFileName;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getFileSize;
@@ -37,6 +38,7 @@ import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getDiseaseCodeProje
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getCGHubServer;
 
 import java.time.Instant;
+import java.util.List;
 
 import lombok.NonNull;
 import lombok.val;
@@ -45,6 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
+import org.icgc.dcc.etl.repo.model.RepositoryFile.RepositoryFileDataType;
 import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -53,6 +56,12 @@ import com.google.common.collect.ImmutableList;
 
 @Slf4j
 public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
+
+  /**
+   * Constants.
+   */
+  private static final List<String> DNA_SEQ_ANALYTE_CODES = ImmutableList.of("D", "G", "W", "X");
+  private static final List<String> RNA_SEQ_ANALYTE_CODES = ImmutableList.of("R", "T", "H");
 
   /**
    * Metadata.
@@ -82,8 +91,8 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val analysisFiles = ImmutableList.<RepositoryFile> builder();
     val files = getFiles(result);
     for (val file : files) {
-      if (isBaiFile(file)) {
-        emptyList();
+      if (!isBamFile(file)) {
+        return emptyList();
       }
 
       try {
@@ -102,19 +111,26 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val diseaseCode = getDiseaseAbbr(result);
     val project = getDiseaseCodeProject(diseaseCode).orNull();
     val projectCode = project.getProjectCode();
+    val analyteCode = getAnalyteCode(result);
+
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
+
+    val dataType = resolveDataType(analyteCode);
     val experimentalStrategy = getLibraryStrategy(result);
 
     val analysisFile = new RepositoryFile();
     analysisFile
         .setStudy(null)
+        .setAccess("controlled");
 
-        .setAccess("controlled")
-        .setDataType("Sequencing reads")
-        .setDataFormat("BAM")
-        .setExperimentalStrategy(experimentalStrategy);
+    analysisFile
+        .getDataTypes().add(
+            new RepositoryFileDataType()
+                .setDataType(dataType)
+                .setDataFormat("BAM")
+                .setExperimentalStrategy(experimentalStrategy));
 
     analysisFile.getRepository()
         .setRepoType(cghubServer.getType().getId())
@@ -155,16 +171,26 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     return analysisFile;
   }
 
+  private static String resolveDataType(String analyteCode) {
+    if (DNA_SEQ_ANALYTE_CODES.contains(analyteCode)) {
+      return "DNA-Seq";
+    } else if (RNA_SEQ_ANALYTE_CODES.contains(analyteCode)) {
+      return "RNA-Seq";
+    }
+
+    return null;
+  }
+
   private static String resolveLastModified(JsonNode result) {
     val text = getLastModified(result);
 
     return formatDateTime(Instant.parse(text));
   }
 
-  private static boolean isBaiFile(JsonNode file) {
+  private static boolean isBamFile(JsonNode file) {
     val fileName = getFileName(file);
 
-    return fileName.endsWith(".bam.bai");
+    return fileName.endsWith(".bam");
   }
 
 }

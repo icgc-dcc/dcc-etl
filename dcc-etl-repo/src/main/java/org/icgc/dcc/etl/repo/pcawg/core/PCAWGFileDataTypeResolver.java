@@ -17,76 +17,79 @@
  */
 package org.icgc.dcc.etl.repo.pcawg.core;
 
-import lombok.Data;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+
+import java.util.List;
+
 import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
+import org.icgc.dcc.etl.repo.model.RepositoryFile.RepositoryFileDataType;
+
+import com.google.common.collect.ImmutableList;
+
 @UtilityClass
-public class PCAWGFileMetadataResolver {
+public class PCAWGFileDataTypeResolver {
 
   @NonNull
-  public static PCAWGFileMetadata resolveMetadata(String analysisType, String fileName) {
-    val metadata = new PCAWGFileMetadata()
-        .setAccess("controlled");
-
+  public static List<RepositoryFileDataType> resolveFileDataTypes(String analysisType, String fileName) {
     if (analysisType.matches("rna_seq\\..*\\.(star|tophat)")) {
-      return metadata
+      return singletonList(new RepositoryFileDataType()
           .setDataType("RNA-Seq")
           .setDataFormat("BAM")
-          .setExperimentalStrategy("RNA-Seq");
+          .setExperimentalStrategy("RNA-Seq"));
     } else if (analysisType.matches("wgs\\..*\\.bwa_alignment")) {
-      return metadata
+      return singletonList(new RepositoryFileDataType()
           .setDataType("DNA-Seq")
           .setDataFormat("BAM")
-          .setExperimentalStrategy("RNA-Seq");
+          .setExperimentalStrategy("WGS"));
     } else if (analysisType.matches("wgs\\.tumor_specimens\\.sanger_variant_calling")) {
-      return metadata
-          .setDataType(resolveSangerVCFDataType(fileName, fileName))
-          .setDataFormat("VCF")
-          .setExperimentalStrategy("WGS");
+      val dataTypes = ImmutableList.<RepositoryFileDataType> builder();
+      for (val value : resolveSangerVCFDataTypes(fileName)) {
+        String dataFormat = "Other".equals(value) ? "Other" : "VCF";
+
+        dataTypes.add(new RepositoryFileDataType()
+            .setDataType(value)
+            .setDataFormat(dataFormat)
+            .setExperimentalStrategy("WGS"));
+      }
+
+      return dataTypes.build();
     }
 
-    return metadata;
+    return emptyList();
   }
 
-  private static String resolveSangerVCFDataType(String fileName, String dataType) {
+  private static List<String> resolveSangerVCFDataTypes(String fileName) {
     if (fileName.endsWith(".somatic.snv_mnv.vcf.gz")) {
-      dataType = "Somatic SNV MNV";
+      return ImmutableList.of("Simple Somatic Mutations");
     } else if (fileName.endsWith(".somatic.cnv.vcf.gz")) {
-      dataType = "Somatic CNV";
+      return ImmutableList.of("Copy Number Somatic Mutations");
     } else if (fileName.endsWith(".somatic.sv.vcf.gz")) {
-      dataType = "Somatic SV";
+      return ImmutableList.of("Structural Somatic Mutations");
     } else if (fileName.endsWith(".somatic.indel.vcf.gz")) {
-      dataType = "Somatic Indel";
+      return ImmutableList.of("Simple Somatic Mutations");
     } else if (fileName.endsWith(".somatic.snv_mnv.tar.gz")) {
-      dataType = "Somatic SNV MNV";
+      return ImmutableList.of("Simple Somatic Mutations", "Simple Germline Variants");
+    } else if (fileName.endsWith(".somatic.cnv.tar.gz")) {
+      return ImmutableList.of("Copy Number Somatic Mutations", "Copy Number Germline Variants");
     } else if (fileName.endsWith(".somatic.sv.tar.gz")) {
-      dataType = "Somatic SV";
+      return ImmutableList.of("Structural Somatic Mutations", "Structural Germline Variants");
     } else if (fileName.endsWith(".somatic.indel.tar.gz")) {
-      dataType = "Somatic Indel";
+      return ImmutableList.of("Simple Somatic Mutations", "Simple Germline Variants");
     } else if (fileName.endsWith(".somatic.imputeCounts.tar.gz")) {
-      dataType = "Somatic Impute Counts";
+      return ImmutableList.of("Other");
     } else if (fileName.endsWith(".somatic.binnedReadCounts.tar.gz")) {
-      dataType = "Somatic Binned Read Counts";
+      return ImmutableList.of("Other");
     } else if (fileName.endsWith(".somatic.genotype.tar.gz")) {
-      dataType = "Somatic Genotype";
+      return ImmutableList.of("Other");
     } else if (fileName.endsWith(".somatic.verifyBamId.tar.gz")) {
-      dataType = "Somatic Verify BAM Id";
+      return ImmutableList.of("Other");
+    } else {
+      return emptyList();
     }
-    return dataType;
-  }
-
-  @Data
-  @Accessors(chain = true)
-  public static class PCAWGFileMetadata {
-
-    String dataType;
-    String dataFormat;
-    String experimentalStrategy;
-    String access;
-
   }
 
 }

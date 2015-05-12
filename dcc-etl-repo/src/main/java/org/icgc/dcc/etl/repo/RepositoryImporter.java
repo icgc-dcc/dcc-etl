@@ -117,9 +117,10 @@ public class RepositoryImporter {
 
   private List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
     return ImmutableList.of(
-        new CGHubImporter(context),
         new PCAWGImporter(context),
-        new TCGAImporter(context));
+        new TCGAImporter(context),
+        new CGHubImporter(context)
+        );
   }
 
   private static void logBanner(String message) {

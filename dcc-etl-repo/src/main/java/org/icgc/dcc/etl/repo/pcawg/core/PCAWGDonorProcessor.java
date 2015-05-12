@@ -23,7 +23,7 @@ import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getPCAWGServer;
-import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileMetadataResolver.resolveMetadata;
+import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileDataTypeResolver.resolveFileDataTypes;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
@@ -166,16 +166,15 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val submitterSampleId = getSubmitterSampleId(workflow);
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
-    val metadata = resolveMetadata(analysisType, fileName);
+    val dataTypes = resolveFileDataTypes(analysisType, fileName);
 
     val donorFile = new RepositoryFile();
     donorFile
         .setStudy("PCAWG")
+        .setAccess("controlled");
 
-        .setAccess(metadata.getAccess())
-        .setExperimentalStrategy(metadata.getExperimentalStrategy())
-        .setDataType(metadata.getDataType())
-        .setDataFormat(metadata.getDataFormat());
+    donorFile
+        .getDataTypes().addAll(dataTypes);
 
     donorFile.getRepository()
         .setRepoType(pcawgServer.getType().getId())

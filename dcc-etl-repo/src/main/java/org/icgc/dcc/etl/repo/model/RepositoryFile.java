@@ -31,13 +31,20 @@ public class RepositoryFile {
   String study;
   String access;
 
-  String dataType;
-  String dataFormat;
-
-  String experimentalStrategy;
+  List<RepositoryFileDataType> dataTypes = newArrayList();
 
   Repository repository = new Repository();
   RepositoryDonor donor = new RepositoryDonor();
+
+  @Data
+  @Accessors(chain = true)
+  public static class RepositoryFileDataType {
+
+    String dataType;
+    String dataFormat;
+    String experimentalStrategy;
+
+  }
 
   @Data
   @Accessors(chain = true)
