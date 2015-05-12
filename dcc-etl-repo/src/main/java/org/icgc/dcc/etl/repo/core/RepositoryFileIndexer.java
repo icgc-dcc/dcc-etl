@@ -25,25 +25,22 @@ import static java.lang.String.format;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
-import static org.icgc.dcc.etl.repo.util.Jongos.createJongo;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.elasticsearch.client.transport.TransportClient;
+import org.icgc.dcc.etl.repo.util.AbstractJongoComponent;
 import org.icgc.dcc.etl.repo.util.TransportClientFactory;
 import org.joda.time.DateTime;
-import org.jongo.Jongo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -51,8 +48,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-@RequiredArgsConstructor
-public class RepositoryFileIndexer implements Closeable {
+public class RepositoryFileIndexer extends AbstractJongoComponent implements Closeable {
 
   /**
    * Constants.
@@ -72,41 +68,32 @@ public class RepositoryFileIndexer implements Closeable {
    * Dependencies.
    */
   @NonNull
-  private final Jongo jongo;
-  @NonNull
   private final TransportClient client;
 
   public RepositoryFileIndexer(@NonNull MongoClientURI mongoUri, @NonNull String esUri) {
+    super(mongoUri);
     this.indexName = resolveIndexName();
-    this.jongo = createJongo(mongoUri);
     this.client = TransportClientFactory.newTransportClient(esUri);
   }
 
   public void indexFiles() {
     initializeIndex();
 
-    eachFile(file -> {
+    eachDocument(FILE_COLLECTION, file -> {
       // Need to remove this as to not conflict with Elasticsearch
-      file.remove("_id");
+        file.remove("_id");
 
-      String source = file.toString();
-      client.prepareIndex(indexName, INDEX_TYPE_NAME).setSource(source).execute();
-    });
+        String source = file.toString();
+        client.prepareIndex(indexName, INDEX_TYPE_NAME).setSource(source).execute();
+      });
 
     aliasIndex();
   }
 
   @Override
   public void close() throws IOException {
-    jongo.getDatabase().getMongo().close();
     client.close();
-  }
-
-  private void eachFile(Consumer<ObjectNode> fileCallback) {
-    val files = jongo.getCollection(FILE_COLLECTION.getId());
-    for (val file : files.find().as(ObjectNode.class)) {
-      fileCallback.accept(file);
-    }
+    super.close();
   }
 
   private String resolveIndexName() {

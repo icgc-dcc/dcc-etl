@@ -17,11 +17,7 @@
  */
 package org.icgc.dcc.etl.repo.cghub;
 
-import static com.google.common.base.Stopwatch.createStarted;
-import static com.google.common.collect.Iterables.isEmpty;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.repo.model.RepositorySource.CGHUB;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,27 +40,7 @@ public class CGHubImporter extends RepositorySourceFileImporter {
   }
 
   @Override
-  @SneakyThrows
-  public void execute() {
-    val watch = createStarted();
-
-    log.info("Reading files...");
-    val files = readFiles();
-    log.info("Finished reading files");
-
-    if (isEmpty(files)) {
-      log.error("**** Files are empty! Reusing previous imported files");
-      return;
-    }
-
-    log.info("Writing files...");
-    writeFiles(files, CGHUB);
-    log.info("Finished writing files");
-
-    log.info("Imported {} files in {}.", formatCount(files), watch);
-  }
-
-  private Iterable<RepositoryFile> readFiles() {
+  protected Iterable<RepositoryFile> readFiles() {
     log.info("Reading details...");
     val details = readDetails();
     log.info("Finished reading deatils");

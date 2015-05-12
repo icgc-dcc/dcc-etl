@@ -1,7 +1,7 @@
-ICGC DCC - ETL DB Importer
+ICGC DCC - ETL DB Repo
 ===
 
-Imports collections of data from external sources into a MongoDB databases which is later imported into release databases during ETL run.
+Importer for the ICGC "Data Repository" feature which imports file metadata from various external data sources.
 
 
 Build

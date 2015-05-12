@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.repo.cli.Options;
-import org.icgc.dcc.etl.repo.util.RepositoryFileContextFactory;
+import org.icgc.dcc.etl.repo.core.RepositoryFileContextBuilder;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
@@ -75,8 +75,8 @@ public class RepositoryMain {
       System.exit(FAILURE_STATUS_CODE);
     } catch (Exception e) {
       log.error("Unknown error: ", e);
-      System.err.println("Command error. Please check the log for detailed error messages: " + e.getMessage());
-      usage(cli);
+      System.err.println("An an error occurred while processing. Please check the log for detailed error messages: "
+          + e.getMessage());
       System.exit(FAILURE_STATUS_CODE);
     }
   }
@@ -97,8 +97,13 @@ public class RepositoryMain {
     val geneMongoUri = new MongoClientURI(config.getGeneMongoUri());
     val repoMongoUri = new MongoClientURI(config.getRepoMongoUri());
     val esUri = config.getEsUri();
+    val context = RepositoryFileContextBuilder.builder()
+        .geneMongoUri(geneMongoUri)
+        .repoMongoUri(repoMongoUri)
+        .esUri(esUri)
+        .realIds(true)
+        .build();
 
-    val context = RepositoryFileContextFactory.createRepositoryContext(repoMongoUri, geneMongoUri, esUri);
     val importer = new RepositoryImporter(context);
 
     // Business method

@@ -21,7 +21,6 @@ import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.net.HttpHeaders.ACCEPT;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
-import static org.icgc.dcc.etl.repo.cghub.util.CGHubConverters.CGHUB_BASE_URL;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectDiseaseCodes;
 
 import java.io.IOException;
@@ -47,6 +46,7 @@ public class CGHubAnalysisDetailReader {
   /**
    * Constants.
    */
+  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu/";
   public static final String CGHUB_TCGA_STUDY = "phs000178";
   public static final String CGHUB_API_URL = CGHUB_BASE_URL + "/cghub/metadata";
   public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";

@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.etl.repo.core;
 
+import static lombok.AccessLevel.PACKAGE;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +33,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.mongodb.MongoClientURI;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = PACKAGE)
 public class RepositoryFileContext {
 
   /**

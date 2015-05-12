@@ -17,14 +17,11 @@
  */
 package org.icgc.dcc.etl.repo.pcawg;
 
-import static com.google.common.base.Stopwatch.createStarted;
-import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.URLs.getUrl;
 import static org.icgc.dcc.etl.repo.model.RepositorySource.PCAWG;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_ARCHIVE_BASE_URL;
 
-import java.io.IOException;
 import java.net.URL;
 
 import lombok.NonNull;
@@ -67,27 +64,7 @@ public class PCAWGImporter extends RepositorySourceFileImporter {
   }
 
   @Override
-  @SneakyThrows
-  public void execute() {
-    val watch = createStarted();
-
-    log.info("Reading files...");
-    val files = readFiles();
-    log.info("Finished reading files");
-
-    if (isEmpty(files)) {
-      log.error("**** Files are empty! Reusing previous imported files");
-      return;
-    }
-
-    log.info("Writing files...");
-    writeFiles(files, PCAWG);
-    log.info("Finished writing files");
-
-    log.info("Imported {} files in {}.", formatCount(files), watch);
-  }
-
-  private Iterable<RepositoryFile> readFiles() throws IOException {
+  protected Iterable<RepositoryFile> readFiles() {
     log.info("Reading donors...");
     val donors = readDonors();
     log.info("Finished reading {} donors", formatCount(donors));
@@ -95,10 +72,12 @@ public class PCAWGImporter extends RepositorySourceFileImporter {
     log.info("Processing donor files...");
     val files = processFiles(donors);
     log.info("Finished processing {} donor files", formatCount(files));
+
     return files;
   }
 
-  private Iterable<ObjectNode> readDonors() throws IOException {
+  @SneakyThrows
+  private Iterable<ObjectNode> readDonors() {
     val reader = new PCAWGDonorArchiveReader(archiveUrl);
     return reader.readDonors();
   }

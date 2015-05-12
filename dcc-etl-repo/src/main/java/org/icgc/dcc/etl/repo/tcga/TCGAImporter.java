@@ -17,9 +17,6 @@ j * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights res
  */
 package org.icgc.dcc.etl.repo.tcga;
 
-import static com.google.common.base.Stopwatch.createStarted;
-import static com.google.common.collect.Iterables.isEmpty;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -40,27 +37,14 @@ public class TCGAImporter extends RepositorySourceFileImporter {
   }
 
   @Override
-  public void execute() {
-    val watch = createStarted();
+  protected Iterable<RepositoryFile> readFiles() {
+    val processor = new TCGAClinicalFileProcessor(context);
 
-    log.info("Reading files...");
-    val files = readFiles();
-    log.info("Read {} files", formatCount(files));
+    log.info("Processining clinical files...");
+    val files = processor.processClinicalFiles();
+    log.info("Finished processing clinical files");
 
-    if (isEmpty(files)) {
-      log.error("**** Files are empty! Reusing previous imported files");
-      return;
-    }
-
-    log.info("Writing files...");
-    writeFiles(files, TCGA);
-    log.info("Finished writing files");
-
-    log.info("Imported {} files in {}.", formatCount(files), watch);
-  }
-
-  private Iterable<RepositoryFile> readFiles() {
-    return new TCGAClinicalFileProcessor(context).processClinicalFiles();
+    return files;
   }
 
 }

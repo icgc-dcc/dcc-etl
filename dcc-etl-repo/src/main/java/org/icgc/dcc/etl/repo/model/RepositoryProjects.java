@@ -92,7 +92,7 @@ public final class RepositoryProjects {
       project().projectCode("LUSC-US").diseaseCode("LUSC").program("TCGA")  .country("United States").build(),
       project().projectCode("MALY-DE").diseaseCode(null)  .program(null)    .country("Germany").build(),
       project().projectCode("NACA-CN").diseaseCode(null)  .program(null)    .country("China").build(),
-      project().projectCode("NBL-US") .diseaseCode(null)  .program("TARGET").country("United States").build(),
+      project().projectCode("NBL-US") .diseaseCode("NBL") .program("TARGET").country("United States").build(),
       project().projectCode("NHLY-MX").diseaseCode(null)  .program(null)    .country("Mexico").build(),
       project().projectCode("ORCA-IN").diseaseCode(null)  .program(null)    .country("India").build(),
       project().projectCode("OS-US")  .diseaseCode("OS")  .program("TARGET").country("United States").build(),
@@ -126,7 +126,7 @@ public final class RepositoryProjects {
       project().projectCode("THCA-SA").diseaseCode(null)  .program(null)    .country("Saudi Arabia").build(),
       project().projectCode("THCA-US").diseaseCode("THCA").program("TCGA")  .country("United States").build(),
       project().projectCode("UCEC-US").diseaseCode("UCEC").program("TCGA")  .country("United States").build(),
-      project().projectCode("WT-US")  .diseaseCode(null)  .program("TARGET").country("United States").build()     
+      project().projectCode("WT-US")  .diseaseCode("WT")  .program("TARGET").country("United States").build()     
       );
   // @formatter:on
 

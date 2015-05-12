@@ -17,16 +17,21 @@
  */
 package org.icgc.dcc.etl.repo.core;
 
+import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.collect.Iterables.isEmpty;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import lombok.Cleanup;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.repo.model.RepositorySource;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class RepositorySourceFileImporter {
 
@@ -43,12 +48,32 @@ public abstract class RepositorySourceFileImporter {
   @NonNull
   protected RepositoryFileContext context;
 
-  public abstract void execute();
+  @SneakyThrows
+  public void execute() {
+    val watch = createStarted();
+
+    log.info("Reading files...");
+    val files = readFiles();
+    log.info("Finished reading files");
+
+    if (isEmpty(files)) {
+      log.error("**** Files are empty! Reusing previous imported files");
+      return;
+    }
+
+    log.info("Writing files...");
+    writeFiles(files);
+    log.info("Finished writing files");
+
+    log.info("Imported {} files in {}.", formatCount(files), watch);
+  }
+
+  protected abstract Iterable<RepositoryFile> readFiles();
 
   @SneakyThrows
-  protected void writeFiles(Iterable<RepositoryFile> files, RepositorySource organization) {
+  protected void writeFiles(Iterable<RepositoryFile> files) {
     @Cleanup
-    val writer = new RepositorySourceFileWriter(context.getMongoUri(), organization);
+    val writer = new RepositorySourceFileWriter(context.getMongoUri(), source);
     writer.write(files);
   }
 

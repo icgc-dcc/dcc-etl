@@ -17,24 +17,21 @@
  */
 package org.icgc.dcc.etl.repo;
 
-import static org.icgc.dcc.etl.repo.util.RepositoryFileContextFactory.createRepositoryContext;
-import static org.icgc.dcc.etl.repo.util.Tests.getLocalMongoClientUri;
+import static org.icgc.dcc.etl.repo.util.Tests.createLocalRepositoryFileContext;
 
 import java.io.IOException;
 
 import lombok.val;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RepositoryImporterTest {
 
   @Test
+  @Ignore("For development only")
   public void testExecute() throws IOException {
-    val geneMongoUri = getLocalMongoClientUri("dcc-genome");
-    val repoMongoUri = getLocalMongoClientUri("dcc-repo");
-    val esUri = "es://localhost:9300";
-
-    val context = createRepositoryContext(repoMongoUri, geneMongoUri, esUri);
+    val context = createLocalRepositoryFileContext();
     val repositoryImporter = new RepositoryImporter(context);
     repositoryImporter.execute();
   }

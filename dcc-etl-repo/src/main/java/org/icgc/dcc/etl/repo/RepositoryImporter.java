@@ -41,7 +41,6 @@ import org.icgc.dcc.etl.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.repo.tcga.TCGAImporter;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 /**
  * Importer for the ICGC "Data Repository" feature which imports file metadata from various external data sources.
@@ -56,6 +55,7 @@ public class RepositoryImporter {
   /**
    * Dependencies.
    */
+  @NonNull
   private final RepositoryFileContext context;
 
   public void execute() {
@@ -63,17 +63,17 @@ public class RepositoryImporter {
   }
 
   @NonNull
-  public void execute(RepositorySource... sources) {
-    execute(ImmutableList.copyOf(sources));
+  public void execute(RepositorySource... activeSources) {
+    execute(ImmutableList.copyOf(activeSources));
   }
 
   @NonNull
-  public void execute(Iterable<RepositorySource> sources) {
+  public void execute(Iterable<RepositorySource> activeSources) {
     val watch = createStarted();
 
     // The business
     val exceptions = ImmutableList.builder()
-        .addAll(writeFiles(sources))
+        .addAll(writeFiles(activeSources))
         .addAll(indexFiles())
         .build();
 
@@ -81,13 +81,13 @@ public class RepositoryImporter {
     checkState(exceptions.isEmpty(), "Exception(s) processing %s", exceptions);
   }
 
-  private Collection<Exception> writeFiles(Iterable<RepositorySource> sources) {
+  private Collection<Exception> writeFiles(Iterable<RepositorySource> activeSources) {
     val importers = createImporters(context);
 
-    val exceptions = Lists.<Exception> newArrayList();
+    val exceptions = ImmutableList.<Exception> builder();
     for (val importer : importers) {
-      boolean activeSource = contains(sources, importer.getSource());
-      if (activeSource) {
+      boolean active = contains(activeSources, importer.getSource());
+      if (active) {
         try {
           logBanner("Importing '" + importer.getSource() + "' sourced files");
           importer.execute();
@@ -97,12 +97,12 @@ public class RepositoryImporter {
       }
     }
 
-    return exceptions;
+    return exceptions.build();
   }
 
   @SneakyThrows
   private Iterable<Exception> indexFiles() {
-    val exceptions = Lists.<Exception> newArrayList();
+    val exceptions = ImmutableList.<Exception> builder();
     try {
       logBanner("Indexing files");
       @Cleanup
@@ -112,16 +112,14 @@ public class RepositoryImporter {
       exceptions.add(e);
     }
 
-    return exceptions;
+    return exceptions.build();
   }
 
   private List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
     return ImmutableList.of(
         new CGHubImporter(context),
         new PCAWGImporter(context),
-        new TCGAImporter(context)
-        );
-
+        new TCGAImporter(context));
   }
 
   private static void logBanner(String message) {

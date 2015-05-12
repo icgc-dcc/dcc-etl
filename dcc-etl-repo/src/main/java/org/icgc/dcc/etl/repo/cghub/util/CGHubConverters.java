@@ -28,11 +28,6 @@ import com.google.common.collect.ImmutableMap;
 @NoArgsConstructor(access = PRIVATE)
 public final class CGHubConverters {
 
-  /**
-   * Constants.
-   */
-  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu/";
-
   private static final Map<String, String> SAMPLE_TYPE_CODE_MAPPING = ImmutableMap.<String, String> builder()
       .put("01", "Primary solid Tumor")
       .put("02", "Recurrent Solid Tumor")

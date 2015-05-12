@@ -29,6 +29,7 @@ import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getLastModif
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getLegacyDonorId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getLegacySampleId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getLegacySpecimenId;
+import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getLibraryStrategy;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getParticipantId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getResults;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getSampleId;
@@ -152,10 +153,6 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setTcgaAliquotBarcode(legacySampleId);
 
     return analysisFile;
-  }
-
-  private String getLibraryStrategy(JsonNode result) {
-    return result.get("library_strategy").textValue();
   }
 
   private static String resolveLastModified(JsonNode result) {

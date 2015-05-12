@@ -17,87 +17,45 @@
  */
 package org.icgc.dcc.etl.repo.util;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS;
 import static com.fasterxml.jackson.databind.PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES;
 import static lombok.AccessLevel.PRIVATE;
-
-import java.io.IOException;
-
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
 import org.jongo.Jongo;
+import org.jongo.Mapper;
 import org.jongo.marshall.jackson.JacksonMapper;
-import org.jongo.marshall.jackson.configuration.MapperModifier;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.BeanDescription;
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class Jongos {
 
-  @SneakyThrows
   public static Jongo createJongo(@NonNull MongoClientURI mongoUri) {
+    val db = createDB(mongoUri);
+    val mapper = createMapper();
+
+    return new Jongo(db, mapper);
+  }
+
+  @SneakyThrows
+  private static DB createDB(MongoClientURI mongoUri) {
     val mongo = new MongoClient(mongoUri);
     val db = mongo.getDB(mongoUri.getDatabase());
 
-    return new Jongo(db, new JacksonMapper.Builder().addModifier(new MapperModifier() {
-
-      @Override
-      public void modify(ObjectMapper mapper) {
-        mapper.setPropertyNamingStrategy(CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
-        mapper.registerModule(
-            new SimpleModule()
-                .addSerializer(Enum.class, new EnumStdSerializer())
-                .setDeserializerModifier(new EnumDeserializerModifier()));
-      }
-
-    }).build());
+    return db;
   }
 
-  @SuppressWarnings({ "rawtypes", "unchecked" })
-  private static final class EnumDeserializerModifier extends BeanDeserializerModifier {
-
-    @Override
-    public JsonDeserializer<Enum> modifyEnumDeserializer(DeserializationConfig config, final JavaType type,
-        BeanDescription beanDesc, final JsonDeserializer<?> deserializer) {
-      return new JsonDeserializer<Enum>() {
-
-        @Override
-        public Enum deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-          Class<? extends Enum> rawClass = (Class<Enum<?>>) type.getRawClass();
-          return Enum.valueOf(rawClass, jp.getValueAsString().toUpperCase());
-        }
-
-      };
-    }
-  }
-
-  @SuppressWarnings("rawtypes")
-  private static final class EnumStdSerializer extends StdSerializer<Enum> {
-
-    private EnumStdSerializer() {
-      super(Enum.class);
-    }
-
-    @Override
-    public void serialize(Enum value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeString(value.name().toLowerCase());
-    }
-
+  private static Mapper createMapper() {
+    return new JacksonMapper.Builder().addModifier(mapper -> {
+      mapper.setPropertyNamingStrategy(CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+      mapper.setSerializationInclusion(ALWAYS);
+    }).build();
   }
 
 }
