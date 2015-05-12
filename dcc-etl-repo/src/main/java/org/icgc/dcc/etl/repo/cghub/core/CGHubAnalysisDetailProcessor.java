@@ -18,7 +18,6 @@
 package org.icgc.dcc.etl.repo.cghub.core;
 
 import static com.google.common.base.Throwables.propagate;
-import static java.util.Collections.emptyList;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAnalyteCode;
@@ -91,8 +90,9 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val analysisFiles = ImmutableList.<RepositoryFile> builder();
     val files = getFiles(result);
     for (val file : files) {
-      if (!isBamFile(file)) {
-        return emptyList();
+      val exclude = !isBamFile(file);
+      if (exclude) {
+        continue;
       }
 
       try {

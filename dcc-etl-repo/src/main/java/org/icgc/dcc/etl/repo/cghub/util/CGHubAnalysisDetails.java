@@ -76,7 +76,7 @@ public final class CGHubAnalysisDetails {
   }
 
   public static String getLegacySpecimenId(@NonNull String legacySampleId) {
-    return legacySampleId.substring(0, 20);
+    return legacySampleId.substring(0, 16);
   }
 
   public static String getLegacyDonorId(@NonNull String legacySampleId) {

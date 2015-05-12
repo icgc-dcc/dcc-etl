@@ -46,7 +46,7 @@ public class CGHubAnalysisDetailReader {
   /**
    * Constants.
    */
-  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu/";
+  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu";
   public static final String CGHUB_TCGA_STUDY = "phs000178";
   public static final String CGHUB_API_URL = CGHUB_BASE_URL + "/cghub/metadata";
   public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";
