@@ -58,7 +58,7 @@ public class RepositorySourceFileWriter extends AbstractJongoWriter<Iterable<Rep
   }
 
   @Override
-  public void writeFiles(@NonNull Iterable<RepositoryFile> files) {
+  public void write(@NonNull Iterable<RepositoryFile> files) {
     log.info("Clearing file documents...");
     clearFiles();
 

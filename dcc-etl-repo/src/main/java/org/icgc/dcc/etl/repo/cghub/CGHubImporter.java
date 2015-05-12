@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.repo.cghub;
 
+import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.collect.Iterables.isEmpty;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.repo.model.RepositorySource.CGHUB;
@@ -42,24 +43,37 @@ public class CGHubImporter extends RepositorySourceFileImporter {
     super(CGHUB, context);
   }
 
+  @Override
   @SneakyThrows
   public void execute() {
+    val watch = createStarted();
+
     log.info("Reading files...");
-    val details = readDetails();
+    val files = readFiles();
     log.info("Finished reading files");
 
-    log.info("Processing details...");
-    val cghubFiles = processDetails(details);
-    log.info("Finished processing details");
-
-    if (isEmpty(cghubFiles)) {
-      log.error("**** Files are emtpy! Reusing previous imported files");
+    if (isEmpty(files)) {
+      log.error("**** Files are empty! Reusing previous imported files");
       return;
     }
 
     log.info("Writing files...");
-    writeFiles(cghubFiles, CGHUB);
-    log.info("Wrote {} files", formatCount(cghubFiles));
+    writeFiles(files, CGHUB);
+    log.info("Finished writing files");
+
+    log.info("Imported {} files in {}.", formatCount(files), watch);
+  }
+
+  private Iterable<RepositoryFile> readFiles() {
+    log.info("Reading details...");
+    val details = readDetails();
+    log.info("Finished reading deatils");
+
+    log.info("Processing details...");
+    val files = processDetails(details);
+    log.info("Finished processing details");
+
+    return files;
   }
 
   private Iterable<ObjectNode> readDetails() {

@@ -31,8 +31,6 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.mongodb.MongoClientURI;
 
-/**
- */
 @RequiredArgsConstructor
 public class RepositoryFileContext {
 
@@ -42,6 +40,9 @@ public class RepositoryFileContext {
   @Getter
   @NonNull
   protected final MongoClientURI mongoUri;
+  @Getter
+  @NonNull
+  protected final String esUri;
 
   /**
    * Metadata.
@@ -106,12 +107,12 @@ public class RepositoryFileContext {
   }
 
   @NonNull
-  protected Map<String, String> getTCGAUUIDs(Set<String> tcgaBarcodes) {
+  public Map<String, String> getTCGAUUIDs(Set<String> tcgaBarcodes) {
     return tcgaClient.getUUIDs(tcgaBarcodes);
   }
 
   @NonNull
-  protected Map<String, String> getTCGABarcodes(Set<String> tcgaUuids) {
+  public Map<String, String> getTCGABarcodes(Set<String> tcgaUuids) {
     return tcgaClient.getBarcodes(tcgaUuids);
   }
 

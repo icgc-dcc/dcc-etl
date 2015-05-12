@@ -17,13 +17,9 @@
  */
 package org.icgc.dcc.etl.repo.cghub;
 
-import static java.util.Collections.emptyMap;
-import static org.icgc.dcc.etl.repo.util.Tests.getLocalMongoClientUri;
+import static org.icgc.dcc.etl.repo.util.Tests.createLocalRepositoryFileContext;
 import lombok.val;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
-import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -32,8 +28,7 @@ public class CGHubImporterTest {
   @Test
   @Ignore("For development only")
   public void testExecute() {
-    val mongoUri = getLocalMongoClientUri("dcc-genome");
-    val context = new RepositoryFileContext(mongoUri, emptyMap(), new HashIdentifierClient(), new TCGAClient());
+    val context = createLocalRepositoryFileContext();
     val cghubImporter = new CGHubImporter(context);
     cghubImporter.execute();
   }

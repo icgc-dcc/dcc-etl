@@ -23,6 +23,7 @@ import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getPCAWGServer;
+import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileMetadataResolver.resolveMetadata;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
@@ -48,7 +49,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.model.RepositoryFileDataType;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -125,8 +125,8 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val submittedDonorId = getSubmitterDonorId(donor);
 
     val donorFiles = ImmutableList.<RepositoryFile> builder();
-    for (val name : PCAWG_LIBRARY_STRATEGY_NAMES) {
-      val libraryStrategy = donor.path(name);
+    for (val libraryStrategyName : PCAWG_LIBRARY_STRATEGY_NAMES) {
+      val libraryStrategy = donor.path(libraryStrategyName);
 
       if (libraryStrategy.isMissingNode()) {
         continue;
@@ -141,7 +141,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
               continue;
             }
 
-            val analysisType = name + "." + specimenClass + "." + workflowType;
+            val analysisType = resolveAnalysisType(libraryStrategyName, specimenClass, workflowType);
             for (val workflowFile : getFiles(workflow)) {
               val donorFile = createDonorFile(projectCode, submittedDonorId, analysisType, workflow, workflowFile);
 
@@ -166,16 +166,16 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val submitterSampleId = getSubmitterSampleId(workflow);
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
-    val dataType = resolveDataType(analysisType, fileName);
+    val metadata = resolveMetadata(analysisType, fileName);
 
     val donorFile = new RepositoryFile();
     donorFile
         .setStudy("PCAWG")
 
-        .setAccess(dataType.getAccess())
-        .setExperimentalStrategy(dataType.getExperimentalStrategy())
-        .setDataType(dataType.getDataType())
-        .setDataFormat(dataType.getDataFormat());
+        .setAccess(metadata.getAccess())
+        .setExperimentalStrategy(metadata.getExperimentalStrategy())
+        .setDataType(metadata.getDataType())
+        .setDataFormat(metadata.getDataFormat());
 
     donorFile.getRepository()
         .setRepoType(pcawgServer.getType().getId())
@@ -216,53 +216,8 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     return donorFile;
   }
 
-  private RepositoryFileDataType resolveDataType(String analysisType, String fileName) {
-    String dataType = null;
-    String dataFormat = null;
-    String experimentalStrategy = null;
-
-    if (analysisType.matches("rna_seq\\..*\\.(star|tophat)")) {
-      dataType = "RNA-Seq";
-      dataFormat = "BAM";
-      experimentalStrategy = "RNA-Seq";
-    } else if (analysisType.matches("wgs\\..*\\.bwa_alignment")) {
-      dataType = "DNA-Seq";
-      dataFormat = "BAM";
-      experimentalStrategy = "RNA-Seq";
-    } else if (analysisType.matches("wgs\\.tumor_specimens\\.sanger_variant_calling")) {
-      dataFormat = "VCF";
-      experimentalStrategy = "WGS";
-
-      if (fileName.endsWith(".somatic.snv_mnv.vcf.gz")) {
-        dataType = "Somatic SNV MNV";
-      } else if (fileName.endsWith(".somatic.cnv.vcf.gz")) {
-        dataType = "Somatic CNV";
-      } else if (fileName.endsWith(".somatic.sv.vcf.gz")) {
-        dataType = "Somatic SV";
-      } else if (fileName.endsWith(".somatic.indel.vcf.gz")) {
-        dataType = "Somatic Indel";
-      } else if (fileName.endsWith(".somatic.snv_mnv.tar.gz")) {
-        dataType = "Somatic SNV MNV";
-      } else if (fileName.endsWith(".somatic.sv.tar.gz")) {
-        dataType = "Somatic SV";
-      } else if (fileName.endsWith(".somatic.indel.tar.gz")) {
-        dataType = "Somatic Indel";
-      } else if (fileName.endsWith(".somatic.imputeCounts.tar.gz")) {
-        dataType = "Somatic Impute Counts";
-      } else if (fileName.endsWith(".somatic.binnedReadCounts.tar.gz")) {
-        dataType = "Somatic Binned Read Counts";
-      } else if (fileName.endsWith(".somatic.genotype.tar.gz")) {
-        dataType = "Somatic Genotype";
-      } else if (fileName.endsWith(".somatic.verifyBamId.tar.gz")) {
-        dataType = "Somatic Verify BAM Id";
-      }
-    }
-
-    return new RepositoryFileDataType()
-        .setDataType(dataType)
-        .setDataFormat(dataFormat)
-        .setExperimentalStrategy(experimentalStrategy)
-        .setAccess("controlled");
+  private static String resolveAnalysisType(String libraryStrategyName, String specimenClass, String workflowType) {
+    return libraryStrategyName + "." + specimenClass + "." + workflowType;
   }
 
   private static Set<String> resolveUUIDs(Iterable<RepositoryFile> donorFiles) {
@@ -272,6 +227,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
       val specimenId = donorFile.getDonor().getSubmittedSpecimenId();
       val sampleId = donorFile.getDonor().getSubmittedSampleId();
 
+      // TODO: Check is TCGA?
       if (isUUID(donorId)) {
         uuids.add(donorId);
       }
@@ -282,6 +238,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         uuids.add(sampleId);
       }
     }
+
     return uuids;
   }
 

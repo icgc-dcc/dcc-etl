@@ -66,17 +66,14 @@ public class PCAWGImporter extends RepositorySourceFileImporter {
     this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, context);
   }
 
+  @Override
   @SneakyThrows
   public void execute() {
     val watch = createStarted();
 
-    log.info("Reading donors...");
-    val donors = readDonors();
-    log.info("Finished reading {} donors", formatCount(donors));
-
-    log.info("Processing donor files...");
-    val files = processFiles(donors);
-    log.info("Finished processing {} donor files", formatCount(files));
+    log.info("Reading files...");
+    val files = readFiles();
+    log.info("Finished reading files");
 
     if (isEmpty(files)) {
       log.error("**** Files are empty! Reusing previous imported files");
@@ -85,9 +82,20 @@ public class PCAWGImporter extends RepositorySourceFileImporter {
 
     log.info("Writing files...");
     writeFiles(files, PCAWG);
-    log.info("Finished writing {} donor files", formatCount(files));
+    log.info("Finished writing files");
 
     log.info("Imported {} files in {}.", formatCount(files), watch);
+  }
+
+  private Iterable<RepositoryFile> readFiles() throws IOException {
+    log.info("Reading donors...");
+    val donors = readDonors();
+    log.info("Finished reading {} donors", formatCount(donors));
+
+    log.info("Processing donor files...");
+    val files = processFiles(donors);
+    log.info("Finished processing {} donor files", formatCount(files));
+    return files;
   }
 
   private Iterable<ObjectNode> readDonors() throws IOException {

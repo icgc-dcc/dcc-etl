@@ -17,11 +17,13 @@
  */
 package org.icgc.dcc.etl.repo;
 
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.collect.Iterables.contains;
 import static org.apache.commons.lang.StringUtils.repeat;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -30,21 +32,16 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.tcga.TCGAClient;
-import org.icgc.dcc.etl.core.id.HttpIdentifierClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.repo.cghub.CGHubImporter;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileIndexer;
-import org.icgc.dcc.etl.repo.core.RepositoryProjectReader;
 import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.model.RepositorySource;
 import org.icgc.dcc.etl.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.repo.tcga.TCGAImporter;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.mongodb.MongoClientURI;
+import com.google.common.collect.Lists;
 
 /**
  * Importer for the ICGC "Data Repository" feature which imports file metadata from various external data sources.
@@ -57,14 +54,9 @@ import com.mongodb.MongoClientURI;
 public class RepositoryImporter {
 
   /**
-   * Configuration
+   * Dependencies.
    */
-  @NonNull
-  private final MongoClientURI geneMongoUri;
-  @NonNull
-  private final MongoClientURI repoMongoUri;
-  @NonNull
-  private final String esUri;
+  private final RepositoryFileContext context;
 
   public void execute() {
     execute(RepositorySource.values());
@@ -80,30 +72,47 @@ public class RepositoryImporter {
     val watch = createStarted();
 
     // The business
-    writeFiles(sources);
-    indexFiles();
+    val exceptions = ImmutableList.builder()
+        .addAll(writeFiles(sources))
+        .addAll(indexFiles())
+        .build();
 
     log.info("Finished importing repository in {}", watch);
+    checkState(exceptions.isEmpty(), "Exception(s) processing %s", exceptions);
   }
 
-  private void writeFiles(Iterable<RepositorySource> sources) {
-    val context = createRepositoryContext();
+  private Collection<Exception> writeFiles(Iterable<RepositorySource> sources) {
     val importers = createImporters(context);
 
+    val exceptions = Lists.<Exception> newArrayList();
     for (val importer : importers) {
-      if (Iterables.contains(sources, importer.getSource())) {
-        logBanner("Importing " + importer.getSource() + " files");
-        importer.execute();
+      boolean activeSource = contains(sources, importer.getSource());
+      if (activeSource) {
+        try {
+          logBanner("Importing '" + importer.getSource() + "' sourced files");
+          importer.execute();
+        } catch (Exception e) {
+          exceptions.add(e);
+        }
       }
     }
+
+    return exceptions;
   }
 
   @SneakyThrows
-  private void indexFiles() {
-    logBanner("Indexing files");
-    @Cleanup
-    val indexer = new RepositoryFileIndexer(repoMongoUri, esUri);
-    indexer.indexFiles();
+  private Iterable<Exception> indexFiles() {
+    val exceptions = Lists.<Exception> newArrayList();
+    try {
+      logBanner("Indexing files");
+      @Cleanup
+      val indexer = new RepositoryFileIndexer(context.getMongoUri(), context.getEsUri());
+      indexer.indexFiles();
+    } catch (Exception e) {
+      exceptions.add(e);
+    }
+
+    return exceptions;
   }
 
   private List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
@@ -113,34 +122,6 @@ public class RepositoryImporter {
         new TCGAImporter(context)
         );
 
-  }
-
-  private RepositoryFileContext createRepositoryContext() {
-    // TODO: Externalize
-    val primarySites = getProjectPrimarySites();
-    val identifierClient = createIdentifierClient();
-    val tcgaClient = createTCGAClient();
-
-    return new RepositoryFileContext(repoMongoUri, primarySites, identifierClient, tcgaClient);
-  }
-
-  private static IdentifierClient createIdentifierClient() {
-    // TODO: Externalize
-    val dummyRelease = "";
-    return new HttpIdentifierClient("http://hcache-dcc.oicr.on.ca:5391/", dummyRelease);
-  }
-
-  private static TCGAClient createTCGAClient() {
-    // TODO: Externalize
-    return new TCGAClient();
-  }
-
-  @SneakyThrows
-  private Map<String, String> getProjectPrimarySites() {
-    // TODO: Externalize
-    @Cleanup
-    val projectReader = new RepositoryProjectReader(geneMongoUri);
-    return projectReader.getPrimarySites();
   }
 
   private static void logBanner(String message) {

@@ -35,8 +35,10 @@ public class RepositoryProjectReader extends AbstractJongoComponent {
   }
 
   public Map<String, String> getPrimarySites() {
+    val collection = PROJECT_COLLECTION;
+
     val map = ImmutableMap.<String, String> builder();
-    eachDocument(PROJECT_COLLECTION, project -> {
+    eachDocument(collection, project -> {
       String projectName = project.get("_project_id").textValue();
       String primarySite = project.get("primary_site").textValue();
 

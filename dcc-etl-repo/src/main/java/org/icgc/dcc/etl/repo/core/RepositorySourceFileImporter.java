@@ -49,7 +49,7 @@ public abstract class RepositorySourceFileImporter {
   protected void writeFiles(Iterable<RepositoryFile> files, RepositorySource organization) {
     @Cleanup
     val writer = new RepositorySourceFileWriter(context.getMongoUri(), organization);
-    writer.writeFiles(files);
+    writer.write(files);
   }
 
 }

@@ -18,6 +18,12 @@
 package org.icgc.dcc.etl.repo.util;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyMap;
+import lombok.val;
+
+import org.icgc.dcc.common.core.tcga.TCGAClient;
+import org.icgc.dcc.etl.core.id.HashIdentifierClient;
+import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 
 import com.mongodb.MongoClientURI;
 
@@ -28,6 +34,12 @@ public class Tests {
 
   public static final MongoClientURI getLocalMongoClientUri(String db) {
     return new MongoClientURI(format(MONGO_URI_TEMPLATE, DEFAULT_MONGO_PORT, db));
+  }
+
+  public static RepositoryFileContext createLocalRepositoryFileContext() {
+    val mongoUri = getLocalMongoClientUri("dcc-genome");
+    val esUri = "es://localhost:9300";
+    return new RepositoryFileContext(mongoUri, esUri, emptyMap(), new HashIdentifierClient(), new TCGAClient());
   }
 
 }

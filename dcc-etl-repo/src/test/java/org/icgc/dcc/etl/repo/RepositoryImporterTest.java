@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.repo;
 
+import static org.icgc.dcc.etl.repo.util.RepositoryFileContextFactory.createRepositoryContext;
 import static org.icgc.dcc.etl.repo.util.Tests.getLocalMongoClientUri;
 
 import java.io.IOException;
@@ -33,7 +34,8 @@ public class RepositoryImporterTest {
     val repoMongoUri = getLocalMongoClientUri("dcc-repo");
     val esUri = "es://localhost:9300";
 
-    val repositoryImporter = new RepositoryImporter(geneMongoUri, repoMongoUri, esUri);
+    val context = createRepositoryContext(repoMongoUri, geneMongoUri, esUri);
+    val repositoryImporter = new RepositoryImporter(context);
     repositoryImporter.execute();
   }
 
