@@ -23,6 +23,7 @@ import static com.google.common.base.Throwables.propagate;
 import static com.google.common.io.Resources.getResource;
 import static java.lang.String.format;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
 
@@ -78,8 +79,12 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
 
   public void indexFiles() {
     initializeIndex();
+    indexDocuments();
+    aliasIndex();
+  }
 
-    eachDocument(FILE_COLLECTION, file -> {
+  private void indexDocuments() {
+    val documentCount = eachDocument(FILE_COLLECTION, file -> {
       // Need to remove this as to not conflict with Elasticsearch
         file.remove("_id");
 
@@ -87,7 +92,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         client.prepareIndex(indexName, INDEX_TYPE_NAME).setSource(source).execute();
       });
 
-    aliasIndex();
+    log.info("Finished indexing {} documents", formatCount(documentCount));
   }
 
   @Override
@@ -149,18 +154,15 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
 
   @SneakyThrows
   private void aliasIndex() {
-    val indexNames = getIndexNames();
     val alias = INDEX_ALIAS;
 
-    // Remove existing
+    // Remove existing alias
     val request = client.admin().indices().prepareAliases();
-    for (val name : indexNames) {
-      if (!indexName.equals(name)) {
-        request.removeAlias(indexName, alias);
-      }
+    for (val index : getIndexNames()) {
+      request.removeAlias(index, alias);
     }
 
-    // Add new
+    // Add new alias
     log.info("Assigning index alias {} to index {}...", alias, indexName);
     request.addAlias(indexName, alias);
 
@@ -182,7 +184,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         .getState();
 
     val result = new ImmutableSet.Builder<String>();
-    for (val key : state.getMetaData().aliases().keys()) {
+    for (val key : state.getMetaData().getIndices().keys()) {
       result.add(key.value);
     }
 

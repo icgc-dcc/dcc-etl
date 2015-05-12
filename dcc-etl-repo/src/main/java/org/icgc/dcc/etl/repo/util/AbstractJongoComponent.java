@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.etl.repo.util;
 
-import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 import static org.icgc.dcc.etl.repo.util.Jongos.createJongo;
 
 import java.io.Closeable;
@@ -61,11 +60,16 @@ public abstract class AbstractJongoComponent implements Closeable {
   }
 
   @NonNull
-  protected void eachDocument(ReleaseCollection collection, Consumer<ObjectNode> consumer) {
-    val documents = getCollection(PROJECT_COLLECTION);
+  protected int eachDocument(ReleaseCollection collection, Consumer<ObjectNode> consumer) {
+    int documentCount = 0;
+    val documents = getCollection(collection);
     for (val document : documents.find().as(ObjectNode.class)) {
       consumer.accept(document);
+
+      documentCount++;
     }
+
+    return documentCount;
   }
 
 }

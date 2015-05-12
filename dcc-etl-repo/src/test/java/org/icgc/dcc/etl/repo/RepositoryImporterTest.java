@@ -23,13 +23,12 @@ import java.io.IOException;
 
 import lombok.val;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RepositoryImporterTest {
 
   @Test
-  @Ignore("For development only")
+  // @Ignore("For development only")
   public void testExecute() throws IOException {
     val context = createLocalRepositoryFileContext();
     val repositoryImporter = new RepositoryImporter(context);

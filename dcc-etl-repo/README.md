@@ -9,5 +9,5 @@ Build
 
 From the command line:
 
-	mvn package
+	mvn -pl dcc-etl-repo -am clean package -DskipTests
 
