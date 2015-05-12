@@ -20,9 +20,9 @@ import static com.sun.jersey.api.client.ClientResponse.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import lombok.val;
 
 import org.icgc.dcc.etl.identifier.repository.ProjectRepository;
-import org.icgc.dcc.etl.identifier.resource.ProjectResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -33,6 +33,8 @@ import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProjectResourceTest extends ResourceTest {
+
+  static final boolean CREATE = true;
 
   @Mock
   private ProjectRepository repository;
@@ -48,17 +50,18 @@ public class ProjectResourceTest extends ResourceTest {
     String projectId = "PR1";
     String submittedProjectId = "project1";
     String release = "release1";
-    when(repository.findId(submittedProjectId, release)).thenReturn(projectId);
+    when(repository.findId(CREATE, submittedProjectId, release)).thenReturn(projectId);
 
     // Execute
-    ClientResponse response = client()
+    val response = client()
         .resource("/project/id")
         .queryParam("submittedProjectId", submittedProjectId)
         .queryParam("release", release)
+        .queryParam("create", Boolean.toString(CREATE))
         .get(ClientResponse.class);
 
     // Verify
-    verify(repository).findId(submittedProjectId, release);
+    verify(repository).findId(CREATE, submittedProjectId, release);
     assertThat(response.getClientResponseStatus()).isEqualTo(OK);
   }
 }

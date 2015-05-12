@@ -395,7 +395,7 @@ public class Main {
   }
 
   private static void createDotVersion(Dictionary dictionary) {
-    // TODO: create file
+    // TODO: CREATE file
     // TODO: formatting
 
     describe("Dictionary dot file");

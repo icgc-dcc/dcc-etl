@@ -23,8 +23,8 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 
 public abstract class SampleRepository extends BaseRepository {
 
-  public String findId(String submittedSampleId, String submittedProjectId, String release) {
-    return super.findId(submittedSampleId, submittedProjectId, release);
+  public String findId(boolean create, String submittedSampleId, String submittedProjectId, String release) {
+    return super.findId(create, submittedSampleId, submittedProjectId, release);
   }
 
   /**

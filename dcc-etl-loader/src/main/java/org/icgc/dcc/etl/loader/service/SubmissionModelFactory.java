@@ -180,16 +180,7 @@ public class SubmissionModelFactory {
    */
   private static Iterable<FileSchema> getRelevantFileSchemata(@NonNull final Dictionary dictionary) {
 
-    return filter(
-        dictionary.getFiles(),
-        new Predicate<FileSchema>() {
-
-          @Override
-          public boolean apply(FileSchema fileSchema) {
-            return !fileSchema.getFileType().isOptional();
-          }
-
-        });
+    return dictionary.getFiles();
   }
 
   /**
@@ -203,7 +194,7 @@ public class SubmissionModelFactory {
 
           @Override
           public boolean apply(Relation relation) {
-            return !isSystemFileType(relation)
+            return !isSystemFileType(relation) && !isOptionalFileType(fileSchema)
                 && (!isMetaFileType(fileSchema) || !pertainsTo(relation, SUBMISSION_MATCHED_SAMPLE_ID));
           }
 
@@ -213,6 +204,10 @@ public class SubmissionModelFactory {
 
           private boolean isMetaFileType(final FileSchema fileSchema) {
             return fileSchema.getFileType().getSubType() == META_SUBTYPE;
+          }
+
+          private boolean isOptionalFileType(final FileSchema fileSchema) {
+            return fileSchema.getFileType().getSubType().isOptionalSubType();
           }
 
           private boolean pertainsTo(Relation relation, String fieldName) {

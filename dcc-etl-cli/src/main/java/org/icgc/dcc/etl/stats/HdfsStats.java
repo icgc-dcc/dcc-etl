@@ -61,7 +61,7 @@ public class HdfsStats {
   }
 
   @SneakyThrows
-  void stats(StatsResults results) { // TODO: create abstract method (all 3 *Stats have a stat() method and a uri)
+  void stats(StatsResults results) { // TODO: CREATE abstract method (all 3 *Stats have a stat() method and a uri)
 
     for (val donorFilePath : getDonorFiles()) {
       val donorFile = new Path(donorFilePath);

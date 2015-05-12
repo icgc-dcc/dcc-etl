@@ -10,16 +10,16 @@
   </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File>${log.dir}/${log.name}.log</File>
+    <file>${log.dir}/${log.name}.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${log.dir}/${log.name}.%d{yyyy-MM-dd}.log</FileNamePattern>
+      <fileNamePattern>${log.dir}/${log.name}.%d{yyyy-MM-dd}.log</fileNamePattern>
     </rollingPolicy>
     <encoder>
       <pattern>${pattern}</pattern>
     </encoder>
   </appender>
 
-  <root level="info">
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </root>

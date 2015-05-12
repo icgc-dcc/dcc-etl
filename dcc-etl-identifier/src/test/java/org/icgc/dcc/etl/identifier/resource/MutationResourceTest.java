@@ -20,10 +20,10 @@ import static com.sun.jersey.api.client.ClientResponse.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import lombok.val;
 
 import org.icgc.dcc.etl.identifier.repository.BadRequestException;
 import org.icgc.dcc.etl.identifier.repository.MutationRepository;
-import org.icgc.dcc.etl.identifier.resource.MutationResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,6 +34,8 @@ import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MutationResourceTest extends ResourceTest {
+
+  static final boolean CREATE = true;
 
   @Mock
   private MutationRepository repository;
@@ -56,11 +58,12 @@ public class MutationResourceTest extends ResourceTest {
     String mutationId = "MU1";
 
     when(
-        repository.findId(chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation, assemblyVersion, release))
+        repository.findId(CREATE, chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation, assemblyVersion,
+            release))
         .thenReturn(mutationId);
 
     // Execute
-    ClientResponse response = client()
+    val response = client()
         .resource("/mutation/id")
         .queryParam("chromosome", chromosome)
         .queryParam("chromosomeStart", chromosomeStart)
@@ -69,10 +72,12 @@ public class MutationResourceTest extends ResourceTest {
         .queryParam("mutationType", mutationType)
         .queryParam("assemblyVersion", assemblyVersion)
         .queryParam("release", release)
+        .queryParam("create", Boolean.toString(CREATE))
         .get(ClientResponse.class);
 
     // Verify
-    verify(repository).findId(chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation, assemblyVersion,
+    verify(repository).findId(CREATE, chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation,
+        assemblyVersion,
         release);
     assertThat(response.getClientResponseStatus()).isEqualTo(OK);
   }
@@ -90,7 +95,8 @@ public class MutationResourceTest extends ResourceTest {
     String release = "release1";
 
     when(
-        repository.findId(chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation, assemblyVersion, release))
+        repository.findId(CREATE, chromosome, chromosomeStart, chromosomeEnd, mutationType, mutation, assemblyVersion,
+            release))
         .thenThrow(new BadRequestException(""));
     // Execute
     client()
@@ -101,6 +107,7 @@ public class MutationResourceTest extends ResourceTest {
         .queryParam("mutationType", mutationType)
         .queryParam("assemblyVersion", assemblyVersion)
         .queryParam("release", release)
+        .queryParam("create", Boolean.toString(CREATE))
         .get(ClientResponse.class);
   }
 }
