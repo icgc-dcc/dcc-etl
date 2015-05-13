@@ -50,12 +50,16 @@ public class PCAWGArchives {
     return donor.get("dcc_project_code").textValue();
   }
 
+  public static String getFileName(@NonNull JsonNode workflowFile) {
+    return workflowFile.path("file_name").textValue();
+  }
+
   public static long getFileSize(@NonNull JsonNode workflowFile) {
     return workflowFile.path("file_size").longValue();
   }
 
-  public static String getFileName(@NonNull JsonNode workflowFile) {
-    return workflowFile.path("file_name").textValue();
+  public static String getFileMd5sum(@NonNull JsonNode workflowFile) {
+    return workflowFile.path("file_md5sum").textValue();
   }
 
   public static String getBamFileName(@NonNull JsonNode workflowFile) {
@@ -64,6 +68,10 @@ public class PCAWGArchives {
 
   public static long getBamFileSize(@NonNull JsonNode workflowFile) {
     return workflowFile.path("bam_file_size").longValue();
+  }
+
+  public static String getBamFileMd5sum(@NonNull JsonNode workflowFile) {
+    return workflowFile.path("bam_file_md5sum").textValue();
   }
 
   public static String getSubmitterDonorId(@NonNull ObjectNode donor) {
@@ -84,6 +92,10 @@ public class PCAWGArchives {
 
   public static String getGnosRepo(@NonNull JsonNode workflow) {
     return workflow.get("gnos_repo").get(0).textValue();
+  }
+
+  public static String getGnosLastModified(@NonNull JsonNode workflow) {
+    return workflow.get("gnos_last_modified").textValue();
   }
 
   public static JsonNode getFiles(@NonNull JsonNode workflow) {

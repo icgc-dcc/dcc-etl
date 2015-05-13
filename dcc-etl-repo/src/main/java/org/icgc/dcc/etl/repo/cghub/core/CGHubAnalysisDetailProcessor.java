@@ -134,6 +134,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setPrimarySite(resolvePrimarySite(projectCode))
         .setProjectCode(projectCode)
         .setProgram(project.getProgram())
+        .setStudy(null)
 
         .setDonorId(resolveDonorId(projectCode, legacyDonorId))
         .setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId))

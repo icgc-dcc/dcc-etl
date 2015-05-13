@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.etl.repo.tcga.core;
 
+import static org.icgc.dcc.etl.repo.core.RepositoryFileProcessor.formatDateTime;
+
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -25,8 +27,8 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.tcga.model.TCGAArchiveClinicalFile;
+import org.icgc.dcc.etl.repo.tcga.model.TCGAArchivePageEntry;
 import org.icgc.dcc.etl.repo.tcga.reader.TCGAArchiveManifestReader;
 import org.icgc.dcc.etl.repo.tcga.reader.TCGAArchivePageReader;
 
@@ -59,13 +61,17 @@ public class TCGAArchiveClinicalFileProcessor {
       val md5 = md5s.get(entry.getFileName());
       val clinicalFile =
           new TCGAArchiveClinicalFile(
-              donorId, entry.getFileName(), RepositoryFileProcessor.formatDateTime(entry.getLastModified()),
+              donorId, entry.getFileName(), resolveLastModified(entry),
               entry.getFileSize(), md5, url);
 
       clinicalFiles.add(clinicalFile);
     }
 
     return clinicalFiles.build();
+  }
+
+  private static String resolveLastModified(TCGAArchivePageEntry entry) {
+    return formatDateTime(entry.getLastModified());
   }
 
   private Map<String, String> resolveArchiveFileMD5Sums(String archiveFolderUrl) {

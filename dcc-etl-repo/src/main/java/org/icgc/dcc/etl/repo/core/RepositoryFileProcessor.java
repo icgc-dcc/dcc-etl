@@ -18,9 +18,6 @@
 package org.icgc.dcc.etl.repo.core;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,16 +61,6 @@ public abstract class RepositoryFileProcessor {
   @NonNull
   protected Map<String, String> resolveTCGABarcodes(Set<String> tcgaUuids) {
     return context.getTCGABarcodes(tcgaUuids);
-  }
-
-  @NonNull
-  public static final String formatDateTime(LocalDateTime dateTime) {
-    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
-  }
-
-  @NonNull
-  public static final String formatDateTime(ZonedDateTime dateTime) {
-    return dateTime.format(DateTimeFormatter.ISO_INSTANT);
   }
 
   @NonNull

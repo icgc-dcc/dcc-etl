@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.repo.pcawg.core;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.primitives.Longs.max;
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
@@ -27,19 +28,22 @@ import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileDataTypeResolver.resolve
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
+import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getBamFileMd5sum;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getBamFileName;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getBamFileSize;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getDccProjectCode;
+import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getFileMd5sum;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getFileName;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getFileSize;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getFiles;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosId;
+import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosLastModified;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosRepo;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSampleId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -49,6 +53,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
+import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -159,8 +164,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
       JsonNode workflow,
       JsonNode workflowFile) {
     val project = getProjectCodeProject(projectCode).orNull();
-    val genosRepo = getGnosRepo(workflow);
-    val pcawgServer = getPCAWGServer(genosRepo);
+    val pcawgServer = resolvePCAWGSerer(workflow);
 
     val submitterSpecimenId = getSubmitterSpecimenId(workflow);
     val submitterSampleId = getSubmitterSampleId(workflow);
@@ -191,7 +195,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setRepoMetadataPath(pcawgServer.getType().getMetadataPath())
         .setRepoDataPath(pcawgServer.getType().getDataPath())
         .setFileName(fileName)
-        .setFileMd5sum(null)
+        .setFileMd5sum(resolveMd5sum(workflowFile))
         .setFileSize(fileSize)
         .setLastModified(resolveLastModified(workflow));
 
@@ -199,6 +203,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setPrimarySite(resolvePrimarySite(projectCode))
         .setProgram(project.getProgram())
         .setProjectCode(projectCode)
+        .setStudy(null)
 
         .setDonorId(null)
         .setSpecimenId(null)
@@ -213,6 +218,12 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setTcgaAliquotBarcode(null);
 
     return donorFile;
+  }
+
+  private static RepositoryServer resolvePCAWGSerer(JsonNode workflow) {
+    val genosRepo = getGnosRepo(workflow);
+
+    return getPCAWGServer(genosRepo);
   }
 
   private static String resolveAnalysisType(String libraryStrategyName, String specimenClass, String workflowType) {
@@ -245,14 +256,20 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     return firstNonNull(getFileName(workflowFile), getBamFileName(workflowFile));
   }
 
+  private static String resolveMd5sum(JsonNode workflowFile) {
+    return firstNonNull(getFileMd5sum(workflowFile), getBamFileMd5sum(workflowFile));
+  }
+
   private static long resolveFileSize(JsonNode workflowFile) {
     // First non-zero
     return max(getFileSize(workflowFile), getBamFileSize(workflowFile));
   }
 
   private static String resolveLastModified(JsonNode workflow) {
-    // TODO: mapping
-    return formatDateTime(ZonedDateTime.now());
+    val text = getGnosLastModified(workflow);
+    val dateTime = ISO_OFFSET_DATE_TIME.parse(text, Instant::from);
+
+    return formatDateTime(dateTime);
   }
 
 }
