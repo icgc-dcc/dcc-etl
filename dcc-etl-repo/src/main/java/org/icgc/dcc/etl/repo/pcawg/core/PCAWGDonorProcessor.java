@@ -42,6 +42,8 @@ import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosRepo;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSampleId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
+import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
+import static org.icgc.dcc.etl.repo.util.Streams.stream;
 
 import java.time.Instant;
 import java.util.Set;
@@ -115,14 +117,9 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private Iterable<RepositoryFile> createDonorFiles(Iterable<ObjectNode> donors) {
-    val files = ImmutableList.<RepositoryFile> builder();
-    for (val donor : donors) {
-      val donorFiles = processDonor(donor);
-
-      files.addAll(donorFiles);
-    }
-
-    return files.build();
+    return stream(donors)
+        .flatMap(donor -> stream(processDonor(donor)))
+        .collect(toImmutableList());
   }
 
   private Iterable<RepositoryFile> processDonor(@NonNull ObjectNode donor) {
@@ -203,19 +200,19 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setPrimarySite(resolvePrimarySite(projectCode))
         .setProgram(project.getProgram())
         .setProjectCode(projectCode)
-        .setStudy(null)
+        .setStudy("PCAWG")
 
-        .setDonorId(null)
-        .setSpecimenId(null)
-        .setSampleId(null)
+        .setDonorId(null) // Set downstream
+        .setSpecimenId(null) // Set downstream
+        .setSampleId(null) // Set downstream
 
         .setSubmittedDonorId(submittedDonorId)
         .setSubmittedSpecimenId(submitterSpecimenId)
         .setSubmittedSampleId(submitterSampleId)
 
-        .setTcgaParticipantBarcode(null)
-        .setTcgaSampleBarcode(null)
-        .setTcgaAliquotBarcode(null);
+        .setTcgaParticipantBarcode(null) // Set downstream
+        .setTcgaSampleBarcode(null) // Set downstream
+        .setTcgaAliquotBarcode(null); // Set downstream
 
     return donorFile;
   }

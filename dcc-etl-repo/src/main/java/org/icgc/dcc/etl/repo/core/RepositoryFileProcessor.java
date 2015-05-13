@@ -64,6 +64,11 @@ public abstract class RepositoryFileProcessor {
   }
 
   @NonNull
+  protected boolean isPCAWGSubmittedDonorId(String projectCode, String submittedDonorId) {
+    return context.isPCAWGSubmittedDonorId(projectCode, submittedDonorId);
+  }
+
+  @NonNull
   public static final String formatDateTime(Instant dateTime) {
     return dateTime.toString();
   }

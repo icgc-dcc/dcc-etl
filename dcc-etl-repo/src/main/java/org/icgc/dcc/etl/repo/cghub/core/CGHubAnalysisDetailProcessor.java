@@ -75,10 +75,14 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
   @NonNull
   public Iterable<RepositoryFile> processDetails(Iterable<ObjectNode> details) {
-    return stream(details)
+    val analysisFiles = stream(details)
         .flatMap(detail -> stream(getResults(detail)))
         .flatMap(result -> stream(processResult(result)))
         .collect(toImmutableList());
+
+    assignStudy(analysisFiles);
+
+    return analysisFiles;
   }
 
   private Iterable<RepositoryFile> processResult(JsonNode result) {
@@ -134,7 +138,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setPrimarySite(resolvePrimarySite(projectCode))
         .setProjectCode(projectCode)
         .setProgram(project.getProgram())
-        .setStudy(null)
+        .setStudy(null) // Set downstream
 
         .setDonorId(resolveDonorId(projectCode, legacyDonorId))
         .setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId))
@@ -149,6 +153,16 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setTcgaAliquotBarcode(legacySampleId);
 
     return analysisFile;
+  }
+
+  private void assignStudy(Iterable<RepositoryFile> analysisFiles) {
+    for (val analysisFile : analysisFiles) {
+      val donor = analysisFile.getDonor();
+      val pcawg = isPCAWGSubmittedDonorId(donor.getProjectCode(), donor.getSubmittedDonorId());
+      if (pcawg) {
+        donor.setStudy("PCAWG");
+      }
+    }
   }
 
   private static RepositoryProject resolveProject(JsonNode result) {

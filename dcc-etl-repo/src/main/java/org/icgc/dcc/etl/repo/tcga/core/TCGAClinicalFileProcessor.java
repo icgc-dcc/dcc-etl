@@ -60,6 +60,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
     val clinicalFiles = createClinicalFiles();
 
     translateBarcodes(clinicalFiles);
+    assignStudy(clinicalFiles);
 
     return clinicalFiles;
   }
@@ -119,7 +120,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
             new RepositoryFileDataType()
                 .setDataType("Clinical")
                 .setDataFormat("XML")
-                .setExperimentalStrategy(null));
+                .setExperimentalStrategy(null)); // N/A
 
     clinicalFile.getRepository()
         .setRepoType(tcgaServer.getType().getId())
@@ -144,19 +145,21 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
         .setPrimarySite(resolvePrimarySite(projectCode))
         .setProgram("TCGA")
         .setProjectCode(projectCode)
-        .setStudy(null)
+
+        .setStudy(null) // Set downstream
 
         .setDonorId(resolveDonorId(projectCode, submittedDonorId))
-        .setSpecimenId(null)
-        .setSampleId(null)
+        .setSpecimenId(null) // N/A
+        .setSampleId(null) // N/A
 
-        .setSubmittedDonorId(null)
-        .setSubmittedSpecimenId(null)
-        .setSubmittedSampleId(null)
+        .setSubmittedDonorId(null) // Set downstream
+        .setSubmittedSpecimenId(null) // Set downstream
+        .setSubmittedSampleId(null) // Set downstream
 
         .setTcgaParticipantBarcode(submittedDonorId)
-        .setTcgaSampleBarcode(null)
-        .setTcgaAliquotBarcode(null);
+        .setTcgaSampleBarcode(null) // N/A
+        .setTcgaAliquotBarcode(null); // N/A
+
     return clinicalFile;
   }
 
@@ -176,6 +179,16 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
 
       val uuid = uuids.get(participantBarcode);
       clinicalFile.getDonor().setSubmittedDonorId(uuid);
+    }
+  }
+
+  private void assignStudy(Iterable<RepositoryFile> clinicalFiles) {
+    for (val clinicalFile : clinicalFiles) {
+      val donor = clinicalFile.getDonor();
+      val pcawg = isPCAWGSubmittedDonorId(donor.getProjectCode(), donor.getSubmittedDonorId());
+      if (pcawg) {
+        donor.setStudy("PCAWG");
+      }
     }
   }
 

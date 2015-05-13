@@ -1,6 +1,8 @@
 package org.icgc.dcc.etl.repo.pcawg.reader;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.AUTO_CLOSE_SOURCE;
+import static org.icgc.dcc.common.core.util.URLs.getUrl;
+import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_ARCHIVE_BASE_URL;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +26,14 @@ import com.google.common.collect.ImmutableList;
 public class PCAWGDonorArchiveReader {
 
   /**
+   * JSONL (new line delimited JSON file) dump of clean, curated PCAWG donor information.
+   * 
+   * @see http://jsonlines.org/
+   */
+  public static final URL DEFAULT_PCAWG_DONOR_ARCHIVE_URL =
+      getUrl(PCAWG_ARCHIVE_BASE_URL + "/gnos_metadata/latest/reports/sanger_variant_called_donors.jsonl");
+
+  /**
    * Constants.
    */
   private static final ObjectMapper MAPPER = new ObjectMapper().configure(AUTO_CLOSE_SOURCE, false);
@@ -34,6 +44,10 @@ public class PCAWGDonorArchiveReader {
    */
   @NonNull
   private final URL donorArchiveUrl;
+
+  public PCAWGDonorArchiveReader() {
+    this.donorArchiveUrl = DEFAULT_PCAWG_DONOR_ARCHIVE_URL;
+  }
 
   public Iterable<ObjectNode> readDonors() throws IOException {
     log.info("Reading donors from '{}'...", donorArchiveUrl);

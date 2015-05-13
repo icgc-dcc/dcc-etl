@@ -15,67 +15,42 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.pcawg;
+package org.icgc.dcc.etl.repo.pcawg.core;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.etl.repo.model.RepositorySource.PCAWG;
-import static org.icgc.dcc.etl.repo.pcawg.reader.PCAWGDonorArchiveReader.DEFAULT_PCAWG_DONOR_ARCHIVE_URL;
+import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getDccProjectCode;
+import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
+import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
+import static org.icgc.dcc.etl.repo.util.Streams.stream;
 
-import java.net.URL;
+import java.util.Set;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
-import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorProcessor;
 import org.icgc.dcc.etl.repo.pcawg.reader.PCAWGDonorArchiveReader;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Slf4j
-public class PCAWGImporter extends RepositorySourceFileImporter {
+public class PCAWGDonorIndentifier {
 
-  /**
-   * Configuration.
-   */
-  @NonNull
-  private final URL archiveUrl;
-
-  public PCAWGImporter(@NonNull URL archiveUrl, @NonNull RepositoryFileContext context) {
-    super(PCAWG, context);
-    this.archiveUrl = archiveUrl;
-  }
-
-  public PCAWGImporter(@NonNull RepositoryFileContext context) {
-    this(DEFAULT_PCAWG_DONOR_ARCHIVE_URL, context);
-  }
-
-  @Override
-  protected Iterable<RepositoryFile> readFiles() {
-    log.info("Reading donors...");
+  public Set<String> identifyDonors() {
     val donors = readDonors();
-    log.info("Finished reading {} donors", formatCount(donors));
 
-    log.info("Processing donor files...");
-    val files = processFiles(donors);
-    log.info("Finished processing {} donor files", formatCount(files));
+    log.info("Collecting PCAWG study donor ids...");
+    val submittedDonorIds = stream(donors)
+        .map(donor -> getDccProjectCode(donor) + ":" + getSubmitterDonorId(donor))
+        .collect(toImmutableSet());
+    log.info("Finish collecting PCAWG study donor ids");
 
-    return files;
+    return submittedDonorIds;
   }
 
   @SneakyThrows
   private Iterable<ObjectNode> readDonors() {
-    val reader = new PCAWGDonorArchiveReader(archiveUrl);
+    val reader = new PCAWGDonorArchiveReader();
     return reader.readDonors();
-  }
-
-  private Iterable<RepositoryFile> processFiles(Iterable<ObjectNode> donors) {
-    val processor = new PCAWGDonorProcessor(context);
-    return processor.processDonors(donors);
   }
 
 }

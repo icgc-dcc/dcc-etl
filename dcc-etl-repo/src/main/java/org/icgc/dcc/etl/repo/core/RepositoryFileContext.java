@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.repo.core;
 
 import static lombok.AccessLevel.PACKAGE;
+import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorIndentifier;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -41,16 +43,16 @@ public class RepositoryFileContext {
    */
   @Getter
   @NonNull
-  protected final MongoClientURI mongoUri;
+  private final MongoClientURI mongoUri;
   @Getter
   @NonNull
-  protected final String esUri;
+  private final String esUri;
 
   /**
    * Metadata.
    */
   @NonNull
-  protected final Map<String, String> primarySites;
+  private final Map<String, String> primarySites;
 
   /**
    * Caches.
@@ -63,13 +65,24 @@ public class RepositoryFileContext {
    * Dependencies.
    */
   @NonNull
-  protected final IdentifierClient identifierClient;
+  private final IdentifierClient identifierClient;
   @NonNull
-  protected final TCGAClient tcgaClient;
+  private final TCGAClient tcgaClient;
+
+  /**
+   * Data.
+   */
+  @Getter(lazy = true, value = PRIVATE)
+  private final Set<String> pcawgSubmittedDonorIds = new PCAWGDonorIndentifier().identifyDonors();
 
   @NonNull
   public String getPrimarySite(String projectCode) {
     return primarySites.get(projectCode);
+  }
+
+  @NonNull
+  public boolean isPCAWGSubmittedDonorId(String projectCode, String submittedDonorId) {
+    return getPcawgSubmittedDonorIds().contains(projectCode + ":" + submittedDonorId);
   }
 
   @NonNull
