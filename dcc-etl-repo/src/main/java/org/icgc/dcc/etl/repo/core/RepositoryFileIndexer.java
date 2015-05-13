@@ -31,6 +31,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -44,7 +45,9 @@ import org.icgc.dcc.etl.repo.util.TransportClientFactory;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mongodb.MongoClientURI;
 
@@ -52,12 +55,22 @@ import com.mongodb.MongoClientURI;
 public class RepositoryFileIndexer extends AbstractJongoComponent implements Closeable {
 
   /**
-   * Constants.
+   * Index naming.
    */
   private static final String INDEX_ALIAS = "icgc-repository";
-  private static final String INDEX_TYPE_NAME = "file";
-  private static final String ES_CONFIG_BASE_PATH = "mappings";
   private static final DateTimeFormatter INDEX_NAME_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+  /**
+   * Index types.
+   */
+  private static final String INDEX_TYPE_NAME = "file";
+  private static final String INDEX_TYPE_TEXT_NAME = "file-text";
+  private static final List<String> INDEX_TYPE_NAMES = ImmutableList.of(INDEX_TYPE_NAME, INDEX_TYPE_TEXT_NAME);
+
+  /**
+   * Locations.
+   */
+  private static final String ES_CONFIG_BASE_PATH = "mappings";
 
   /**
    * Configuration.
@@ -84,15 +97,34 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
   }
 
   private void indexDocuments() {
+    log.info("Indexing documents...");
     val documentCount = eachDocument(FILE_COLLECTION, file -> {
       // Need to remove this as to not conflict with Elasticsearch
         file.remove("_id");
+        checkState(client.prepareIndex(indexName, INDEX_TYPE_NAME)
+            .setSource(file.toString())
+            .execute()
+            .actionGet()
+            .isCreated(),
+            "Indexing of file document '%s' was not created", file);
 
-        String source = file.toString();
-        client.prepareIndex(indexName, INDEX_TYPE_NAME).setSource(source).execute();
+        JsonNode fileText = createFileText(file);
+        checkState(client.prepareIndex(indexName, INDEX_TYPE_TEXT_NAME)
+            .setSource(fileText.toString())
+            .execute()
+            .actionGet()
+            .isCreated(),
+            "Indexing of file text document '%s' was not created", file);
       });
 
     log.info("Finished indexing {} documents", formatCount(documentCount));
+  }
+
+  private JsonNode createFileText(ObjectNode file) {
+    val fileName = file.path("repository").path("file_name");
+    val fileText = file.objectNode().set("file_name", fileName);
+
+    return fileText;
   }
 
   @Override
@@ -135,18 +167,19 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
           .isAcknowledged(),
           "Index '%s' creation was not acknowledged!", indexName);
 
-      String typeName = INDEX_TYPE_NAME;
-      String source = getTypeMapping(typeName).toString();
+      for (val typeName : INDEX_TYPE_NAMES) {
+        val source = getTypeMapping(typeName).toString();
 
-      log.info("Creating index '{}' mapping for type '{}'...", indexName, typeName);
-      checkState(indexClient.preparePutMapping(indexName)
-          .setType(typeName)
-          .setSource(source)
-          .execute()
-          .actionGet()
-          .isAcknowledged(),
-          "Index '%s' type mapping in index '%s' was not acknowledged for release '%s'!",
-          typeName, indexName);
+        log.info("Creating index '{}' mapping for type '{}'...", indexName, typeName);
+        checkState(indexClient.preparePutMapping(indexName)
+            .setType(typeName)
+            .setSource(source)
+            .execute()
+            .actionGet()
+            .isAcknowledged(),
+            "Index '%s' type mapping in index '%s' was not acknowledged for release '%s'!",
+            typeName, indexName);
+      }
     } catch (Throwable t) {
       propagate(t);
     }

@@ -116,7 +116,7 @@ public class RepositoryImporter {
     return exceptions.build();
   }
 
-  private List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
+  private static List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
     return ImmutableList.of(
         new PCAWGImporter(context),
         new TCGAImporter(context),
