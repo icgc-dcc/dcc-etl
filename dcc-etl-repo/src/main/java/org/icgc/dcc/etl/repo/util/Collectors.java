@@ -15,50 +15,32 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.cghub;
+package org.icgc.dcc.etl.repo.util;
 
-import static org.icgc.dcc.etl.repo.model.RepositorySource.CGHUB;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import java.util.stream.Collector;
 
-import org.icgc.dcc.etl.repo.cghub.core.CGHubAnalysisDetailProcessor;
-import org.icgc.dcc.etl.repo.cghub.reader.CGHubAnalysisDetailReader;
-import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
-import org.icgc.dcc.etl.repo.model.RepositoryFile;
+import lombok.experimental.UtilityClass;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
-/**
- * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
- */
-@Slf4j
-public class CGHubImporter extends RepositorySourceFileImporter {
+@UtilityClass
+public class Collectors {
 
-  public CGHubImporter(RepositoryFileContext context) {
-    super(CGHUB, context);
+  public static <T> Collector<T, ImmutableList.Builder<T>, ImmutableList<T>> toImmutableList() {
+    return Collector.of(
+        ImmutableList.Builder::new,
+        (builder, e) -> builder.add(e),
+        (b1, b2) -> b1.addAll(b2.build()),
+        (builder) -> builder.build());
   }
 
-  @Override
-  protected Iterable<RepositoryFile> readFiles() {
-    log.info("Reading details...");
-    val details = readDetails();
-    log.info("Finished reading details");
-
-    log.info("Processing details...");
-    val files = processDetails(details);
-    log.info("Finished processing details");
-
-    return files;
-  }
-
-  private Iterable<ObjectNode> readDetails() {
-    return new CGHubAnalysisDetailReader().readDetails();
-  }
-
-  private Iterable<RepositoryFile> processDetails(Iterable<ObjectNode> details) {
-    val processor = new CGHubAnalysisDetailProcessor(context);
-    return processor.processDetails(details);
+  public static <T> Collector<T, ImmutableSet.Builder<T>, ImmutableSet<T>> toImmutableSet() {
+    return Collector.of(
+        ImmutableSet.Builder::new,
+        (builder, e) -> builder.add(e),
+        (b1, b2) -> b1.addAll(b2.build()),
+        (builder) -> builder.build());
   }
 
 }

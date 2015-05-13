@@ -92,6 +92,7 @@ public class RepositoryImporter {
           logBanner("Importing '" + importer.getSource() + "' sourced files");
           importer.execute();
         } catch (Exception e) {
+          log.error("Error procesing '" + importer.getSource() + "': ", e);
           exceptions.add(e);
         }
       }
@@ -117,9 +118,9 @@ public class RepositoryImporter {
 
   private List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
     return ImmutableList.of(
+        new CGHubImporter(context),
         new PCAWGImporter(context),
-        new TCGAImporter(context),
-        new CGHubImporter(context)
+        new TCGAImporter(context)
         );
   }
 

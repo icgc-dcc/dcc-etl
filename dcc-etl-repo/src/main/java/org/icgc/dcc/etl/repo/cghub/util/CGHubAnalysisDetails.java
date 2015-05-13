@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class CGHubAnalysisDetails {
@@ -51,12 +50,8 @@ public final class CGHubAnalysisDetails {
     return result.get("analysis_id").textValue();
   }
 
-  public static long getFileSize(@NonNull ObjectNode file) {
+  public static long getFileSize(@NonNull JsonNode file) {
     return file.get("filesize").longValue();
-  }
-
-  public static String getFileName(@NonNull ObjectNode file) {
-    return file.get("filename").textValue();
   }
 
   public static String getParticipantId(@NonNull JsonNode result) {
@@ -89,6 +84,10 @@ public final class CGHubAnalysisDetails {
 
   public static String getLastModified(@NonNull JsonNode result) {
     return result.get("last_modified").textValue();
+  }
+
+  public static String getChecksum(@NonNull JsonNode file) {
+    return file.path("checksum").path("#text").textValue();
   }
 
 }

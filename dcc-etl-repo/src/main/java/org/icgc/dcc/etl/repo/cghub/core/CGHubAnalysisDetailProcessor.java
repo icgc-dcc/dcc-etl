@@ -17,10 +17,10 @@
  */
 package org.icgc.dcc.etl.repo.cghub.core;
 
-import static com.google.common.base.Throwables.propagate;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAnalyteCode;
+import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getChecksum;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getDiseaseAbbr;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getFileName;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getFileSize;
@@ -35,25 +35,26 @@ import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getResults;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getSampleId;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getDiseaseCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getCGHubServer;
+import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
+import static org.icgc.dcc.etl.repo.util.Streams.stream;
 
 import java.time.Instant;
 import java.util.List;
 
 import lombok.NonNull;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.repo.model.RepositoryFile.RepositoryFileDataType;
+import org.icgc.dcc.etl.repo.model.RepositoryProjects.RepositoryProject;
 import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
-@Slf4j
 public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
   /**
@@ -74,50 +75,28 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
   @NonNull
   public Iterable<RepositoryFile> processDetails(Iterable<ObjectNode> details) {
-    val analysisFiles = ImmutableList.<RepositoryFile> builder();
-
-    for (val detail : details) {
-      val results = getResults(detail);
-      for (val result : results) {
-        analysisFiles.addAll(processResult(result));
-      }
-    }
-
-    return analysisFiles.build();
+    return stream(details)
+        .flatMap(detail -> stream(getResults(detail)))
+        .flatMap(result -> stream(processResult(result)))
+        .collect(toImmutableList());
   }
 
   private Iterable<RepositoryFile> processResult(JsonNode result) {
-    val analysisFiles = ImmutableList.<RepositoryFile> builder();
-    val files = getFiles(result);
-    for (val file : files) {
-      val exclude = !isBamFile(file);
-      if (exclude) {
-        continue;
-      }
-
-      try {
-        val analysisFile = createAnalysisFile(result, (ObjectNode) file);
-        analysisFiles.add(analysisFile);
-      } catch (Exception e) {
-        log.error("Error processing result: {}", result);
-        propagate(e);
-      }
-    }
-
-    return analysisFiles.build();
+    return stream(getFiles(result))
+        .filter(file -> isBamFile(file))
+        .map(file -> createAnalysisFile(result, file))
+        .collect(toImmutableList());
   }
 
-  private RepositoryFile createAnalysisFile(JsonNode result, ObjectNode file) {
-    val diseaseCode = getDiseaseAbbr(result);
-    val project = getDiseaseCodeProject(diseaseCode).orNull();
+  private RepositoryFile createAnalysisFile(JsonNode result, JsonNode file) {
+    val project = resolveProject(result);
     val projectCode = project.getProjectCode();
-    val analyteCode = getAnalyteCode(result);
 
     val legacySampleId = getLegacySampleId(result);
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
 
-    val dataType = resolveDataType(analyteCode);
+    final @val java.lang.String dataType = resolveDataType(result);
     val experimentalStrategy = getLibraryStrategy(result);
 
     val analysisFile = new RepositoryFile();
@@ -147,7 +126,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setRepoMetadataPath(cghubServer.getType().getMetadataPath())
         .setRepoDataPath(cghubServer.getType().getDataPath())
         .setFileName(getFileName(file))
-        .setFileMd5sum(null)
+        .setFileMd5sum(getChecksum(file))
         .setFileSize(getFileSize(file))
         .setLastModified(resolveLastModified(result));
 
@@ -171,7 +150,14 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     return analysisFile;
   }
 
-  private static String resolveDataType(String analyteCode) {
+  private static RepositoryProject resolveProject(JsonNode result) {
+    val diseaseCode = getDiseaseAbbr(result);
+
+    return getDiseaseCodeProject(diseaseCode).orNull();
+  }
+
+  private static String resolveDataType(JsonNode result) {
+    val analyteCode = getAnalyteCode(result);
     if (DNA_SEQ_ANALYTE_CODES.contains(analyteCode)) {
       return "DNA-Seq";
     } else if (RNA_SEQ_ANALYTE_CODES.contains(analyteCode)) {
@@ -182,15 +168,13 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
   }
 
   private static String resolveLastModified(JsonNode result) {
-    val text = getLastModified(result);
+    val instant = Instant.parse(getLastModified(result));
 
-    return formatDateTime(Instant.parse(text));
+    return formatDateTime(instant);
   }
 
   private static boolean isBamFile(JsonNode file) {
-    val fileName = getFileName(file);
-
-    return fileName.endsWith(".bam");
+    return getFileName(file).endsWith(".bam");
   }
 
 }
