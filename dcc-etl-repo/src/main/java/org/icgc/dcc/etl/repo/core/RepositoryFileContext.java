@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.repo.core;
 
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
+import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorIndentifier.qualifyDonorId;
 
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +74,7 @@ public class RepositoryFileContext {
    * Data.
    */
   @Getter(lazy = true, value = PRIVATE)
-  private final Set<String> pcawgSubmittedDonorIds = new PCAWGDonorIndentifier().identifyDonors();
+  private final Set<String> pcawgSubmittedDonorIds = new PCAWGDonorIndentifier().identifyDonorIds();
 
   @NonNull
   public String getPrimarySite(String projectCode) {
@@ -82,7 +83,7 @@ public class RepositoryFileContext {
 
   @NonNull
   public boolean isPCAWGSubmittedDonorId(String projectCode, String submittedDonorId) {
-    return getPcawgSubmittedDonorIds().contains(projectCode + ":" + submittedDonorId);
+    return getPcawgSubmittedDonorIds().contains(qualifyDonorId(projectCode, submittedDonorId));
   }
 
   @NonNull

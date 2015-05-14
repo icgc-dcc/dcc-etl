@@ -19,11 +19,11 @@ package org.icgc.dcc.etl.repo.pcawg.core;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
 
 import java.util.List;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import org.icgc.dcc.etl.repo.model.RepositoryFile.RepositoryFileDataType;
@@ -35,34 +35,44 @@ public class PCAWGFileDataTypeResolver {
 
   @NonNull
   public static List<RepositoryFileDataType> resolveFileDataTypes(String analysisType, String fileName) {
-    if (analysisType.matches("rna_seq\\..*\\.(star|tophat)")) {
+    if (isRNASeq(analysisType)) {
       return singletonList(new RepositoryFileDataType()
           .setDataType("RNA-Seq")
           .setDataFormat("BAM")
           .setExperimentalStrategy("RNA-Seq"));
-    } else if (analysisType.matches("wgs\\..*\\.bwa_alignment")) {
+    } else if (isDNASeq(analysisType)) {
       return singletonList(new RepositoryFileDataType()
           .setDataType("DNA-Seq")
           .setDataFormat("BAM")
           .setExperimentalStrategy("WGS"));
-    } else if (analysisType.matches("wgs\\.tumor_specimens\\.sanger_variant_calling")) {
-      val dataTypes = ImmutableList.<RepositoryFileDataType> builder();
-      for (val value : resolveSangerVCFDataTypes(fileName)) {
-        String dataFormat = "Other".equals(value) ? "Other" : "VCF";
-
-        dataTypes.add(new RepositoryFileDataType()
-            .setDataType(value)
-            .setDataFormat(dataFormat)
-            .setExperimentalStrategy("WGS"));
-      }
-
-      return dataTypes.build();
+    } else if (isSangerVariantCalling(analysisType)) {
+      return resolveSangerVariantCallingDataTypes(fileName)
+          .stream()
+          .map(dataType ->
+              new RepositoryFileDataType()
+                  .setDataType(dataType)
+                  .setDataFormat("Other".equals(dataType) ? "Other" : "VCF")
+                  .setExperimentalStrategy("WGS")
+          )
+          .collect(toImmutableList());
     }
 
     return emptyList();
   }
 
-  private static List<String> resolveSangerVCFDataTypes(String fileName) {
+  private static boolean isRNASeq(String analysisType) {
+    return analysisType.matches("rna_seq\\..*\\.(star|tophat)");
+  }
+
+  private static boolean isDNASeq(String analysisType) {
+    return analysisType.matches("wgs\\..*\\.bwa_alignment");
+  }
+
+  private static boolean isSangerVariantCalling(String analysisType) {
+    return analysisType.matches("wgs\\.tumor_specimens\\.sanger_variant_calling");
+  }
+
+  private static List<String> resolveSangerVariantCallingDataTypes(String fileName) {
     if (fileName.endsWith(".somatic.snv_mnv.vcf.gz")) {
       return ImmutableList.of("Simple Somatic Mutations");
     } else if (fileName.endsWith(".somatic.cnv.vcf.gz")) {

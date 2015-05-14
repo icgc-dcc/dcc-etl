@@ -46,10 +46,9 @@ public class CGHubAnalysisDetailReader {
   /**
    * Constants.
    */
-  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu";
   public static final String CGHUB_TCGA_STUDY = "phs000178";
-  public static final String CGHUB_API_URL = CGHUB_BASE_URL + "/cghub/metadata";
-  public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_API_URL + "/analysisDetail";
+  public static final String CGHUB_BASE_URL = "https://cghub.ucsc.edu";
+  public static final String CGHUB_ANALYSIS_DETAIL_API_URL = CGHUB_BASE_URL + "/cghub/metadata/analysisDetail";
 
   public Iterable<ObjectNode> readDetails() {
     // Lazy:
@@ -76,7 +75,7 @@ public class CGHubAnalysisDetailReader {
 
   private static URL getDiseaseCodeUrl(String diseaseCode) throws MalformedURLException {
     val params = ImmutableMap.of(
-        "study", CGHUB_TCGA_STUDY,
+        "study", CGHUB_TCGA_STUDY, // "key", value
         "disease_abbr", diseaseCode,
         "state", "live");
 

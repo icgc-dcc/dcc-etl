@@ -35,16 +35,24 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Slf4j
 public class PCAWGDonorIndentifier {
 
-  public Set<String> identifyDonors() {
+  public Set<String> identifyDonorIds() {
     val donors = readDonors();
 
     log.info("Collecting PCAWG study donor ids...");
     val submittedDonorIds = stream(donors)
-        .map(donor -> getDccProjectCode(donor) + ":" + getSubmitterDonorId(donor))
+        .map(donor -> qualifyDonorId(donor))
         .collect(toImmutableSet());
     log.info("Finish collecting PCAWG study donor ids");
 
     return submittedDonorIds;
+  }
+
+  public static String qualifyDonorId(String projectCode, String submittedDonorId) {
+    return projectCode + ":" + submittedDonorId;
+  }
+
+  private static String qualifyDonorId(ObjectNode donor) {
+    return qualifyDonorId(getDccProjectCode(donor), getSubmitterDonorId(donor));
   }
 
   @SneakyThrows

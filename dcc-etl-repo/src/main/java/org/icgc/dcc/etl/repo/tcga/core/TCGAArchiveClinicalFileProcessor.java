@@ -17,10 +17,9 @@
  */
 package org.icgc.dcc.etl.repo.tcga.core;
 
-import static org.icgc.dcc.etl.repo.core.RepositoryFileProcessor.formatDateTime;
-
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import lombok.NonNull;
@@ -50,13 +49,13 @@ public class TCGAArchiveClinicalFileProcessor {
 
     val clinicalFiles = ImmutableList.<TCGAArchiveClinicalFile> builder();
     for (val entry : TCGAArchivePageReader.readEntries(archiveFolderUrl)) {
-      val matcher = CLINICAL_FILENAME_PATTERN.matcher(entry.getFileName());
-      val clinical = matcher.matches();
-      if (!clinical) {
+
+      val clinical = matchClinicalFileName(entry.getFileName());
+      if (!clinical.isPresent()) {
         continue;
       }
 
-      val donorId = matcher.group(1);
+      val donorId = clinical.get();
       val url = archiveFolderUrl + "/" + entry.getFileName();
       val md5 = md5s.get(entry.getFileName());
       val clinicalFile =
@@ -71,7 +70,7 @@ public class TCGAArchiveClinicalFileProcessor {
   }
 
   private static String resolveLastModified(TCGAArchivePageEntry entry) {
-    return formatDateTime(entry.getLastModified());
+    return entry.getLastModified().toString();
   }
 
   private Map<String, String> resolveArchiveFileMD5Sums(String archiveFolderUrl) {
@@ -86,6 +85,11 @@ public class TCGAArchiveClinicalFileProcessor {
 
   private static String resolveArchiveFolderUrl(String archiveUrl) {
     return archiveUrl.replaceFirst(".tar.gz$", "");
+  }
+
+  private static Optional<String> matchClinicalFileName(String fileName) {
+    val matcher = CLINICAL_FILENAME_PATTERN.matcher(fileName);
+    return Optional.ofNullable(matcher.matches() ? matcher.group(1) : null);
   }
 
 }

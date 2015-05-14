@@ -23,6 +23,7 @@ import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
+import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTARGETProjects;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getPCAWGServer;
 import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileDataTypeResolver.resolveFileDataTypes;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
@@ -43,6 +44,7 @@ import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSampleId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
 import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
+import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
 import static org.icgc.dcc.etl.repo.util.Streams.stream;
 
 import java.time.Instant;
@@ -70,9 +72,8 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   public Iterable<RepositoryFile> processDonors(@NonNull Iterable<ObjectNode> donors) {
+    // Key steps, order matters
     val donorFiles = createDonorFiles(donors);
-
-    // The business
     translateUUIDs(donorFiles);
     assignIds(donorFiles);
 
@@ -84,35 +85,27 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val uuids = resolveUUIDs(donorFiles);
 
     log.info("Translating {} TCGA barcodes to TCGA UUIDs...", formatCount(uuids));
-    val barcodes = resolveTCGABarcodes(uuids);
+    val barcodes = context.getTCGABarcodes(uuids);
     for (val donorFile : donorFiles) {
-      val submittedDonorId = donorFile.getDonor().getSubmittedDonorId();
-      val submittedSpecimenId = donorFile.getDonor().getSubmittedSpecimenId();
-      val submittedSampleId = donorFile.getDonor().getSubmittedSampleId();
+      val donor = donorFile.getDonor();
 
-      val tcgaParticipantBarcode = barcodes.get(submittedDonorId);
-      val tcgaSampleBarcode = barcodes.get(submittedSpecimenId);
-      val tcgaAliquotBarcode = barcodes.get(submittedSampleId);
-
-      donorFile.getDonor()
-          .setTcgaParticipantBarcode(tcgaParticipantBarcode)
-          .setTcgaSampleBarcode(tcgaSampleBarcode)
-          .setTcgaAliquotBarcode(tcgaAliquotBarcode);
+      donor
+          .setTcgaParticipantBarcode(barcodes.get(donor.getSubmittedDonorId()))
+          .setTcgaSampleBarcode(barcodes.get(donor.getSubmittedSpecimenId()))
+          .setTcgaAliquotBarcode(barcodes.get(donor.getSubmittedSampleId()));
     }
   }
 
   private void assignIds(Iterable<RepositoryFile> donorFiles) {
     log.info("Assigning ICGC ids...");
     for (val donorFile : donorFiles) {
-      val projectCode = donorFile.getDonor().getProjectCode();
-      val submittedDonorId = donorFile.getDonor().getSubmittedDonorId();
-      val submittedSpecimenId = donorFile.getDonor().getSubmittedSpecimenId();
-      val submittedSampleId = donorFile.getDonor().getSubmittedSampleId();
+      val donor = donorFile.getDonor();
+      val projectCode = donor.getProjectCode();
 
-      donorFile.getDonor()
-          .setDonorId(resolveDonorId(projectCode, submittedDonorId))
-          .setSpecimenId(resolveSpecimenId(projectCode, submittedSpecimenId))
-          .setSampleId(resolveSampleId(projectCode, submittedSampleId));
+      donor
+          .setDonorId(context.getDonorId(donor.getSubmittedDonorId(), projectCode))
+          .setSpecimenId(context.getSpecimenId(donor.getSubmittedSpecimenId(), projectCode))
+          .setSampleId(context.getSampleId(donor.getSubmittedSampleId(), projectCode));
     }
   }
 
@@ -169,8 +162,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val fileSize = resolveFileSize(workflowFile);
     val dataTypes = resolveFileDataTypes(analysisType, fileName);
 
-    val donorFile = new RepositoryFile();
-    donorFile
+    val donorFile = new RepositoryFile()
         .setStudy("PCAWG")
         .setAccess("controlled");
 
@@ -197,7 +189,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setLastModified(resolveLastModified(workflow));
 
     donorFile.getDonor()
-        .setPrimarySite(resolvePrimarySite(projectCode))
+        .setPrimarySite(context.getPrimarySite(projectCode))
         .setProgram(project.getProgram())
         .setProjectCode(projectCode)
         .setStudy("PCAWG")
@@ -228,13 +220,20 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private static Set<String> resolveUUIDs(Iterable<RepositoryFile> donorFiles) {
+    val tcgaProjectCodes = resolveTCGAProjectCodes();
     val uuids = Sets.<String> newHashSet();
     for (val donorFile : donorFiles) {
-      val donorId = donorFile.getDonor().getSubmittedDonorId();
-      val specimenId = donorFile.getDonor().getSubmittedSpecimenId();
-      val sampleId = donorFile.getDonor().getSubmittedSampleId();
+      val donor = donorFile.getDonor();
 
-      // TODO: Check is TCGA?
+      val donorId = donor.getSubmittedDonorId();
+      val specimenId = donor.getSubmittedSpecimenId();
+      val sampleId = donor.getSubmittedSampleId();
+
+      val tcga = tcgaProjectCodes.contains(donor.getProjectCode());
+      if (!tcga) {
+        continue;
+      }
+
       if (isUUID(donorId)) {
         uuids.add(donorId);
       }
@@ -247,6 +246,10 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     }
 
     return uuids;
+  }
+
+  private static Set<String> resolveTCGAProjectCodes() {
+    return stream(getTARGETProjects()).map(project -> project.getProjectCode()).collect(toImmutableSet());
   }
 
   private static String resolveFileName(JsonNode workflowFile) {
@@ -266,7 +269,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val text = getGnosLastModified(workflow);
     val dateTime = ISO_OFFSET_DATE_TIME.parse(text, Instant::from);
 
-    return formatDateTime(dateTime);
+    return dateTime.toString();
   }
 
 }

@@ -22,7 +22,6 @@ import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.collect.Iterables.contains;
 import static org.apache.commons.lang.StringUtils.repeat;
 
-import java.util.Collection;
 import java.util.List;
 
 import lombok.Cleanup;
@@ -71,7 +70,7 @@ public class RepositoryImporter {
   public void execute(Iterable<RepositorySource> activeSources) {
     val watch = createStarted();
 
-    // The business
+    // Key steps, order matters
     val exceptions = ImmutableList.builder()
         .addAll(writeFiles(activeSources))
         .addAll(indexFiles())
@@ -81,7 +80,7 @@ public class RepositoryImporter {
     checkState(exceptions.isEmpty(), "Exception(s) processing %s", exceptions);
   }
 
-  private Collection<Exception> writeFiles(Iterable<RepositorySource> activeSources) {
+  private Iterable<Exception> writeFiles(Iterable<RepositorySource> activeSources) {
     val importers = createImporters(context);
 
     val exceptions = ImmutableList.<Exception> builder();
@@ -117,6 +116,7 @@ public class RepositoryImporter {
   }
 
   private static List<RepositorySourceFileImporter> createImporters(RepositoryFileContext context) {
+    // Order will be execution order subject to activation
     return ImmutableList.of(
         new PCAWGImporter(context),
         new TCGAImporter(context),

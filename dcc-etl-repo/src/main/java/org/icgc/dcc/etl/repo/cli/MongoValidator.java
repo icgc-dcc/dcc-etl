@@ -20,12 +20,12 @@ package org.icgc.dcc.etl.repo.cli;
 import static java.lang.String.format;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.UnknownHostException;
+
+import lombok.val;
 
 import com.beust.jcommander.IValueValidator;
 import com.beust.jcommander.ParameterException;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -33,12 +33,12 @@ public class MongoValidator implements IValueValidator<String> {
 
   @Override
   public void validate(String name, String uri) throws ParameterException {
-    MongoClientURI mongoUri = new MongoClientURI(uri);
+    val mongoUri = new MongoClientURI(uri);
     try {
-      Mongo mongo = new MongoClient(mongoUri);
+      val mongo = new MongoClient(mongoUri);
       try {
         // Test connectivity
-        Socket socket = mongo.getMongoOptions().socketFactory.createSocket();
+        val socket = mongo.getMongoOptions().socketFactory.createSocket();
         socket.connect(mongo.getAddress().getSocketAddress());
 
         // All good

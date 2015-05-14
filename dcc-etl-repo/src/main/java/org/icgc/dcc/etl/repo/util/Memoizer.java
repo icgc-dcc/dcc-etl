@@ -15,28 +15,29 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.model;
+package org.icgc.dcc.etl.repo.util;
 
 import static lombok.AccessLevel.PRIVATE;
-import lombok.Getter;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+@NoArgsConstructor(access = PRIVATE)
+public class Memoizer<T, U> {
 
-@Getter
-@RequiredArgsConstructor(access = PRIVATE)
-public enum RepositoryType implements Identifiable {
-
-  GNOS("GNOS", "/cghub/metadata/analysisFull/", "/cghub/data/analysis/download/"),
-  WEB_ARCHIVE("Web Archive", null, "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
+  private final Map<T, U> cache = new ConcurrentHashMap<>();
 
   @NonNull
-  private final String id;
+  public static <T, U> Function<T, U> memoize(Function<T, U> function) {
+    return new Memoizer<T, U>().doMemoize(function);
+  }
 
-  // Optional
-  private final String metadataPath;
-  @NonNull
-  private final String dataPath;
+  private Function<T, U> doMemoize(Function<T, U> function) {
+    return input -> cache.computeIfAbsent(input, function::apply);
+  }
 
 }

@@ -17,10 +17,6 @@
  */
 package org.icgc.dcc.etl.repo.core;
 
-import java.time.Instant;
-import java.util.Map;
-import java.util.Set;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -31,46 +27,6 @@ public abstract class RepositoryFileProcessor {
    * Dependencies.
    */
   @NonNull
-  private final RepositoryFileContext context;
-
-  @NonNull
-  protected String resolvePrimarySite(String projectCode) {
-    return context.getPrimarySite(projectCode);
-  }
-
-  @NonNull
-  protected String resolveDonorId(String projectCode, String submittedDonorId) {
-    return context.getDonorId(submittedDonorId, projectCode);
-  }
-
-  @NonNull
-  protected String resolveSpecimenId(String projectCode, String submittedSpecimenId) {
-    return context.getSpecimenId(submittedSpecimenId, projectCode);
-  }
-
-  @NonNull
-  protected String resolveSampleId(String projectCode, String submittedSampleId) {
-    return context.getSampleId(submittedSampleId, projectCode);
-  }
-
-  @NonNull
-  protected Map<String, String> resolveTCGAUUIDs(Set<String> tcgaBarcodes) {
-    return context.getTCGAUUIDs(tcgaBarcodes);
-  }
-
-  @NonNull
-  protected Map<String, String> resolveTCGABarcodes(Set<String> tcgaUuids) {
-    return context.getTCGABarcodes(tcgaUuids);
-  }
-
-  @NonNull
-  protected boolean isPCAWGSubmittedDonorId(String projectCode, String submittedDonorId) {
-    return context.isPCAWGSubmittedDonorId(projectCode, submittedDonorId);
-  }
-
-  @NonNull
-  public static final String formatDateTime(Instant dateTime) {
-    return dateTime.toString();
-  }
+  protected final RepositoryFileContext context;
 
 }

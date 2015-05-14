@@ -100,20 +100,16 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
 
-    final @val java.lang.String dataType = resolveDataType(result);
-    val experimentalStrategy = getLibraryStrategy(result);
-
-    val analysisFile = new RepositoryFile();
-    analysisFile
+    val analysisFile = new RepositoryFile()
         .setStudy(null)
         .setAccess("controlled");
 
     analysisFile
         .getDataTypes().add(
             new RepositoryFileDataType()
-                .setDataType(dataType)
+                .setDataType(resolveDataType(result))
                 .setDataFormat("BAM")
-                .setExperimentalStrategy(experimentalStrategy));
+                .setExperimentalStrategy(getLibraryStrategy(result)));
 
     analysisFile.getRepository()
         .setRepoType(cghubServer.getType().getId())
@@ -135,14 +131,14 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setLastModified(resolveLastModified(result));
 
     analysisFile.getDonor()
-        .setPrimarySite(resolvePrimarySite(projectCode))
+        .setPrimarySite(context.getPrimarySite(projectCode))
         .setProjectCode(projectCode)
         .setProgram(project.getProgram())
         .setStudy(null) // Set downstream
 
-        .setDonorId(resolveDonorId(projectCode, legacyDonorId))
-        .setSpecimenId(resolveSpecimenId(projectCode, legacySpecimenId))
-        .setSampleId(resolveSampleId(projectCode, legacySampleId))
+        .setDonorId(context.getDonorId(legacyDonorId, projectCode))
+        .setSpecimenId(context.getSpecimenId(legacySpecimenId, projectCode))
+        .setSampleId(context.getSampleId(legacySampleId, projectCode))
 
         .setSubmittedDonorId(getParticipantId(result))
         .setSubmittedSpecimenId(getSampleId(result))
@@ -158,7 +154,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
   private void assignStudy(Iterable<RepositoryFile> analysisFiles) {
     for (val analysisFile : analysisFiles) {
       val donor = analysisFile.getDonor();
-      val pcawg = isPCAWGSubmittedDonorId(donor.getProjectCode(), donor.getSubmittedDonorId());
+      val pcawg = context.isPCAWGSubmittedDonorId(donor.getProjectCode(), donor.getSubmittedDonorId());
       if (pcawg) {
         donor.setStudy("PCAWG");
       }
@@ -185,7 +181,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
   private static String resolveLastModified(JsonNode result) {
     val instant = Instant.parse(getLastModified(result));
 
-    return formatDateTime(instant);
+    return instant.toString();
   }
 
   private static boolean isBamFile(JsonNode file) {

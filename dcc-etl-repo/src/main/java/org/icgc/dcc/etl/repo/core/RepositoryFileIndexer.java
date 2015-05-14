@@ -18,37 +18,53 @@
 package org.icgc.dcc.etl.repo.core;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.io.Resources.getResource;
 import static java.lang.String.format;
+import static org.elasticsearch.client.Requests.indexRequest;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
+import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.getSettings;
+import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.isRepoIndex;
+import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.repoDateDescending;
+import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.resolveIndexName;
+import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
+import static org.icgc.dcc.etl.repo.util.Streams.stream;
+import static org.icgc.dcc.etl.repo.util.TransportClientFactory.newTransportClient;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
+import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.elasticsearch.action.bulk.BulkProcessor;
+import org.elasticsearch.action.bulk.BulkProcessor.Listener;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.unit.ByteSizeValue;
 import org.icgc.dcc.etl.repo.util.AbstractJongoComponent;
-import org.icgc.dcc.etl.repo.util.TransportClientFactory;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
@@ -57,7 +73,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
   /**
    * Index naming.
    */
-  private static final String INDEX_ALIAS = "icgc-repository";
+  private static final String REPO_INDEX_ALIAS = "icgc-repository";
   private static final DateTimeFormatter INDEX_NAME_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
   /**
@@ -68,7 +84,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
   private static final List<String> INDEX_TYPE_NAMES = ImmutableList.of(INDEX_TYPE_NAME, INDEX_TYPE_TEXT_NAME);
 
   /**
-   * Locations.
+   * Metadata location.
    */
   private static final String ES_CONFIG_BASE_PATH = "mappings";
 
@@ -87,44 +103,14 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
   public RepositoryFileIndexer(@NonNull MongoClientURI mongoUri, @NonNull String esUri) {
     super(mongoUri);
     this.indexName = resolveIndexName();
-    this.client = TransportClientFactory.newTransportClient(esUri);
+    this.client = newTransportClient(esUri);
   }
 
   public void indexFiles() {
     initializeIndex();
     indexDocuments();
     aliasIndex();
-  }
-
-  private void indexDocuments() {
-    log.info("Indexing documents...");
-    val documentCount = eachDocument(FILE_COLLECTION, file -> {
-      // Need to remove this as to not conflict with Elasticsearch
-        file.remove("_id");
-        checkState(client.prepareIndex(indexName, INDEX_TYPE_NAME)
-            .setSource(file.toString())
-            .execute()
-            .actionGet()
-            .isCreated(),
-            "Indexing of file document '%s' was not created", file);
-
-        JsonNode fileText = createFileText(file);
-        checkState(client.prepareIndex(indexName, INDEX_TYPE_TEXT_NAME)
-            .setSource(fileText.toString())
-            .execute()
-            .actionGet()
-            .isCreated(),
-            "Indexing of file text document '%s' was not created", file);
-      });
-
-    log.info("Finished indexing {} documents", formatCount(documentCount));
-  }
-
-  private JsonNode createFileText(ObjectNode file) {
-    val fileName = file.path("repository").path("file_name");
-    val fileText = file.objectNode().set("file_name", fileName);
-
-    return fileText;
+    pruneIndexes();
   }
 
   @Override
@@ -133,17 +119,11 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     super.close();
   }
 
-  private String resolveIndexName() {
-    val date = INDEX_NAME_DATE_FORMAT.format(LocalDate.now());
-
-    return INDEX_ALIAS + "-" + date;
-  }
-
   private void initializeIndex() {
     val indexClient = client.admin().indices();
 
     log.info("Checking index '{}' for existence...", indexName);
-    boolean exists = indexClient.prepareExists(indexName)
+    val exists = indexClient.prepareExists(indexName)
         .execute()
         .actionGet()
         .isExists();
@@ -177,7 +157,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
             .execute()
             .actionGet()
             .isAcknowledged(),
-            "Index '%s' type mapping in index '%s' was not acknowledged for release '%s'!",
+            "Index '%s' type mapping in index '%s' was not acknowledged for '%s'!",
             typeName, indexName);
       }
     } catch (Throwable t) {
@@ -185,9 +165,53 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     }
   }
 
+  private void indexDocuments() {
+    val watch = createStarted();
+    log.info("Indexing documents...");
+    @Cleanup
+    val processor = createBulkProcessor();
+
+    val documentCount = eachDocument(FILE_COLLECTION, file -> {
+      // Need to remove this as to not conflict with Elasticsearch
+        file.remove("_id");
+        processor.add(indexRequest(indexName).type(INDEX_TYPE_NAME).source(file.toString()));
+
+        JsonNode fileText = createFileText(file);
+        processor.add(indexRequest(indexName).type(INDEX_TYPE_TEXT_NAME).source(fileText.toString()));
+      });
+
+    log.info("Finished indexing {} documents in {}", formatCount(documentCount), watch);
+  }
+
+  private BulkProcessor createBulkProcessor() {
+    return BulkProcessor.builder(client, new Listener() {
+
+      @Override
+      public void beforeBulk(long executionId, BulkRequest request) {
+        log.info("[{}] executing [{}]/[{}]", executionId, request.numberOfActions(),
+            new ByteSizeValue(request.estimatedSizeInBytes()));
+      }
+
+      @Override
+      public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
+        log.info("'{}' executed  [{}]/[{}], took {}", executionId, request.numberOfActions(), new ByteSizeValue(
+            request.estimatedSizeInBytes()), response.getTook());
+
+        checkState(!response.hasFailures(), "'%s' failed to execute bulk request: %s", executionId,
+            response.buildFailureMessage());
+      }
+
+      @Override
+      public void afterBulk(long executionId, BulkRequest request, Throwable e) {
+        log.info("'{}' failed to execute bulk request", e, executionId);
+      }
+
+    }).build();
+  }
+
   @SneakyThrows
   private void aliasIndex() {
-    val alias = INDEX_ALIAS;
+    val alias = REPO_INDEX_ALIAS;
 
     // Remove existing alias
     val request = client.admin().indices().prepareAliases();
@@ -208,6 +232,35 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         alias, indexName);
   }
 
+  private void pruneIndexes() {
+    String[] staleRepoIndexNames =
+        getIndexNames()
+            .stream()
+            .filter(isRepoIndex())
+            .sorted(repoDateDescending())
+            .skip(3) // Keep 3
+            .toArray(size -> new String[size]);
+
+    if (staleRepoIndexNames.length == 0) {
+      return;
+    }
+
+    log.info("Pruning stale indexes '{}'...", Arrays.toString(staleRepoIndexNames));
+    val indexClient = client.admin().indices();
+    checkState(indexClient.prepareDelete(staleRepoIndexNames)
+        .execute()
+        .actionGet()
+        .isAcknowledged(),
+        "Index '%s' deletion was not acknowledged", Arrays.toString(staleRepoIndexNames));
+  }
+
+  private JsonNode createFileText(ObjectNode file) {
+    val fileName = file.path("repository").path("file_name");
+    val fileText = file.objectNode().set("file_name", fileName);
+
+    return fileText;
+  }
+
   private Set<String> getIndexNames() {
     val state = client.admin()
         .cluster()
@@ -216,19 +269,9 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         .actionGet()
         .getState();
 
-    val result = new ImmutableSet.Builder<String>();
-    for (val key : state.getMetaData().getIndices().keys()) {
-      result.add(key.value);
-    }
-
-    return result.build();
-  }
-
-  private static ObjectNode getSettings() throws IOException {
-    val resourceName = format("%s/index.settings.json", ES_CONFIG_BASE_PATH);
-    val settingsFileUrl = getResource(resourceName);
-
-    return (ObjectNode) DEFAULT.readTree(settingsFileUrl);
+    return stream(state.getMetaData().getIndices().keys())
+        .map(key -> key.value)
+        .collect(toImmutableSet());
   }
 
   private static ObjectNode getTypeMapping(String typeName) throws JsonProcessingException, IOException {
@@ -246,6 +289,37 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     }
 
     return (ObjectNode) typeMapping;
+  }
+
+  public static class RepositoryFileIndex {
+
+    public static String resolveIndexName() {
+      val currentDate = INDEX_NAME_DATE_FORMAT.format(LocalDate.now());
+      return REPO_INDEX_ALIAS + "-" + currentDate;
+    }
+
+    public static ObjectNode getSettings() throws IOException {
+      val resourceName = format("%s/index.settings.json", ES_CONFIG_BASE_PATH);
+      val settingsFileUrl = getResource(resourceName);
+
+      return (ObjectNode) DEFAULT.readTree(settingsFileUrl);
+    }
+
+    public static LocalDate parseIndexTime(String indexName) {
+      val date = indexName.replace(REPO_INDEX_ALIAS + "-", "");
+      return INDEX_NAME_DATE_FORMAT.parse(date, LocalDate::from);
+    }
+
+    public static Predicate<? super String> isRepoIndex() {
+      return indexName -> indexName.startsWith(REPO_INDEX_ALIAS);
+    }
+
+    public static Comparator<? super String> repoDateDescending() {
+      return (repoIndexA, repoIndexB) -> {
+        return -parseIndexTime(repoIndexA).compareTo(parseIndexTime(repoIndexB)); // Time descending
+      };
+    }
+
   }
 
 }
