@@ -17,13 +17,24 @@
  */
 package org.icgc.dcc.etl.exporter.pig.udf;
 
+import static org.icgc.dcc.downloader.core.ArchiverConstant.DATA_CONTENT_FAMILY;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import lombok.SneakyThrows;
+
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.PathFilter;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.io.hfile.CacheConfig;
+import org.apache.hadoop.hbase.io.hfile.HFile;
+import org.apache.hadoop.hbase.io.hfile.HFile.Reader;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.pig.EvalFunc;
 import org.apache.pig.data.DataBag;
@@ -134,5 +145,28 @@ public class CreateTable extends EvalFunc<Long> {
       SchemaUtil.createDataTable(tablename, builder.build(), localConf);
       return keysPerRS;
     }
+  }
+
+  @SneakyThrows
+  public static void loadBalance(String tablename, String hfileDir) {
+    Path inputPath = new Path(hfileDir, Bytes.toString(DATA_CONTENT_FAMILY));
+    Configuration conf = HBaseConfiguration.create();
+    FileSystem fs = FileSystem.get(conf);
+    FileStatus[] partStatus = fs.listStatus(inputPath, new PathFilter() {
+
+      @Override
+      public boolean accept(Path path) {
+        return !path.getName().startsWith("_");
+      }
+    });
+
+    Builder<byte[]> splitKeys = ImmutableList.builder();
+    for (FileStatus part : partStatus) {
+      if (part.isFile()) {
+        Reader reader = HFile.createReader(fs, part.getPath(), new CacheConfig(conf), conf);
+        splitKeys.add(reader.getFirstKey());
+      }
+    }
+    SchemaUtil.createDataTable(tablename, splitKeys.build(), conf);
   }
 }

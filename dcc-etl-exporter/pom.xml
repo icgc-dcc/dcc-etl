@@ -397,7 +397,7 @@
 
   <properties>
     <!-- Versions -->
-    <dcc-downloader.version>3.8.2.0</dcc-downloader.version>
+    <dcc-downloader.version>3.8.2.1-SNAPSHOT</dcc-downloader.version>
     <pig-cdh.version>0.12.0-${cdh.version}</pig-cdh.version>
     <hbase-cdh.version>0.98.6-${cdh.version}</hbase-cdh.version>
     <oozie-cdh.version>4.0.0-${cdh.version}</oozie-cdh.version>
