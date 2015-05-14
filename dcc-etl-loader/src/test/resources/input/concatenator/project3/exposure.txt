@@ -1,6 +1,6 @@
-donor_id	exposure_type	exposure_intensity	exposure_notes
-0011	LVKkHZPuXN	130	-9999
-0011	CzlSlzhKXu	125	 neelilCiA
-0011	KgfDAcJmPf	91	y CSgpnLQC
-0013	iYPgTprjtl	52	jlUVR bvbL
-0013	RgGUhi JTV	124	-9999
+donor_id	exposure_type	exposure_intensity	exposure_notes	tobacco_smoking_history_indicator	tobacco_smoking_intensity	alcohol_history	alcohol_history_intensity
+0011    	LVKkHZPuXN   	130               	-9999         	-888                             	-888                     	-888           	-888
+0011    	CzlSlzhKXu   	125               	 neelilCiA    	-888                             	-888                     	-888           	-888
+0011    	KgfDAcJmPf   	91                	y CSgpnLQC    	-888                             	-888                     	-888           	-888
+0013    	iYPgTprjtl   	52                	jlUVR bvbL    	-888                             	-888                     	-888           	-888
+0013    	RgGUhi JTV   	124               	-9999         	-888                             	-888                     	-888           	-888

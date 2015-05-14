@@ -18,7 +18,6 @@ package org.icgc.dcc.etl.identifier.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.icgc.dcc.etl.identifier.repository.SpecimenRepository;
 import org.junit.Test;
 
 public class SpecimenRepositoryTest extends BaseRepositoryTest<SpecimenRepository> {
@@ -31,7 +30,7 @@ public class SpecimenRepositoryTest extends BaseRepositoryTest<SpecimenRepositor
     String release = "release";
 
     // Execute
-    String id = repository.findId(submittedSpecimenId, submittedProjectId, release);
+    String id = repository.findId(CREATE, submittedSpecimenId, submittedProjectId, release);
 
     // Verify
     assertThat(id).isEqualTo("SP1");
@@ -46,12 +45,12 @@ public class SpecimenRepositoryTest extends BaseRepositoryTest<SpecimenRepositor
     String release2 = "release2";
 
     // Execute
-    String id = repository.findId(submittedSpecimenId, submittedProjectId, release1);
+    String id = repository.findId(CREATE, submittedSpecimenId, submittedProjectId, release1);
 
     // Verify
     assertThat(id).isEqualTo("SP1");
 
-    id = repository.findId(submittedSpecimenId, submittedProjectId, release2);
+    id = repository.findId(CREATE, submittedSpecimenId, submittedProjectId, release2);
 
     assertThat(id).isEqualTo("SP1");
 
@@ -61,9 +60,9 @@ public class SpecimenRepositoryTest extends BaseRepositoryTest<SpecimenRepositor
   @Test
   public void test_findId_increment() {
     // Execute and verify
-    assertThat(repository.findId("s1", "project1", "release1")).isEqualTo("SP1");
-    assertThat(repository.findId("s2", "project1", "release1")).isEqualTo("SP2");
-    assertThat(repository.findId("s3", "project1", "release1")).isEqualTo("SP3");
+    assertThat(repository.findId(CREATE, "s1", "project1", "release1")).isEqualTo("SP1");
+    assertThat(repository.findId(CREATE, "s2", "project1", "release1")).isEqualTo("SP2");
+    assertThat(repository.findId(CREATE, "s3", "project1", "release1")).isEqualTo("SP3");
   }
 
 }

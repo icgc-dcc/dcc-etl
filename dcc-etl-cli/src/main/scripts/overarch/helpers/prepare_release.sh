@@ -1,10 +1,10 @@
 #!/bin/bash
-release_number='18'
-dictionary_version='0.10a'
+release_number='19'
+dictionary_version='0.11c'
 artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-release/org/icgc/dcc/'
-dcc_etl_cli_version='3.7.5.1'
-dcc_etl_annotator_version='3.7.5.1'
-dcc_submission_server_version='3.7.4.1'
+dcc_etl_cli_version='3.8.5.1'
+dcc_etl_annotator_version='3.8.5.1'
+dcc_submission_server_version='3.8.5.9'
 
 # update libraries and their symlinks
 cd ***REMOVED***/dcc-etl/lib
@@ -23,7 +23,7 @@ git pull
 run_helper=***REMOVED***/dcc-etl/git/dcc-etl/dcc-etl-cli/src/main/scripts/overarch/helpers/run.sh
 sed -i "s/^release_number=.*/release_number=${release_number}/" ${run_helper}
 sed -i "s/^dictionary_version=.*/dictionary_version=\"${dictionary_version}\"/" ${run_helper}
-git add .
+git add ${run_helper}
 git commit -m "Updated release number and dictionary version."
 git push
 
@@ -33,13 +33,15 @@ cd ***REMOVED***/dcc-etl/conf/
 # update etl_prod.yml if needed
 
 # update dictionary.json from production server
-curl -v -XGET http://hwww2-dcc:5380/ws/nextRelease/dictionary -H "Accept: application/json" > dictionaries/${dictionary_version}.json
+dictionary_file=dictionaries/${dictionary_version}.json
+curl -v -XGET http://***REMOVED***/ws/nextRelease/dictionary -H "Accept: application/json" > ${dictionary_file}
 
 # update codelists.json from production server
-curl -v -XGET http://hwww2-dcc:5380/ws/codeLists -H "Accept: application/json" > codelists.json
+curl -v -XGET http://***REMOVED***/ws/codeLists -H "Accept: application/json" > codelists.json
 
-git add .
-git commit -m "Updated dictionary and codelists configuration files."
+git add codelists.json
+git add ${dictionary_file}
+git commit -m "Updated dictionary and codelist configuration files."
 git push
 
 # create projects.json for release, currently there is no reliable way to automate this step.

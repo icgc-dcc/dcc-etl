@@ -61,14 +61,14 @@ def exportDynamicData(type):
   stats = bound.runSingle()
   if not stats.isSuccessful():
     touch(logfile)
-    for errMsg in stats.getAllErrorMessages():
-            print errMsg
+    print stats.getErrorMessage()
     raise 'failed'
 
   print 'Pig job succeeded'
 
 def exportStaticData(type):
   out_static = root_out_static + "/" + release + "/Projects"
+  out_summary = root_out_static + "/" + release + "/Summary"
 
   # create directory (if needed)
   Pig.fs("mkdir " + out_static)
@@ -86,6 +86,7 @@ def exportStaticData(type):
   params["OUT_STATIC_DIR"] = out_static
 
   params["DATATYPE"] = type
+  params["STATIC_FILE_NAME_PREFIX"] = longname[type]
 
   try:
     loader
@@ -100,12 +101,15 @@ def exportStaticData(type):
   stats = bound.runSingle()
   if not stats.isSuccessful():
     touch(logfile)
-    for errMsg in stats.getAllErrorMessages():
-            print errMsg
+    print stats.getErrorMessage()
     raise 'failed'
 
   # now we need to concatenate all files into 1
   StaticMultiStorage.concatenate(longname[type], tmp_static, out_static, '.gz')
+  
+  # now output summary files if applicable
+  if summary[type]:
+    StaticMultiStorage.concatenateAll(longname[type], tmp_static, out_summary, '.gz')
   
   print 'Pig job succeeded'
   

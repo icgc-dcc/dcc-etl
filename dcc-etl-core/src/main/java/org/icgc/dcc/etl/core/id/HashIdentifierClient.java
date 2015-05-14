@@ -78,6 +78,7 @@ public class HashIdentifierClient implements IdentifierClient {
         mutationType,
         assemblyVersion);
   }
+  
 
   @Override
   public String createDonorId(String submittedDonorId, String submittedProjectId) {

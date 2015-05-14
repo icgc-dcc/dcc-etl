@@ -40,6 +40,7 @@ mem.h2.db
 mem.lock.db
 mem.trace.db
 logs/
+*.hprof
 
 # *nix temporary files
 *~

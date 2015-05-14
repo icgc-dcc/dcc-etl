@@ -124,7 +124,7 @@ public class GoImporter implements Importer {
 
   @Override
   public CollectionName getCollectionName() {
-    return CollectionName.PROJECTS;
+    return CollectionName.GO;
   }
 
   @Override

@@ -64,7 +64,7 @@ public class HttpIdentifierClient implements IdentifierClient {
       throw new RuntimeException(e);
     }
   }
-
+  
   /**
    * Read only
    */
@@ -89,7 +89,7 @@ public class HttpIdentifierClient implements IdentifierClient {
   public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
     return requestSpecimenId(false, submittedSpecimenId, submittedProjectId);
   }
-
+  
   /**
    * Write-read
    */
