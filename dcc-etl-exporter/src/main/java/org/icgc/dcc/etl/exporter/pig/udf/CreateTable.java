@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.exporter.pig.udf;
 import static org.icgc.dcc.downloader.core.ArchiverConstant.DATA_CONTENT_FAMILY;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -160,11 +161,14 @@ public class CreateTable extends EvalFunc<Long> {
       }
     });
 
+    partStatus = Arrays.copyOfRange(partStatus, 1, partStatus.length);
+
     Builder<byte[]> splitKeys = ImmutableList.builder();
     for (FileStatus part : partStatus) {
       if (part.isFile()) {
-        Reader reader = HFile.createReader(fs, part.getPath(), new CacheConfig(conf), conf);
-        splitKeys.add(reader.getFirstKey());
+        try (Reader reader = HFile.createReader(fs, part.getPath(), new CacheConfig(conf), conf)) {
+          splitKeys.add(reader.getFirstKey());
+        }
       }
     }
     SchemaUtil.createDataTable(tablename, splitKeys.build(), conf);
