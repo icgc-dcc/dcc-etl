@@ -18,10 +18,10 @@
 package org.icgc.dcc.etl.repo.tcga.core;
 
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getDiseaseCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getTCGAServer;
 import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
-import static org.icgc.dcc.etl.repo.util.Streams.stream;
 
 import java.util.regex.Pattern;
 

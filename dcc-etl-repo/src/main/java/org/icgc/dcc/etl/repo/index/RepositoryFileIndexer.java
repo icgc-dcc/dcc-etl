@@ -15,36 +15,31 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.core;
+package org.icgc.dcc.etl.repo.index;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Stopwatch.createStarted;
-import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.base.Throwables.propagate;
-import static com.google.common.io.Resources.getResource;
-import static java.lang.String.format;
 import static org.elasticsearch.client.Requests.indexRequest;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
-import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
-import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.getSettings;
-import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.isRepoIndex;
-import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.repoDateDescending;
-import static org.icgc.dcc.etl.repo.core.RepositoryFileIndexer.RepositoryFileIndex.resolveIndexName;
+import static org.icgc.dcc.common.core.util.stream.Streams.stream;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_NAME;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_NAMES;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_TEXT_NAME;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.REPO_INDEX_ALIAS;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.compareIndexDateDescending;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.getCurrentIndexName;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.getSettings;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.getTypeMapping;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.isRepoIndexName;
 import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
-import static org.icgc.dcc.etl.repo.util.Streams.stream;
 import static org.icgc.dcc.etl.repo.util.TransportClientFactory.newTransportClient;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -59,34 +54,13 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.icgc.dcc.etl.repo.util.AbstractJongoComponent;
-import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableList;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
 public class RepositoryFileIndexer extends AbstractJongoComponent implements Closeable {
-
-  /**
-   * Index naming.
-   */
-  private static final String REPO_INDEX_ALIAS = "icgc-repository";
-  private static final DateTimeFormatter INDEX_NAME_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
-
-  /**
-   * Index types.
-   */
-  private static final String INDEX_TYPE_NAME = "file";
-  private static final String INDEX_TYPE_TEXT_NAME = "file-text";
-  private static final List<String> INDEX_TYPE_NAMES = ImmutableList.of(INDEX_TYPE_NAME, INDEX_TYPE_TEXT_NAME);
-
-  /**
-   * Metadata location.
-   */
-  private static final String ES_CONFIG_BASE_PATH = "mappings";
 
   /**
    * Configuration.
@@ -102,7 +76,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
 
   public RepositoryFileIndexer(@NonNull MongoClientURI mongoUri, @NonNull String esUri) {
     super(mongoUri);
-    this.indexName = resolveIndexName();
+    this.indexName = getCurrentIndexName();
     this.client = newTransportClient(esUri);
   }
 
@@ -236,8 +210,8 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     String[] staleRepoIndexNames =
         getIndexNames()
             .stream()
-            .filter(isRepoIndex())
-            .sorted(repoDateDescending())
+            .filter(isRepoIndexName())
+            .sorted(compareIndexDateDescending())
             .skip(3) // Keep 3
             .toArray(size -> new String[size]);
 
@@ -272,54 +246,6 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     return stream(state.getMetaData().getIndices().keys())
         .map(key -> key.value)
         .collect(toImmutableSet());
-  }
-
-  private static ObjectNode getTypeMapping(String typeName) throws JsonProcessingException, IOException {
-    val resourceName = format("%s/%s.mapping.json", ES_CONFIG_BASE_PATH, typeName);
-    val mappingFileUrl = getResource(resourceName);
-    val typeMapping = DEFAULT.readTree(mappingFileUrl);
-
-    // Add meta data for index-to-indexer traceability
-    val _meta = (ObjectNode) typeMapping.get(typeName).with("_meta");
-    _meta.put("creation_date", DateTime.now().toString());
-    for (val entry : getScmInfo().entrySet()) {
-      val key = entry.getKey();
-      val value = nullToEmpty(entry.getValue()).replaceAll("\n", " ");
-      _meta.put(key, value);
-    }
-
-    return (ObjectNode) typeMapping;
-  }
-
-  public static class RepositoryFileIndex {
-
-    public static String resolveIndexName() {
-      val currentDate = INDEX_NAME_DATE_FORMAT.format(LocalDate.now());
-      return REPO_INDEX_ALIAS + "-" + currentDate;
-    }
-
-    public static ObjectNode getSettings() throws IOException {
-      val resourceName = format("%s/index.settings.json", ES_CONFIG_BASE_PATH);
-      val settingsFileUrl = getResource(resourceName);
-
-      return (ObjectNode) DEFAULT.readTree(settingsFileUrl);
-    }
-
-    public static LocalDate parseIndexTime(String indexName) {
-      val date = indexName.replace(REPO_INDEX_ALIAS + "-", "");
-      return INDEX_NAME_DATE_FORMAT.parse(date, LocalDate::from);
-    }
-
-    public static Predicate<? super String> isRepoIndex() {
-      return indexName -> indexName.startsWith(REPO_INDEX_ALIAS);
-    }
-
-    public static Comparator<? super String> repoDateDescending() {
-      return (repoIndexA, repoIndexB) -> {
-        return -parseIndexTime(repoIndexA).compareTo(parseIndexTime(repoIndexB)); // Time descending
-      };
-    }
-
   }
 
 }

@@ -22,6 +22,7 @@ import static com.google.common.primitives.Longs.max;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTARGETProjects;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getPCAWGServer;
@@ -45,7 +46,6 @@ import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSampleI
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
 import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
 import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
-import static org.icgc.dcc.etl.repo.util.Streams.stream;
 
 import java.time.Instant;
 import java.util.Set;

@@ -33,8 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.repo.cghub.CGHubImporter;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositoryFileIndexer;
 import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
+import org.icgc.dcc.etl.repo.index.RepositoryFileIndexer;
 import org.icgc.dcc.etl.repo.model.RepositorySource;
 import org.icgc.dcc.etl.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.repo.tcga.TCGAImporter;
