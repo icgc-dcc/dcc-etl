@@ -31,6 +31,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.diagram.model.DiagramModel;
 import org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader;
 import org.icgc.dcc.etl.db.importer.diagram.writer.DiagramWriter;
@@ -60,13 +62,19 @@ import com.mongodb.MongoClientURI;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class DiagramImporter {
+public class DiagramImporter implements Importer {
 
   @NonNull
   private final MongoClientURI mongoUri;
 
   public final static String INCLUDED_REACTOME_DIAGRAMS = DiagramImporter.class + ".diagramIds";
 
+  @Override
+  public CollectionName getCollectionName() {
+    return CollectionName.DIAGRAMS;
+  }
+
+  @Override
   @SneakyThrows
   public void execute() {
     val watch = createStarted();
@@ -93,7 +101,7 @@ public class DiagramImporter {
   private void writeDiagramModel(DiagramModel model) throws UnknownHostException, IOException {
     @Cleanup
     val writer = new DiagramWriter(mongoUri);
-    writer.write(model);
+    writer.writeFiles(model);
   }
 
 }

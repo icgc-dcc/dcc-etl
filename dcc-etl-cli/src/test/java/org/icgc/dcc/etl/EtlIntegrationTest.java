@@ -211,7 +211,7 @@ public class EtlIntegrationTest {
         createICGCConfig(config));
 
     val collections = Arrays.asList(CollectionName.values());
-    dbImporter.import_(collections);
+    dbImporter.execute(collections);
 
   }
 

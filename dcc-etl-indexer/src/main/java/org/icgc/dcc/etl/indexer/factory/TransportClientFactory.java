@@ -56,6 +56,7 @@ public final class TransportClientFactory {
     return newTransportClient(esUri, DEFAULT_CLIENT_TRANSPORT_SNIFF);
   }
 
+  @SuppressWarnings("resource")
   public static TransportClient newTransportClient(@NonNull String esUri, boolean sniff) {
     val host = getHost(esUri);
     val port = getPort(esUri);

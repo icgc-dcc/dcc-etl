@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>16</version>
+    <version>17</version>
   </parent>
 
   <artifactId>dcc-etl</artifactId>
@@ -20,6 +20,7 @@
     <module>dcc-etl-exporter</module>
     <module>dcc-etl-identifier</module>
     <module>dcc-etl-db-importer</module>
+    <module>dcc-etl-repo</module>
     <module>dcc-etl-importer</module>
     <module>dcc-etl-indexer</module>
     <module>dcc-etl-loader</module>
@@ -180,7 +181,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.5.9</dcc-common.version>
+    <dcc-common.version>3.8.6.0</dcc-common.version>
     <dcc-submission-core.version>3.8.5.9</dcc-submission-core.version>
 
     <!-- Versions - JSON -->

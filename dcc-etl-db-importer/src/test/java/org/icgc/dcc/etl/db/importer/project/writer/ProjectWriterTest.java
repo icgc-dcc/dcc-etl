@@ -33,18 +33,18 @@ public class ProjectWriterTest {
   public final static EmbeddedMongo embeddedMongo = new EmbeddedMongo();
 
   @Test
-  @SneakyThrows
-  public void testWrite() {
-    val mongoClientUri = getLocalMongoClientUri(embeddedMongo.getPort(), MONGO_RELEASE_PROJECT_DB_NAME);
-    @Cleanup
-    val writer = new ProjectWriter(mongoClientUri);
-
-    writer.write(ImmutableList.of(Project.builder().__project_id("test").build()));
-
-    log.info("Project: {}", getJongo(mongoClientUri).getCollection(ReleaseCollection.PROJECT_COLLECTION.getId())
-        .findOne()
-        .as(JsonNode.class));
-  }
+    @SneakyThrows
+    public void testWriteFiles() {
+      val mongoClientUri = getLocalMongoClientUri(embeddedMongo.getPort(), MONGO_RELEASE_PROJECT_DB_NAME);
+      @Cleanup
+      val writer = new ProjectWriter(mongoClientUri);
+  
+      writer.writeFiles(ImmutableList.of(Project.builder().__project_id("test").build()));
+  
+      log.info("Project: {}", getJongo(mongoClientUri).getCollection(ReleaseCollection.PROJECT_COLLECTION.getId())
+          .findOne()
+          .as(JsonNode.class));
+    }
 
   private static Jongo getJongo(MongoClientURI mongoClientUri) {
     val mongo = embeddedMongo.getMongo();

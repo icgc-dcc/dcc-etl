@@ -23,11 +23,11 @@ import java.util.Map;
 
 import lombok.NoArgsConstructor;
 
+import org.icgc.dcc.common.hadoop.util.HadoopCompression;
+import org.icgc.dcc.etl.core.id.HttpIdentifierClient;
 import org.icgc.dcc.etl.loader.config.ConfigModule;
 import org.icgc.dcc.etl.loader.config.LoaderModule;
 import org.icgc.dcc.etl.loader.service.LoaderService;
-import org.icgc.dcc.etl.loader.util.HttpIdentifierClient;
-import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 
 import com.google.inject.Guice;
 

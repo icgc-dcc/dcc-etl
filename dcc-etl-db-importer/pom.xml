@@ -29,6 +29,10 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-client</artifactId>
     </dependency>
+        <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-resources</artifactId>
+    </dependency>
 
     <!-- GO -->
     <dependency>
@@ -166,7 +170,7 @@
           </excludes>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <configuration>
@@ -174,12 +178,12 @@
           <!-- Fixes bug https://jira.codehaus.org/browse/MSHADE-183 -->
           <transformers>
             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-            	<mainClass>org.icgc.dcc.etl.db.importer.DBImporterMain</mainClass>
+              <mainClass>org.icgc.dcc.etl.db.importer.DBImporterMain</mainClass>
             </transformer>
           </transformers>
         </configuration>
       </plugin>
-      
+
       <!-- Assembly -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>

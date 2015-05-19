@@ -34,6 +34,7 @@ import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.jongo.Jongo;
 import org.junit.Ignore;
+import org.junit.Test;
 
 import com.mongodb.MongoClientURI;
 
@@ -50,14 +51,12 @@ public class DBImporterTest {
    */
   private final Jongo jongo = createJongo(new MongoClientURI(CONFIG.getGeneMongoUri()));
 
-  /**
-   * This is tested in ETLIntegration.
-   */
-  @Ignore
+  @Test
+  @Ignore("This is tested in ETLIntegration")
   public void testExecute() {
     val dbImporter = new DBImporter(CONFIG.getGeneMongoUri(), createICGCConfig(CONFIG));
     val collections = Arrays.asList(CollectionName.values());
-    dbImporter.import_(collections);
+    dbImporter.execute(collections);
 
     assertThat(getCollectionSize(PROJECT_COLLECTION.getId())).isGreaterThan(0);
     assertThat(getCollectionSize(GENE_COLLECTION.getId())).isGreaterThan(0);

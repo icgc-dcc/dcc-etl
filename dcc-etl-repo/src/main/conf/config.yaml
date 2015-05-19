@@ -1,0 +1,8 @@
+# Gene MongoDB URI
+geneMongoUri: "mongodb://localhost/dcc-genome"
+
+# Repository MongoDB URI
+repoMongoUri: "mongodb://localhost/dcc-repo"
+
+# Elasticsearch URI
+esUri: "es://localhost:9300"

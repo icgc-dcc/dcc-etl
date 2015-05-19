@@ -17,17 +17,21 @@
  */
 package org.icgc.dcc.etl.db.importer.util;
 
+import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import lombok.NonNull;
+import lombok.val;
 
 import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.MongoClientURI;
 
 public abstract class AbstractJongoComponent implements Closeable {
@@ -54,6 +58,14 @@ public abstract class AbstractJongoComponent implements Closeable {
 
   protected MongoCollection getCollection(ReleaseCollection releaseCollection) {
     return jongo.getCollection(releaseCollection.getId());
+  }
+
+  @NonNull
+  protected void eachDocument(ReleaseCollection collection, Consumer<ObjectNode> consumer) {
+    val documents = getCollection(PROJECT_COLLECTION);
+    for (val document : documents.find().as(ObjectNode.class)) {
+      consumer.accept(document);
+    }
   }
 
 }
