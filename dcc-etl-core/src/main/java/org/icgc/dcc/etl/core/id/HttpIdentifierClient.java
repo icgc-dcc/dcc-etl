@@ -64,7 +64,7 @@ public class HttpIdentifierClient implements IdentifierClient {
       throw new RuntimeException(e);
     }
   }
-  
+
   /**
    * Read only
    */
@@ -89,7 +89,7 @@ public class HttpIdentifierClient implements IdentifierClient {
   public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
     return requestSpecimenId(false, submittedSpecimenId, submittedProjectId);
   }
-  
+
   /**
    * Write-read
    */
@@ -120,7 +120,8 @@ public class HttpIdentifierClient implements IdentifierClient {
     {
         new NameValuePair("submittedDonorId", submittedDonorId),
         new NameValuePair("submittedProjectId", submittedProjectId),
-        new NameValuePair("release", release)
+        new NameValuePair("release", release),
+        new NameValuePair("create", String.valueOf(create))
     };
     return getBody(DONOR_ID_PATH, params);
   }
@@ -136,7 +137,8 @@ public class HttpIdentifierClient implements IdentifierClient {
         new NameValuePair("mutation", mutation),
         new NameValuePair("mutationType", mutationType),
         new NameValuePair("assemblyVersion", assemblyVersion),
-        new NameValuePair("release", release)
+        new NameValuePair("release", release),
+        new NameValuePair("create", String.valueOf(create))
     };
     return getBody(MUTATION_ID_PATH, params);
   }
@@ -146,7 +148,8 @@ public class HttpIdentifierClient implements IdentifierClient {
     {
         new NameValuePair("submittedSampleId", submittedSampleId),
         new NameValuePair("submittedProjectId", submittedProjectId),
-        new NameValuePair("release", release)
+        new NameValuePair("release", release),
+        new NameValuePair("create", String.valueOf(create))
     };
     return getBody(SAMPLE_ID_PATH, params);
   }
@@ -156,7 +159,8 @@ public class HttpIdentifierClient implements IdentifierClient {
     {
         new NameValuePair("submittedSpecimenId", submittedSpecimenId),
         new NameValuePair("submittedProjectId", submittedProjectId),
-        new NameValuePair("release", release)
+        new NameValuePair("release", release),
+        new NameValuePair("create", String.valueOf(create))
     };
     return getBody(SPECIMEN_ID_PATH, params);
   }
