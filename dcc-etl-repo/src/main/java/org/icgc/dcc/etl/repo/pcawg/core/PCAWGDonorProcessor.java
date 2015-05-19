@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.repo.pcawg.core;
 
 import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.collect.Iterables.filter;
 import static com.google.common.primitives.Longs.max;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
@@ -74,10 +75,21 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   public Iterable<RepositoryFile> processDonors(@NonNull Iterable<ObjectNode> donors) {
     // Key steps, order matters
     val donorFiles = createDonorFiles(donors);
-    translateUUIDs(donorFiles);
-    assignIds(donorFiles);
+    val filteredFiles = filterFiles(donorFiles);
+    translateUUIDs(filteredFiles);
+    assignIds(filteredFiles);
 
-    return donorFiles;
+    return filteredFiles;
+  }
+
+  private Iterable<RepositoryFile> createDonorFiles(Iterable<ObjectNode> donors) {
+    return stream(donors)
+        .flatMap(donor -> stream(processDonor(donor)))
+        .collect(toImmutableList());
+  }
+
+  private Iterable<RepositoryFile> filterFiles(Iterable<RepositoryFile> donorFiles) {
+    return filter(donorFiles, donorFile -> !donorFile.getDataTypes().isEmpty());
   }
 
   private void translateUUIDs(Iterable<RepositoryFile> donorFiles) {
@@ -107,12 +119,6 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
           .setSpecimenId(context.getSpecimenId(donor.getSubmittedSpecimenId(), projectCode))
           .setSampleId(context.getSampleId(donor.getSubmittedSampleId(), projectCode));
     }
-  }
-
-  private Iterable<RepositoryFile> createDonorFiles(Iterable<ObjectNode> donors) {
-    return stream(donors)
-        .flatMap(donor -> stream(processDonor(donor)))
-        .collect(toImmutableList());
   }
 
   private Iterable<RepositoryFile> processDonor(@NonNull ObjectNode donor) {
