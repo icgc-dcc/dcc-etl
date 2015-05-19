@@ -22,11 +22,17 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.mapreduce.OutputFormat;
 import org.apache.hadoop.mapreduce.RecordWriter;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.pig.ResourceSchema;
+import org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigTextOutputFormat;
 import org.apache.pig.builtin.PigStorage;
 import org.apache.pig.data.Tuple;
-import org.apache.pig.impl.util.UDFContext;
 import org.icgc.dcc.downloader.core.ArchiveMetaManager;
 import org.icgc.dcc.downloader.core.ArchiverConstant;
 import org.icgc.dcc.downloader.core.SchemaUtil;
@@ -44,7 +50,7 @@ public class StatisticStorage extends PigStorage {
 
   private String dataType;
   private String metaTablename;
-  private ArchiveMetaManager metaManager;
+  private final byte DELIMITER = '\t';
 
   public StatisticStorage(String dataType, String releaseName)
   {
@@ -57,17 +63,6 @@ public class StatisticStorage extends PigStorage {
   }
 
   @Override
-  public void prepareToWrite(RecordWriter writer) {
-    super.prepareToWrite(writer);
-    Configuration conf = UDFContext.getUDFContext().getJobConf();
-    try {
-      metaManager = new ArchiveMetaManager(metaTablename, conf);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  };
-
-  @Override
   public void checkSchema(ResourceSchema s) throws IOException {
     log.info("Resource Schema: " + s.toString());
     Preconditions.checkArgument(s.getFields().length == 3);
@@ -78,9 +73,82 @@ public class StatisticStorage extends PigStorage {
   }
 
   @Override
-  public void putNext(Tuple t) throws IOException {
-    metaManager.keepMetaInfo(dataType, (int) t.get(0), (long) t.get(1), (long) t.get(2));
-    super.putNext(t);
+  public OutputFormat getOutputFormat() {
+    return new StatisticOutputFormat(dataType, metaTablename, DELIMITER);
+  }
+
+  /**
+   * Internal OutputFormat class
+   */
+  public static class StatisticOutputFormat extends PigTextOutputFormat {
+
+    final private String dataType;
+
+    /**
+     * Delimiter to use between fields
+     */
+    final private byte fieldDelimiter;
+
+    final private String metaTablename;
+
+    public StatisticOutputFormat(String dataType, String metaTablename, byte delimiter) {
+      super(delimiter);
+      this.fieldDelimiter = delimiter;
+      this.dataType = dataType;
+      this.metaTablename = metaTablename;
+    }
+
+    @Override
+    public RecordWriter<WritableComparable, Tuple> getRecordWriter(
+        TaskAttemptContext context) throws IOException,
+        InterruptedException {
+
+      Configuration conf = context.getConfiguration();
+
+      FileSystem fs = FileSystem.get(conf);
+      Path file = this.getDefaultWorkFile(context, "");
+      FSDataOutputStream fileOut = fs.create(file, false);
+
+      ArchiveMetaManager metaManager = new ArchiveMetaManager(metaTablename, conf);
+      return new StatisticStorageRecordWriter(fileOut, this.fieldDelimiter, this.dataType, metaManager);
+    }
+
+    /**
+     * Internal class to do the actual record writing and index generation
+     *
+     */
+    public static class StatisticStorageRecordWriter extends PigLineRecordWriter {
+
+      final private String dataType;
+
+      /**
+       * Index builder
+       */
+      final private ArchiveMetaManager metaManager;
+
+      public StatisticStorageRecordWriter(FSDataOutputStream fileOut, byte fieldDel, String dataType,
+          ArchiveMetaManager metaManager)
+          throws IOException {
+        super(fileOut, fieldDel);
+        this.metaManager = metaManager;
+        this.dataType = dataType;
+
+      }
+
+      @Override
+      public void write(@SuppressWarnings("rawtypes") WritableComparable key, Tuple value) throws IOException {
+        super.write(key, value);
+        metaManager.keepMetaInfo(dataType, (int) value.get(0), (long) value.get(1), (long) value.get(2));
+      }
+
+      @Override
+      public void close(TaskAttemptContext context)
+          throws IOException {
+        this.metaManager.close();
+        super.close(context);
+      }
+
+    }
 
   }
 }

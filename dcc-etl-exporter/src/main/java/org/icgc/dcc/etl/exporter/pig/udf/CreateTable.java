@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -33,6 +34,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.io.hfile.CacheConfig;
 import org.apache.hadoop.hbase.io.hfile.HFile;
 import org.apache.hadoop.hbase.io.hfile.HFile.Reader;
@@ -56,6 +58,7 @@ import com.google.common.collect.TreeRangeMap;
  * It is used for bucket.pig for load-balancing purposes
  * 
  */
+@Slf4j
 public class CreateTable extends EvalFunc<Long> {
 
   private final int numRegions;
@@ -157,16 +160,28 @@ public class CreateTable extends EvalFunc<Long> {
 
       @Override
       public boolean accept(Path path) {
+        // remove hadoop tmp directories from the path status
         return !path.getName().startsWith("_");
       }
     });
 
+    if (partStatus.length < 2) {
+      // no need to load balance
+      return;
+    }
+
     partStatus = Arrays.copyOfRange(partStatus, 1, partStatus.length);
+
+    HTableDescriptor schema = SchemaUtil.getDataTableSchema(tablename);
 
     Builder<byte[]> splitKeys = ImmutableList.builder();
     for (FileStatus part : partStatus) {
       if (part.isFile()) {
         try (Reader reader = HFile.createReader(fs, part.getPath(), new CacheConfig(conf), conf)) {
+          if (reader.getCompressionAlgorithm() != schema.getFamily(DATA_CONTENT_FAMILY).getCompression()) {
+            log.error("wrong compression: {}", reader.getCompressionAlgorithm());
+            throw new RuntimeException("Wrong file format");
+          }
           splitKeys.add(reader.getFirstKey());
         }
       }
