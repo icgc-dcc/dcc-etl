@@ -55,7 +55,7 @@ public class PCAWGArchives {
   }
 
   public static long getFileSize(@NonNull JsonNode workflowFile) {
-    return workflowFile.path("file_size").longValue();
+    return workflowFile.path("file_size").asLong();
   }
 
   public static String getFileMd5sum(@NonNull JsonNode workflowFile) {
@@ -67,7 +67,7 @@ public class PCAWGArchives {
   }
 
   public static long getBamFileSize(@NonNull JsonNode workflowFile) {
-    return workflowFile.path("bam_file_size").longValue();
+    return workflowFile.path("bam_file_size").asLong();
   }
 
   public static String getBamFileMd5sum(@NonNull JsonNode workflowFile) {

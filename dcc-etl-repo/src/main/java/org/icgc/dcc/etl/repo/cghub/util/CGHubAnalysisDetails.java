@@ -51,7 +51,7 @@ public final class CGHubAnalysisDetails {
   }
 
   public static long getFileSize(@NonNull JsonNode file) {
-    return file.get("filesize").longValue();
+    return file.get("filesize").asLong();
   }
 
   public static String getParticipantId(@NonNull JsonNode result) {
