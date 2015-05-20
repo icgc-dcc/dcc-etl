@@ -114,10 +114,11 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
       val donor = donorFile.getDonor();
       val projectCode = donor.getProjectCode();
 
+      // Get IDs or create if they don't exist. This is different than the other repos.
       donor
-          .setDonorId(context.getDonorId(donor.getSubmittedDonorId(), projectCode))
-          .setSpecimenId(context.getSpecimenId(donor.getSubmittedSpecimenId(), projectCode))
-          .setSampleId(context.getSampleId(donor.getSubmittedSampleId(), projectCode));
+          .setDonorId(context.ensureDonorId(donor.getSubmittedDonorId(), projectCode))
+          .setSpecimenId(context.ensureSpecimenId(donor.getSubmittedSpecimenId(), projectCode))
+          .setSampleId(context.ensureSampleId(donor.getSubmittedSampleId(), projectCode));
     }
   }
 

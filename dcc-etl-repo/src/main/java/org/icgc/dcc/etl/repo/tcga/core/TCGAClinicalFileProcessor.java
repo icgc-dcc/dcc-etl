@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.repo.tcga.core;
 
+import static com.google.common.collect.Iterables.filter;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getDiseaseCodeProject;
@@ -60,10 +61,15 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
   public Iterable<RepositoryFile> processClinicalFiles() {
     // Key steps, order matters
     val clinicalFiles = createClinicalFiles();
-    translateBarcodes(clinicalFiles);
-    assignStudy(clinicalFiles);
+    val filteredClinicalFiles = filterClinicalFiles(clinicalFiles);
+    translateBarcodes(filteredClinicalFiles);
+    assignStudy(filteredClinicalFiles);
 
-    return clinicalFiles;
+    return filteredClinicalFiles;
+  }
+
+  private Iterable<RepositoryFile> filterClinicalFiles(Iterable<RepositoryFile> clinicalFiles) {
+    return filter(clinicalFiles, clinicalFile -> clinicalFile.getDonor().hasDonorId());
   }
 
   private Iterable<RepositoryFile> createClinicalFiles() {

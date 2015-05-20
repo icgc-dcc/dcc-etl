@@ -78,6 +78,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val analysisFiles = stream(details)
         .flatMap(detail -> stream(getResults(detail)))
         .flatMap(result -> stream(processResult(result)))
+        .filter(analysisFile -> analysisFile.getDonor().hasDonorId()) // Filter out non-ICGC donors
         .collect(toImmutableList());
 
     assignStudy(analysisFiles);

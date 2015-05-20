@@ -97,6 +97,10 @@ public class RepositoryFile {
     String tcgaSampleBarcode;
     String tcgaAliquotBarcode;
 
+    public boolean hasDonorId() {
+      return donorId != null;
+    }
+
   }
 
 }

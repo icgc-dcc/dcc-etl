@@ -99,6 +99,18 @@ public class RepositoryFileContext {
   }
 
   @NonNull
+  public String ensureDonorId(String submittedDonorId, String submittedProjectId) {
+    String donorId = donorIdCache.get(submittedDonorId, submittedProjectId);
+    if (donorId == null) {
+      donorId = identifierClient.createDonorId(submittedDonorId, submittedProjectId);
+
+      donorIdCache.put(submittedDonorId, submittedProjectId, donorId);
+    }
+
+    return filter(donorId);
+  }
+
+  @NonNull
   public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
     String specimenId = specimenIdCache.get(submittedSpecimenId, submittedProjectId);
     if (specimenId == null) {
@@ -111,10 +123,34 @@ public class RepositoryFileContext {
   }
 
   @NonNull
+  public String ensureSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    String specimenId = specimenIdCache.get(submittedSpecimenId, submittedProjectId);
+    if (specimenId == null) {
+      specimenId = identifierClient.createSpecimenId(submittedSpecimenId, submittedProjectId);
+
+      specimenIdCache.put(submittedSpecimenId, submittedProjectId, specimenId);
+    }
+
+    return filter(specimenId);
+  }
+
+  @NonNull
   public String getSampleId(String submittedSampleId, String submittedProjectId) {
     String sampleId = sampleIdCache.get(submittedSampleId, submittedProjectId);
     if (sampleId == null) {
       sampleId = identifierClient.getSampleId(submittedSampleId, submittedProjectId);
+
+      sampleIdCache.put(submittedSampleId, submittedProjectId, sampleId);
+    }
+
+    return filter(sampleId);
+  }
+
+  @NonNull
+  public String ensureSampleId(String submittedSampleId, String submittedProjectId) {
+    String sampleId = sampleIdCache.get(submittedSampleId, submittedProjectId);
+    if (sampleId == null) {
+      sampleId = identifierClient.createSampleId(submittedSampleId, submittedProjectId);
 
       sampleIdCache.put(submittedSampleId, submittedProjectId, sampleId);
     }
