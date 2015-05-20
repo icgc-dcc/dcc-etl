@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -17,96 +17,66 @@
  */
 package org.icgc.dcc.etl.core.id;
 
-import static com.google.common.base.Joiner.on;
-import static com.google.common.hash.Hashing.md5;
-
 import java.io.IOException;
 
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-import com.google.common.base.Joiner;
-import com.google.common.hash.HashFunction;
-
-/**
- * Stateless hash based {@link IdentifierClient} implementation that returns a stable id based on it it's inputs.
- */
-@NoArgsConstructor
-public class HashIdentifierClient implements IdentifierClient {
+@RequiredArgsConstructor
+public abstract class ForwardingIdentifierClient implements IdentifierClient {
 
   /**
-   * Id generation strategy state.
+   * Dependencies.
    */
-  private static final HashFunction MD5 = md5();
-  private static final Joiner JOINER = on(":");
-
-  /**
-   * Required for reflection in Loader
-   */
-  public HashIdentifierClient(String serviceUri, String release) {
-    // Empty
-  }
+  @NonNull
+  protected final IdentifierClient delegate;
 
   @Override
   public String getDonorId(String submittedDonorId, String submittedProjectId) {
-    return "DO" + generateId(
-        submittedDonorId,
-        submittedProjectId);
-  }
-
-  @Override
-  public String getSampleId(String submittedSampleId, String submittedProjectId) {
-    return "SA" + generateId(
-        submittedSampleId,
-        submittedProjectId);
+    return delegate.getDonorId(submittedDonorId, submittedProjectId);
   }
 
   @Override
   public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    return "SP" + generateId(
-        submittedSpecimenId,
-        submittedProjectId);
+    return delegate.getSpecimenId(submittedSpecimenId, submittedProjectId);
+  }
+
+  @Override
+  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+    return delegate.getSampleId(submittedSampleId, submittedProjectId);
   }
 
   @Override
   public String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
       String mutationType, String assemblyVersion) {
-    return "MU" + generateId(
-        chromosome,
-        chromosomeStart,
-        chromosomeEnd,
-        mutation,
-        mutationType,
-        assemblyVersion);
+    return delegate.getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
   }
 
   @Override
   public String createDonorId(String submittedDonorId, String submittedProjectId) {
-    return getDonorId(submittedDonorId, submittedProjectId);
+    return delegate.createDonorId(submittedDonorId, submittedProjectId);
+  }
+
+  @Override
+  public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    return delegate.createSpecimenId(submittedSpecimenId, submittedProjectId);
+  }
+
+  @Override
+  public String createSampleId(String submittedSampleId, String submittedProjectId) {
+    return delegate.createSampleId(submittedSampleId, submittedProjectId);
   }
 
   @Override
   public String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
       String mutationType, String assemblyVersion) {
-    return getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
-  }
-
-  @Override
-  public String createSampleId(String submittedSampleId, String submittedProjectId) {
-    return getSampleId(submittedSampleId, submittedProjectId);
-  }
-
-  @Override
-  public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    return getSpecimenId(submittedSpecimenId, submittedProjectId);
+    return delegate.createMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType,
+        assemblyVersion);
   }
 
   @Override
   public void close() throws IOException {
-    // No-op
-  }
-
-  private static String generateId(String... keys) {
-    return MD5.hashUnencodedChars(JOINER.join(keys)).toString();
+    delegate.close();
   }
 
 }

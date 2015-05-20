@@ -31,6 +31,7 @@ import lombok.val;
 import lombok.experimental.Accessors;
 
 import org.icgc.dcc.common.core.tcga.TCGAClient;
+import org.icgc.dcc.etl.core.id.CachingIdentifierClient;
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.icgc.dcc.etl.core.id.HttpIdentifierClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
@@ -81,7 +82,7 @@ public final class RepositoryFileContextBuilder {
 
   @SuppressWarnings("resource")
   private IdentifierClient createIdentifierClient() {
-    return realIds ? new HttpIdentifierClient(idUrl, "") : new HashIdentifierClient();
+    return realIds ? new CachingIdentifierClient(new HttpIdentifierClient(idUrl, "")) : new HashIdentifierClient();
   }
 
   private static TCGAClient createTCGAClient() {

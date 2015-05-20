@@ -32,8 +32,6 @@ import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorIndentifier;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import com.mongodb.MongoClientURI;
 
 @RequiredArgsConstructor(access = PACKAGE)
@@ -54,13 +52,6 @@ public class RepositoryFileContext {
    */
   @NonNull
   private final Map<String, String> primarySites;
-
-  /**
-   * Caches.
-   */
-  private final Table<String, String, String> donorIdCache = HashBasedTable.create();
-  private final Table<String, String, String> specimenIdCache = HashBasedTable.create();
-  private final Table<String, String, String> sampleIdCache = HashBasedTable.create();
 
   /**
    * Dependencies.
@@ -88,74 +79,32 @@ public class RepositoryFileContext {
 
   @NonNull
   public String getDonorId(String submittedDonorId, String submittedProjectId) {
-    String donorId = donorIdCache.get(submittedDonorId, submittedProjectId);
-    if (donorId == null) {
-      donorId = identifierClient.getDonorId(submittedDonorId, submittedProjectId);
-
-      donorIdCache.put(submittedDonorId, submittedProjectId, donorId);
-    }
-
-    return filter(donorId);
+    return filter(identifierClient.getDonorId(submittedDonorId, submittedProjectId));
   }
 
   @NonNull
   public String ensureDonorId(String submittedDonorId, String submittedProjectId) {
-    String donorId = donorIdCache.get(submittedDonorId, submittedProjectId);
-    if (donorId == null) {
-      donorId = identifierClient.createDonorId(submittedDonorId, submittedProjectId);
-
-      donorIdCache.put(submittedDonorId, submittedProjectId, donorId);
-    }
-
-    return filter(donorId);
+    return filter(identifierClient.createDonorId(submittedDonorId, submittedProjectId));
   }
 
   @NonNull
   public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    String specimenId = specimenIdCache.get(submittedSpecimenId, submittedProjectId);
-    if (specimenId == null) {
-      specimenId = identifierClient.getSpecimenId(submittedSpecimenId, submittedProjectId);
-
-      specimenIdCache.put(submittedSpecimenId, submittedProjectId, specimenId);
-    }
-
-    return filter(specimenId);
+    return filter(identifierClient.getSpecimenId(submittedSpecimenId, submittedProjectId));
   }
 
   @NonNull
   public String ensureSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    String specimenId = specimenIdCache.get(submittedSpecimenId, submittedProjectId);
-    if (specimenId == null) {
-      specimenId = identifierClient.createSpecimenId(submittedSpecimenId, submittedProjectId);
-
-      specimenIdCache.put(submittedSpecimenId, submittedProjectId, specimenId);
-    }
-
-    return filter(specimenId);
+    return filter(identifierClient.createSpecimenId(submittedSpecimenId, submittedProjectId));
   }
 
   @NonNull
   public String getSampleId(String submittedSampleId, String submittedProjectId) {
-    String sampleId = sampleIdCache.get(submittedSampleId, submittedProjectId);
-    if (sampleId == null) {
-      sampleId = identifierClient.getSampleId(submittedSampleId, submittedProjectId);
-
-      sampleIdCache.put(submittedSampleId, submittedProjectId, sampleId);
-    }
-
-    return filter(sampleId);
+    return filter(identifierClient.getSampleId(submittedSampleId, submittedProjectId));
   }
 
   @NonNull
   public String ensureSampleId(String submittedSampleId, String submittedProjectId) {
-    String sampleId = sampleIdCache.get(submittedSampleId, submittedProjectId);
-    if (sampleId == null) {
-      sampleId = identifierClient.createSampleId(submittedSampleId, submittedProjectId);
-
-      sampleIdCache.put(submittedSampleId, submittedProjectId, sampleId);
-    }
-
-    return filter(sampleId);
+    return filter(identifierClient.createSampleId(submittedSampleId, submittedProjectId));
   }
 
   @NonNull
