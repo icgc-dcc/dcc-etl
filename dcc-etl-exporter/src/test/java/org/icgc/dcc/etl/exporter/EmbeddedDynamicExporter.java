@@ -88,6 +88,7 @@ public class EmbeddedDynamicExporter {
     Configuration conf = hbase.getConfiguration();
     LoadIncrementalHFiles loader = new LoadIncrementalHFiles(conf);
     // PigServer pigServer = new PigServer(ExecType.LOCAL );
+    System.out.println(conf.get("hbase.zookeeper.property.clientPort"));
     PigServer pigServer = new PigServer(ExecType.LOCAL, conf);
     try {
       Map<String, String> params = Maps.newHashMap();
@@ -95,6 +96,7 @@ public class EmbeddedDynamicExporter {
       if (extSource != null) params.put("LIB", extSource.getLocation().getPath());
 
       params.put("RELEASE_OUT", RELEASE);
+      params.put("COMPRESSION_ENABLED ", "false");
       String tmpDirDynamic = tmp.getRoot() + "/dynamic/" + exporter;
       String tmpDirHFile = tmp.getRoot() + "/hfile/" + exporter;
       params.put("TMP_DYNAMIC_DIR", tmpDirDynamic);

@@ -1,5 +1,4 @@
 %default LIB 'udf/dcc-etl-exporter.jar'
-%default RAW_STORAGE 'com.twitter.elephantbird.pig.store.LzoRawBytesStorage'
 REGISTER $LIB
 
 %default DATATYPE 'donor_exposure'
@@ -18,21 +17,29 @@ DEFINE TOHFILE org.icgc.dcc.etl.exporter.pig.udf.ToHFile('$DATATYPE', '$UPLOAD_T
 set default_parallel $DEFAULT_PARALLEL;
 
 set job.name dynamic-$DATATYPE;
--- load donor 
+-- load donor
 import 'projection.pig';
 
-keys = foreach (GROUP selected_donor BY donor_id) {
-             content = FOREACH selected_donor 
-                          GENERATE icgc_donor_id..submitted_donor_id, 
-                          FLATTEN(exposures) as exposure;
-             
-             selected_content = FOREACH content GENERATE icgc_donor_id..submitted_donor_id, 
-                                                   exposure#'exposure_type' as exposure_type,
-                                                   exposure#'exposure_intensity' as exposure_intensity,
-                                                   exposure#'tobacco_smoking_history_indicator' as tobacco_smoking_history_indicator,
-                                                   exposure#'tobacco_smoking_intensity' as tobacco_smoking_intensity,
-                                                   exposure#'alcohol_history' as alcohol_history,
-                                                   exposure#'alcohol_history_intensity' as alcohol_history_intensity;
-             GENERATE FLATTEN(TOHFILE(group, selected_content)) as key;
-}
-STORE keys INTO '$TMP_DYNAMIC_DIR' USING $RAW_STORAGE();
+flat_donor = FOREACH selected_donor GENERATE donor_id,
+                                             icgc_donor_id..submitted_donor_id,
+                                             FLATTEN(exposures) as exposure;
+
+selected_content = FOREACH flat_donor GENERATE donor_id,
+                                               COMPOSITE_KEY(donor_id) as rowkey:bytearray,
+                                               icgc_donor_id..submitted_donor_id,
+                                               exposure#'exposure_type' as exposure_type,
+                                               exposure#'exposure_intensity' as exposure_intensity,
+                                               exposure#'tobacco_smoking_history_indicator' as tobacco_smoking_history_indicator,
+                                               exposure#'tobacco_smoking_intensity' as tobacco_smoking_intensity,
+                                               exposure#'alcohol_history' as alcohol_history,
+                                               exposure#'alcohol_history_intensity' as alcohol_history_intensity;
+
+obj = FOREACH selected_content GENERATE rowkey, {(icgc_donor_id..alcohol_history_intensity)};
+content = ORDER obj BY rowkey ASC PARALLEL $DEFAULT_PARALLEL;
+STORE content INTO '$TMP_HFILE_DIR' USING DYNAMIC_STORAGE();
+
+-- populate statistics
+row_size = FOREACH selected_content GENERATE donor_id, COMPUTE_SIZE(icgc_donor_id..alcohol_history_intensity) as bytes:long;
+row_size_per_donor = GROUP row_size BY donor_id;
+stats = FOREACH row_size_per_donor GENERATE group as donor_id, COUNT(row_size.donor_id) as total_line, SUM(row_size.bytes) as total_size;
+STORE stats INTO '$TMP_DYNAMIC_DIR' USING STATISTIC_STORAGE();

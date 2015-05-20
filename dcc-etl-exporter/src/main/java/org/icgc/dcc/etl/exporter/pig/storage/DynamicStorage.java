@@ -61,18 +61,21 @@ public class DynamicStorage extends StoreFunc {
   protected RecordWriter writer = null;
   private final String tablename;
   private final String metaTablename;
+  private final boolean compressionEnabled;
   private String[] headers;
   private byte[] previousRowKey;
   private final String dataType;
 
-  public DynamicStorage(String dataType, String releaseName)
+  public DynamicStorage(String dataType, String releaseName, String compressionEnabled)
   {
     Preconditions.checkArgument(dataType != null);
-    Preconditions.checkArgument(releaseName != null && !releaseName.trim().isEmpty());
+    Preconditions.checkArgument(releaseName != null);
+    Preconditions.checkArgument(compressionEnabled != null);
 
     this.tablename = SchemaUtil.getDataTableName(dataType, releaseName);
     this.dataType = dataType;
     this.metaTablename = SchemaUtil.getMetaTableName(releaseName);
+    this.compressionEnabled = Boolean.valueOf(compressionEnabled);
   }
 
   @SuppressWarnings("rawtypes")
@@ -85,7 +88,7 @@ public class DynamicStorage extends StoreFunc {
   @Override
   public void setStoreLocation(String location, Job job) throws IOException {
     Configuration conf = job.getConfiguration();
-    HTableDescriptor schema = SchemaUtil.getDataTableSchema(tablename);
+    HTableDescriptor schema = SchemaUtil.getDataTableSchema(tablename, compressionEnabled);
     conf.set("hbase.hfileoutputformat.families.compression",
         Bytes.toString(DATA_CONTENT_FAMILY) + "=" + schema.getFamily(DATA_CONTENT_FAMILY).getCompression().getName());
     conf.set("hbase.hfileoutputformat.families.bloomtype",
@@ -174,5 +177,14 @@ public class DynamicStorage extends StoreFunc {
     } catch (InterruptedException e) {
       throw new IOException("Interrupted");
     }
+  }
+
+  public static void init(String dataType, String releaseName) throws IOException {
+
+    try (ArchiveMetaManager metaManager =
+        new ArchiveMetaManager(SchemaUtil.getMetaTableName(releaseName), HBaseConfiguration.create())) {
+      metaManager.deleteMetaInfo(dataType);
+    }
+
   }
 }
