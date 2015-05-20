@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -83,11 +84,7 @@ public class DynamicStorage extends StoreFunc {
 
   @Override
   public void setStoreLocation(String location, Job job) throws IOException {
-    HFileOutputFormat2.setOutputPath(job, new Path(location));
-  }
-
-  public static Configuration getConfiguration(String tablename) {
-    Configuration conf = new Configuration();
+    Configuration conf = job.getConfiguration();
     HTableDescriptor schema = SchemaUtil.getDataTableSchema(tablename);
     conf.set("hbase.hfileoutputformat.families.compression",
         Bytes.toString(DATA_CONTENT_FAMILY) + "=" + schema.getFamily(DATA_CONTENT_FAMILY).getCompression().getName());
@@ -97,7 +94,8 @@ public class DynamicStorage extends StoreFunc {
         Bytes.toString(DATA_CONTENT_FAMILY) + "=" + schema.getFamily(DATA_CONTENT_FAMILY).getBlocksize());
     conf.set("hbase.mapreduce.hfileoutputformat.families.datablock.encoding",
         Bytes.toString(DATA_CONTENT_FAMILY) + "=" + schema.getFamily(DATA_CONTENT_FAMILY).getDataBlockEncoding().name());
-    return conf;
+
+    HFileOutputFormat2.setOutputPath(job, new Path(location));
   }
 
   @Override
@@ -120,6 +118,10 @@ public class DynamicStorage extends StoreFunc {
     p.setProperty("headerline", headerline);
     log.info("header information: {}", headerline);
 
+    try (ArchiveMetaManager metaManager =
+        new ArchiveMetaManager(metaTablename, HBaseConfiguration.create())) {
+      metaManager.addHeader(dataType, headerline.split(HEADER_SEPARATOR));
+    }
   }
 
   private ResourceFieldSchema[] headerFields(ResourceFieldSchema resourceFieldSchema) {
@@ -136,10 +138,6 @@ public class DynamicStorage extends StoreFunc {
     String headerline = props.getProperty("headerline");
     Preconditions.checkNotNull(headerline);
     headers = headerline.split(HEADER_SEPARATOR);
-    try (ArchiveMetaManager metaManager =
-        new ArchiveMetaManager(metaTablename, UDFContext.getUDFContext().getJobConf())) {
-      metaManager.addHeader(dataType, headers);
-    }
   }
 
   @Override
