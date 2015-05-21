@@ -82,7 +82,7 @@ public class PCAWGFileDataTypeResolver {
     } else if (fileName.endsWith(".somatic.indel.vcf.gz")) {
       return ImmutableList.of("SSM");
     } else if (fileName.endsWith(".somatic.snv_mnv.tar.gz")) {
-      return ImmutableList.of("SSM", "Simple Germline Variants");
+      return ImmutableList.of("SSM", "SGV");
     } else if (fileName.endsWith(".somatic.cnv.tar.gz")) {
       return ImmutableList.of("CNSM", "CNGV");
     } else if (fileName.endsWith(".somatic.sv.tar.gz")) {
