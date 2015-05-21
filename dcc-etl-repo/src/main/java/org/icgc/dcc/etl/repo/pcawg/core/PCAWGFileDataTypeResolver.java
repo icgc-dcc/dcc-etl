@@ -74,21 +74,21 @@ public class PCAWGFileDataTypeResolver {
 
   private static List<String> resolveSangerVariantCallingDataTypes(String fileName) {
     if (fileName.endsWith(".somatic.snv_mnv.vcf.gz")) {
-      return ImmutableList.of("Simple Somatic Mutations");
+      return ImmutableList.of("SSM");
     } else if (fileName.endsWith(".somatic.cnv.vcf.gz")) {
-      return ImmutableList.of("Copy Number Somatic Mutations");
+      return ImmutableList.of("CNSM");
     } else if (fileName.endsWith(".somatic.sv.vcf.gz")) {
-      return ImmutableList.of("Structural Somatic Mutations");
+      return ImmutableList.of("StSM");
     } else if (fileName.endsWith(".somatic.indel.vcf.gz")) {
-      return ImmutableList.of("Simple Somatic Mutations");
+      return ImmutableList.of("SSM");
     } else if (fileName.endsWith(".somatic.snv_mnv.tar.gz")) {
-      return ImmutableList.of("Simple Somatic Mutations", "Simple Germline Variants");
+      return ImmutableList.of("SSM", "Simple Germline Variants");
     } else if (fileName.endsWith(".somatic.cnv.tar.gz")) {
-      return ImmutableList.of("Copy Number Somatic Mutations", "Copy Number Germline Variants");
+      return ImmutableList.of("CNSM", "CNGV");
     } else if (fileName.endsWith(".somatic.sv.tar.gz")) {
-      return ImmutableList.of("Structural Somatic Mutations", "Structural Germline Variants");
+      return ImmutableList.of("StSM", "StGV");
     } else if (fileName.endsWith(".somatic.indel.tar.gz")) {
-      return ImmutableList.of("Simple Somatic Mutations", "Simple Germline Variants");
+      return ImmutableList.of("SSM", "SGV");
     } else if (fileName.endsWith(".somatic.imputeCounts.tar.gz")) {
       return ImmutableList.of("Other");
     } else if (fileName.endsWith(".somatic.binnedReadCounts.tar.gz")) {
