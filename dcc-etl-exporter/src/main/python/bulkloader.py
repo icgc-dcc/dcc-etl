@@ -2,24 +2,24 @@
 from org.apache.pig.scripting import *
 from org.icgc.dcc.downloader.core import SchemaUtil
 from org.icgc.dcc.etl.exporter.core import LoadBalancer
+
 from subprocess import call
 import os, os.path, sys
 import getopt
 sys.path.append(os.path.dirname(sys.argv[0]))
-########CONTROL SETTINGS###########
 from core import *
-
-########HADOOP JOB CONF SETTINGS###########
-Pig.set("mapred.child.java.opts", "-Xms2G -Xmx8G")
 
 ####### DATA PROCESSING ###########
 def bulkloadData(type):
-  tmp_hfile = tmp_hfile_root + "/" + release + "/" + type 
+  tmp_hfile = tmp_hfile_root + "/" + release + "/" + type
+
+  if not(LoadBalancer.canLoadBalance(tmp_hfile)) :
+    return;
 
   if upload is None :
     tablename = SchemaUtil.getDataTableName(type, release);
     SchemaUtil.createArchiveTable();
-    SchemaUtil.createMetaTable(SchemaUtil.getMetaTableName(release)); 
+    SchemaUtil.createMetaTable(SchemaUtil.getMetaTableName(release));
   elif upload == '' :
     tablename = type
   else :
@@ -34,8 +34,8 @@ def bulkloadData(type):
   os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R hbase " + tmp_hfile)
   os.system("HADOOP_USER_NAME=hbase java -cp `hbase classpath` -Xmx8G org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles -Dhbase.mapreduce.bulkload.max.hfiles.perRegion.perFamily=9999 " + tmp_hfile + " " + tablename)
   os.system("HADOOP_USER_NAME=hdfs hdfs dfs -chown -R downloader " + tmp_hfile)
-  print 'Pig job succeeded'
-  
+  print 'Pig job succeeded' 
+
 if __name__ == "__main__":
   try:
     opts, args = getopt.getopt(sys.argv[1:],"hd:e:r:u:l:",["type=","exporter=","release=", "upload="])

@@ -48,6 +48,15 @@ import com.google.common.collect.ImmutableList.Builder;
 public class LoadBalancer {
 
   @SneakyThrows
+  public static boolean canLoadBalance(String hfileDir) {
+    Path inputPath = new Path(hfileDir, Bytes.toString(DATA_CONTENT_FAMILY));
+    Configuration conf = HBaseConfiguration.create();
+    try (FileSystem fs = FileSystem.get(conf)) {
+      return fs.exists(inputPath);
+    }
+  }
+
+  @SneakyThrows
   public static void run(String tablename, String hfileDir) {
     Path inputPath = new Path(hfileDir, Bytes.toString(DATA_CONTENT_FAMILY));
     Configuration conf = HBaseConfiguration.create();

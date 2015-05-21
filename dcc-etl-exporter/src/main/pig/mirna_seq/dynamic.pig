@@ -20,6 +20,7 @@ DEFINE STATISTIC_STORAGE org.icgc.dcc.etl.exporter.pig.storage.StatisticStorage(
 
 import 'projection.pig';
 selected_content = FOREACH selected_mirna GENERATE donor_id,
+                                                   COMPOSITE_KEY(donor_id) as rowkey:bytearray, 
                                                    icgc_donor_id..raw_data_accession;
 
 obj = FOREACH selected_content GENERATE rowkey, {(icgc_donor_id..raw_data_accession)};

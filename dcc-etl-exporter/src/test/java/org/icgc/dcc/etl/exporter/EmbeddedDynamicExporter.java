@@ -13,14 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles;
 import org.apache.pig.ExecType;
 import org.apache.pig.PigServer;
 import org.apache.pig.tools.pigstats.ScriptState;
 import org.icgc.dcc.downloader.core.SchemaUtil;
 import org.icgc.dcc.etl.exporter.pig.storage.StaticMultiStorage;
-import org.icgc.dcc.etl.exporter.pig.udf.ToHFile;
 import org.icgc.dcc.etl.exporter.test.hbase.EmbeddedHBase;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -70,7 +68,6 @@ public class EmbeddedDynamicExporter {
     hbase.startUp();
     log.info("< Started embedded HBase");
 
-    ToHFile.COMPRESSION = Compression.Algorithm.NONE;
     Configuration conf = hbase.getConfiguration();
     SchemaUtil.createMetaTable("meta", conf, false);
     SchemaUtil.createArchiveTable(conf, false);
