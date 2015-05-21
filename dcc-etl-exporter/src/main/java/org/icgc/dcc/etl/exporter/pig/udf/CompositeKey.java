@@ -88,7 +88,7 @@ public class CompositeKey extends EvalFunc<DataByteArray> {
       counters.put(donorId, counter);
       log.debug("donor id: {}, start: {}, end: {}, interval: {}", donorId, start, end, interval);
     }
-    return new DataByteArray(SchemaUtil.encodedArchiveRowKey(donorId, counter.end--));
+    return new DataByteArray(SchemaUtil.encodedArchiveRowKey(donorId, counter.start++));
   }
 
   @Override
