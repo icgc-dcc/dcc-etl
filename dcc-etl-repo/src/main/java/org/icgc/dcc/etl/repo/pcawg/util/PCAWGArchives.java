@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 
@@ -91,9 +92,8 @@ public class PCAWGArchives {
     return workflow.get("gnos_id").textValue();
   }
 
-  public static String getGnosRepo(@NonNull JsonNode workflow) {
-    // TODO: This is a bug!!!!
-    return workflow.get("gnos_repo").get(0).textValue();
+  public static ArrayNode getGnosRepo(@NonNull JsonNode workflow) {
+    return (ArrayNode) workflow.get("gnos_repo");
   }
 
   public static String getGnosLastModified(@NonNull JsonNode workflow) {

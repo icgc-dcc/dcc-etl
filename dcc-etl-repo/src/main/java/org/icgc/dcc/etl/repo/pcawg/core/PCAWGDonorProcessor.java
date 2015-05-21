@@ -24,6 +24,8 @@ import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.singleton;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTARGETProjects;
@@ -46,10 +48,9 @@ import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosRepo;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSampleId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
-import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
-import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -59,7 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer;
+import org.icgc.dcc.etl.repo.model.RepositoryServers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -148,7 +149,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   private RepositoryFile createDonorFile(String projectCode, String submittedDonorId, String analysisType,
       JsonNode workflow, JsonNode workflowFile) {
     val project = getProjectCodeProject(projectCode).orNull();
-    val pcawgServer = resolvePCAWGSerer(workflow);
+    val pcawgServers = resolvePCAWGServers(workflow);
 
     val submitterSpecimenId = getSubmitterSpecimenId(workflow);
     val submitterSampleId = getSubmitterSampleId(workflow);
@@ -164,19 +165,16 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .getDataTypes().addAll(dataTypes);
 
     donorFile.getRepository()
-        .setRepoType(pcawgServer.getType().getId())
-        .setRepoOrg(pcawgServer.getSource().getId())
+        .setRepoType(pcawgServers.get(0).getType().getId())
+        .setRepoOrg(pcawgServers.get(0).getSource().getId())
         .setRepoEntityId(getGnosId(workflow));
 
-    donorFile.getRepository().getRepoServer().get(0)
-        .setRepoName(pcawgServer.getName())
-        .setRepoCode(pcawgServer.getCode())
-        .setRepoCountry(pcawgServer.getCountry())
-        .setRepoBaseUrl(pcawgServer.getBaseUrl());
+    donorFile.getRepository()
+        .setRepoServer(resolveRepositoryServers(pcawgServers));
 
     donorFile.getRepository()
-        .setRepoMetadataPath(pcawgServer.getType().getMetadataPath())
-        .setRepoDataPath(pcawgServer.getType().getDataPath())
+        .setRepoMetadataPath(pcawgServers.get(0).getType().getMetadataPath())
+        .setRepoDataPath(pcawgServers.get(0).getType().getDataPath())
         .setFileName(fileName)
         .setFileMd5sum(resolveMd5sum(workflowFile))
         .setFileSize(fileSize)
@@ -203,10 +201,21 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     return donorFile;
   }
 
-  private static RepositoryServer resolvePCAWGSerer(JsonNode workflow) {
-    val genosRepo = getGnosRepo(workflow);
+  private static List<RepositoryServers.RepositoryServer> resolvePCAWGServers(JsonNode workflow) {
+    return stream(getGnosRepo(workflow))
+        .map(genosRepo -> getPCAWGServer(genosRepo.asText()))
+        .collect(toImmutableList());
+  }
 
-    return getPCAWGServer(genosRepo);
+  private static List<RepositoryFile.RepositoryServer> resolveRepositoryServers(
+      List<RepositoryServers.RepositoryServer> pcawgServers) {
+    return pcawgServers.stream()
+        .map(pcawgServer -> new RepositoryFile.RepositoryServer()
+            .setRepoName(pcawgServer.getName())
+            .setRepoCode(pcawgServer.getCode())
+            .setRepoCountry(pcawgServer.getCountry())
+            .setRepoBaseUrl(pcawgServer.getBaseUrl()))
+        .collect(toImmutableList());
   }
 
   private static String resolveAnalysisType(String libraryStrategyName, String specimenClass, String workflowType) {

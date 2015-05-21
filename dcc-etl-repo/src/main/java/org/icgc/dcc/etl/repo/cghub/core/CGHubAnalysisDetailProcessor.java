@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.repo.cghub.core;
 
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAliquotId;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getAnalysisId;
@@ -36,7 +37,6 @@ import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getResults;
 import static org.icgc.dcc.etl.repo.cghub.util.CGHubAnalysisDetails.getSampleId;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getDiseaseCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getCGHubServer;
-import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
 
 import java.time.Instant;
 import java.util.List;

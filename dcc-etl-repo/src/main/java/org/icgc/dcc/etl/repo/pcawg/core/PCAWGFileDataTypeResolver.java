@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.repo.pcawg.core;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
 import java.util.List;
 

@@ -23,6 +23,7 @@ import static com.google.common.base.Throwables.propagate;
 import static org.elasticsearch.client.Requests.indexRequest;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_NAME;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_NAMES;
@@ -33,7 +34,6 @@ import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.getCurrentIndexNam
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.getSettings;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.getTypeMapping;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.isRepoIndexName;
-import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
 import static org.icgc.dcc.etl.repo.util.TransportClientFactory.newTransportClient;
 
 import java.io.Closeable;

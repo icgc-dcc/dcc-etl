@@ -19,10 +19,10 @@ package org.icgc.dcc.etl.repo.tcga.core;
 
 import static com.google.common.collect.Iterables.filter;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getDiseaseCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getTCGAServer;
-import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
 
 import java.util.regex.Pattern;
 

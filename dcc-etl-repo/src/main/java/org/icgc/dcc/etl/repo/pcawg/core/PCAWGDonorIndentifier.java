@@ -17,10 +17,10 @@
  */
 package org.icgc.dcc.etl.repo.pcawg.core;
 
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getDccProjectCode;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
-import static org.icgc.dcc.etl.repo.util.Collectors.toImmutableSet;
 
 import java.util.Set;
 
