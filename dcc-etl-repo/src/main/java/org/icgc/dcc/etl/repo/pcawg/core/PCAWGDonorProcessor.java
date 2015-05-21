@@ -21,6 +21,7 @@ import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.primitives.Longs.max;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+import static java.util.Collections.singleton;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
@@ -83,9 +84,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private Iterable<RepositoryFile> createDonorFiles(Iterable<ObjectNode> donors) {
-    return stream(donors)
-        .flatMap(donor -> stream(processDonor(donor)))
-        .collect(toImmutableList());
+    return stream(donors).flatMap(donor -> stream(processDonor(donor))).collect(toImmutableList());
   }
 
   private Iterable<RepositoryFile> filterFiles(Iterable<RepositoryFile> donorFiles) {
@@ -125,28 +124,17 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   private Iterable<RepositoryFile> processDonor(@NonNull ObjectNode donor) {
     val projectCode = getDccProjectCode(donor);
     val submittedDonorId = getSubmitterDonorId(donor);
-
     val donorFiles = ImmutableList.<RepositoryFile> builder();
+
     for (val libraryStrategyName : PCAWG_LIBRARY_STRATEGY_NAMES) {
-      val libraryStrategy = donor.path(libraryStrategyName);
-
-      if (libraryStrategy.isMissingNode()) {
-        continue;
-      }
-
       for (val specimenClass : PCAWG_SPECIMEN_CLASSES) {
-        val specimens = libraryStrategy.path(specimenClass);
-        for (val specimen : specimens) {
+        val specimens = donor.path(libraryStrategyName).path(specimenClass);
+        for (val specimen : specimens.isArray() ? specimens : singleton(specimens)) {
           for (val workflowType : PCAWG_WORKFLOW_TYPES) {
             val workflow = specimen.path(workflowType);
-            if (workflow.isMissingNode()) {
-              continue;
-            }
-
             val analysisType = resolveAnalysisType(libraryStrategyName, specimenClass, workflowType);
             for (val workflowFile : getFiles(workflow)) {
               val donorFile = createDonorFile(projectCode, submittedDonorId, analysisType, workflow, workflowFile);
-
               donorFiles.add(donorFile);
             }
           }
@@ -158,8 +146,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private RepositoryFile createDonorFile(String projectCode, String submittedDonorId, String analysisType,
-      JsonNode workflow,
-      JsonNode workflowFile) {
+      JsonNode workflow, JsonNode workflowFile) {
     val project = getProjectCodeProject(projectCode).orNull();
     val pcawgServer = resolvePCAWGSerer(workflow);
 
@@ -260,11 +247,11 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private static String resolveFileName(JsonNode workflowFile) {
-    return firstNonNull(getFileName(workflowFile), getBamFileName(workflowFile));
+    return firstNonNull(getBamFileName(workflowFile), getFileName(workflowFile));
   }
 
   private static String resolveMd5sum(JsonNode workflowFile) {
-    return firstNonNull(getFileMd5sum(workflowFile), getBamFileMd5sum(workflowFile));
+    return firstNonNull(getBamFileMd5sum(workflowFile), getFileMd5sum(workflowFile));
   }
 
   private static long resolveFileSize(JsonNode workflowFile) {

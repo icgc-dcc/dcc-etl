@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.repo.pcawg.util;
 
 import static lombok.AccessLevel.PRIVATE;
+import static org.elasticsearch.common.base.Strings.emptyToNull;
 
 import java.util.List;
 
@@ -39,19 +40,19 @@ public class PCAWGArchives {
   /**
    * Field values.
    */
+  public static final List<String> PCAWG_LIBRARY_STRATEGY_NAMES = ImmutableList.of(
+      "rna_seq", "wgs");
   public static final List<String> PCAWG_SPECIMEN_CLASSES = ImmutableList.of(
       "normal_specimen", "normal_specimens", "tumor_specimen", "tumor_specimens");
   public static final List<String> PCAWG_WORKFLOW_TYPES = ImmutableList.of(
       "star", "tophat", "bwa_alignment", "sanger_variant_calling");
-  public static final List<String> PCAWG_LIBRARY_STRATEGY_NAMES = ImmutableList.of(
-      "rna_seq", "wgs");
 
   public static String getDccProjectCode(@NonNull ObjectNode donor) {
     return donor.get("dcc_project_code").textValue();
   }
 
   public static String getFileName(@NonNull JsonNode workflowFile) {
-    return workflowFile.path("file_name").textValue();
+    return emptyToNull(workflowFile.path("file_name").asText());
   }
 
   public static long getFileSize(@NonNull JsonNode workflowFile) {
@@ -59,11 +60,11 @@ public class PCAWGArchives {
   }
 
   public static String getFileMd5sum(@NonNull JsonNode workflowFile) {
-    return workflowFile.path("file_md5sum").textValue();
+    return emptyToNull(workflowFile.path("file_md5sum").asText());
   }
 
   public static String getBamFileName(@NonNull JsonNode workflowFile) {
-    return workflowFile.path("bam_file_name").textValue();
+    return emptyToNull(workflowFile.path("bam_file_name").asText());
   }
 
   public static long getBamFileSize(@NonNull JsonNode workflowFile) {
@@ -71,7 +72,7 @@ public class PCAWGArchives {
   }
 
   public static String getBamFileMd5sum(@NonNull JsonNode workflowFile) {
-    return workflowFile.path("bam_file_md5sum").textValue();
+    return emptyToNull(workflowFile.path("bam_file_md5sum").asText());
   }
 
   public static String getSubmitterDonorId(@NonNull ObjectNode donor) {
@@ -91,6 +92,7 @@ public class PCAWGArchives {
   }
 
   public static String getGnosRepo(@NonNull JsonNode workflow) {
+    // TODO: This is a bug!!!!
     return workflow.get("gnos_repo").get(0).textValue();
   }
 
