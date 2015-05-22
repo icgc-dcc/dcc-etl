@@ -2,11 +2,14 @@
 release_number='19'
 dictionary_version='0.11c'
 artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-release/org/icgc/dcc/'
-dcc_etl_cli_version='3.8.5.1'
-dcc_etl_annotator_version='3.8.5.1'
-dcc_submission_server_version='3.8.5.9'
+dcc_etl_cli_version='3.8.5.2'
+dcc_etl_annotator_version='3.8.5.2'
+dcc_etl_exporter_version='3.8.5.2'
+dcc_etl_exporter_version='3.8.5.2'
+dcc_etl_db_importer_version='3.8.5.2'
+dcc_submission_server_version='3.8.6.1'
 
-# update libraries and their symlinks
+# update libraries and their symbolic links
 cd ***REMOVED***/dcc-etl/lib
 wget ${artifactory_release_url}dcc-etl-cli/${dcc_etl_cli_version}/dcc-etl-cli-${dcc_etl_cli_version}.jar
 wget ${artifactory_release_url}dcc-etl-annotator/${dcc_etl_annotator_version}/dcc-etl-annotator-${dcc_etl_annotator_version}.jar
@@ -14,6 +17,19 @@ wget ${artifactory_release_url}dcc-submission-server/${dcc_submission_server_ver
 ln -sfn dcc-etl-cli-${dcc_etl_cli_version}.jar dcc-etl.jar
 ln -sfn dcc-etl-annotator-${dcc_etl_annotator_version}.jar dcc-annotator.jar
 ln -sfn dcc-submission-server-${dcc_submission_server_version}.jar dcc-validator.jar
+
+# update db-importer and exporter distribution
+cd ***REMOVED***
+
+wget ${artifactory_release_url}dcc-etl-db-importer/${dcc_etl_db_importer_version}/dcc-etl-db-importer-${dcc_etl_db_importer_version}-dist.tar.gz
+tar -xzf dcc-etl-db-importer-${dcc_etl_db_importer_version}-dist.tar.gz
+rm dcc-etl-db-importer-${dcc_etl_db_importer_version}-dist.tar.gz
+ln -sfn dcc-etl-db-importer-${dcc_etl_db_importer_version} dcc-etl-db-importer
+
+wget ${artifactory_release_url}dcc-etl-exporter/${dcc_etl_exporter_version}/dcc-etl-exporter-${dcc_etl_exporter_version}-dist.tar.gz
+tar -xzf dcc-etl-exporter-${dcc_etl_exporter_version}-dist.tar.gz
+rm dcc-etl-exporter-${dcc_etl_exporter_version}-dist.tar.gz
+ln -sfn dcc-etl-exporter-${dcc_etl_exporter_version} dcc-exporter
 
 # update sources
 cd ***REMOVED***/dcc-etl/git/dcc-etl
