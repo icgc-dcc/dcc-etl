@@ -1,0 +1,21 @@
+analyzed_sample_id	specimen_id	analyzed_sample_interval	percentage_cellularity	level_of_cellularity	analyzed_sample_notes	study
+00301	0020	94	-777	4		 PanCancer Study
+00312	0020	77	62	1	C iiExczaV	 PanCancer Study
+00321	0020	85	103	-777	rDNPsvoBUd	 PanCancer Study
+00332	0020		-888	-9999	VwHCLrAIgX	 PanCancer Study
+00341	0021		143	1	wRAlUKoqTO	 PanCancer Study
+00352	0021	2	-777	1	R wzjRjZRr	
+00361	0021		169	-9999	Uy KsQVWbS	
+00372	0021	75	63	4	ipHTQS vaQ	
+00381	0022		104	2		
+00392	0022		-888	2	LpyYhpd cx	
+003101	0022		83	2	mulIFcN vM	
+003112	0022	33	-9999	4		
+003121	0023		-9999	-888	Ji OyDKTPx	
+003132	0023	88	138	2		
+003141	0024		131	5	PLqFEzSslb	
+003152	0024	14	14	-9999		
+003161	0025	53	27	-9999	DocTn oDxi	
+003172	0025		12	-888	hqx wpHlET	
+003181	0025	22	145	2	E zoM rKoT	
+003192	0025	189	177	5	zzz WTfWHQ	
