@@ -118,8 +118,11 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
   private RepositoryFile createClinicalFile(String projectCode, TCGAArchiveClinicalFile archiveClinicalFile) {
     val submittedDonorId = archiveClinicalFile.getDonorId();
 
+    val repoEntityId = resolveRepoEntityId(archiveClinicalFile);
+
     val clinicalFile = new RepositoryFile()
-        .setStudy(null)
+        .setId(resolveFileId(tcgaServer.getType().getDataPath(), repoEntityId))
+        .setStudy(null) // Set downstream
         .setAccess("open");
 
     clinicalFile
@@ -132,7 +135,7 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
     clinicalFile.getRepository()
         .setRepoType(tcgaServer.getType().getId())
         .setRepoOrg(tcgaServer.getSource().getId())
-        .setRepoEntityId(resolveRepoEntityId(archiveClinicalFile));
+        .setRepoEntityId(repoEntityId);
 
     clinicalFile.getRepository().getRepoServer().get(0)
         .setRepoName(tcgaServer.getName())
@@ -192,7 +195,8 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
       val donor = clinicalFile.getDonor();
       val pcawg = context.isPCAWGSubmittedDonorId(donor.getProjectCode(), donor.getSubmittedDonorId());
       if (pcawg) {
-        donor.setStudy("PCAWG");
+        clinicalFile.setStudy(PCAWG_STUDY_VALUE);
+        donor.setStudy(PCAWG_STUDY_VALUE);
       }
     }
   }
