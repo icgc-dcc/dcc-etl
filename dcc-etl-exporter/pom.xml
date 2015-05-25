@@ -181,7 +181,6 @@
         	<groupId>org.apache.hbase</groupId>
         </exclusion>
       </exclusions>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -202,7 +201,6 @@
       <artifactId>hbase-server</artifactId>
       <groupId>org.apache.hbase</groupId>
       <version>${hbase-cdh.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -215,7 +213,6 @@
       <artifactId>hbase-common</artifactId>
       <groupId>org.apache.hbase</groupId>
       <version>${hbase-cdh.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <!-- Pig -->
@@ -429,7 +426,6 @@
 	  <groupId>com.googlecode.json-simple</groupId>
 	  <artifactId>json-simple</artifactId>
 	  <version>1.1.1</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
