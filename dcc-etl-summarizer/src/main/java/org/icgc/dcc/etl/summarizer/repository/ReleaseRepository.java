@@ -31,6 +31,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AFFECTED_GENE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_COMPLETENESS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_REPOSITORY;
@@ -217,7 +218,7 @@ public class ReleaseRepository {
   }
 
   public void setDonorCompleteness(String donorId, String completeness) {
-    String field = DONOR_SUMMARY + "." + "_completeness";
+    String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETENESS;
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
         .with("{ $set: { " + field + ": # } }", completeness);
