@@ -50,7 +50,7 @@ add_to_cmd "  -p ${projects_json_file?}"
 add_to_cmd "  -d ${dictionary_file?}"
 add_to_cmd "  -c ${config_file?}"
 # remove orphaned data from files. comment out for reports only.
-add_to_cmd "  -r"
+# add_to_cmd "  -r"
 cmd=$(build_cmd)
 pretty_print_cmd "${cmd?}"
 eval_cmd "${cmd?}"
