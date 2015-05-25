@@ -26,16 +26,34 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>${logback.version}</version>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>slf4j-api</artifactId>
+      		<groupId>org.slf4j</groupId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
       <version>${slf4j.version}</version>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>slf4j-api</artifactId>
+      		<groupId>org.slf4j</groupId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
       <version>${slf4j.version}</version>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>slf4j-api</artifactId>
+      		<groupId>org.slf4j</groupId>
+      	</exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -46,6 +64,34 @@
         <exclusion>
           <artifactId>log4j-over-slf4j</artifactId>
           <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hbase</groupId>
+          <artifactId>hbase-client</artifactId>
+        </exclusion>
+        <exclusion>
+          <artifactId>hadoop-common</artifactId>
+          <groupId>org.apache.hadoop</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hbase-server</artifactId>
+        	<groupId>org.apache.hbase</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hbase-common</artifactId>
+        	<groupId>org.apache.hbase</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hadoop-core</artifactId>
+        	<groupId>org.apache.hadoop</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>oozie-client</artifactId>
+        	<groupId>org.apache.oozie</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>jsr305</artifactId>
+        	<groupId>com.google.code.findbugs</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -68,28 +114,6 @@
     <!-- Hadoop -->
     <dependency>
       <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-common</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>log4j</artifactId>
-          <groupId>log4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-logging</artifactId>
-          <groupId>commons-logging</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-log4j12</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-hdfs</artifactId>
       <exclusions>
         <exclusion>
@@ -101,6 +125,29 @@
           <groupId>commons-logging</groupId>
         </exclusion>
       </exclusions>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>hadoop-common</artifactId>
+      <groupId>org.apache.hadoop</groupId>
+      <scope>provided</scope>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>slf4j-api</artifactId>
+      		<groupId>org.slf4j</groupId>
+      	</exclusion>
+      	<exclusion>
+      		<artifactId>jsr305</artifactId>
+      		<groupId>com.google.code.findbugs</groupId>
+      	</exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <artifactId>hadoop-core</artifactId>
+      <groupId>org.apache.hadoop</groupId>
+      <scope>provided</scope>
     </dependency>
 
     <!-- HBase -->
@@ -125,7 +172,50 @@
           <artifactId>commons-logging</artifactId>
           <groupId>commons-logging</groupId>
         </exclusion>
+        <exclusion>
+        	<artifactId>hadoop-common</artifactId>
+        	<groupId>org.apache.hadoop</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hbase-common</artifactId>
+        	<groupId>org.apache.hbase</groupId>
+        </exclusion>
       </exclusions>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>hbase-server</artifactId>
+      <groupId>org.apache.hbase</groupId>
+      <version>${hbase-cdh.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>slf4j-api</artifactId>
+      		<groupId>org.slf4j</groupId>
+      	</exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <artifactId>hbase-server</artifactId>
+      <groupId>org.apache.hbase</groupId>
+      <version>${hbase-cdh.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>jersey-json</artifactId>
+      <groupId>com.sun.jersey</groupId>
+      <version>1.9</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>hbase-common</artifactId>
+      <groupId>org.apache.hbase</groupId>
+      <version>${hbase-cdh.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Pig -->
@@ -143,6 +233,14 @@
           <artifactId>servlet-api-2.5</artifactId>
           <groupId>org.mortbay.jetty</groupId>
         </exclusion>
+        <exclusion>
+        	<artifactId>hadoop-common</artifactId>
+        	<groupId>org.apache.hadoop</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hbase-common</artifactId>
+        	<groupId>org.apache.hbase</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -155,25 +253,6 @@
           <groupId>org.slf4j</groupId>
         </exclusion>
       </exclusions>
-    </dependency>
-
-    <!-- Oozie -->
-    <dependency>
-      <groupId>org.apache.oozie</groupId>
-      <artifactId>oozie-client</artifactId>
-      <version>${oozie-cdh.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>slf4j-simple</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- Command line -->
-    <dependency>
-      <groupId>com.beust</groupId>
-      <artifactId>jcommander</artifactId>
     </dependency>
 
     <!-- Utilities -->
@@ -242,12 +321,30 @@
           <artifactId>commons-logging</artifactId>
           <groupId>commons-logging</groupId>
         </exclusion>
+        <exclusion>
+        	<artifactId>hadoop-core</artifactId>
+        	<groupId>org.apache.hadoop</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>slf4j-api</artifactId>
+        	<groupId>org.slf4j</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-minicluster</artifactId>
       <scope>test</scope>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>hadoop-common</artifactId>
+      		<groupId>org.apache.hadoop</groupId>
+      	</exclusion>
+      	<exclusion>
+      		<artifactId>hadoop-core</artifactId>
+      		<groupId>org.apache.hadoop</groupId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.mrunit</groupId>
@@ -287,6 +384,22 @@
           <artifactId>commons-logging</artifactId>
           <groupId>commons-logging</groupId>
         </exclusion>
+        <exclusion>
+        	<artifactId>hadoop-common</artifactId>
+        	<groupId>org.apache.hadoop</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hbase-server</artifactId>
+        	<groupId>org.apache.hbase</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hbase-common</artifactId>
+        	<groupId>org.apache.hbase</groupId>
+        </exclusion>
+        <exclusion>
+        	<artifactId>hadoop-core</artifactId>
+        	<groupId>org.apache.hadoop</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
 
@@ -309,6 +422,13 @@
       <groupId>com.google.caliper</groupId>
       <artifactId>caliper</artifactId>
       <version>1.0-beta-1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+	  <groupId>com.googlecode.json-simple</groupId>
+	  <artifactId>json-simple</artifactId>
+	  <version>1.1.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
