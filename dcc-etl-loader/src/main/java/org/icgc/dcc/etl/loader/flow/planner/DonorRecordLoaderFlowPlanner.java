@@ -134,12 +134,16 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
       return new StainedSectionImageUpdate(clinicalPipe);
 
     case SAMPLE_TYPE:
-      return new RawSequenceDataInfo(clinicalPipe,
-          getSubmission(),
-          availableFeatureTypes,
-          RawSequenceDataInfo.filterRawSequencingMappings(
-              context.getSubmissionModel(),
-              availableFeatureTypes));
+      if (!availableFeatureTypes.isEmpty()) {
+        return new RawSequenceDataInfo(clinicalPipe,
+            getSubmission(),
+            availableFeatureTypes,
+            RawSequenceDataInfo.filterRawSequencingMappings(
+                context.getSubmissionModel(),
+                availableFeatureTypes));
+      }
+      log.info("Skipping RawSequenceDataInfo subAssembly, no feature types available for '{}'", getSubmission());
+      return clinicalPipe;
 
     default:
       throw new IllegalStateException(String.format("Unexpected file type: '%s'", currentFileType));
