@@ -31,6 +31,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.gene.core.GeneFilter;
 import org.icgc.dcc.etl.db.importer.gene.writer.GeneWriter;
 
@@ -38,7 +40,7 @@ import com.mongodb.MongoClientURI;
 
 @Slf4j
 @RequiredArgsConstructor
-public class GeneImporter {
+public class GeneImporter implements Importer {
 
   @NonNull
   private final URI genesBsonUri;
@@ -50,6 +52,12 @@ public class GeneImporter {
     this.mongoUri = mongoUri;
   }
 
+  @Override
+  public CollectionName getCollectionName() {
+    return CollectionName.GENES;
+  }
+
+  @Override
   public void execute() {
     execute(all());
   }

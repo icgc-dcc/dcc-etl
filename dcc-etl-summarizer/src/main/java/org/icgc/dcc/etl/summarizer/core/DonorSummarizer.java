@@ -118,6 +118,7 @@ public class DonorSummarizer extends AbstractSummarizer {
     summarizeDonorGenes();
     summarizeDonorRepositories();
     summarizeDonorStudies();
+    summarizeDonorCompleteness();
     summarizeDonorLibraryStrategies();
     summarizeDonorAgeGroups();
   }
@@ -235,6 +236,24 @@ public class DonorSummarizer extends AbstractSummarizer {
       } catch (Throwable t) {
         log.error("Error setting donor study with donorId '{}' and studies '{}'", donorId,
             studies);
+        throw new RuntimeException(t);
+      }
+    }
+  }
+
+  private void summarizeDonorCompleteness() {
+    val results = repository.getDonorAvailableDataTypes();
+    for (val entry : results.entrySet()) {
+      val donorId = entry.getKey();
+      val donorAvailableDataTypes = entry.getValue();
+
+      val completeness = donorAvailableDataTypes.isEmpty() ? "missing molecular" : "has molecular";
+
+      try {
+        repository.setDonorCompleteness(donorId, completeness);
+      } catch (Throwable t) {
+        log.error("Error setting donor completeness with donorId '{}' and completeness '{}'", donorId,
+            completeness);
         throw new RuntimeException(t);
       }
     }

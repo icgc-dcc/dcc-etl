@@ -33,6 +33,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.pathway.core.PathwayModel;
 import org.icgc.dcc.etl.db.importer.pathway.reader.PathwayModelReader;
 import org.icgc.dcc.etl.db.importer.pathway.writer.PathwayWriter;
@@ -44,7 +46,7 @@ import com.mongodb.MongoClientURI;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class PathwayImporter {
+public class PathwayImporter implements Importer {
 
   /**
    * Configuration.
@@ -65,6 +67,12 @@ public class PathwayImporter {
     this.mongoUri = mongoUri;
   }
 
+  @Override
+  public CollectionName getCollectionName() {
+    return CollectionName.PATHWAYS;
+  }
+
+  @Override
   @SneakyThrows
   public void execute() {
     val watch = createStarted();
@@ -85,7 +93,7 @@ public class PathwayImporter {
   private void writePathwayModel(PathwayModel model) throws UnknownHostException, IOException {
     @Cleanup
     val writer = new PathwayWriter(mongoUri);
-    writer.write(model);
+    writer.writeFiles(model);
   }
 
 }

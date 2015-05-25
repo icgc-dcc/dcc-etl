@@ -17,6 +17,13 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
+import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.Strings.padEnd;
+import static com.google.common.io.Resources.getResource;
+import static com.google.common.io.Resources.readLines;
+import static org.apache.commons.lang.StringUtils.repeat;
+import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
 import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
 
 import java.io.File;
@@ -78,19 +85,47 @@ public class DBImporterMain {
     val collections = options.collections;
     val configFilePath = options.configFilePath;
 
+    val config = EtlConfigFile.read(new File(configFilePath));
+    logBanner(config);
     log.info("         collections    - {}", options.collections);
     log.info("         config file    - {}", options.configFilePath);
-
-    EtlConfig config = EtlConfigFile.read(new File(configFilePath));
 
     val geneMongoUri = config.getGeneMongoUri();
     val dbImporter = new DBImporter(geneMongoUri, createICGCConfig(config));
 
-    dbImporter.import_(collections);
+    dbImporter.execute(collections);
   }
 
   private static void usage(JCommander cli) {
     cli.usage();
+  }
+
+  @SneakyThrows
+  private static void logBanner(EtlConfig config) {
+    log.info("{}", repeat("-", 100));
+    for (String line : readLines(getResource("banner.txt"), UTF_8)) {
+      log.info(line);
+    }
+    log.info("{}", repeat("-", 100));
+    log.info("Version: {}", getVersion());
+    log.info("Built:   {}", getBuildTimestamp());
+    log.info("SCM:");
+    for (val entry : getScmInfo().entrySet()) {
+      val key = entry.getKey();
+      val value = firstNonNull(entry.getValue(), "").replaceAll("\n", " ");
+
+      log.info("         {}: {}", padEnd(key, 24, ' '), value);
+    }
+
+    log.info("Config:  {}", config);
+  }
+
+  private static String getVersion() {
+    return firstNonNull(DBImporterMain.class.getPackage().getImplementationVersion(), "[unknown version]");
+  }
+
+  private static String getBuildTimestamp() {
+    return firstNonNull(DBImporterMain.class.getPackage().getSpecificationVersion(), "[unknown build timestamp]");
   }
 
 }

@@ -25,7 +25,7 @@ import org.icgc.dcc.etl.db.importer.geneset.model.GeneSetType;
 import org.jongo.MongoCollection;
 
 @RequiredArgsConstructor
-public class AbstractGeneSetWriter {
+public abstract class AbstractGeneSetWriter {
 
   /**
    * Constants.

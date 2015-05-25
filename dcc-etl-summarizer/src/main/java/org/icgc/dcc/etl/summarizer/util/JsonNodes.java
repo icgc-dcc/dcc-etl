@@ -72,8 +72,9 @@ public final class JsonNodes {
       if (element.isArray()) {
         result.addAll(extractStudies(element));
       }
-      if (element.textValue() != null) {
-        result.add(element.textValue());
+      val text = element.textValue();
+      if (text != null && !text.equals("")) {
+        result.add(text);
       }
     }
 
@@ -103,6 +104,19 @@ public final class JsonNodes {
     for (val node : nodes) {
       String key = node.path(keyFieldName).asText();
       String value = node.path(valueFieldName).asText();
+
+      map.put(key, value);
+    }
+
+    return unmodifiableMap(map);
+  }
+
+  public static Map<String, List<String>> mapMultipleTextValues(String keyFieldName, String valueFieldName,
+      Iterable<JsonNode> nodes) {
+    Map<String, List<String>> map = newHashMap();
+    for (val node : nodes) {
+      String key = node.path(keyFieldName).asText();
+      List<String> value = textValues(node.path(valueFieldName));
 
       map.put(key, value);
     }

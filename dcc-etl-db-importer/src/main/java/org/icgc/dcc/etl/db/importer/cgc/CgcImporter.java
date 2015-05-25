@@ -33,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.cgc.reader.CgcReader;
 import org.icgc.dcc.etl.db.importer.cgc.writer.CgcWriter;
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.core.Importer;
 
 import com.mongodb.MongoClientURI;
 
@@ -41,7 +43,7 @@ import com.mongodb.MongoClientURI;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class CgcImporter {
+public class CgcImporter implements Importer {
 
   /**
    * Configuration.
@@ -56,6 +58,12 @@ public class CgcImporter {
     this.mongoUri = mongoUri;
   }
 
+  @Override
+  public CollectionName getCollectionName() {
+    return CollectionName.CGC;
+  }
+
+  @Override
   @SneakyThrows
   public void execute() {
     val watch = createStarted();
@@ -76,7 +84,7 @@ public class CgcImporter {
   private void writeCgc(Iterable<Map<String, String>> cgc) throws IOException {
     @Cleanup
     val writer = new CgcWriter(mongoUri);
-    writer.write(cgc);
+    writer.writeFiles(cgc);
   }
 
 }

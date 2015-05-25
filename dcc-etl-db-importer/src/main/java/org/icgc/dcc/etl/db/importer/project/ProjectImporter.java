@@ -30,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.common.client.api.ICGCClient;
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.common.client.api.cgp.CGPClient;
+import org.icgc.dcc.etl.db.importer.cli.CollectionName;
+import org.icgc.dcc.etl.db.importer.core.Importer;
 import org.icgc.dcc.etl.db.importer.project.model.Project;
 import org.icgc.dcc.etl.db.importer.project.reader.ProjectReader;
 import org.icgc.dcc.etl.db.importer.project.writer.ProjectWriter;
@@ -38,7 +40,7 @@ import com.google.common.base.Stopwatch;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
-public class ProjectImporter {
+public class ProjectImporter implements Importer {
 
   /**
    * Configuration
@@ -58,6 +60,12 @@ public class ProjectImporter {
     this.client = ICGCClient.create(config).cgp().details();
   }
 
+  @Override
+  public CollectionName getCollectionName() {
+    return CollectionName.PROJECTS;
+  }
+
+  @Override
   @SneakyThrows
   public void execute() {
     val watch = Stopwatch.createStarted();
@@ -79,7 +87,7 @@ public class ProjectImporter {
   private void writeProjects(Iterable<Project> specifiedProjects) throws IOException {
     @Cleanup
     val writer = new ProjectWriter(mongoUri);
-    writer.write(specifiedProjects);
+    writer.writeFiles(specifiedProjects);
   }
 
 }

@@ -73,7 +73,7 @@ public class GeneWriterTest {
 
     @Cleanup
     val writer = new GeneWriter(mongoClientURI);
-    writer.write(new File(bsonFile).toURI().toURL().openStream());
+    writer.writeFiles(new File(bsonFile).toURI().toURL().openStream());
 
     JsonNode gene = getGene(mongoClientURI);
     System.out.println(gene);

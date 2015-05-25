@@ -126,6 +126,7 @@ public class EtlIntegrationTest {
       .add("PACA-AU")
       .add("PEME-CA")
       .add("MALY-DE")
+      .add("LAML-US")
       .build();
 
   /**
@@ -211,7 +212,7 @@ public class EtlIntegrationTest {
         createICGCConfig(config));
 
     val collections = Arrays.asList(CollectionName.values());
-    dbImporter.import_(collections);
+    dbImporter.execute(collections);
 
   }
 
