@@ -72,8 +72,9 @@ public final class JsonNodes {
       if (element.isArray()) {
         result.addAll(extractStudies(element));
       }
-      if (element.textValue() != null) {
-        result.add(element.textValue());
+      val text = element.textValue();
+      if (text != null && !text.equals("")) {
+        result.add(text);
       }
     }
 
