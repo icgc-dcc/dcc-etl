@@ -28,6 +28,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class RepositoryFile {
 
+  String id;
   String study;
   String access;
 

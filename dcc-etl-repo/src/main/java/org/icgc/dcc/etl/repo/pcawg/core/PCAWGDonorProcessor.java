@@ -151,6 +151,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val project = getProjectCodeProject(projectCode).orNull();
     val pcawgServers = resolvePCAWGServers(workflow);
 
+    val gnosId = getGnosId(workflow);
     val submitterSpecimenId = getSubmitterSpecimenId(workflow);
     val submitterSampleId = getSubmitterSampleId(workflow);
     val fileName = resolveFileName(workflowFile);
@@ -158,7 +159,8 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val dataTypes = resolveFileDataTypes(analysisType, fileName);
 
     val donorFile = new RepositoryFile()
-        .setStudy("PCAWG")
+        .setId(resolveFileId(gnosId, fileName))
+        .setStudy(PCAWG_STUDY_VALUE)
         .setAccess("controlled");
 
     donorFile
@@ -167,7 +169,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     donorFile.getRepository()
         .setRepoType(pcawgServers.get(0).getType().getId())
         .setRepoOrg(pcawgServers.get(0).getSource().getId())
-        .setRepoEntityId(getGnosId(workflow));
+        .setRepoEntityId(gnosId);
 
     donorFile.getRepository()
         .setRepoServer(resolveRepositoryServers(pcawgServers));
@@ -184,7 +186,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setPrimarySite(context.getPrimarySite(projectCode))
         .setProgram(project.getProgram())
         .setProjectCode(projectCode)
-        .setStudy("PCAWG")
+        .setStudy(PCAWG_STUDY_VALUE)
 
         .setDonorId(null) // Set downstream
         .setSpecimenId(null) // Set downstream

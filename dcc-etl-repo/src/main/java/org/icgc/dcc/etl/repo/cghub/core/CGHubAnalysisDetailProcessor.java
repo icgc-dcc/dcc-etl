@@ -101,7 +101,11 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     val legacySpecimenId = getLegacySpecimenId(legacySampleId);
     val legacyDonorId = getLegacyDonorId(legacySampleId);
 
+    val analysisId = getAnalysisId(result);
+    val fileName = getFileName(file);
+
     val analysisFile = new RepositoryFile()
+        .setId(resolveFileId(analysisId, fileName))
         .setStudy(null)
         .setAccess("controlled");
 
@@ -115,7 +119,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     analysisFile.getRepository()
         .setRepoType(cghubServer.getType().getId())
         .setRepoOrg(cghubServer.getSource().getId())
-        .setRepoEntityId(getAnalysisId(result));
+        .setRepoEntityId(analysisId);
 
     analysisFile.getRepository().getRepoServer().get(0)
         .setRepoName(cghubServer.getName())
@@ -126,7 +130,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
     analysisFile.getRepository()
         .setRepoMetadataPath(cghubServer.getType().getMetadataPath())
         .setRepoDataPath(cghubServer.getType().getDataPath())
-        .setFileName(getFileName(file))
+        .setFileName(fileName)
         .setFileMd5sum(getChecksum(file))
         .setFileSize(getFileSize(file))
         .setLastModified(resolveLastModified(result));
@@ -157,7 +161,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
       val donor = analysisFile.getDonor();
       val pcawg = context.isPCAWGSubmittedDonorId(donor.getProjectCode(), donor.getSubmittedDonorId());
       if (pcawg) {
-        donor.setStudy("PCAWG");
+        donor.setStudy(PCAWG_STUDY_VALUE);
       }
     }
   }

@@ -20,13 +20,26 @@ package org.icgc.dcc.etl.repo.core;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import org.icgc.dcc.common.core.util.UUID5;
+
+import com.google.common.base.Joiner;
+
 @RequiredArgsConstructor
 public abstract class RepositoryFileProcessor {
+
+  /**
+   * Constants.
+   */
+  protected final String PCAWG_STUDY_VALUE = "PCAWG";
 
   /**
    * Dependencies.
    */
   @NonNull
   protected final RepositoryFileContext context;
+
+  protected static String resolveFileId(String... parts) {
+    return UUID5.fromUTF8(UUID5.getNamespace(), Joiner.on('/').join(parts)).toString();
+  }
 
 }
