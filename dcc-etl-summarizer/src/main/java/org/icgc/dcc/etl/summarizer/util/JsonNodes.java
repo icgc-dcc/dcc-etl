@@ -111,6 +111,19 @@ public final class JsonNodes {
     return unmodifiableMap(map);
   }
 
+  public static Map<String, List<String>> mapMultipleTextValues(String keyFieldName, String valueFieldName,
+      Iterable<JsonNode> nodes) {
+    Map<String, List<String>> map = newHashMap();
+    for (val node : nodes) {
+      String key = node.path(keyFieldName).asText();
+      List<String> value = textValues(node.path(valueFieldName));
+
+      map.put(key, value);
+    }
+
+    return unmodifiableMap(map);
+  }
+
   public static Map<String, Long> mapLongValues(String keyFieldName, String valueFieldName, Iterable<JsonNode> nodes) {
     Map<String, Long> map = newHashMap();
     for (val node : nodes) {

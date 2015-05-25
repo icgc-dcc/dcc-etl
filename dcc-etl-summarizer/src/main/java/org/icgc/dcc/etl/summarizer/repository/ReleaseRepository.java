@@ -31,6 +31,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AFFECTED_GENE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_COMPLETENESS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_REPOSITORY;
@@ -53,9 +54,10 @@ import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_LIBRARY_ST
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_REPOSITORY;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
-import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapLongValues;
-import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapTextValues;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.extractStudies;
+import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapLongValues;
+import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapMultipleTextValues;
+import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapTextValues;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.textValues;
 
 import java.util.List;
@@ -63,6 +65,7 @@ import java.util.Map;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import org.bson.types.ObjectId;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
@@ -108,6 +111,20 @@ public class ReleaseRepository {
         .find()
         .projection("{ _id: 0, " + DONOR_ID + ": 1, " + DONOR_AGE_AT_DIAGNOSIS + ": 1 }")
         .as(JsonNode.class));
+  }
+
+  public Map<String, List<String>> getDonorAvailableDataTypes() {
+    val availableDataTypes = DONOR_SUMMARY + "." + AVAILABLE_DATA_TYPES;
+    val field = "dataTypeCount";
+
+    // Create donorId -> data type count mapping
+    return mapMultipleTextValues(
+        DONOR_ID, field,
+        donors
+            .aggregate(
+                "{ $project: { _id: 0, " + DONOR_ID + ": 1, " + field + ": '$" + availableDataTypes
+                    + "' } }")
+            .as(JsonNode.class));
   }
 
   public Iterable<JsonNode> getDonorGeneObservationTypes() {
@@ -198,6 +215,13 @@ public class ReleaseRepository {
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
         .with("{ $set: { " + field + ": # } }", extractStudies(studies));
+  }
+
+  public void setDonorCompleteness(String donorId, String completeness) {
+    String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETENESS;
+    donors
+        .update("{ " + DONOR_ID + ": # }", donorId)
+        .with("{ $set: { " + field + ": # } }", completeness);
   }
 
   public void setDonorExperimentalAnalysis(String donorId, JsonNode analysisSampleCounts) {
