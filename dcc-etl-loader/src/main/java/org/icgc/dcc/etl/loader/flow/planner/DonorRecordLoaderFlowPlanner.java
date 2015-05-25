@@ -20,7 +20,6 @@ package org.icgc.dcc.etl.loader.flow.planner;
 import static cascading.tuple.Fields.ALL;
 import static cascading.tuple.Fields.RESULTS;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 import static org.icgc.dcc.common.core.model.ClinicalType.CLINICAL_CORE_TYPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.withRawSequenceData;
 import static org.icgc.dcc.etl.loader.flow.planner.PipeNames.getRawSequenceDataInfoPipeName;
@@ -77,8 +76,6 @@ public class DonorRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlanner {
     super(context, CLINICAL_CORE_TYPE, submission, availableSubTypes, platformStrategy);
     this.availableFeatureTypes = checkNotNull(availableFeatureTypes);
 
-    // There should always be the core clinical files at the minimum
-    checkState(!availableFeatureTypes.isEmpty(), "No feature types found for submission: '%s'", submission);
   }
 
   SummaryCollector summary;
