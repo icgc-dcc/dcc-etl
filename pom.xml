@@ -94,7 +94,6 @@
         <artifactId>dcc-common-resources</artifactId>
         <version>${dcc-common.version}</version>
       </dependency>
-
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>dcc-submission-core</artifactId>
@@ -146,11 +145,6 @@
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-heliotrope</artifactId>
-      <version>${dcc-heliotrope.version}</version>
-    </dependency>
 
     <!-- Testing - DCC -->
     <dependency>
@@ -189,9 +183,6 @@
 
     <!-- Versions - Utilities -->
     <commons-lang.version>2.6</commons-lang.version>
-
-    <!-- Versions - Resources -->
-    <dcc-heliotrope.version>12</dcc-heliotrope.version>
   </properties>
 
 </project>
