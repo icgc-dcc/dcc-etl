@@ -106,7 +106,7 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
 
     val analysisFile = new RepositoryFile()
         .setId(resolveFileId(analysisId, fileName))
-        .setStudy(null)
+        .setStudy(null) // N/A
         .setAccess("controlled");
 
     analysisFile
