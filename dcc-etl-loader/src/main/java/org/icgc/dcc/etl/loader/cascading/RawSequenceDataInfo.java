@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.loader.cascading;
 
 import static cascading.tuple.Fields.ALL;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
@@ -89,6 +90,9 @@ public class RawSequenceDataInfo extends SubAssembly {
       @NonNull final String projectKey,
       @NonNull final Set<FeatureType> availableFeatureTypes,
       @NonNull final Map<FeatureType, Map<String, Map<String, String>>> guaranteedFieldsMappings) {
+
+    // There should be feature types at this stage
+    checkState(!availableFeatureTypes.isEmpty(), "No feature types found for project: '%s'", projectKey);
 
     this.projectKey = projectKey;
     this.availableFeatureTypes = availableFeatureTypes;
