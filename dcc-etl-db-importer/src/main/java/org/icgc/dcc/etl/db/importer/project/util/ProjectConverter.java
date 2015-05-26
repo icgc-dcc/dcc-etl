@@ -112,11 +112,13 @@ public final class ProjectConverter {
       return "Eye";
     } else if (projectId.equals("NACA-CN")) {
       return "Nasopharynx";
+    } else if (projectId.equals("SARC-US")) {
+      return "Mesenchymal";
     } else {
       val organSystem = cgp.getOrganSystem();
       val primarySite = PRIMARY_SITE_MAPPING.get(organSystem);
 
-      checkState(primarySite != null, "Mapping not found for project id '%s' and primary site %s",
+      checkState(primarySite != null, "Mapping not found for project id '%s' and primary site '%s'",
           projectId, organSystem);
 
       return primarySite;
