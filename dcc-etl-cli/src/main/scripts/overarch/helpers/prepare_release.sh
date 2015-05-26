@@ -39,6 +39,7 @@ cd ***REMOVED***
 wget ${artifactory_release_url}${dcc_etl_db_importer_name}/${dcc_etl_db_importer_version}/${dcc_etl_db_importer_dist_file_name}
 tar -xzf ${dcc_etl_db_importer_dist_file_name}
 rm ${dcc_etl_db_importer_dist_file_name}
+cp dcc-etl-db-importer/conf/* ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version}/conf
 ln -sfn ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version} dcc-etl-db-importer
 
 wget ${artifactory_release_url}dcc-etl-exporter/${dcc_etl_exporter_version}/${dcc_etl_exporter_dist_file_name}
