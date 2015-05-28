@@ -4,12 +4,12 @@ ICGC DCC - Heliotrope Resource Bundle
 This bundle contains several static resources used by ETL pipeline.
 
 ### Last Updated:
-- cancer_gene_census.tsv: May 28th, 2015.
-- pathway_hier.txt: November 28th, 2014, release 52.
-- uniprot_2_reactome.txt: May 28th, 2015.
-- pathway_2_summation.txt: May 28th, 2015.
-- genes.bson: Updated on February 5, 2015 -  removed genes with bad chromosomes
-- gene2xml: Updated on February 5, 2015
+- `cancer_gene_census.tsv`: *May 28th, 2015*.
+- `pathway_hier.txt`: *November 28th, 2014, release 52*.
+- `uniprot_2_reactome.txt`: *May 28th, 2015*.
+- `pathway_2_summation.txt`: *May 28th, 2015*.
+- `genes.bson`: *February 5, 2015*, removed genes with bad chromosomes.
+- `gene2xml`: *February 5, 2015*.
 
 
 ### 1. Updating Resources:
@@ -66,20 +66,20 @@ These 2 binary files rarely (if ever) get updated. Cosult others to see if any u
 
 Unfortunately, the updated files are usually not in the right format or consistency. So some manual work is needed to make them compatible with ETL component. Based on previous experiences, these are some items to look out for:
 
-- Cancer Gene Census tsv file has csv header. Just replace the commas with tab character in a text editor.
+- `cancer_gene_census.tsv` file might have csv header. Just replace the commas with tab character in a text editor.
 
-- Reactome names are present in pathway_hierarchy.txt but missing from pathway_2_summation.txt. You'd need to resolve them using uniprot_2_reactome.txt. Start by copying the lines with '???' from the end of previous pathway_2_summation to the new verison. For each one of those, search for the REACT_[id] in the file to see if the data is provided in the current version. If so, delete the lines.
+- Reactome names are present in `pathway_hierarchy.txt` but missing from `pathway_2_summation.txt`. You'd need to resolve them using `uniprot_2_reactome.txt`. Start by copying the lines with '???' from the end of previous `pathway_2_summation.txt` to the new verison. For each one of those, search for the REACT_[id] in the file to see if the data is provided in the current version. If so, delete the lines.
 
 Currently, the following reactoem names are inconsistent between the reactome data files and have been resolved with other methods:
 
-- The following reactome names are present in pathway_hierarchy.txt but missing from pathway_2_summation.txt and have been resolved using uniprot_2_reactome.txt:
+- The following reactome names are present in `pathway_hierarchy.txt` but missing from `pathway_2_summation.txt` and have been resolved using `uniprot_2_reactome.txt`:
   - PI3K Cascade
   - RNA Polymerase II Transcription
   - S6K1-mediated signalling
   - Switching of origins to a post-replicative state
   - mTOR signalling
 
-- The following reactome names are present in pathway_hierarchy.txt but missing from pathway_2_summation.txt and uniprot_2_reactome.txt have been resolved using reactome.org website:
+- The following reactome names are present in `pathway_hierarchy.txt` but missing from `pathway_2_summation.txt` and `uniprot_2_reactome.txt` have been resolved using reactome.org website:
   - Acetylcholine Binding And Downstream Events
   - Cell Cycle
   - Cell junction organization
@@ -90,7 +90,7 @@ Currently, the following reactoem names are inconsistent between the reactome da
   - Transmembrane transport of small molecules
   - mTORC1-mediated signalling
 
-- The following reactome ids are present in uniprot_2_reactome.txt but missing from the other 2 files.
+- The following reactome ids are present in `uniprot_2_reactome.txt` but missing from the other 2 files.
   - REACT_790
   - REACT_1451
   - REACT_330
