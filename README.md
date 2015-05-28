@@ -27,5 +27,5 @@ Sub-system modules:
 
 Additional Info:
 ---
-[Running ETL](ETL.md)
-[Updating Heliotrope Resources](Heliotrope.md)
+- [Running ETL](ETL.md)
+- [Updating Heliotrope Resources](Heliotrope.md)
