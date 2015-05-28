@@ -99,6 +99,7 @@ public class ProjectSummarizer extends AbstractSummarizer {
     // Summarize
     summarizeAvailableTypes(projectSummaries);
     summarizeTotalDonorCounts(projectSummaries);
+    summarizeTotalCompleteDonorCounts(projectSummaries);
     summarizeSpecimenSampleCounts(projectSummaries);
     summarizeTestedTypeCounts(projectSummaries);
     summarizeRepositories(projectSummaries);
@@ -179,6 +180,19 @@ public class ProjectSummarizer extends AbstractSummarizer {
   private void summarizeTotalDonorCounts(Map<String, ObjectNode> projectSummaries) {
     // Summarize and set the total number of donors in each project
     List<JsonNode> results = repository.getProjectDonorCounts();
+
+    for (JsonNode result : results) {
+      String projectId = result.get("projectId").textValue();
+      int donorCount = result.get("donorCount").asInt();
+
+      ObjectNode projectSummary = projectSummaries.get(projectId);
+      setTotalDonorCount(projectSummary, donorCount);
+    }
+  }
+
+  private void summarizeTotalCompleteDonorCounts(Map<String, ObjectNode> projectSummaries) {
+    // Summarize and set the total number of complete donors in each project
+    List<JsonNode> results = repository.getProjectCompleteDonorCounts();
 
     for (JsonNode result : results) {
       String projectId = result.get("projectId").textValue();

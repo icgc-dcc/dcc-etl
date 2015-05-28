@@ -247,13 +247,12 @@ public class DonorSummarizer extends AbstractSummarizer {
       val donorId = entry.getKey();
       val donorAvailableDataTypes = entry.getValue();
 
-      val completeness = donorAvailableDataTypes.isEmpty() ? "missing molecular" : "has molecular";
+      val complete = !donorAvailableDataTypes.isEmpty();
 
       try {
-        repository.setDonorCompleteness(donorId, completeness);
+        repository.setDonorCompleteness(donorId, complete);
       } catch (Throwable t) {
-        log.error("Error setting donor completeness with donorId '{}' and completeness '{}'", donorId,
-            completeness);
+        log.error("Error setting donor completeness with donorId '{}' and completeness '{}'", donorId, complete);
         throw new RuntimeException(t);
       }
     }

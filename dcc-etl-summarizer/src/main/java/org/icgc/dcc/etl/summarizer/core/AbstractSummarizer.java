@@ -20,6 +20,7 @@ import static com.google.common.base.Strings.emptyToNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_COMPLETE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
@@ -121,6 +122,10 @@ public abstract class AbstractSummarizer {
 
   static void setTotalDonorCount(ObjectNode node, int donorCount) {
     node.put(TOTAL_DONOR_COUNT, donorCount);
+  }
+
+  static void setTotalCompleteDonorCount(ObjectNode node, int donorCount) {
+    node.put(TOTAL_COMPLETE_DONOR_COUNT, donorCount);
   }
 
   static void setTotalSpecimenCount(ObjectNode node, int specimenCount) {
