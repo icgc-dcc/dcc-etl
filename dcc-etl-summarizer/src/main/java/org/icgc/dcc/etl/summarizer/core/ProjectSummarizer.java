@@ -199,7 +199,7 @@ public class ProjectSummarizer extends AbstractSummarizer {
       int donorCount = result.get("donorCount").asInt();
 
       ObjectNode projectSummary = projectSummaries.get(projectId);
-      setTotalDonorCount(projectSummary, donorCount);
+      setTotalCompleteDonorCount(projectSummary, donorCount);
     }
   }
 

@@ -171,7 +171,8 @@ public enum DocumentType {
                               "project_name",
                               "tumour_type",
                               "tumour_subtype",
-                              "primary_site")
+                              "primary_site",
+                              "_summary._total_complete_donor_count")
                   )
           )
   ),
@@ -216,7 +217,8 @@ public enum DocumentType {
                               "specimen._specimen_id",
                               "specimen.specimen_id",
                               "specimen.sample._sample_id",
-                              "specimen.sample.analyzed_sample_id")
+                              "specimen.sample.analyzed_sample_id",
+                              "_summary._complete")
                   )
           )
   ),
