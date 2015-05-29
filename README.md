@@ -24,3 +24,8 @@ Sub-system modules:
 - [Importer](dcc-etl-importer/README.md)
 - [Summarizer](dcc-etl-summarizer/README.md)
 - [Indexer](dcc-etl-indexer/README.md)
+
+Additional Info:
+---
+- [Running ETL](ETL.md)
+- [Updating Heliotrope Resources](Heliotrope.md)
