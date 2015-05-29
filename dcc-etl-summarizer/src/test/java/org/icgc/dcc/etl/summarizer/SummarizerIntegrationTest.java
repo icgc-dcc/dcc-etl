@@ -431,7 +431,7 @@ public class SummarizerIntegrationTest {
           getTestedTypeCountFieldName(JCN_TYPE)  + ":0," +
           getTestedTypeCountFieldName(PEXP_TYPE) + ":0," +
       		
-      		TOTAL_DONOR_COUNT   + ":2," +
+      		TOTAL_DONOR_COUNT   + ":3," +
       		TOTAL_SPECIMEN_COUNT + ":2," +
       		TOTAL_SAMPLE_COUNT  + ":2," +
       		
