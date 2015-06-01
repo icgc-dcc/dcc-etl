@@ -89,3 +89,26 @@
     }
   ]
 }
+{
+  "_id":"3",
+  "_donor_id":"donor3",
+  "_project_id":"project1",
+  "_summary":{
+    "_available_data_type":[],
+    "_ssm_count":0,
+    "_cnsm_exists":false,
+    "_cngv_exists":false,
+    "_sgv_exists":false,
+    "_stgv_exists":false,
+    "_stsm_exists":false,
+    "_exp_seq_exists":false,
+    "_exp_array_exists":false,
+    "_meth_seq_exists":false,
+    "_meth_array_exists":false,
+    "_jcn_exists":false,
+    "_mirna_seq_exists":false,
+    "_pexp_exists":false
+  },
+  "donor_age_at_diagnosis":77,
+  "specimen":[]
+}

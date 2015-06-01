@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.summarizer.core;
 
 import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_ID;
@@ -63,6 +64,10 @@ public class ReleaseSummarizer extends AbstractSummarizer {
     long donorCount = repository.getReleaseDonorCount();
     log.info("Found {} release donors", donorCount);
 
+    log.info("Finding release complete donor count...");
+    long completeDonorCount = repository.getReleaseCompleteDonorCount();
+    log.info("Found {} release complete donors", donorCount);
+
     log.info("Finding release specimen count...");
     long specimenCount = repository.getReleaseSpecimenCount();
     log.info("Found {} release specimen", specimenCount);
@@ -94,6 +99,7 @@ public class ReleaseSummarizer extends AbstractSummarizer {
 
     // Donor counts
     release.put(RELEASE_DONOR_COUNT, donorCount);
+    release.put(RELEASE_COMPLETE_DONOR_COUNT, completeDonorCount);
     release.put(RELEASE_SPECIMEN_COUNT, specimenCount);
     release.put(RELEASE_SAMPLE_COUNT, sampleCount);
 

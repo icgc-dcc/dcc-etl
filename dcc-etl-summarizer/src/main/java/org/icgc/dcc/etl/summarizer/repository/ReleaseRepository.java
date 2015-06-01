@@ -31,7 +31,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AFFECTED_GENE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP;
-import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_COMPLETENESS;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_COMPLETE;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_REPOSITORY;
@@ -217,11 +217,11 @@ public class ReleaseRepository {
         .with("{ $set: { " + field + ": # } }", extractStudies(studies));
   }
 
-  public void setDonorCompleteness(String donorId, String completeness) {
-    String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETENESS;
+  public void setDonorComplete(String donorId, boolean complete) {
+    String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETE;
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
-        .with("{ $set: { " + field + ": # } }", completeness);
+        .with("{ $set: { " + field + ": # } }", complete);
   }
 
   public void setDonorExperimentalAnalysis(String donorId, JsonNode analysisSampleCounts) {
@@ -432,6 +432,28 @@ public class ReleaseRepository {
     // @formatter:on
   }
 
+  public List<JsonNode> getProjectCompleteDonorCounts() {
+    // @formatter:off
+    // Use Donor collection as the basis for the pipeline    
+    return donors
+        // Retain only the required fields to reduce memory footprint and rename to internal field names: 
+        //  {projectId: "p1"}        
+        //  {projectId: "p1"}        
+        .aggregate("{ $match: { '" + DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETE + "': true } }")
+        
+        .and("{ $project: { projectId: '$" + DONOR_PROJECT_ID + "' } }")
+        
+        //  {projectId: "p1", count: 2}
+        .and("{ $group: { _id: '$projectId', donorCount: { $sum: 1 } } } }")
+        
+         // Remove unused fields
+        .and("{ $project: { _id: 0, projectId: '$_id', donorCount: 1 } } ")
+        
+         // Return list of previous objects
+        .as(JsonNode.class);
+    // @formatter:on
+  }
+
   public List<JsonNode> getProjectSampleSpecimenCounts() {
     // @formatter:off
     // Use Donor collection as the basis for the pipeline
@@ -529,6 +551,10 @@ public class ReleaseRepository {
 
   public long getReleaseDonorCount() {
     return donors.count();
+  }
+
+  public long getReleaseCompleteDonorCount() {
+    return donors.count("{ '" + DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETE + "': true }");
   }
 
   public void saveRelease(ObjectNode release) {

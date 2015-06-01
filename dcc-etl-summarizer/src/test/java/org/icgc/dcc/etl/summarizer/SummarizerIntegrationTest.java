@@ -74,7 +74,9 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_MUTATION_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY;
+import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_COMPLETE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_REPOSITORY;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_ID;
@@ -293,6 +295,37 @@ public class SummarizerIntegrationTest {
               "}]" +
             "}"
           ))
+          
+      .put("donor3", $(
+          "{" +
+              "_id:'3'," +
+              DONOR_ID + ":'" + "donor3" + "'," +
+              PROJECT_ID + ":'project1'," +
+              DONOR_AGE_AT_DIAGNOSIS + ":77," +
+              
+              // Donor-observation summaries
+              DONOR_SUMMARY + ":{" +
+                DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP + ":'70 - 79'," +
+                AVAILABLE_DATA_TYPES + ":[]," +
+                SSM_TYPE.getSummaryFieldName()  + ":0," +
+                
+                CNSM_TYPE.getSummaryFieldName() + ":false," +
+                CNGV_TYPE.getSummaryFieldName() + ":false," +
+                SGV_TYPE.getSummaryFieldName()  + ":false," +
+                STGV_TYPE.getSummaryFieldName() + ":false," +
+                STSM_TYPE.getSummaryFieldName() + ":false," +
+                EXP_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
+                EXP_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                METH_ARRAY_TYPE.getSummaryFieldName()   + ":false," +
+                METH_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                MIRNA_SEQ_TYPE.getSummaryFieldName()   + ":false," +
+                JCN_TYPE.getSummaryFieldName()   + ":false," +
+                PEXP_TYPE.getSummaryFieldName()  + ":false" +
+              "}," +
+              
+              DONOR_SPECIMEN + ":[]" +
+            "}"
+          ))          
       .build();
   
   //@formatter:on
@@ -399,7 +432,8 @@ public class SummarizerIntegrationTest {
           getTestedTypeCountFieldName(JCN_TYPE)  + ":0," +
           getTestedTypeCountFieldName(PEXP_TYPE) + ":0," +
       		
-      		TOTAL_DONOR_COUNT   + ":2," +
+          PROJECT_SUMMARY_COMPLETE   + ":true," +
+      		TOTAL_DONOR_COUNT   + ":3," +
       		TOTAL_SPECIMEN_COUNT + ":2," +
       		TOTAL_SAMPLE_COUNT  + ":2," +
       		
@@ -544,7 +578,8 @@ public class SummarizerIntegrationTest {
         RELEASE_DATE + ":'1969-12-31T19:00:00.000-05:00'," + 
         RELEASE_PROJECT_COUNT + ":1," + 
         RELEASE_PRIMARY_SITE_COUNT + ":1," + 
-        RELEASE_DONOR_COUNT + ":2," + 
+        RELEASE_DONOR_COUNT + ":3," + 
+        RELEASE_COMPLETE_DONOR_COUNT + ":2," + 
         RELEASE_SPECIMEN_COUNT + ":2," + 
         RELEASE_SAMPLE_COUNT + ":2," + 
         RELEASE_SSM_COUNT + ":2," + 

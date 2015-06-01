@@ -9,11 +9,11 @@ dcc_etl_exporter_name='dcc-etl-exporter'
 dcc_etl_db_importer_name='dcc-etl-db-importer'
 dcc_submission_server_name='dcc-submission-server'
 
-dcc_etl_cli_version='3.8.5.2'
-dcc_etl_annotator_version='3.8.5.2'
-dcc_etl_exporter_version='3.8.5.2'
-dcc_etl_db_importer_version='3.8.5.2'
-dcc_submission_server_version='3.8.6.1'
+dcc_etl_cli_version='3.8.5.4'
+dcc_etl_annotator_version='3.8.5.4'
+dcc_etl_exporter_version='3.8.5.4'
+dcc_etl_db_importer_version='3.8.5.4'
+dcc_submission_server_version='3.8.6.2'
 
 dcc_etl_cli_dist_file_name=${dcc_etl_cli_name}-${dcc_etl_cli_version}.jar
 dcc_etl_annotator_dist_file_name=${dcc_etl_annotator_name}-${dcc_etl_annotator_version}.jar
@@ -25,7 +25,7 @@ dcc_etl_db_importer_dist_file_name=${dcc_etl_db_importer_name}-${dcc_etl_db_impo
 # update libraries and their symbolic links
 cd ***REMOVED***/dcc-etl/lib
 wget ${artifactory_release_url}${dcc_etl_cli_name}/${dcc_etl_cli_version}/${dcc_etl_cli_dist_file_name}
-ln -sfn {dcc_etl_cli_dist_file_name} dcc-etl.jar
+ln -sfn ${dcc_etl_cli_dist_file_name} dcc-etl.jar
 
 wget ${artifactory_release_url}${dcc_etl_annotator_name}/${dcc_etl_annotator_version}/${dcc_etl_annotator_dist_file_name}
 ln -sfn ${dcc_etl_annotator_dist_file_name} dcc-annotator.jar
@@ -39,6 +39,7 @@ cd ***REMOVED***
 wget ${artifactory_release_url}${dcc_etl_db_importer_name}/${dcc_etl_db_importer_version}/${dcc_etl_db_importer_dist_file_name}
 tar -xzf ${dcc_etl_db_importer_dist_file_name}
 rm ${dcc_etl_db_importer_dist_file_name}
+cp dcc-etl-db-importer/conf/* ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version}/conf
 ln -sfn ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version} dcc-etl-db-importer
 
 wget ${artifactory_release_url}dcc-etl-exporter/${dcc_etl_exporter_version}/${dcc_etl_exporter_dist_file_name}
