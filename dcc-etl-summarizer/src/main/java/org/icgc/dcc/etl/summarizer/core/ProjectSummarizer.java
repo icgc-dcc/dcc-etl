@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.summarizer.core;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.uniqueIndex;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_EXPERIMENTAL_ANALYSIS_PERFORMED;
 import static org.icgc.dcc.common.core.model.FieldNames.EXPERIMENTAL_ANALYSIS_PERFORMED_DONOR_COUNT;
@@ -191,14 +192,18 @@ public class ProjectSummarizer extends AbstractSummarizer {
   }
 
   private void summarizeTotalCompleteDonorCounts(Map<String, ObjectNode> projectSummaries) {
-    // Summarize and set the total number of complete donors in each project
-    List<JsonNode> results = repository.getProjectCompleteDonorCounts();
+    val results =
+        uniqueIndex(repository.getProjectCompleteDonorCounts(), result -> result.get("projectId").textValue());
 
-    for (JsonNode result : results) {
-      String projectId = result.get("projectId").textValue();
-      int donorCount = result.get("donorCount").asInt();
+    for (val entry : projectSummaries.entrySet()) {
+      val projectId = entry.getKey();
+      val projectSummary = entry.getValue();
 
-      ObjectNode projectSummary = projectSummaries.get(projectId);
+      val result = results.get(projectId);
+      val donorCount = result != null ? result.get("donorCount").asInt() : 0;
+      val complete = donorCount > 0;
+
+      setComplete(projectSummary, complete);
       setTotalCompleteDonorCount(projectSummary, donorCount);
     }
   }

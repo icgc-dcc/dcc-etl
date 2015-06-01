@@ -74,6 +74,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_MUTATION_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY;
+import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_COMPLETE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_REPOSITORY;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
@@ -431,6 +432,7 @@ public class SummarizerIntegrationTest {
           getTestedTypeCountFieldName(JCN_TYPE)  + ":0," +
           getTestedTypeCountFieldName(PEXP_TYPE) + ":0," +
       		
+          PROJECT_SUMMARY_COMPLETE   + ":true," +
       		TOTAL_DONOR_COUNT   + ":3," +
       		TOTAL_SPECIMEN_COUNT + ":2," +
       		TOTAL_SAMPLE_COUNT  + ":2," +

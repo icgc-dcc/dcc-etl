@@ -217,7 +217,7 @@ public class ReleaseRepository {
         .with("{ $set: { " + field + ": # } }", extractStudies(studies));
   }
 
-  public void setDonorCompleteness(String donorId, boolean complete) {
+  public void setDonorComplete(String donorId, boolean complete) {
     String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETE;
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)

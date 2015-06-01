@@ -250,7 +250,7 @@ public class DonorSummarizer extends AbstractSummarizer {
       val complete = !donorAvailableDataTypes.isEmpty();
 
       try {
-        repository.setDonorCompleteness(donorId, complete);
+        repository.setDonorComplete(donorId, complete);
       } catch (Throwable t) {
         log.error("Error setting donor completeness with donorId '{}' and completeness '{}'", donorId, complete);
         throw new RuntimeException(t);
