@@ -172,7 +172,7 @@ public enum DocumentType {
                               "tumour_type",
                               "tumour_subtype",
                               "primary_site",
-                              "_summary._total_complete_donor_count")
+                              "_summary._complete")
                   )
           )
   ),
