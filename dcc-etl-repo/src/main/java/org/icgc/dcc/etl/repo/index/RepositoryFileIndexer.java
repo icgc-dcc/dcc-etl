@@ -146,12 +146,14 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     val processor = createBulkProcessor();
 
     val documentCount = eachDocument(FILE_COLLECTION, file -> {
+      String id = file.get("id").textValue();
+
       // Need to remove this as to not conflict with Elasticsearch
         file.remove("_id");
-        processor.add(indexRequest(indexName).type(INDEX_TYPE_NAME).source(file.toString()));
+        processor.add(indexRequest(indexName).type(INDEX_TYPE_NAME).id(id).source(file.toString()));
 
         JsonNode fileText = createFileText(file);
-        processor.add(indexRequest(indexName).type(INDEX_TYPE_TEXT_NAME).source(fileText.toString()));
+        processor.add(indexRequest(indexName).type(INDEX_TYPE_TEXT_NAME).id(id).source(fileText.toString()));
       });
 
     log.info("Finished indexing {} documents in {}", formatCount(documentCount), watch);
@@ -230,9 +232,11 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
 
   private JsonNode createFileText(ObjectNode file) {
     val fileName = file.path("repository").path("file_name");
+    val donorId = file.path("repository").path("donor").path("donor_id");
     val fileText = file.objectNode();
     fileText.put("type", "file");
     fileText.put("file_name", fileName);
+    fileText.put("donor_id", donorId);
 
     return fileText;
   }
