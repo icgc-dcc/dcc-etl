@@ -142,6 +142,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
   private void indexDocuments() {
     val watch = createStarted();
     log.info("Indexing documents...");
+
     @Cleanup
     val processor = createBulkProcessor();
 
@@ -152,7 +153,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         file.remove("_id");
         processor.add(indexRequest(indexName).type(INDEX_TYPE_NAME).id(id).source(file.toString()));
 
-        JsonNode fileText = createFileText(file);
+        JsonNode fileText = createFileText(file, id);
         processor.add(indexRequest(indexName).type(INDEX_TYPE_TEXT_NAME).id(id).source(fileText.toString()));
       });
 
@@ -230,11 +231,13 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         "Index '%s' deletion was not acknowledged", Arrays.toString(staleRepoIndexNames));
   }
 
-  private JsonNode createFileText(ObjectNode file) {
+  private JsonNode createFileText(ObjectNode file, String id) {
     val fileName = file.path("repository").path("file_name");
     val donorId = file.path("repository").path("donor").path("donor_id");
+
     val fileText = file.objectNode();
     fileText.put("type", "file");
+    fileText.put("id", id);
     fileText.put("file_name", fileName);
     fileText.put("donor_id", donorId);
 
