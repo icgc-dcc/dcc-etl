@@ -45,7 +45,7 @@ projected_donor = FOREACH donor GENERATE ExtractId(document#'_donor_id') as dono
 donor_with_study = JOIN projected_donor by icgc_donor_id LEFT OUTER, study_field BY icgc_donor_id;
 
 selected_donor = FOREACH donor_with_study GENERATE projected_donor::donor_id as donor_id,
-                                                   projected_donor::icgc_donor_id,
+                                                   projected_donor::icgc_donor_id as icgc_donor_id,
                                                    projected_donor::project_code as project_code,
                                                    study_field::filter_study::study as study_donor_involved_in,
                                                    projected_donor::submitted_donor_id as submitted_donor_id,
