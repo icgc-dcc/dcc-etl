@@ -577,6 +577,7 @@ public class SummarizerIntegrationTest {
         RELEASE_NUMBER + ":" + TEST_RUN_NUMBER + "," + 
         RELEASE_DATE + ":'1969-12-31T19:00:00.000-05:00'," + 
         RELEASE_PROJECT_COUNT + ":1," + 
+        "complete_project_count" + ":1," + 
         RELEASE_PRIMARY_SITE_COUNT + ":1," + 
         RELEASE_DONOR_COUNT + ":3," + 
         RELEASE_COMPLETE_DONOR_COUNT + ":2," + 

@@ -56,6 +56,10 @@ public class ReleaseSummarizer extends AbstractSummarizer {
     long projectCount = repository.getReleaseProjectCount();
     log.info("Found {} release projects", projectCount);
 
+    log.info("Finding release complete project count...");
+    long completeProjectCount = repository.getReleaseCompleteProjectCount();
+    log.info("Found {} release complete projects", completeProjectCount);
+
     log.info("Finding release unique primary site count...");
     long uniquePrimarySiteCount = repository.getReleaseUniquePrimarySiteCount();
     log.info("Found {} release projects", uniquePrimarySiteCount);
@@ -95,6 +99,7 @@ public class ReleaseSummarizer extends AbstractSummarizer {
 
     // Project counts
     release.put(RELEASE_PROJECT_COUNT, projectCount);
+    release.put("complete_project_count", completeProjectCount);
     release.put(RELEASE_PRIMARY_SITE_COUNT, uniquePrimarySiteCount);
 
     // Donor counts

@@ -50,6 +50,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_PRIMARY_SITE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY;
+import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_COMPLETE;
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_LIBRARY_STRATEGY;
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_REPOSITORY;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
@@ -535,6 +536,10 @@ public class ReleaseRepository {
 
   public long getReleaseProjectCount() {
     return projects.count();
+  }
+
+  public long getReleaseCompleteProjectCount() {
+    return projects.count("{ '" + PROJECT_SUMMARY + "." + PROJECT_SUMMARY_COMPLETE + "': true }");
   }
 
   public long getReleaseUniqueAffectedGeneCount() {
