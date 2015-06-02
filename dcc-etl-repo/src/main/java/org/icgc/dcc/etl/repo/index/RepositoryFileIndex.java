@@ -52,9 +52,13 @@ public class RepositoryFileIndex {
   /**
    * Index types.
    */
-  public static final String INDEX_TYPE_NAME = "file";
-  public static final String INDEX_TYPE_TEXT_NAME = "file-text";
-  public static final List<String> INDEX_TYPE_NAMES = ImmutableList.of(INDEX_TYPE_NAME, INDEX_TYPE_TEXT_NAME);
+  public static final String INDEX_TYPE_FILE_NAME = "file";
+  public static final String INDEX_TYPE_FILE_TEXT_NAME = "file-text";
+  public static final String INDEX_TYPE_DONOR_TEXT_NAME = "file-donor-text";
+  public static final List<String> INDEX_TYPE_NAMES = ImmutableList.of(
+      INDEX_TYPE_FILE_NAME,
+      INDEX_TYPE_FILE_TEXT_NAME,
+      INDEX_TYPE_DONOR_TEXT_NAME);
 
   /**
    * Metadata location.
