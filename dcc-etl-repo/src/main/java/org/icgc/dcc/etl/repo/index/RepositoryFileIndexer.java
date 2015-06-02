@@ -233,7 +233,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
 
   private JsonNode createFileText(ObjectNode file, String id) {
     val fileName = file.path("repository").path("file_name");
-    val donorId = file.path("repository").path("donor").path("donor_id");
+    val donorId = file.path("donor").path("donor_id");
 
     val fileText = file.objectNode();
     fileText.put("type", "file");
