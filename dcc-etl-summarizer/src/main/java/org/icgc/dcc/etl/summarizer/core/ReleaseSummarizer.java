@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.summarizer.core;
 
 import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_DONOR_COUNT;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_PROJECT_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_ID;
@@ -99,7 +100,7 @@ public class ReleaseSummarizer extends AbstractSummarizer {
 
     // Project counts
     release.put(RELEASE_PROJECT_COUNT, projectCount);
-    release.put("complete_project_count", completeProjectCount);
+    release.put(RELEASE_COMPLETE_PROJECT_COUNT, completeProjectCount);
     release.put(RELEASE_PRIMARY_SITE_COUNT, uniquePrimarySiteCount);
 
     // Donor counts
