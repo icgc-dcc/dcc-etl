@@ -52,8 +52,7 @@ public final class ProjectFieldCleaner {
   }
 
   private static String cleanSpelling(String fieldValue) {
-    String result = fieldValue.replace("Leukemia", "Leukaemia");
-    result = result.replace("Non Hodgkin", "Non-Hodgkin");
+    String result = fieldValue.replace("Non Hodgkin", "Non-Hodgkin");
     result = result.replace("And", "and");
     result = result.replaceFirst("Cancer$", "cancer");
 
