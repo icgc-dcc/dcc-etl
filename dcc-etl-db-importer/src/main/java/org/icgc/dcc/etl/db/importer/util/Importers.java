@@ -63,21 +63,10 @@ public final class Importers {
   private static final String IMPORT_ARTIFACT_REMOTE_URL = IMPORT_ARTIFACT_REMOTE_REPO + "/" + IMPORT_ARTIFACT_PATH;
 
   /**
-   * Local.
-   */
-  private static final String IMPORT_ARTIFACT_LOCAL_REPO = System.getProperty("user.home") + "/" + ".m2/repository";
-  private static final String IMPORT_ARTIFACT_LOCAL_URL = "file:" + IMPORT_ARTIFACT_LOCAL_REPO + "/"
-      + IMPORT_ARTIFACT_PATH;
-
-  /**
    * Helpers.
    */
   private static URI getRemoteImportFileUri(@NonNull String fileName) {
     return getJarFileUri(IMPORT_ARTIFACT_REMOTE_URL, fileName);
-  }
-
-  private static URI getLocalImportFileUri(@NonNull String fileName) {
-    return getJarFileUri(IMPORT_ARTIFACT_LOCAL_URL, fileName);
   }
 
   private static URI getJarFileUri(String path, String fileName) {
@@ -108,28 +97,8 @@ public final class Importers {
   }
 
   /**
-   * Local resource URIs.
+   * Local MongoDB URIs.
    */
-
-  public static final URI getLocalReactomeUniprotUri() {
-    return getLocalImportFileUri(REACTOME_UNIPROT_FILENAME);
-  }
-
-  public static final URI getLocalReactomeSummationUri() {
-    return getLocalImportFileUri(REACTOME_PATHWAY_SUMMATION_FILENAME);
-  }
-
-  public static final URI getLocalReactomeHierarchyUri() {
-    return getLocalImportFileUri(REACTOME_PATHWAY_HIER_FILENAME);
-  }
-
-  public static final URI getLocalGenesBsonUri() {
-    return getLocalImportFileUri(REACTOME_GENES_BSON_FILENAME);
-  }
-
-  public static final URI getLocalCgsUri() {
-    return getLocalImportFileUri(CGS_FILENAME);
-  }
 
   public static final MongoClientURI getLocalMongoClientUri(String db) {
     return new MongoClientURI(format(MONGO_URI_TEMPLATE, DEFAULT_MONGO_PORT, db));

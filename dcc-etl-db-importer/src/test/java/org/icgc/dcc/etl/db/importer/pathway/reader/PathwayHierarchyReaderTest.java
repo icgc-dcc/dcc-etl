@@ -1,7 +1,7 @@
 package org.icgc.dcc.etl.db.importer.pathway.reader;
 
 import static org.apache.commons.lang.StringUtils.repeat;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalReactomeHierarchyUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteReactomeHierarchyUri;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -21,7 +21,7 @@ public class PathwayHierarchyReaderTest {
   @Test
   public void testRead() throws MalformedURLException, IOException, SAXException, ParserConfigurationException,
       URISyntaxException {
-    val hierarchyFile = getLocalReactomeHierarchyUri();
+    val hierarchyFile = getRemoteReactomeHierarchyUri();
     log.info("Pathway URL {}", hierarchyFile);
 
     val parser = new PathwayHierarchyReader();

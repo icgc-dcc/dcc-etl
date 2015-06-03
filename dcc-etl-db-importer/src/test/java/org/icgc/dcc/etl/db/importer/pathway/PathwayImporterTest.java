@@ -17,11 +17,11 @@
  */
 package org.icgc.dcc.etl.db.importer.pathway;
 
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalGenesBsonUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalReactomeHierarchyUri;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalReactomeSummationUri;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalReactomeUniprotUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteReactomeHierarchyUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteReactomeSummationUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteReactomeUniprotUri;
 import lombok.SneakyThrows;
 import lombok.val;
 
@@ -36,7 +36,7 @@ public class PathwayImporterTest {
     // Create a fresh copy of the entire gene model
     new GeneImporter(
         getLocalMongoClientUri("dcc-genome"),
-        getLocalGenesBsonUri())
+        getRemoteGenesBsonUri())
         .execute();
   }
 
@@ -45,9 +45,9 @@ public class PathwayImporterTest {
   public void testExecute() {
     val pathwayImporter =
         new PathwayImporter(
-            getLocalReactomeUniprotUri(),
-            getLocalReactomeSummationUri(),
-            getLocalReactomeHierarchyUri(),
+            getRemoteReactomeUniprotUri(),
+            getRemoteReactomeSummationUri(),
+            getRemoteReactomeHierarchyUri(),
             getLocalMongoClientUri("dcc-genome"));
 
     pathwayImporter.execute();
