@@ -43,18 +43,17 @@ public class ProjectReader {
     val projects = ImmutableList.<Project> builder();
 
     int projectNumber = 1;
-
     val cgps = readCgps();
     for (val value : cgps) {
       val cgp = readCgp(value);
 
       val cgpProjects = convertCgp(cgp);
       for (val cgpProject : cgpProjects) {
-        log.info("[{}/{}] Read CGP project {}", projectNumber, cgps.size(), cgpProject.get__project_id());
+        log.info("[{}] Read CGP project {}", projectNumber, cgpProject.get__project_id());
+        projectNumber++;
       }
 
       projects.addAll(cgpProjects);
-      projectNumber++;
     }
 
     return projects.build();
