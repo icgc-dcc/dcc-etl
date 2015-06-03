@@ -47,6 +47,8 @@ public class DiagramProteinMapReader {
       String dbId = node.get("peDbId").asText();
       String referenceIds = getReferenceIds(node.get("refEntities"));
       if (!referenceIds.isEmpty()) {
+
+        // TODO: Reactome: Change to array from string
         proteinMap.put(dbId, referenceIds);
       }
     });

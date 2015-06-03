@@ -37,10 +37,15 @@ public class DiagramNodeConverter {
     node.put(MONGO_INTERNAL_ID, id);
     node.put(DIAGRAM_ID, id);
     node.put(DIAGRAM_XML, diagram.diagram);
+
+    // TODO: Reactome: Change to array in index
     node.put(DIAGRAM_HIGHLIGHTS, diagram.highlights);
 
     val proteinNode = mapper.createObjectNode();
 
+    // TODO: Reactome: Need to fix this because it is stored pathwayId -> uniprotIds in Elasticsearch which causes
+    // performance issues in the resulting index. Will also need to change the client after reindexing:
+    // org.icgc.dcc.portal.service.DiagramService
     for (val entry : diagram.proteinMap.entrySet()) {
       proteinNode.put(entry.getKey(), entry.getValue());
     }
@@ -51,5 +56,4 @@ public class DiagramNodeConverter {
 
     return node;
   }
-
 }
