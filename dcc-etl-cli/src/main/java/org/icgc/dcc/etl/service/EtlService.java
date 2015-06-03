@@ -29,7 +29,7 @@ import static org.icgc.dcc.common.core.util.Joiners.PATH;
 import static org.icgc.dcc.common.core.util.Protocol.FILE;
 import static org.icgc.dcc.common.core.util.URIs.LOCAL_ROOT;
 import static org.icgc.dcc.common.core.util.URLs.getUrlFromPath;
-import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
+import static org.icgc.dcc.etl.core.config.ICGCClientConfigs.createICGCConfig;
 import static org.icgc.dcc.etl.core.util.EtlConventions.getIndexerOutputDir;
 import static org.icgc.dcc.etl.core.util.EtlConventions.getLoaderOutputDir;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newDistributedService;

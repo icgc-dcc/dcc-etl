@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_SET_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
-import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
+import static org.icgc.dcc.etl.core.config.ICGCClientConfigs.createICGCConfig;
 import static org.icgc.dcc.etl.db.importer.util.Jongos.createJongo;
 
 import java.io.File;

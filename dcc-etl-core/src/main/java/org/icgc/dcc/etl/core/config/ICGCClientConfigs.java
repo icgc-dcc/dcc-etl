@@ -19,10 +19,20 @@ package org.icgc.dcc.etl.core.config;
 
 import static java.lang.Boolean.valueOf;
 
+import java.io.File;
+
+import lombok.NonNull;
+
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 
-public class Utils {
+public class ICGCClientConfigs {
 
+  @NonNull
+  public static ICGCClientConfig createICGCConfig(String etlConfigFile) {
+    return createICGCConfig(EtlConfigFile.read(new File(etlConfigFile)));
+  }
+
+  @NonNull
   public static ICGCClientConfig createICGCConfig(EtlConfig config) {
     return ICGCClientConfig.builder()
         .cgpServiceUrl(config.getIcgc().get("cgpServiceUrl"))
