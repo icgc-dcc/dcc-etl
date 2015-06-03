@@ -36,7 +36,6 @@ public class ProjectFieldCleanerTest {
     assertThat(cleanField("R&amp;D")).isEqualTo("R&D");
 
     // Spelling and cases
-    assertThat(cleanField("Typical Leukemia")).isEqualTo("Typical Leukaemia");
     assertThat(cleanField("Non Hodgkin cancer")).isEqualTo("Non-Hodgkin cancer");
     assertThat(cleanField("one And two and three And four")).isEqualTo("one and two and three and four");
   }
