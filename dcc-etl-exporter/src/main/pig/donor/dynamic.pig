@@ -18,7 +18,7 @@ set job.name dynamic-$DATATYPE;
 -- load donor 
 import 'projection.pig';
 
-keys = foreach (GROUP selected_donor BY donor_id) {
+keys = FOREACH (GROUP selected_donor BY donor_id) {
 	                   selected_content = FOREACH selected_donor GENERATE icgc_donor_id..cancer_history_first_degree_relative;
              GENERATE FLATTEN(TOHFILE(group, selected_content)) as key;
 }

@@ -74,7 +74,7 @@ public class DonorExporterTest extends EmbeddedDynamicExporter {
     List<String> header = archive.getHeader(DATA_TYPE);
     assertEquals(DONOR_TSV_SCHEMA.length, header.size());
     for (String fieldname : DONOR_TSV_SCHEMA) {
-      assertTrue(header.contains(fieldname));
+      assertTrue("Field name not found: " + fieldname, header.contains(fieldname));
     }
     @Cleanup
     HTable table = new HTable(conf, DATA_TYPE);
