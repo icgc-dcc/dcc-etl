@@ -175,7 +175,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.8.4</dcc-common.version>
+    <dcc-common.version>3.8.8.5</dcc-common.version>
     <dcc-submission-core.version>3.8.5.9</dcc-submission-core.version>
 
     <!-- Versions - JSON -->

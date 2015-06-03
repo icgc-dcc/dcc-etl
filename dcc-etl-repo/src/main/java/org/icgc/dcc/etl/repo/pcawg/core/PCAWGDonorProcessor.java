@@ -22,6 +22,7 @@ import static com.google.common.collect.Iterables.filter;
 import static com.google.common.primitives.Longs.max;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.singleton;
+import static org.elasticsearch.common.base.Strings.isNullOrEmpty;
 import static org.icgc.dcc.common.core.tcga.TCGAIdentifiers.isUUID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
@@ -30,7 +31,7 @@ import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTARGETProjects;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getPCAWGServer;
-import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileDataTypeResolver.resolveFileDataTypes;
+import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileDataTypeResolver.resolveFileDataType;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_SPECIMEN_CLASSES;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_WORKFLOW_TYPES;
@@ -89,7 +90,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private Iterable<RepositoryFile> filterFiles(Iterable<RepositoryFile> donorFiles) {
-    return filter(donorFiles, donorFile -> !donorFile.getDataTypes().isEmpty());
+    return filter(donorFiles, donorFile -> !isNullOrEmpty(donorFile.getDataType().getDataType()));
   }
 
   private void translateUUIDs(Iterable<RepositoryFile> donorFiles) {
@@ -156,7 +157,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val submitterSampleId = getSubmitterSampleId(workflow);
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
-    val dataTypes = resolveFileDataTypes(analysisType, fileName);
+    val dataType = resolveFileDataType(analysisType, fileName);
 
     val donorFile = new RepositoryFile()
         .setId(resolveFileId(gnosId, fileName))
@@ -164,7 +165,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setAccess("controlled");
 
     donorFile
-        .getDataTypes().addAll(dataTypes);
+        .setDataType(dataType);
 
     donorFile.getRepository()
         .setRepoType(pcawgServers.get(0).getType().getId())

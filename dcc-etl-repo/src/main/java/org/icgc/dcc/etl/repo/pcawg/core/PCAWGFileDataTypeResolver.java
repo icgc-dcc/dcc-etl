@@ -17,47 +17,36 @@
  */
 package org.icgc.dcc.etl.repo.pcawg.core;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
-
-import java.util.List;
-
 import lombok.NonNull;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import org.icgc.dcc.etl.repo.model.RepositoryFile.RepositoryFileDataType;
-
-import com.google.common.collect.ImmutableList;
 
 @UtilityClass
 public class PCAWGFileDataTypeResolver {
 
   @NonNull
-  public static List<RepositoryFileDataType> resolveFileDataTypes(String analysisType, String fileName) {
+  public static RepositoryFileDataType resolveFileDataType(String analysisType, String fileName) {
     if (isRNASeq(analysisType)) {
-      return singletonList(new RepositoryFileDataType()
+      return new RepositoryFileDataType()
           .setDataType("RNA-Seq")
           .setDataFormat("BAM")
-          .setExperimentalStrategy("RNA-Seq"));
+          .setExperimentalStrategy("RNA-Seq");
     } else if (isDNASeq(analysisType)) {
-      return singletonList(new RepositoryFileDataType()
+      return new RepositoryFileDataType()
           .setDataType("DNA-Seq")
           .setDataFormat("BAM")
-          .setExperimentalStrategy("WGS"));
+          .setExperimentalStrategy("WGS");
     } else if (isSangerVariantCalling(analysisType)) {
-      return resolveSangerVariantCallingDataTypes(fileName)
-          .stream()
-          .map(dataType ->
-              new RepositoryFileDataType()
-                  .setDataType(dataType)
-                  .setDataFormat("Other".equals(dataType) ? "Other" : "VCF")
-                  .setExperimentalStrategy("WGS")
-          )
-          .collect(toImmutableList());
+      val dataType = resolveSangerVariantCallingDataType(fileName);
+      return new RepositoryFileDataType()
+          .setDataType(dataType)
+          .setDataFormat(dataType == null ? null : "VCF")
+          .setExperimentalStrategy("WGS");
+    } else {
+      return new RepositoryFileDataType();
     }
-
-    return emptyList();
   }
 
   private static boolean isRNASeq(String analysisType) {
@@ -72,33 +61,17 @@ public class PCAWGFileDataTypeResolver {
     return analysisType.matches("wgs\\.tumor_specimens\\.sanger_variant_calling");
   }
 
-  private static List<String> resolveSangerVariantCallingDataTypes(String fileName) {
+  private static String resolveSangerVariantCallingDataType(String fileName) {
     if (fileName.endsWith(".somatic.snv_mnv.vcf.gz")) {
-      return ImmutableList.of("SSM");
+      return "SSM";
     } else if (fileName.endsWith(".somatic.cnv.vcf.gz")) {
-      return ImmutableList.of("CNSM");
+      return "CNSM";
     } else if (fileName.endsWith(".somatic.sv.vcf.gz")) {
-      return ImmutableList.of("StSM");
+      return "StSM";
     } else if (fileName.endsWith(".somatic.indel.vcf.gz")) {
-      return ImmutableList.of("SSM");
-    } else if (fileName.endsWith(".somatic.snv_mnv.tar.gz")) {
-      return ImmutableList.of("SSM", "SGV");
-    } else if (fileName.endsWith(".somatic.cnv.tar.gz")) {
-      return ImmutableList.of("CNSM", "CNGV");
-    } else if (fileName.endsWith(".somatic.sv.tar.gz")) {
-      return ImmutableList.of("StSM", "StGV");
-    } else if (fileName.endsWith(".somatic.indel.tar.gz")) {
-      return ImmutableList.of("SSM", "SGV");
-    } else if (fileName.endsWith(".somatic.imputeCounts.tar.gz")) {
-      return ImmutableList.of("Other");
-    } else if (fileName.endsWith(".somatic.binnedReadCounts.tar.gz")) {
-      return ImmutableList.of("Other");
-    } else if (fileName.endsWith(".somatic.genotype.tar.gz")) {
-      return ImmutableList.of("Other");
-    } else if (fileName.endsWith(".somatic.verifyBamId.tar.gz")) {
-      return ImmutableList.of("Other");
+      return "SSM";
     } else {
-      return emptyList();
+      return null;
     }
   }
 

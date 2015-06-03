@@ -26,7 +26,6 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
-import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_DONOR_TEXT_NAME;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_FILE_NAME;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_FILE_TEXT_NAME;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_NAMES;
@@ -54,7 +53,6 @@ import org.elasticsearch.action.bulk.BulkProcessor.Listener;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.collect.Sets;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.icgc.dcc.etl.repo.util.AbstractJongoComponent;
 
@@ -150,10 +148,8 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
 
     log.info("Indexing documents...");
     val fileCount = indexFileDocuments(processor);
-    val donorCount = indexDonorDocuments(processor);
 
-    log.info("Finished indexing {} file and {} donor documents in {}", formatCount(fileCount), formatCount(donorCount),
-        watch);
+    log.info("Finished indexing {} file documents in {}", formatCount(fileCount), watch);
   }
 
   private int indexFileDocuments(BulkProcessor processor) {
@@ -167,21 +163,6 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         JsonNode fileText = createFileText(file, id);
         processor.add(indexRequest(indexName).type(INDEX_TYPE_FILE_TEXT_NAME).id(id).source(fileText.toString()));
       });
-  }
-
-  private int indexDonorDocuments(BulkProcessor processor) {
-    val donorIds = Sets.<String> newHashSet();
-    val donorCount = eachDocument(FILE_COLLECTION, file -> {
-      String donorId = file.path("donor").path("donor_id").textValue();
-      donorIds.add(donorId);
-    });
-
-    for (val donorId : donorIds) {
-      val fileText = createDonorText(donorId);
-      processor.add(indexRequest(indexName).type(INDEX_TYPE_DONOR_TEXT_NAME).id(donorId).source(fileText.toString()));
-    }
-
-    return donorCount;
   }
 
   private BulkProcessor createBulkProcessor() {
@@ -266,13 +247,6 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     fileText.put("donor_id", donorId);
 
     return fileText;
-  }
-
-  private JsonNode createDonorText(String donorId) {
-    val donorText = DEFAULT.createObjectNode();
-    donorText.put("donor_id", donorId);
-
-    return donorText;
   }
 
   private Set<String> getIndexNames() {
