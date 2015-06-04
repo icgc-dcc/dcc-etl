@@ -133,7 +133,7 @@ mv ${dcc_heliotrope_next_dist_file_name} ..
 Create a new feature branch and update the version in db-importer pom file in ```dcc-etl-db-importer/pom.xml``` and ```dcc-etl-db-importer/src/main/java/org/icgc/dcc/etl/db/importer/util/Importers.java```.
 
 #### 4.2. Modify the reference to local artifact for testing
-Chnage the reference to central artifact to local in [Importers file](https://github.com/icgc-dcc/dcc-etl/blob/develop/dcc-etl-db-importer/src/main/java/org/icgc/dcc/etl/db/importer/util/Importers.java). Replace the value for `IMPORT_ARTIFACT_REMOTE_URL` with `file:/path/to/new/jar`, the path to your newly generated jar file. Careful not to commit this later on!
+Change the reference to central artifact to local in [Importers file](https://github.com/icgc-dcc/dcc-etl/blob/develop/dcc-etl-db-importer/src/main/java/org/icgc/dcc/etl/db/importer/util/Importers.java). Replace the value for `IMPORT_ARTIFACT_REMOTE_URL` with `file:/path/to/new/jar`, the path to your newly generated jar file. Careful not to commit this later on!
 
 #### 4.3. Run db-importer tests
 db-importer modules heavily depends on the heliotrope resource, so running the unit tests is the first step to catch issues with updates bundle. Run the tests and try to resolve the issues. You might get an error similar to following:
