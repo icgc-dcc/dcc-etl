@@ -49,7 +49,7 @@ cd /tmp/${dcc_heliotrope_next_dist_folder_name}
 Refer to this [wiki page](https://wiki.oicr.on.ca/display/DCCSOFT/Reactome+Pathway+Update+-+Nov+2014) for complete information.
 
 ```bash
-curl http://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/pathwayHierarchy/homo+sapiens > pathway_hier.txt
+curl http://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/pathwayHierarchy/homo+sapiens > pathway_hierarchy.txt
 curl http://www.reactome.org/download/current/UniProt2Reactome.txt > uniprot_2_reactome.txt
 curl http://www.reactome.org/download/current/pathway2summation.txt > pathway_2_summation.txt
 ```
