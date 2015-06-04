@@ -127,36 +127,37 @@ jar cf ${dcc_heliotrope_next_dist_file_name} *
 mv ${dcc_heliotrope_next_dist_file_name} ..
 ```
 
-#### 3.3. Publish the artifact to your local maven repository to test.
-```bash
-cd /tmp/
-mvn install:install-file -Dfile=${dcc_heliotrope_next_dist_file_name} -DpomFile=${dcc_heliotrope_next_pom_file_name}
-```
 ### 4. Update and test ETL.
 
 #### 4.1. Update version references in source code
 Create a new feature branch and update the version in db-importer pom file in ```dcc-etl-db-importer/pom.xml``` and ```dcc-etl-db-importer/src/main/java/org/icgc/dcc/etl/db/importer/util/Importers.java```.
 
-#### 4.2. Run db-importer tests
-db-importer modules heavily depends on the heliotrope resource, so running the unit tests is the first step to catch issues with updates bundle. Run the tests and try to resolve the issues. After modifying the file, repeat steps 3.2 and 3.3 to recreate and republish the jar file.
+#### 4.2. Modify the reference to local artifact for testing
+Chnage the reference to central artifact to local in [Importers file](https://github.com/icgc-dcc/dcc-etl/blob/develop/dcc-etl-db-importer/src/main/java/org/icgc/dcc/etl/db/importer/util/Importers.java). Replace the value for `IMPORT_ARTIFACT_REMOTE_URL` with `file:/path/to/new/jar`, the path to your newly generated jar file. Careful not to commit this later on!
 
-```bash
-cd dcc-etl-db-importer
-mvn clean package
+#### 4.3. Run db-importer tests
+db-importer modules heavily depends on the heliotrope resource, so running the unit tests is the first step to catch issues with updates bundle. Run the tests and try to resolve the issues. You might get an error similar to following:
+
 ```
+java.lang.NullPointerException: Cannot find reactome id for pathway segment with reactome name 'Infectious disease' and segment 'PathwaySegment(reactomeId=null, reactomeName=Infectious disease, diagrammed=true)'
+```
+In which case, you might need to go to [reactome website](http://www.reactome.org/) and search for the missing reactome name and finding the corresponding reactome id such as `REACT_355497` and add the combination to the buttom of `pathway_2_summation.txt`.
 
-#### 4.3. Publish to Artifactory.
+
+After modifying the file, repeat step 3.2 to recreate the jar file.
+
+#### 4.4. Publish to Artifactory.
 Now that the artifact passes local testing it needs to be published to central artifactory. This is also needed because ETL integration test expects the resource in artifactory. Use the [deploy page](http://seqwaremaven.oicr.on.ca/artifactory/webapp/deployartifact.html) and upload the final jar file.
 
 
-#### 4.4. Run all ETL tests
+#### 4.5. Run all ETL tests
 ```bash
 cd dcc-etl
 mvn clean package
 ```
 
-### 6. Publish new ETL release.
+### 5. Publish new ETL release.
 Push the changes to repository and wait for Continuous Integration to verify the build. Optionally, publish the complete ETL release to artifactory.
 
-### 7. Update this document.
+### 6. Update this document.
 Reflect the changes and their date.
