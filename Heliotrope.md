@@ -89,6 +89,8 @@ Currently, the following reactoem names are inconsistent between the reactome da
   - Regulation of mitotic cell cycle
   - Transmembrane transport of small molecules
   - mTORC1-mediated signalling
+  - Infectious disease
+  - Vesicle-mediated transport
 
 - The following reactome ids are present in `uniprot_2_reactome.txt` but missing from the other 2 files.
   - REACT_790
