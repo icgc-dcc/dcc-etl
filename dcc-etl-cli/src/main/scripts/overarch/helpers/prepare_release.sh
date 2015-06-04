@@ -9,11 +9,11 @@ dcc_etl_exporter_name='dcc-etl-exporter'
 dcc_etl_db_importer_name='dcc-etl-db-importer'
 dcc_submission_server_name='dcc-submission-server'
 
-dcc_etl_cli_version='3.8.5.4'
-dcc_etl_annotator_version='3.8.5.4'
-dcc_etl_exporter_version='3.8.5.4'
-dcc_etl_db_importer_version='3.8.5.4'
-dcc_submission_server_version='3.8.6.2'
+dcc_etl_cli_version='3.8.8.1'
+dcc_etl_annotator_version='3.8.8.1'
+dcc_etl_exporter_version='3.8.8.1'
+dcc_etl_db_importer_version='3.8.8.1'
+dcc_submission_server_version='3.8.6.4'
 
 dcc_etl_cli_dist_file_name=${dcc_etl_cli_name}-${dcc_etl_cli_version}.jar
 dcc_etl_annotator_dist_file_name=${dcc_etl_annotator_name}-${dcc_etl_annotator_version}.jar

@@ -126,7 +126,7 @@ function email() {
   body="$(cat ${attempt_manifest_file?})"
   #sendemail -f ${sender?} -t ${recipients?} -u ${subject?} -m ${body?} -s ${smtp_server?}
   #echo -e "${body?}" | mail -s "${subject?}" "${recipients?}" -aFrom:${sender?}
-  echo -e "${body?}" | mail -s "${subject?}" "sepehr.mavedati@oicr.on.ca,***REMOVED***" -aFrom:${sender?}
+  echo -e "${body?}" | mail -s "${subject?}" "sepehr.mavedati@oicr.on.ca,***REMOVED***,vslobodianyk@oicr.on.ca" -aFrom:${sender?}
 }
 
 # Determines whether the component is to be run or not
