@@ -205,3 +205,10 @@ cd ***REMOVED***/dcc-etl/lib/
 ln -sfn dcc-etl-cli-3.8.5.5-SNAPSHOT.jar dcc-etl.jar
 ```
 And so on for the rest of the uploaded files.
+
+### Additional Resources
+[Job Tracker](http://***REMOVED***/jobtracker.jsp)
+
+When a job id is shown in error logs, use the following link to see the relevant information: http://***REMOVED***/jobdetails.jsp?jobid=[job_id]
+
+[Ganglia] (http://***REMOVED***/ganglia/)
