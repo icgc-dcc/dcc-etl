@@ -27,22 +27,26 @@ import org.junit.Test;
 
 public class DiagramHighlightReaderTest {
 
+  DiagramHighlightReader reader = new DiagramHighlightReader();
+
   @Test
-  public void testHighlightRead() throws IOException {
-    val reader = new DiagramHighlightReader();
+  public void testHighlightRead1() throws IOException {
+    val ids = reader.readHighlights("1300645");
+    assertThat(ids)
+        .containsOnly("1297354", "1297333");
+  }
 
-    String ids = reader.readHighlights("1300645");
-    assertThat(ids.split(",")).containsOnly("1297354,1297333".split(","));
-
-    ids = reader.readHighlights("418360");
-    assertThat(ids.split(",")).containsOnly(
-        "425661,434798,426223,139855,434700,418359,139854,139853,418309,418365".split(","));
+  @Test
+  public void testHighlightRead2() throws IOException {
+    val ids = reader.readHighlights("418360");
+    assertThat(ids)
+        .containsOnly("425661", "434798", "426223", "139855", "434700", "418359", "139854", "139853", "418309",
+            "418365");
   }
 
   @Test
   public void testNoHighlightsRead() throws IOException {
-    val reader = new DiagramHighlightReader();
-    String ids = reader.readHighlights("167168");
+    val ids = reader.readHighlights("167168");
     assertThat(ids).isEmpty();
   }
 

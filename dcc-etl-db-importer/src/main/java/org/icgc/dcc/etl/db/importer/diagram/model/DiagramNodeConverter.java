@@ -20,6 +20,8 @@ package org.icgc.dcc.etl.db.importer.diagram.model;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_HIGHLIGHTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP_PATHWAY_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP_UNIPROT_IDS;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_XML;
 import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
 import lombok.NonNull;
@@ -37,12 +39,15 @@ public class DiagramNodeConverter {
     node.put(MONGO_INTERNAL_ID, id);
     node.put(DIAGRAM_ID, id);
     node.put(DIAGRAM_XML, diagram.diagram);
-    node.put(DIAGRAM_HIGHLIGHTS, diagram.highlights);
+    node.putPOJO(DIAGRAM_HIGHLIGHTS, diagram.highlights);
 
-    val proteinNode = mapper.createObjectNode();
-
+    val proteinNode = mapper.createArrayNode();
     for (val entry : diagram.proteinMap.entrySet()) {
-      proteinNode.put(entry.getKey(), entry.getValue());
+      val mapping = mapper.createObjectNode();
+      mapping.put(DIAGRAM_PROTEIN_MAP_PATHWAY_ID, entry.getKey());
+      mapping.putPOJO(DIAGRAM_PROTEIN_MAP_UNIPROT_IDS, entry.getValue());
+
+      proteinNode.add(mapping);
     }
 
     if (!diagram.proteinMap.isEmpty()) {
@@ -51,5 +56,4 @@ public class DiagramNodeConverter {
 
     return node;
   }
-
 }

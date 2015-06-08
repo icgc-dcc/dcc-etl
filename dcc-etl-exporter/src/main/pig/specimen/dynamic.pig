@@ -28,7 +28,7 @@ import 'projection.pig';
 content = FOREACH selected_donor GENERATE donor_id,
                                              icgc_donor_id..submitted_donor_id,
                                              FLATTEN(((specimens is null or IsEmpty(specimens)) ? {($EMPTY_SPECIMEN)} : specimens)) as specimen;
-                                             
+
 specimen_content = FOREACH content GENERATE donor_id,
                                       COMPOSITE_KEY(donor_id) as rowkey:bytearray,
                                       specimen#'_specimen_id' as icgc_specimen_id,
@@ -60,7 +60,7 @@ specimen_content = FOREACH content GENERATE donor_id,
                                       specimen#'digital_image_of_stained_section' as digital_image_of_stained_section,
                                       specimen#'percentage_cellularity' as percentage_cellularity,
                                       specimen#'level_of_cellularity' as level_of_cellularity;
-                                             
+
 flat_sample = FOREACH content GENERATE specimen#'_specimen_id' as icgc_specimen_id,
                                        FLATTEN((bag{tuple(map[])}) specimen#'sample') as s;
 
@@ -75,7 +75,7 @@ study_field  = FOREACH (GROUP unique_study BY icgc_specimen_id) GENERATE FLATTEN
 specimen_with_study = JOIN specimen_content by icgc_specimen_id LEFT OUTER, study_field BY icgc_specimen_id;
 
 
-selected_content = FOREACH specimen_with_study GENERATE 
+selected_content = FOREACH specimen_with_study GENERATE
                                                         specimen_content::donor_id as donor_id,
                                                         specimen_content::rowkey as rowkey,
                                                         specimen_content::icgc_specimen_id as icgc_specimen_id,

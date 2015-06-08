@@ -18,8 +18,8 @@ set job.name static-$DATATYPE;
 import 'projection.pig';
 
 
-content = FOREACH selected_donor 
-             GENERATE icgc_donor_id..submitted_donor_id, 
+content = FOREACH selected_donor
+             GENERATE icgc_donor_id..submitted_donor_id,
              FLATTEN(((specimens is null or IsEmpty(specimens)) ? {($EMPTY_SPECIMEN)} : specimens)) as specimen;
 
 specimen_content = FOREACH content GENERATE specimen#'_specimen_id' as icgc_specimen_id,

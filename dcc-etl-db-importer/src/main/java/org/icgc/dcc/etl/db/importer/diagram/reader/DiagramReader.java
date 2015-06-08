@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramHighlightReader.CONTAINED_EVENTS_URL;
@@ -42,7 +43,8 @@ import com.google.common.collect.ImmutableSet;
 public class DiagramReader {
 
   public final static String REACTOME_BASE_URL = "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/";
-  public final static String NOT_HIGHLIGHTED = "";
+  public final static List<String> NOT_HIGHLIGHTED = emptyList();
+
   private final static int PATHWAY_ENDPOINT_DELAY_MILLISECONDS = 3000;
   private final static int ID_ENDPOINT_DELAY_MILLISECONDS = 1000;
 

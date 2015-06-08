@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Utils class for mongodb related operations.
+ * ICGCClientConfigs class for mongodb related operations.
  */
 public class MongoDbUtils {
 

@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.summarizer.core;
 
 import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_DONOR_COUNT;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_PROJECT_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_ID;
@@ -55,6 +56,10 @@ public class ReleaseSummarizer extends AbstractSummarizer {
     log.info("Finding release project count...");
     long projectCount = repository.getReleaseProjectCount();
     log.info("Found {} release projects", projectCount);
+
+    log.info("Finding release complete project count...");
+    long completeProjectCount = repository.getReleaseCompleteProjectCount();
+    log.info("Found {} release complete projects", completeProjectCount);
 
     log.info("Finding release unique primary site count...");
     long uniquePrimarySiteCount = repository.getReleaseUniquePrimarySiteCount();
@@ -95,6 +100,7 @@ public class ReleaseSummarizer extends AbstractSummarizer {
 
     // Project counts
     release.put(RELEASE_PROJECT_COUNT, projectCount);
+    release.put(RELEASE_COMPLETE_PROJECT_COUNT, completeProjectCount);
     release.put(RELEASE_PRIMARY_SITE_COUNT, uniquePrimarySiteCount);
 
     // Donor counts

@@ -32,8 +32,7 @@ public class RepositoryFile {
   String study;
   String access;
 
-  List<RepositoryFileDataType> dataTypes = newArrayList();
-
+  RepositoryFileDataType dataType = new RepositoryFileDataType();
   Repository repository = new Repository();
   RepositoryDonor donor = new RepositoryDonor();
 

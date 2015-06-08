@@ -34,7 +34,7 @@ import cascading.pipe.Pipe;
 import com.google.common.base.Optional;
 
 /**
- * Utils method for loader-specific {@link Optional}s (helps with verbosity).
+ * ICGCClientConfigs method for loader-specific {@link Optional}s (helps with verbosity).
  */
 @NoArgsConstructor(access = PRIVATE)
 public final class LoaderOptionals {

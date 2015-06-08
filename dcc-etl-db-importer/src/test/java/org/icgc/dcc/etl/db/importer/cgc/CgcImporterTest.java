@@ -17,8 +17,8 @@
  */
 package org.icgc.dcc.etl.db.importer.cgc;
 
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class CgcImporterTest {
 
   @Test
   public void testExecute() throws IOException {
-    val cgcImporter = new CgcImporter(getLocalMongoClientUri("dcc-genome"), getLocalCgsUri());
+    val cgcImporter = new CgcImporter(getLocalMongoClientUri("dcc-genome"), getRemoteCgsUri());
     cgcImporter.execute();
   }
 

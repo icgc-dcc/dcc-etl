@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.model.RepositoryFile.RepositoryFileDataType;
 import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer;
 import org.icgc.dcc.etl.repo.tcga.model.TCGAArchiveClinicalFile;
 import org.icgc.dcc.etl.repo.tcga.reader.TCGAArchiveListReader;
@@ -125,12 +124,10 @@ public class TCGAClinicalFileProcessor extends RepositoryFileProcessor {
         .setStudy(null) // N/A
         .setAccess("open");
 
-    clinicalFile
-        .getDataTypes().add(
-            new RepositoryFileDataType()
-                .setDataType("Clinical")
-                .setDataFormat("XML")
-                .setExperimentalStrategy(null)); // N/A
+    clinicalFile.getDataType()
+        .setDataType("Clinical")
+        .setDataFormat("XML")
+        .setExperimentalStrategy(null); // N/A
 
     clinicalFile.getRepository()
         .setRepoType(tcgaServer.getType().getId())

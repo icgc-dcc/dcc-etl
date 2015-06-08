@@ -46,7 +46,7 @@ import static org.icgc.dcc.common.test.Tests.TEST_RUN_NUMBER;
 import static org.icgc.dcc.common.test.Tests.getTestJobId;
 import static org.icgc.dcc.common.test.Tests.getTestReleasePrefix;
 import static org.icgc.dcc.common.test.Tests.getTestWorkingDir;
-import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
+import static org.icgc.dcc.etl.core.config.ICGCClientConfigs.createICGCConfig;
 import static org.icgc.dcc.etl.service.EtlService.EtlAction.IMPORT;
 
 import java.io.File;

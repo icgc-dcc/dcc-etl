@@ -40,8 +40,8 @@ public class ProjectWriter extends AbstractJongoWriter<Iterable<Project>> {
     val projectCollection = getCollection(PROJECT_COLLECTION);
     clearProjects(projectCollection);
 
-    log.info("Writing project documents...");
     for (val project : projects) {
+      log.info("Writing project {} ...", project.get__project_id());
       projectCollection.save(project);
     }
   }

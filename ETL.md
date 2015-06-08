@@ -109,17 +109,19 @@ cd ***REMOVED***/dcc-etl/conf/
 
 #### 1.7. Update `etl_prod.yml` if needed
 
-#### 1.8. Update dictionary.json from production server
+#### 1.8. Update dictionary.json and codelists.json from production server
 
 ```bash
 dictionary_file=dictionaries/${dictionary_version}.json
 curl -v -XGET http://***REMOVED***/ws/nextRelease/dictionary -H "Accept: application/json" > ${dictionary_file}
+curl -v -XGET http://***REMOVED***/ws/codeLists -H "Accept: application/json" > codelists.json
 ```
 
-#### 1.9. Update codelists.json from production server
+#### 1.9. Push possible changes
 
 ```bash
-curl -v -XGET http://***REMOVED***/ws/codeLists -H "Accept: application/json" > codelists.json
+git status
+# if there are changes, commit and push them.
 git add codelists.json
 git add ${dictionary_file}
 git commit -m "Updated dictionary and codelist configuration files."
@@ -127,8 +129,9 @@ git push
 ```
 
 #### 1.10. Create projects.json for release, if required
-Currently there is no reliable way to automate this step. Get the formal list of projects to be included in and ensure each project exists in [ICGC.org](https://icgc.org/icgc)
+Currently there is no reliable way to automate this step. Get the formal list of projects to be included and ensure each project exists in [ICGC.org](https://icgc.org/icgc)
 use the pre-existing project.json in `***REMOVED***/dcc-etl/conf/projects` as a template to create a new one with the project names and commit the new file.
+
 ```bash
 cd ***REMOVED***/dcc-etl/conf/projects
 touch icgc${release_number}.json 
@@ -136,6 +139,13 @@ git add . && git commit -m "Added project.json configuration file." && git push
 ```
 
 ### 2. Run
+
+First, if needed, run db-importer to update MongoDB database containing projects, go, genes, CGC and pathways data.
+
+```bash
+cd ***REMOVED***/dcc-etl-db-importer
+bin/db-importer.sh
+```
 
 Change to the directory containing the overarching shell script.
 
@@ -195,3 +205,10 @@ cd ***REMOVED***/dcc-etl/lib/
 ln -sfn dcc-etl-cli-3.8.5.5-SNAPSHOT.jar dcc-etl.jar
 ```
 And so on for the rest of the uploaded files.
+
+### Additional Resources
+[Job Tracker](http://***REMOVED***/jobtracker.jsp)
+
+When a job id is shown in error logs, use the following link to see the relevant information: http://***REMOVED***/jobdetails.jsp?jobid=[job_id]
+
+[Ganglia] (http://***REMOVED***/ganglia/)

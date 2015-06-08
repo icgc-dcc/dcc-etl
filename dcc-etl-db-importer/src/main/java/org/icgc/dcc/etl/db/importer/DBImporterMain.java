@@ -24,7 +24,7 @@ import static com.google.common.io.Resources.getResource;
 import static com.google.common.io.Resources.readLines;
 import static org.apache.commons.lang.StringUtils.repeat;
 import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
-import static org.icgc.dcc.etl.core.config.Utils.createICGCConfig;
+import static org.icgc.dcc.etl.core.config.ICGCClientConfigs.createICGCConfig;
 
 import java.io.File;
 

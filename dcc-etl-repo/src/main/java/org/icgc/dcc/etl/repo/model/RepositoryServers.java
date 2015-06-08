@@ -42,7 +42,7 @@ public final class RepositoryServers {
   // @formatter:off
   public static final List<RepositoryServer> SERVERS = ImmutableList.of(
       server().source(CGHUB).type(GNOS)       .name("CGHub - Santa Cruz")    .code("cghub")             .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
-      server().source(TCGA) .type(WEB_ARCHIVE).name("TCGA DCC - Washington") .code("tcga")              .country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
+      server().source(TCGA) .type(WEB_ARCHIVE).name("TCGA DCC - Bethesda")   .code("tcga")              .country("US").baseUrl("https://tcga-data.nci.nih.gov/").build(),
       server().source(PCAWG).type(GNOS)       .name("PCAWG - Barcelona")     .code("pcawg-barcelona")   .country("ES").baseUrl("https://gtrepo-bsc.annailabs.com/").build(),
       server().source(PCAWG).type(GNOS)       .name("PCAWG - Santa Cruz")    .code("pcawg-cghub")       .country("US").baseUrl("https://cghub.ucsc.edu/").build(),
       server().source(PCAWG).type(GNOS)       .name("PCAWG - Tokyo")         .code("pcawg-tokyo")       .country("JP").baseUrl("https://gtrepo-riken.annailabs.com/").build(),

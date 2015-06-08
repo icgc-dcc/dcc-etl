@@ -2,7 +2,7 @@
 DEFINE ExtractId org.icgc.dcc.etl.exporter.pig.udf.ExtractId();
 %default JSON_LOADER 'com.twitter.elephantbird.pig.load.JsonLoader'
 
--- load donor 
+-- load donor
 donor = LOAD '$OBSERVATION' USING $JSON_LOADER('-nestedLoad') as document:map[];
 specimen = FOREACH donor GENERATE document#'_donor_id' as icgc_donor_id,
                                (bag{tuple(map[])}) document#'specimen' as specimens;
@@ -17,7 +17,7 @@ flat_study = FOREACH flat_sample GENERATE icgc_donor_id,
                       s#'study' as study;
 
 filter_study = FILTER flat_study by study is not null;
-unique_study = distinct filter_study;
+unique_study = DISTINCT filter_study;
 study_field  = FOREACH (GROUP unique_study BY icgc_donor_id) GENERATE FLATTEN(unique_study);
 
 projected_donor = FOREACH donor GENERATE ExtractId(document#'_donor_id') as donor_id:int,

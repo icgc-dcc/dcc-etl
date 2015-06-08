@@ -1,8 +1,8 @@
 package org.icgc.dcc.etl.db.importer.gene;
 
 import static org.icgc.dcc.common.core.model.ReleaseDatabase.GENOME;
-import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalGenesBsonUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
+import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -37,7 +37,7 @@ public class GeneImporterTest {
     log.info("Dropping '{}'...", GENOME.getId());
     genesMongo.dropDatabase(GENOME.getId());
 
-    this.importer = new GeneImporter(releaseUri, getLocalGenesBsonUri());
+    this.importer = new GeneImporter(releaseUri, getRemoteGenesBsonUri());
   }
 
   @Test

@@ -18,6 +18,8 @@
 package org.icgc.dcc.etl.db.importer.project;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
+import static org.icgc.dcc.etl.core.config.ICGCClientConfigs.createICGCConfig;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getLocalMongoClientUri;
 
 import java.util.Set;
@@ -26,7 +28,6 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
-import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.icgc.dcc.common.test.mongodb.EmbeddedMongo;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
@@ -44,18 +45,8 @@ public class ProjectImporterTest {
    * Constants.
    */
   private static final String MONGO_DB_NAME = "project-importer-test";
-  private static final String MONGO_RELEASE_PROJECT_DB_NAME = MONGO_DB_NAME + "."
-      + ReleaseCollection.PROJECT_COLLECTION.getId();
-
-  private static final ICGCClientConfig CONFIG = ICGCClientConfig.builder()
-      .cgpServiceUrl("https://***REMOVED***/ud_oauth/1/search")
-      .consumerKey("***REMOVED***")
-      .consumerSecret("***REMOVED***")
-      .accessToken("***REMOVED***")
-      .accessSecret("***REMOVED***")
-      .strictSSLCertificates(false)
-      .requestLoggingEnabled(false)
-      .build();
+  private static final String MONGO_RELEASE_PROJECT_DB_NAME = MONGO_DB_NAME + "." + PROJECT_COLLECTION.getId();
+  private static final ICGCClientConfig CLIENT_CONFIG = createICGCConfig("src/test/conf/config.yaml");
 
   @Rule
   public final static EmbeddedMongo embeddedMongo = new EmbeddedMongo();
@@ -64,9 +55,8 @@ public class ProjectImporterTest {
   public void testImport() {
     Set<String> includedProjects = ImmutableSet.<String> of("ALL-US");
 
-    val importer =
-        new ProjectImporter(CONFIG, getLocalMongoClientUri(embeddedMongo.getPort(),
-            MONGO_DB_NAME));
+    val mongoClientUri = getLocalMongoClientUri(embeddedMongo.getPort(), MONGO_DB_NAME);
+    val importer = new ProjectImporter(CLIENT_CONFIG, mongoClientUri);
     importer.execute();
 
     assertImport(includedProjects);

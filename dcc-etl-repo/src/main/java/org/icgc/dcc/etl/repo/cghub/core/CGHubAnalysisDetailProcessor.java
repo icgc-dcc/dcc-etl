@@ -47,7 +47,6 @@ import lombok.val;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.model.RepositoryFile.RepositoryFileDataType;
 import org.icgc.dcc.etl.repo.model.RepositoryProjects.RepositoryProject;
 import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer;
 
@@ -109,12 +108,10 @@ public class CGHubAnalysisDetailProcessor extends RepositoryFileProcessor {
         .setStudy(null) // N/A
         .setAccess("controlled");
 
-    analysisFile
-        .getDataTypes().add(
-            new RepositoryFileDataType()
-                .setDataType(resolveDataType(result))
-                .setDataFormat("BAM")
-                .setExperimentalStrategy(getLibraryStrategy(result)));
+    analysisFile.getDataType()
+        .setDataType(resolveDataType(result))
+        .setDataFormat("BAM")
+        .setExperimentalStrategy(getLibraryStrategy(result));
 
     analysisFile.getRepository()
         .setRepoType(cghubServer.getType().getId())

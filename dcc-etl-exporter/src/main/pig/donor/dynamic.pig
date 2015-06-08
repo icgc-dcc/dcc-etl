@@ -1,5 +1,4 @@
 %default LIB 'udf/dcc-etl-exporter.jar'
-%default RAW_STORAGE 'com.twitter.elephantbird.pig.store.LzoRawBytesStorage'
 REGISTER $LIB
 
 %default DATATYPE 'donor'
