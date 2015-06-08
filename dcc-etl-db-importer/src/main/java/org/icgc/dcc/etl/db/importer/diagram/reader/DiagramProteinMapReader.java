@@ -28,10 +28,8 @@ import java.util.Map;
 
 import lombok.val;
 
-import org.codehaus.jettison.json.JSONException;
-import org.elasticsearch.common.collect.Lists;
-
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class DiagramProteinMapReader {
@@ -42,7 +40,7 @@ public class DiagramProteinMapReader {
   private final static String PROTEIN_MAP_URL = REACTOME_BASE_URL + "getPhysicalToReferenceEntityMaps/%s";
   private final static String GENE_TYPE = "ReferenceGeneProduct";
 
-  public Map<String, List<String>> readProteinMap(String pathwayId) throws IOException, JSONException {
+  public Map<String, List<String>> readProteinMap(String pathwayId) throws IOException {
     val result = DEFAULT.readTree(new URL(format(PROTEIN_MAP_URL, pathwayId)));
 
     val proteinMap = Maps.<String, List<String>> newHashMap();

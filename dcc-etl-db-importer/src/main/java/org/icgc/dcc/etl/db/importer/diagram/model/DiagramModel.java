@@ -19,20 +19,18 @@ package org.icgc.dcc.etl.db.importer.diagram.model;
 
 import java.util.Map;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 import com.google.common.collect.Maps;
 
 public class DiagramModel {
 
-  Map<String, Diagram> diagrams = Maps.<String, Diagram> newHashMap();;
+  @Getter
+  Map<String, Diagram> diagrams = Maps.<String, Diagram> newHashMap();
 
   public void addDiagram(@NonNull String id, @NonNull Diagram diagram) {
     diagrams.put(id, diagram);
-  }
-
-  public Map<String, Diagram> getDiagrams() {
-    return diagrams;
   }
 
 }

@@ -18,9 +18,9 @@
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.io.Resources.readLines;
 import static java.util.Collections.emptyList;
-import static org.elasticsearch.common.base.Strings.nullToEmpty;
 import static org.icgc.dcc.common.core.util.Splitters.COMMA;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
@@ -56,7 +56,7 @@ public class DiagramHighlightReader {
 
   private List<String> parseHighlights(URL diagramUrl) throws IOException {
     // Read the first (and only) line that contains a list of reaction ids to zoom in on
-    val text = nullToEmpty(readLines(diagramUrl, UTF_8).get(0));
+    String text = nullToEmpty(readLines(diagramUrl, UTF_8).get(0));
 
     return COMMA.omitEmptyStrings().trimResults().splitToList(text);
   }
