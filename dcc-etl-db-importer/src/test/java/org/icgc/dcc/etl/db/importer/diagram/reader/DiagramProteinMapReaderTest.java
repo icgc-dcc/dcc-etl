@@ -22,6 +22,8 @@ import lombok.val;
 
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
+
 public class DiagramProteinMapReaderTest {
 
   @Test
@@ -29,8 +31,10 @@ public class DiagramProteinMapReaderTest {
     val reader = new DiagramProteinMapReader();
     val result = reader.readProteinMap("4839726");
 
-    assertThat(result.get("5218942")).isIn("UniProt:Q71DI3,UniProt:P68431", "UniProt:P68431,UniProt:Q71DI3");
-    assertThat(result.get("181902")).isEqualTo("UniProt:P62805");
+    assertThat(result.get("5218942")).isIn(
+        ImmutableList.of("UniProt:Q71DI3", "UniProt:P68431"),
+        ImmutableList.of("UniProt:P68431", "UniProt:Q71DI3"));
+    assertThat(result.get("181902")).isEqualTo(ImmutableList.of("UniProt:P62805"));
     assertThat(result.get("77087")).isNull();
   }
 

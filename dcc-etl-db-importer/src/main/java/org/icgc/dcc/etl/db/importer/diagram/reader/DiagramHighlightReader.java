@@ -19,6 +19,9 @@ package org.icgc.dcc.etl.db.importer.diagram.reader;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.io.Resources.readLines;
+import static java.util.Collections.emptyList;
+import static org.elasticsearch.common.base.Strings.nullToEmpty;
+import static org.icgc.dcc.common.core.util.Splitters.COMMA;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
@@ -37,7 +40,7 @@ public class DiagramHighlightReader {
   public static final String CONTAINED_EVENTS_URL = REACTOME_BASE_URL + "getContainedEventIds/%s";
   private static final List<String> FAILURES = new ArrayList<String>();
 
-  public String readHighlights(@NonNull String pathwayId) throws IOException {
+  public List<String> readHighlights(@NonNull String pathwayId) throws IOException {
     val diagramUrl = new URL(String.format(CONTAINED_EVENTS_URL, pathwayId));
 
     val connection = (HttpURLConnection) diagramUrl.openConnection();
@@ -45,11 +48,17 @@ public class DiagramHighlightReader {
       log.error("500 Server Error from Reactome!\nFailed to get URL: {}\nSetting '{}' highlights to \"\"",
           diagramUrl.toExternalForm(), pathwayId);
       FAILURES.add(pathwayId);
-      return "";
+      return emptyList();
     }
 
+    return parseHighlights(diagramUrl);
+  }
+
+  private List<String> parseHighlights(URL diagramUrl) throws IOException {
     // Read the first (and only) line that contains a list of reaction ids to zoom in on
-    return readLines(diagramUrl, UTF_8).get(0);
+    val text = nullToEmpty(readLines(diagramUrl, UTF_8).get(0));
+
+    return COMMA.omitEmptyStrings().trimResults().splitToList(text);
   }
 
   public static List<String> getFailedPathways() {

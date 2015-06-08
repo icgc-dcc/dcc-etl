@@ -17,38 +17,39 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static com.google.common.collect.Maps.newHashMap;
 import static java.lang.String.format;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import lombok.val;
 
 import org.codehaus.jettison.json.JSONException;
+import org.elasticsearch.common.collect.Lists;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.Maps;
 
 public class DiagramProteinMapReader {
 
+  /**
+   * Constants.
+   */
   private final static String PROTEIN_MAP_URL = REACTOME_BASE_URL + "getPhysicalToReferenceEntityMaps/%s";
   private final static String GENE_TYPE = "ReferenceGeneProduct";
 
-  public Map<String, String> readProteinMap(String pathwayId) throws IOException, JSONException {
+  public Map<String, List<String>> readProteinMap(String pathwayId) throws IOException, JSONException {
     val result = DEFAULT.readTree(new URL(format(PROTEIN_MAP_URL, pathwayId)));
 
-    Map<String, String> proteinMap = newHashMap();
-
+    val proteinMap = Maps.<String, List<String>> newHashMap();
     result.forEach(node -> {
       String dbId = node.get("peDbId").asText();
-      String referenceIds = getReferenceIds(node.get("refEntities"));
+      List<String> referenceIds = getReferenceIds(node.get("refEntities"));
       if (!referenceIds.isEmpty()) {
-
-        // TODO: Reactome: Change to array from string
         proteinMap.put(dbId, referenceIds);
       }
     });
@@ -56,20 +57,20 @@ public class DiagramProteinMapReader {
     return proteinMap;
   }
 
-  private String getReferenceIds(JsonNode entities) {
-    StringJoiner joiner = new StringJoiner(",");
+  private List<String> getReferenceIds(JsonNode entities) {
+    val referenceIds = Lists.<String> newArrayList();
     entities.forEach(node -> {
       if (node.get("schemaClass").asText().equalsIgnoreCase(GENE_TYPE)) {
         String uniprotId = node.get("displayName").asText();
         if (uniprotId.indexOf(" ") > 0) {
-          joiner.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
+          referenceIds.add(uniprotId.substring(0, uniprotId.indexOf(" ")));
         } else {
-          joiner.add(uniprotId);
+          referenceIds.add(uniprotId);
         }
       }
     });
 
-    return joiner.toString();
+    return referenceIds;
   }
 
 }
