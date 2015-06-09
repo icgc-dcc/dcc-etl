@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.repo.index;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.base.Throwables.propagate;
 import static org.elasticsearch.client.Requests.indexRequest;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.FILE_COLLECTION;
@@ -26,6 +27,7 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
+import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_FILE_DONOR_TEXT_NAME;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_FILE_NAME;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_FILE_TEXT_NAME;
 import static org.icgc.dcc.etl.repo.index.RepositoryFileIndex.INDEX_TYPE_NAMES;
@@ -53,11 +55,16 @@ import org.elasticsearch.action.bulk.BulkProcessor.Listener;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.collect.Maps;
+import org.elasticsearch.common.collect.Sets;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.icgc.dcc.etl.repo.util.AbstractJongoComponent;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import com.mongodb.MongoClientURI;
 
 @Slf4j
@@ -146,10 +153,13 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     @Cleanup
     val processor = createBulkProcessor();
 
-    log.info("Indexing documents...");
+    log.info("Indexing file documents...");
     val fileCount = indexFileDocuments(processor);
+    log.info("Indexing file donor documents...");
+    val fileDonorCount = indexFileDonorDocuments(processor);
 
-    log.info("Finished indexing {} file documents in {}", formatCount(fileCount), watch);
+    log.info("Finished indexing {} file and {} documents in {}", formatCount(fileCount), formatCount(fileDonorCount),
+        watch);
   }
 
   private int indexFileDocuments(BulkProcessor processor) {
@@ -163,6 +173,53 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         JsonNode fileText = createFileText(file, id);
         processor.add(indexRequest(indexName).type(INDEX_TYPE_FILE_TEXT_NAME).id(id).source(fileText.toString()));
       });
+  }
+
+  @SneakyThrows
+  private int indexFileDonorDocuments(BulkProcessor processor) {
+    val fieldNames = ImmutableList.of(
+        "specimen_id",
+        "sample_id",
+        "submitted_donor_id",
+        "submitted_specimen_id",
+        "submitted_sample_id",
+        "tcga_participant_barcode",
+        "tcga_sample_barcode",
+        "tcga_aliquot_barcode");
+
+    val donorIds = Sets.<String> newHashSet();
+    val donorFields = Maps.<String, Multimap<String, String>> newHashMap();
+    for (val fieldName : fieldNames) {
+      donorFields.put(fieldName, HashMultimap.<String, String> create());
+    }
+
+    eachDocument(FILE_COLLECTION, file -> {
+      JsonNode donor = file.path("donor");
+      String donorId = donor.get("donor_id").textValue();
+      donorIds.add(donorId);
+
+      for (String fieldName : fieldNames) {
+        String value = donor.get(fieldName).textValue();
+        if (!isNullOrEmpty(value)) {
+          donorFields.get(fieldName).put(donorId, value);
+        }
+      }
+    });
+
+    for (val donorId : donorIds) {
+      val fileDonor = DEFAULT.createObjectNode();
+
+      // By convention this is called id
+      fileDonor.put("id", donorId);
+      for (val fieldName : fieldNames) {
+        fileDonor.putPOJO(fieldName, donorFields.get(fieldName).get(donorId));
+      }
+
+      processor.add(indexRequest(indexName).type(INDEX_TYPE_FILE_DONOR_TEXT_NAME).id(donorId)
+          .source(DEFAULT.writeValueAsString(fileDonor)));
+    }
+
+    return donorIds.size();
   }
 
   private BulkProcessor createBulkProcessor() {

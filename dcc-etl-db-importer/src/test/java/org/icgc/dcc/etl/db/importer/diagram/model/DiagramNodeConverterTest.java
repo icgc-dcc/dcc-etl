@@ -17,43 +17,54 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.model;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
+
+import java.util.List;
+
+import lombok.SneakyThrows;
 import lombok.val;
 
+import org.elasticsearch.common.collect.Maps;
 import org.junit.Test;
 
-import com.google.common.collect.Maps;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.ImmutableList;
 
 public class DiagramNodeConverterTest {
 
   @Test
   public void testConvertDiagram() {
     val converter = new DiagramNodeConverter();
-    val result = converter.convertDiagram(getTestDiagram("id", "123,456,789", true), "REACT");
+    val highlights = ImmutableList.of("123", "456", "789");
+    val diagram = getTestDiagram("id", highlights, true);
+    val result = converter.convertDiagram(diagram, "REACT");
 
-    assertThat(result.toString()).isEqualTo(
-        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\""
-            + ":\"123,456,789\",\"protein_map\":{\"123\":\"uniprot1\",\"456\":\"uniprot2\"}}");
+    assertThat(toString(result))
+        .isEqualTo(
+            "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\""
+                + ":[\"123\",\"456\",\"789\"],\"protein_map\":[{\"pathway_id\":\"123\",\"uniprot_ids\":[\"uniprot1\"]},{\"pathway_id\":\"456\",\"uniprot_ids\":[\"uniprot2\"]}]}");
   }
 
   @Test
   public void testConvertIncompleteDiagram() {
     val converter = new DiagramNodeConverter();
-    val result = converter.convertDiagram(getTestDiagram("id", "", false), "REACT");
+    val result = converter.convertDiagram(getTestDiagram("id", emptyList(), false), "REACT");
 
-    assertThat(result.toString()).isEqualTo(
-        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\":\"\"}");
+    assertThat(toString(result)).isEqualTo(
+        "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\":[]}");
   }
 
-  private Diagram getTestDiagram(String xml, String highlights, boolean proteins) {
+  private Diagram getTestDiagram(String xml, List<String> highlights, boolean proteins) {
     val diagram = new Diagram();
     diagram.setDiagram(xml);
     diagram.setHighlights(highlights);
 
-    val map = Maps.<String, String> newHashMap();
+    val map = Maps.<String, List<String>> newHashMap();
     if (proteins) {
-      map.put("123", "uniprot1");
-      map.put("456", "uniprot2");
+      map.put("123", ImmutableList.of("uniprot1"));
+      map.put("456", ImmutableList.of("uniprot2"));
     }
 
     diagram.setProteinMap(map);
@@ -61,4 +72,8 @@ public class DiagramNodeConverterTest {
     return diagram;
   }
 
+  @SneakyThrows
+  private String toString(JsonNode result) {
+    return DEFAULT.writeValueAsString(result);
+  }
 }
