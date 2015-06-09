@@ -91,6 +91,7 @@ public final class RepositoryProjects {
       project().projectCode("LUSC-KR").diseaseCode(null)  .program(null)    .country("South Korea").build(),
       project().projectCode("LUSC-US").diseaseCode("LUSC").program("TCGA")  .country("United States").build(),
       project().projectCode("MALY-DE").diseaseCode(null)  .program(null)    .country("Germany").build(),
+      project().projectCode("MELA-AU").diseaseCode(null)  .program(null)    .country("Australia").build(),
       project().projectCode("NACA-CN").diseaseCode(null)  .program(null)    .country("China").build(),
       project().projectCode("NBL-US") .diseaseCode("NBL") .program("TARGET").country("United States").build(),
       project().projectCode("NHLY-MX").diseaseCode(null)  .program(null)    .country("Mexico").build(),

@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.repo.pcawg.core;
 
 import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.primitives.Longs.max;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
@@ -131,6 +132,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     for (val libraryStrategyName : PCAWG_LIBRARY_STRATEGY_NAMES) {
       for (val specimenClass : PCAWG_SPECIMEN_CLASSES) {
         val specimens = donor.path(libraryStrategyName).path(specimenClass);
+
         for (val specimen : specimens.isArray() ? specimens : singleton(specimens)) {
           for (val workflowType : PCAWG_WORKFLOW_TYPES) {
             val workflow = specimen.path(workflowType);
@@ -150,6 +152,8 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   private RepositoryFile createDonorFile(String projectCode, String submittedDonorId, String analysisType,
       JsonNode workflow, JsonNode workflowFile) {
     val project = getProjectCodeProject(projectCode).orNull();
+    checkState(project != null, "No project found for project code '%s'", projectCode);
+
     val pcawgServers = resolvePCAWGServers(workflow);
 
     val gnosId = getGnosId(workflow);
