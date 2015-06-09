@@ -84,6 +84,10 @@ public class PCAWGArchives {
     return workflow.get("submitter_specimen_id").textValue();
   }
 
+  public static String getSpecimenType(@NonNull JsonNode workflow) {
+    return workflow.get("specimen_type").textValue();
+  }
+
   public static String getSubmitterSampleId(@NonNull JsonNode workflow) {
     return workflow.get("submitter_sample_id").textValue();
   }

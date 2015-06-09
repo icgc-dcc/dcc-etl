@@ -47,6 +47,7 @@ import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getFiles;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosLastModified;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getGnosRepo;
+import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSpecimenType;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterDonorId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSampleId;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.getSubmitterSpecimenId;
@@ -157,8 +158,10 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val pcawgServers = resolvePCAWGServers(workflow);
 
     val gnosId = getGnosId(workflow);
+    val specimenType = getSpecimenType(workflow);
     val submitterSpecimenId = getSubmitterSpecimenId(workflow);
     val submitterSampleId = getSubmitterSampleId(workflow);
+
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
     val dataType = resolveFileDataType(analysisType, fileName);
@@ -195,6 +198,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
 
         .setDonorId(null) // Set downstream
         .setSpecimenId(null) // Set downstream
+        .setSpecimenType(specimenType)
         .setSampleId(null) // Set downstream
 
         .setSubmittedDonorId(submittedDonorId)

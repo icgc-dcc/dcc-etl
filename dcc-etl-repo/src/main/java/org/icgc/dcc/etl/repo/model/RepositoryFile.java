@@ -87,6 +87,7 @@ public class RepositoryFile {
 
     String donorId;
     String specimenId;
+    String specimenType;
     String sampleId;
 
     String submittedDonorId;
