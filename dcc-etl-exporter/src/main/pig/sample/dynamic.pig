@@ -50,12 +50,12 @@ selected_content = FOREACH flat_flat_donor GENERATE donor_id,
                                                     s#'level_of_cellularity' as level_of_cellularity,
                                                     s#'study' as study;
 
-obj = FOREACH selected_content GENERATE rowkey, {(icgc_donor_id..study)};
+obj = FOREACH selected_content GENERATE rowkey, {(icgc_sample_id..study)};
 content = ORDER obj BY rowkey ASC PARALLEL $DEFAULT_PARALLEL;
 STORE content INTO '$TMP_HFILE_DIR' USING DYNAMIC_STORAGE();
 
 -- populate statistics
-row_size = FOREACH selected_content GENERATE donor_id, COMPUTE_SIZE(icgc_donor_id..study) as bytes:long;
+row_size = FOREACH selected_content GENERATE donor_id, COMPUTE_SIZE(icgc_sample_id..study) as bytes:long;
 row_size_per_donor = GROUP row_size BY donor_id;
 stats = FOREACH row_size_per_donor GENERATE group as donor_id, COUNT(row_size.donor_id) as total_line, SUM(row_size.bytes) as total_size;
 STORE stats INTO '$TMP_DYNAMIC_DIR' USING STATISTIC_STORAGE();
