@@ -180,7 +180,6 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     val fieldNames = ImmutableList.of(
         "specimen_id",
         "sample_id",
-        "submitted_donor_id",
         "submitted_specimen_id",
         "submitted_sample_id",
         "tcga_participant_barcode",
@@ -188,15 +187,21 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
         "tcga_aliquot_barcode");
 
     val donorIds = Sets.<String> newHashSet();
+    val submittedDonorIds = Maps.<String, String> newHashMap();
+
     val donorFields = Maps.<String, Multimap<String, String>> newHashMap();
     for (val fieldName : fieldNames) {
       donorFields.put(fieldName, HashMultimap.<String, String> create());
     }
 
+    // Collect
     eachDocument(FILE_COLLECTION, file -> {
       JsonNode donor = file.path("donor");
       String donorId = donor.get("donor_id").textValue();
       donorIds.add(donorId);
+
+      String submittedDonorId = donor.get("submitted_donor_id").textValue();
+      submittedDonorIds.put(donorId, submittedDonorId);
 
       for (String fieldName : fieldNames) {
         String value = donor.get(fieldName).textValue();
@@ -206,11 +211,20 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
       }
     });
 
+    // Index
     for (val donorId : donorIds) {
+      val submittedDonorId = submittedDonorIds.get(donorId);
       val fileDonor = DEFAULT.createObjectNode();
 
       // By convention this is called id
       fileDonor.put("id", donorId);
+      fileDonor.put("id", donorId);
+      fileDonor.put("donor_id", donorId);
+
+      if (!isNullOrEmpty(submittedDonorId)) {
+        fileDonor.put("submitted_donor_id", submittedDonorId);
+      }
+
       for (val fieldName : fieldNames) {
         fileDonor.putPOJO(fieldName, donorFields.get(fieldName).get(donorId));
       }

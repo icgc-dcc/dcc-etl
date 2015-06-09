@@ -44,7 +44,7 @@ public class DiagramNodeConverterTest {
     assertThat(toString(result))
         .isEqualTo(
             "{\"_id\":\"REACT\",\"diagram_id\":\"REACT\",\"xml\":\"id\",\"highlights\""
-                + ":[\"123\",\"456\",\"789\"],\"protein_map\":[{\"pathway_id\":\"123\",\"uniprot_ids\":[\"uniprot1\"]},{\"pathway_id\":\"456\",\"uniprot_ids\":[\"uniprot2\"]}]}");
+                + ":[\"123\",\"456\",\"789\"],\"protein_map\":[{\"db_id\":\"123\",\"uniprot_ids\":[\"uniprot1\"]},{\"db_id\":\"456\",\"uniprot_ids\":[\"uniprot2\"]}]}");
   }
 
   @Test

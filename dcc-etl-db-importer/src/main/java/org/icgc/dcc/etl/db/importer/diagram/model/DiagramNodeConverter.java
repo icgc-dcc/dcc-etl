@@ -20,7 +20,7 @@ package org.icgc.dcc.etl.db.importer.diagram.model;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_HIGHLIGHTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP;
-import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP_PATHWAY_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP_DB_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_PROTEIN_MAP_UNIPROT_IDS;
 import static org.icgc.dcc.common.core.model.FieldNames.DIAGRAM_XML;
 import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
@@ -44,7 +44,7 @@ public class DiagramNodeConverter {
     val proteinNode = mapper.createArrayNode();
     for (val entry : diagram.proteinMap.entrySet()) {
       val mapping = mapper.createObjectNode();
-      mapping.put(DIAGRAM_PROTEIN_MAP_PATHWAY_ID, entry.getKey());
+      mapping.put(DIAGRAM_PROTEIN_MAP_DB_ID, entry.getKey());
       mapping.putPOJO(DIAGRAM_PROTEIN_MAP_UNIPROT_IDS, entry.getValue());
 
       proteinNode.add(mapping);
