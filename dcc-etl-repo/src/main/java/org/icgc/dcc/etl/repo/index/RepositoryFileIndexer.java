@@ -180,6 +180,7 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
     val fieldNames = ImmutableList.of(
         "specimen_id",
         "sample_id",
+        "submitted_donor_id",
         "submitted_specimen_id",
         "submitted_sample_id",
         "tcga_participant_barcode",
