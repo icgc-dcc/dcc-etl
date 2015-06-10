@@ -2,6 +2,7 @@
 from org.apache.pig.scripting import *
 from org.icgc.dcc.downloader.core import SchemaUtil
 from org.icgc.dcc.etl.exporter.pig.storage import StaticMultiStorage
+from org.icgc.dcc.etl.exporter.pig.storage import DynamicStorage
 from subprocess import call
 import os, os.path, sys
 import getopt
@@ -20,7 +21,7 @@ Pig.set("mapred.reduce.parallel.copies", "30")
 Pig.set("mapred.task.timeout", "14400000")
 Pig.set("dfs.replication", "2")
 Pig.set("pig.udf.profile", "false")
-Pig.set("pig.cachedbag.memusage", "0.1")
+Pig.set("pig.cachedbag.memusage", "0.3")
 Pig.set("dfs.blocksize", "134217728")
 Pig.set("mapred.output.compression.type","BLOCK")
 
@@ -52,6 +53,7 @@ def exportDynamicData(type):
 
   SchemaUtil.createArchiveTable();
   SchemaUtil.createMetaTable(SchemaUtil.getMetaTableName(release));
+  DynamicStorage.init(type, release);
 
   scriptDir = default_exporter_src + '/' + type
   Pig.set("pig.import.search.path", scriptDir);
