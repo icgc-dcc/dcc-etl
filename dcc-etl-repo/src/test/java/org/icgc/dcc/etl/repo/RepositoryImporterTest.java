@@ -26,10 +26,10 @@ import lombok.val;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("For development only")
 public class RepositoryImporterTest {
 
   @Test
-  @Ignore("For development only")
   public void testExecute() throws IOException {
     val context = createLocalRepositoryFileContext();
     val repositoryImporter = new RepositoryImporter(context);

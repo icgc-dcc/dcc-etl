@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Stopwatch.createStarted;
 import static com.google.common.collect.Iterables.contains;
 import static org.apache.commons.lang.StringUtils.repeat;
+import static org.icgc.dcc.common.core.util.Joiners.NEWLINE;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.common.core.mail.Mailer;
 import org.icgc.dcc.etl.repo.cghub.CGHubImporter;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
@@ -39,6 +41,7 @@ import org.icgc.dcc.etl.repo.model.RepositorySource;
 import org.icgc.dcc.etl.repo.pcawg.PCAWGImporter;
 import org.icgc.dcc.etl.repo.tcga.TCGAImporter;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -71,13 +74,27 @@ public class RepositoryImporter {
     val watch = createStarted();
 
     // Key steps, order matters
-    val exceptions = ImmutableList.builder()
+    val exceptions = ImmutableList.<Exception> builder()
         .addAll(writeFiles(activeSources))
         .addAll(indexFiles())
         .build();
 
-    log.info("Finished importing repository in {}", watch);
+    report(watch, exceptions);
+
     checkState(exceptions.isEmpty(), "Exception(s) processing %s", exceptions);
+  }
+
+  private void report(Stopwatch watch, List<Exception> exceptions) {
+    val success = exceptions.isEmpty();
+    if (success) {
+      log.info("Finished importing repository in {}", watch);
+    } else {
+      log.warn("Finished importing repository with errors in {}", watch);
+    }
+
+    val subject = "DCC - ETL Repository Importer - " + (success ? "SUCCESS" : "ERROR");
+    val body = "Finished in " + watch + "\n\n" + NEWLINE.join(exceptions);
+    new Mailer().sendMail(subject, body);
   }
 
   private Iterable<Exception> writeFiles(Iterable<RepositorySource> activeSources) {
