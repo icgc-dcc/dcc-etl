@@ -58,6 +58,7 @@ import com.google.common.base.Preconditions;
 @Slf4j
 public class DynamicStorage extends StoreFunc {
 
+  @SuppressWarnings("rawtypes")
   protected RecordWriter writer = null;
   private final String tablename;
   private final String metaTablename;
