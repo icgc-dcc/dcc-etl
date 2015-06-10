@@ -18,10 +18,10 @@ set job.name static-$DATATYPE;
 import 'projection.pig';
 
 
-content = FOREACH selected_donor 
-             GENERATE icgc_donor_id..submitted_donor_id, 
+content = FOREACH selected_donor
+             GENERATE icgc_donor_id..submitted_donor_id,
              FLATTEN(((specimens is null or IsEmpty(specimens)) ? {($EMPTY_SPECIMEN)} : specimens)) as specimen;
-             
+
 specimen_content = FOREACH content GENERATE specimen#'_specimen_id' as icgc_specimen_id,
                            project_code,
                            -- specimen#'study_specimen_involved_in' as study_specimen_involved_in,
@@ -61,15 +61,16 @@ flat_study = FOREACH flat_sample GENERATE icgc_donor_id,
                                           s#'study' as study;
 
 filter_study = FILTER flat_study by study is not null;
+unique_study = DISTINCT filter_study;
 
-study_field  = FOREACH (GROUP filter_study BY (icgc_donor_id, icgc_specimen_id)) GENERATE FLATTEN(filter_study);
+study_field  = FOREACH (GROUP unique_study BY (icgc_donor_id, icgc_specimen_id)) GENERATE FLATTEN(unique_study);
 
 specimen_with_study = JOIN specimen_content by icgc_specimen_id LEFT OUTER, study_field BY icgc_specimen_id;
 
 static_out = FOREACH specimen_with_study GENERATE
                                       specimen_content::icgc_specimen_id as icgc_specimen_id,
                                       specimen_content::project_code as project_code,
-                                      study_field::filter_study::study as study_specimen_involved_in,
+                                      study_field::unique_study::study as study_specimen_involved_in,
                                       specimen_content::submitted_specimen_id as submitted_specimen_id,
                                       specimen_content::icgc_donor_id as icgc_donor_id,
                                       specimen_content::submitted_donor_id as submitted_donor_id,

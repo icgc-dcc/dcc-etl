@@ -243,8 +243,10 @@ public class StaticMultiStorage extends StoreFunc implements StoreMetadata {
               throw ee;
             }
 
-            StorageUtil.putField(mOut, field);
+            String value = (String) field;
+            if (value == null || value.trim().isEmpty()) value = "";
 
+            mOut.write(Bytes.toBytes(value));
             if (i != sz - 1) {
               mOut.write(fieldDel);
             }
