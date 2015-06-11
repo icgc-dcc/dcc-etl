@@ -73,7 +73,7 @@ public class StatisticStorage extends PigStorage {
   }
 
   @Override
-  public OutputFormat getOutputFormat() {
+  public OutputFormat<?, ?> getOutputFormat() {
     return new StatisticOutputFormat(dataType, metaTablename, DELIMITER);
   }
 
@@ -98,6 +98,7 @@ public class StatisticStorage extends PigStorage {
       this.metaTablename = metaTablename;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public RecordWriter<WritableComparable, Tuple> getRecordWriter(
         TaskAttemptContext context) throws IOException,
