@@ -30,7 +30,7 @@ import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
-import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTARGETProjects;
+import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTCGAProjects;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getPCAWGServer;
 import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileDataTypeResolver.resolveFileDataType;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
@@ -263,7 +263,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private static Set<String> resolveTCGAProjectCodes() {
-    return stream(getTARGETProjects()).map(project -> project.getProjectCode()).collect(toImmutableSet());
+    return stream(getTCGAProjects()).map(project -> project.getProjectCode()).collect(toImmutableSet());
   }
 
   private static String resolveFileName(JsonNode workflowFile) {
