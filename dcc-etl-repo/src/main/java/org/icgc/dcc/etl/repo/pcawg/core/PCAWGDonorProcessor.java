@@ -112,16 +112,24 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private void assignIds(Iterable<RepositoryFile> donorFiles) {
+    val tcgaProjectCodes = resolveTCGAProjectCodes();
+
     log.info("Assigning ICGC ids...");
     for (val donorFile : donorFiles) {
       val donor = donorFile.getDonor();
       val projectCode = donor.getProjectCode();
 
+      // Special case for TCGA who submits barcodes to DCC but UUIDs to PCAWG
+      val tcga = tcgaProjectCodes.contains(donor.getProjectCode());
+      val submittedDonorId = tcga ? donor.getTcgaParticipantBarcode() : donor.getSubmittedDonorId();
+      val submittedSpecimenId = tcga ? donor.getTcgaSampleBarcode() : donor.getSubmittedSpecimenId();
+      val submittedSampleId = tcga ? donor.getTcgaAliquotBarcode() : donor.getSubmittedSampleId();
+
       // Get IDs or create if they don't exist. This is different than the other repos.
       donor
-          .setDonorId(context.ensureDonorId(donor.getSubmittedDonorId(), projectCode))
-          .setSpecimenId(context.ensureSpecimenId(donor.getSubmittedSpecimenId(), projectCode))
-          .setSampleId(context.ensureSampleId(donor.getSubmittedSampleId(), projectCode));
+          .setDonorId(context.ensureDonorId(submittedDonorId, projectCode))
+          .setSpecimenId(context.ensureSpecimenId(submittedSpecimenId, projectCode))
+          .setSampleId(context.ensureSampleId(submittedSampleId, projectCode));
     }
   }
 
