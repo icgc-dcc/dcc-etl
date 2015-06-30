@@ -29,7 +29,8 @@ public enum RepositorySource implements Identifiable {
 
   CGHUB("CGHub"),
   TCGA("TCGA"),
-  PCAWG("PCAWG");
+  PCAWG("PCAWG"),
+  AWS("AWS");
 
   @Getter
   @NonNull

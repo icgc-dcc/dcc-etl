@@ -15,28 +15,25 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.model;
+package org.icgc.dcc.etl.repo.aws;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.Getter;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.AWS;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+import org.icgc.dcc.etl.repo.aws.reader.AWSS3BucketReader;
+import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
+import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
+import org.icgc.dcc.etl.repo.model.RepositoryFile;
 
-@Getter
-@RequiredArgsConstructor(access = PRIVATE)
-public enum RepositoryType implements Identifiable {
+public class AWSImporter extends RepositorySourceFileImporter {
 
-  S3("S3", null, null),
-  GNOS("GNOS", "/cghub/metadata/analysisFull/", "/cghub/data/analysis/download/"),
-  WEB_ARCHIVE("Web Archive", null, "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
+  public AWSImporter(@NonNull RepositoryFileContext context) {
+    super(AWS, context);
+  }
 
-  @NonNull
-  private final String id;
-
-  // Optional
-  private final String metadataPath;
-  private final String dataPath;
+  @Override
+  protected Iterable<RepositoryFile> readFiles() {
+    return new AWSS3BucketReader().read();
+  }
 
 }
