@@ -22,14 +22,6 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Map;
 
-import lombok.Cleanup;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.experimental.Accessors;
-
 import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.CachingIdentifierClient;
 import org.icgc.dcc.etl.core.id.HashIdentifierClient;
@@ -37,6 +29,14 @@ import org.icgc.dcc.etl.core.id.HttpIdentifierClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 
 import com.mongodb.MongoClientURI;
+
+import lombok.Cleanup;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.experimental.Accessors;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class RepositoryFileContextBuilder {
@@ -80,7 +80,6 @@ public final class RepositoryFileContextBuilder {
     return new RepositoryFileContext(repoMongoUri, esUri, primarySites, identifierClient, tcgaClient);
   }
 
-  @SuppressWarnings("resource")
   private IdentifierClient createIdentifierClient() {
     return realIds ? new CachingIdentifierClient(new HttpIdentifierClient(idUrl, "")) : new HashIdentifierClient();
   }
