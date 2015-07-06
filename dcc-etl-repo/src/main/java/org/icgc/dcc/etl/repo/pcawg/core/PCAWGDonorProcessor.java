@@ -30,7 +30,7 @@ import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getProjectCodeProject;
-import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTARGETProjects;
+import static org.icgc.dcc.etl.repo.model.RepositoryProjects.getTCGAProjects;
 import static org.icgc.dcc.etl.repo.model.RepositoryServers.getPCAWGServer;
 import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGFileDataTypeResolver.resolveFileDataType;
 import static org.icgc.dcc.etl.repo.pcawg.util.PCAWGArchives.PCAWG_LIBRARY_STRATEGY_NAMES;
@@ -112,16 +112,24 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private void assignIds(Iterable<RepositoryFile> donorFiles) {
+    val tcgaProjectCodes = resolveTCGAProjectCodes();
+
     log.info("Assigning ICGC ids...");
     for (val donorFile : donorFiles) {
       val donor = donorFile.getDonor();
       val projectCode = donor.getProjectCode();
 
+      // Special case for TCGA who submits barcodes to DCC but UUIDs to PCAWG
+      val tcga = tcgaProjectCodes.contains(donor.getProjectCode());
+      val submittedDonorId = tcga ? donor.getTcgaParticipantBarcode() : donor.getSubmittedDonorId();
+      val submittedSpecimenId = tcga ? donor.getTcgaSampleBarcode() : donor.getSubmittedSpecimenId();
+      val submittedSampleId = tcga ? donor.getTcgaAliquotBarcode() : donor.getSubmittedSampleId();
+
       // Get IDs or create if they don't exist. This is different than the other repos.
       donor
-          .setDonorId(context.ensureDonorId(donor.getSubmittedDonorId(), projectCode))
-          .setSpecimenId(context.ensureSpecimenId(donor.getSubmittedSpecimenId(), projectCode))
-          .setSampleId(context.ensureSampleId(donor.getSubmittedSampleId(), projectCode));
+          .setDonorId(context.ensureDonorId(submittedDonorId, projectCode))
+          .setSpecimenId(context.ensureSpecimenId(submittedSpecimenId, projectCode))
+          .setSampleId(context.ensureSampleId(submittedSampleId, projectCode));
     }
   }
 
@@ -263,7 +271,7 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
   }
 
   private static Set<String> resolveTCGAProjectCodes() {
-    return stream(getTARGETProjects()).map(project -> project.getProjectCode()).collect(toImmutableSet());
+    return stream(getTCGAProjects()).map(project -> project.getProjectCode()).collect(toImmutableSet());
   }
 
   private static String resolveFileName(JsonNode workflowFile) {

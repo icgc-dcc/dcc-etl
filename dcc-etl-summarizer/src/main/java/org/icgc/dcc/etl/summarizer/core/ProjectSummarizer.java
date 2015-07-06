@@ -34,15 +34,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Stopwatch;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code Project} collection information.
@@ -100,7 +100,7 @@ public class ProjectSummarizer extends AbstractSummarizer {
     // Summarize
     summarizeAvailableTypes(projectSummaries);
     summarizeTotalDonorCounts(projectSummaries);
-    summarizeTotalCompleteDonorCounts(projectSummaries);
+    summarizeTotalLiveDonorCounts(projectSummaries);
     summarizeSpecimenSampleCounts(projectSummaries);
     summarizeTestedTypeCounts(projectSummaries);
     summarizeRepositories(projectSummaries);
@@ -191,9 +191,9 @@ public class ProjectSummarizer extends AbstractSummarizer {
     }
   }
 
-  private void summarizeTotalCompleteDonorCounts(Map<String, ObjectNode> projectSummaries) {
+  private void summarizeTotalLiveDonorCounts(Map<String, ObjectNode> projectSummaries) {
     val results =
-        uniqueIndex(repository.getProjectCompleteDonorCounts(), result -> result.get("projectId").textValue());
+        uniqueIndex(repository.getProjectLiveDonorCounts(), result -> result.get("projectId").textValue());
 
     for (val entry : projectSummaries.entrySet()) {
       val projectId = entry.getKey();
@@ -201,10 +201,10 @@ public class ProjectSummarizer extends AbstractSummarizer {
 
       val result = results.get(projectId);
       val donorCount = result != null ? result.get("donorCount").asInt() : 0;
-      val complete = donorCount > 0;
+      val state = donorCount > 0 ? "live" : "pending";
 
-      setComplete(projectSummary, complete);
-      setTotalCompleteDonorCount(projectSummary, donorCount);
+      setProjectState(projectSummary, state);
+      setTotalLiveDonorCount(projectSummary, donorCount);
     }
   }
 

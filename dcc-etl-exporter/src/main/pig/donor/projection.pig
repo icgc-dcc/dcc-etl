@@ -2,9 +2,8 @@
 DEFINE ExtractId org.icgc.dcc.etl.exporter.pig.udf.ExtractId();
 %default JSON_LOADER 'com.twitter.elephantbird.pig.load.JsonLoader'
 
--- load donor 
+-- load donor
 donor = LOAD '$OBSERVATION' USING $JSON_LOADER('-nestedLoad') as document:map[];
-
 specimen = FOREACH donor GENERATE document#'_donor_id' as icgc_donor_id,
                                (bag{tuple(map[])}) document#'specimen' as specimens;
 
@@ -18,7 +17,8 @@ flat_study = FOREACH flat_sample GENERATE icgc_donor_id,
                       s#'study' as study;
 
 filter_study = FILTER flat_study by study is not null;
-study_field  = FOREACH (GROUP filter_study BY icgc_donor_id) GENERATE FLATTEN(filter_study);
+unique_study = DISTINCT filter_study;
+study_field  = FOREACH (GROUP unique_study BY icgc_donor_id) GENERATE FLATTEN(unique_study);
 
 projected_donor = FOREACH donor GENERATE ExtractId(document#'_donor_id') as donor_id:int,
                                          document#'_donor_id' as icgc_donor_id,
@@ -47,7 +47,7 @@ donor_with_study = JOIN projected_donor by icgc_donor_id LEFT OUTER, study_field
 selected_donor = FOREACH donor_with_study GENERATE projected_donor::donor_id as donor_id,
                                                    projected_donor::icgc_donor_id as icgc_donor_id,
                                                    projected_donor::project_code as project_code,
-                                                   study_field::filter_study::study as study_donor_involved_in,
+                                                   study_field::unique_study::study as study_donor_involved_in,
                                                    projected_donor::submitted_donor_id as submitted_donor_id,
                                                    projected_donor::donor_sex as donor_sex,
                                                    projected_donor::donor_vital_status as donor_vital_status,

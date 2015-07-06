@@ -15,25 +15,40 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo;
-
-import static org.icgc.dcc.etl.repo.util.Tests.createLocalRepositoryFileContext;
+package org.icgc.dcc.etl.exporter.pig.udf;
 
 import java.io.IOException;
 
-import lombok.val;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.pig.EvalFunc;
+import org.apache.pig.data.Tuple;
 
-import org.junit.Ignore;
-import org.junit.Test;
+public class ComputeSize extends EvalFunc<Long> {
 
-@Ignore("For development only")
-public class RepositoryImporterTest {
-
-  @Test
-  public void testExecute() throws IOException {
-    val context = createLocalRepositoryFileContext();
-    val repositoryImporter = new RepositoryImporter(context);
-    repositoryImporter.execute();
+  public ComputeSize() {
+    super();
   }
 
+  @Override
+  public Long exec(Tuple input) throws IOException {
+    long total = 0;
+    for (int i = 0; i < input.size(); ++i) {
+      Object cellValue = input.get(i);
+      if (cellValue == null) {
+        ++total;
+        continue;
+      }
+
+      String value = (String) cellValue;
+      if (value.trim().isEmpty()) {
+        ++total;
+        continue;
+      }
+
+      byte[] bytes = Bytes.toBytes(value);
+      total += bytes.length;
+    }
+
+    return total;
+  }
 }

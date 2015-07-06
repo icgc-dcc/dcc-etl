@@ -20,18 +20,14 @@ import static com.google.common.base.Strings.emptyToNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE_ID;
-import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_COMPLETE;
-import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_COMPLETE_DONOR_COUNT;
+import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_STATE;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_DONOR_COUNT;
+import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_LIVE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.getTestedTypeCountFieldName;
 
 import java.util.Set;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
@@ -44,6 +40,10 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import com.google.common.collect.Sets;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Abstract base class for the collection summarizer implementations. Provides utility methods and objects.
@@ -125,12 +125,12 @@ public abstract class AbstractSummarizer {
     node.put(TOTAL_DONOR_COUNT, donorCount);
   }
 
-  static void setComplete(ObjectNode node, boolean complete) {
-    node.put(PROJECT_SUMMARY_COMPLETE, complete);
+  static void setProjectState(ObjectNode node, String state) {
+    node.put(PROJECT_SUMMARY_STATE, state);
   }
 
-  static void setTotalCompleteDonorCount(ObjectNode node, int donorCount) {
-    node.put(TOTAL_COMPLETE_DONOR_COUNT, donorCount);
+  static void setTotalLiveDonorCount(ObjectNode node, int donorCount) {
+    node.put(TOTAL_LIVE_DONOR_COUNT, donorCount);
   }
 
   static void setTotalSpecimenCount(ObjectNode node, int specimenCount) {

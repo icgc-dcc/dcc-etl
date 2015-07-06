@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.etl.db.importer;
 
+import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.base.Throwables.getStackTraceAsString;
 import static com.google.common.collect.Maps.uniqueIndex;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteCgsUri;
 import static org.icgc.dcc.etl.db.importer.util.Importers.getRemoteGenesBsonUri;
@@ -30,6 +32,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
+import org.icgc.dcc.common.core.mail.Mailer;
 import org.icgc.dcc.etl.db.importer.cgc.CgcImporter;
 import org.icgc.dcc.etl.db.importer.cli.CollectionName;
 import org.icgc.dcc.etl.db.importer.core.Importer;
@@ -39,7 +42,6 @@ import org.icgc.dcc.etl.db.importer.go.GoImporter;
 import org.icgc.dcc.etl.db.importer.pathway.PathwayImporter;
 import org.icgc.dcc.etl.db.importer.project.ProjectImporter;
 
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.mongodb.MongoClientURI;
 
@@ -77,15 +79,22 @@ public class DBImporter {
   }
 
   public void execute(@NonNull Collection<CollectionName> collectionNames) {
-    for (val collectionName : COLLECTION_ORDER) {
-      if (collectionNames.contains(collectionName)) {
-        val importer = importers.get(collectionName);
+    try {
+      for (val collectionName : COLLECTION_ORDER) {
+        if (collectionNames.contains(collectionName)) {
+          val importer = importers.get(collectionName);
 
-        val watch = Stopwatch.createStarted();
-        log.info("Importing '{}'...", collectionName);
-        importer.execute();
-        log.info("Finished importing '{}' in {}", collectionName, watch);
+          val watch = createStarted();
+          log.info("Importing '{}'...", collectionName);
+          importer.execute();
+          log.info("Finished importing '{}' in {}", collectionName, watch);
+        }
       }
+    } catch (Exception e) {
+      log.error("Unknown error:", e);
+      new Mailer().sendMail("DCC - ETL DB Importer - FAILED", getStackTraceAsString(e));
+
+      throw e;
     }
   }
 

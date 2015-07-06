@@ -38,6 +38,7 @@ import org.junit.Test;
 
 import com.mongodb.MongoClientURI;
 
+@Ignore("This is tested in ETLIntegration")
 public class DBImporterTest {
 
   /**
@@ -52,7 +53,6 @@ public class DBImporterTest {
   private final Jongo jongo = createJongo(new MongoClientURI(CONFIG.getGeneMongoUri()));
 
   @Test
-  @Ignore("This is tested in ETLIntegration")
   public void testExecute() {
     val dbImporter = new DBImporter(CONFIG.getGeneMongoUri(), createICGCConfig(CONFIG));
     val collections = Arrays.asList(CollectionName.values());

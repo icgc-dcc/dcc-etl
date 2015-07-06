@@ -33,9 +33,6 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchScrollRequestBuilder;
@@ -44,6 +41,9 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
+
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Gathers statistics about elasticsearch entities.
@@ -181,6 +181,7 @@ public class EsStats {
   // TODO: Duplicated code:
 
   @SneakyThrows
+  @SuppressWarnings("resource")
   private TransportClient transportClient() {
     URI esUri = new URI(uri);
     String host = esUri.getHost();
