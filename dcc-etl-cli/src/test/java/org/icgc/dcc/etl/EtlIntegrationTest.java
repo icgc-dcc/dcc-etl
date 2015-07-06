@@ -54,11 +54,6 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Set;
 
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.hadoop.fs.Path;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
@@ -92,6 +87,11 @@ import com.google.common.collect.ImmutableSet;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EtlIntegrationTest {
@@ -196,7 +196,7 @@ public class EtlIntegrationTest {
         "-r", TEST_RELEASE_PREFIX,
         "-i", DONOR_TYPE.getName() + "," + DONOR_CENTRIC_TYPE.getName(),
 
-        IMPORT.getId());
+    IMPORT.getId());
   }
 
   @After
@@ -321,6 +321,7 @@ public class EtlIntegrationTest {
   }
 
   @SneakyThrows
+  @SuppressWarnings("resource")
   private TransportClient getIndexClient() {
     URI esUri = getEsUri();
     return new TransportClient().addTransportAddress(

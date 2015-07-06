@@ -28,8 +28,6 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
 import static org.icgc.dcc.etl.summarizer.util.Donors.getAgeGroup;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 
@@ -40,6 +38,9 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code Donor} collection information.
@@ -118,7 +119,7 @@ public class DonorSummarizer extends AbstractSummarizer {
     summarizeDonorGenes();
     summarizeDonorRepositories();
     summarizeDonorStudies();
-    summarizeDonorCompleteness();
+    summarizeDonorState();
     summarizeDonorLibraryStrategies();
     summarizeDonorAgeGroups();
   }
@@ -241,18 +242,18 @@ public class DonorSummarizer extends AbstractSummarizer {
     }
   }
 
-  private void summarizeDonorCompleteness() {
+  private void summarizeDonorState() {
     val results = repository.getDonorAvailableDataTypes();
     for (val entry : results.entrySet()) {
       val donorId = entry.getKey();
       val donorAvailableDataTypes = entry.getValue();
 
-      val complete = !donorAvailableDataTypes.isEmpty();
+      val state = donorAvailableDataTypes.isEmpty() ? "pending" : "live";
 
       try {
-        repository.setDonorComplete(donorId, complete);
+        repository.setDonorState(donorId, state);
       } catch (Throwable t) {
-        log.error("Error setting donor completeness with donorId '{}' and completeness '{}'", donorId, complete);
+        log.error("Error setting donor state with donorId '{}' and state '{}'", donorId, state);
         throw new RuntimeException(t);
       }
     }

@@ -31,10 +31,10 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AFFECTED_GENE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_AGE_AT_DIAGNOSIS_GROUP;
-import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_COMPLETE;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_EXPERIMENTAL_ANALYSIS_SAMPLE_COUNTS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_REPOSITORY;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_STATE;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY_STUDIES;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SETS;
@@ -50,7 +50,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_PRIMARY_SITE;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY;
-import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_COMPLETE;
+import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_STATE;
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_LIBRARY_STRATEGY;
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_REPOSITORY;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
@@ -64,10 +64,6 @@ import static org.icgc.dcc.etl.summarizer.util.JsonNodes.textValues;
 import java.util.List;
 import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import org.bson.types.ObjectId;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.etl.summarizer.util.LongBatchQueryModifier;
@@ -75,6 +71,10 @@ import org.jongo.MongoCollection;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor
 public class ReleaseRepository {
@@ -218,11 +218,11 @@ public class ReleaseRepository {
         .with("{ $set: { " + field + ": # } }", extractStudies(studies));
   }
 
-  public void setDonorComplete(String donorId, boolean complete) {
-    String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETE;
+  public void setDonorState(String donorId, String state) {
+    String field = DONOR_SUMMARY + "." + DONOR_SUMMARY_STATE;
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
-        .with("{ $set: { " + field + ": # } }", complete);
+        .with("{ $set: { " + field + ": # } }", state);
   }
 
   public void setDonorExperimentalAnalysis(String donorId, JsonNode analysisSampleCounts) {
@@ -433,14 +433,14 @@ public class ReleaseRepository {
     // @formatter:on
   }
 
-  public List<JsonNode> getProjectCompleteDonorCounts() {
+  public List<JsonNode> getProjectLiveDonorCounts() {
     // @formatter:off
     // Use Donor collection as the basis for the pipeline    
     return donors
         // Retain only the required fields to reduce memory footprint and rename to internal field names: 
         //  {projectId: "p1"}        
         //  {projectId: "p1"}        
-        .aggregate("{ $match: { '" + DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETE + "': true } }")
+        .aggregate("{ $match: { '" + DONOR_SUMMARY + "." + DONOR_SUMMARY_STATE + "': 'live' } }")
         
         .and("{ $project: { projectId: '$" + DONOR_PROJECT_ID + "' } }")
         
@@ -538,8 +538,8 @@ public class ReleaseRepository {
     return projects.count();
   }
 
-  public long getReleaseCompleteProjectCount() {
-    return projects.count("{ '" + PROJECT_SUMMARY + "." + PROJECT_SUMMARY_COMPLETE + "': true }");
+  public long getReleaseLiveProjectCount() {
+    return projects.count("{ '" + PROJECT_SUMMARY + "." + PROJECT_SUMMARY_STATE + "': 'live' }");
   }
 
   public long getReleaseUniqueAffectedGeneCount() {
@@ -558,8 +558,8 @@ public class ReleaseRepository {
     return donors.count();
   }
 
-  public long getReleaseCompleteDonorCount() {
-    return donors.count("{ '" + DONOR_SUMMARY + "." + DONOR_SUMMARY_COMPLETE + "': true }");
+  public long getReleaseLiveDonorCount() {
+    return donors.count("{ '" + DONOR_SUMMARY + "." + DONOR_SUMMARY_STATE + "': 'live' }");
   }
 
   public void saveRelease(ObjectNode release) {

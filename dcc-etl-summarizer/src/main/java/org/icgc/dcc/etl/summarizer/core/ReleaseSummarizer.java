@@ -18,11 +18,11 @@
 package org.icgc.dcc.etl.summarizer.core;
 
 import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
-import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_DONOR_COUNT;
-import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_COMPLETE_PROJECT_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_DONOR_COUNT;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_PROJECT_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_MUTATED_GENE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_NAME;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_NUMBER;
@@ -31,13 +31,14 @@ import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_PROJECT_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_SPECIMEN_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_SSM_COUNT;
-import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.primitives.Ints;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ReleaseSummarizer extends AbstractSummarizer {
@@ -57,9 +58,9 @@ public class ReleaseSummarizer extends AbstractSummarizer {
     long projectCount = repository.getReleaseProjectCount();
     log.info("Found {} release projects", projectCount);
 
-    log.info("Finding release complete project count...");
-    long completeProjectCount = repository.getReleaseCompleteProjectCount();
-    log.info("Found {} release complete projects", completeProjectCount);
+    log.info("Finding release live project count...");
+    long liveProjectCount = repository.getReleaseLiveProjectCount();
+    log.info("Found {} release live projects", liveProjectCount);
 
     log.info("Finding release unique primary site count...");
     long uniquePrimarySiteCount = repository.getReleaseUniquePrimarySiteCount();
@@ -69,9 +70,9 @@ public class ReleaseSummarizer extends AbstractSummarizer {
     long donorCount = repository.getReleaseDonorCount();
     log.info("Found {} release donors", donorCount);
 
-    log.info("Finding release complete donor count...");
-    long completeDonorCount = repository.getReleaseCompleteDonorCount();
-    log.info("Found {} release complete donors", donorCount);
+    log.info("Finding release live donor count...");
+    long liveDonorCount = repository.getReleaseLiveDonorCount();
+    log.info("Found {} release live donors", donorCount);
 
     log.info("Finding release specimen count...");
     long specimenCount = repository.getReleaseSpecimenCount();
@@ -100,12 +101,12 @@ public class ReleaseSummarizer extends AbstractSummarizer {
 
     // Project counts
     release.put(RELEASE_PROJECT_COUNT, projectCount);
-    release.put(RELEASE_COMPLETE_PROJECT_COUNT, completeProjectCount);
+    release.put(RELEASE_LIVE_PROJECT_COUNT, liveProjectCount);
     release.put(RELEASE_PRIMARY_SITE_COUNT, uniquePrimarySiteCount);
 
     // Donor counts
     release.put(RELEASE_DONOR_COUNT, donorCount);
-    release.put(RELEASE_COMPLETE_DONOR_COUNT, completeDonorCount);
+    release.put(RELEASE_LIVE_DONOR_COUNT, liveDonorCount);
     release.put(RELEASE_SPECIMEN_COUNT, specimenCount);
     release.put(RELEASE_SAMPLE_COUNT, sampleCount);
 
