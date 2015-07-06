@@ -23,9 +23,9 @@ import java.io.IOException;
 
 import javax.xml.transform.TransformerException;
 
-import lombok.val;
-
 import org.junit.Test;
+
+import lombok.val;
 
 public class DiagramListReaderTest {
 
@@ -36,8 +36,8 @@ public class DiagramListReaderTest {
 
     assertThat(pathways.getDiagrammed()).isNotEmpty();
 
-    assertThat(pathways.getDiagrammed().size()).isIn(471, 533);
-    assertThat(pathways.getNotDiagrammed().size()).isIn(1254);
+    assertThat(pathways.getDiagrammed().size()).isIn(565);
+    assertThat(pathways.getNotDiagrammed().size()).isIn(1232, 1254);
 
     assertThat(pathways.getNotDiagrammed().contains("917729-199991")).isTrue();
   }
@@ -46,7 +46,7 @@ public class DiagramListReaderTest {
   public void testIdConvert() throws IOException {
     val reader = new DiagramListReader();
     val result = reader.getReactId("1300645");
-    assertThat(result).isEqualTo("REACT_163938");
+    assertThat(result).isEqualTo("R-HSA-1300645");
   }
 
 }

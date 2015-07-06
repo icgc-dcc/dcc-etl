@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.NonNull;
@@ -56,7 +57,12 @@ public class DiagramHighlightReader {
 
   private List<String> parseHighlights(URL diagramUrl) throws IOException {
     // Read the first (and only) line that contains a list of reaction ids to zoom in on
-    String text = nullToEmpty(readLines(diagramUrl, UTF_8).get(0));
+    val lines = readLines(diagramUrl, UTF_8);
+    if (lines.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    String text = nullToEmpty(lines.get(0));
 
     return COMMA.omitEmptyStrings().trimResults().splitToList(text);
   }
