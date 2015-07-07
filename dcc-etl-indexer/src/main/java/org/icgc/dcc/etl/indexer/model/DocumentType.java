@@ -172,7 +172,7 @@ public enum DocumentType {
                               "tumour_type",
                               "tumour_subtype",
                               "primary_site",
-                              "_summary._complete")
+                              "_summary._state")
                   )
           )
   ),
@@ -218,7 +218,7 @@ public enum DocumentType {
                               "specimen.specimen_id",
                               "specimen.sample._sample_id",
                               "specimen.sample.analyzed_sample_id",
-                              "_summary._complete")
+                              "_summary._state")
                   )
           )
   ),
