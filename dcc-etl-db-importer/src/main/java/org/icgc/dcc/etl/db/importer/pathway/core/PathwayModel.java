@@ -18,7 +18,6 @@
 package org.icgc.dcc.etl.db.importer.pathway.core;
 
 import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newHashMap;
 import static lombok.AccessLevel.NONE;
 
@@ -26,11 +25,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.pathway.model.Pathway;
@@ -39,7 +38,6 @@ import org.icgc.dcc.etl.db.importer.pathway.model.PathwaySummation;
 import org.icgc.dcc.etl.db.importer.pathway.model.PathwayUniprot;
 
 import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -65,7 +63,7 @@ public class PathwayModel {
    * Indexes.
    */
   BiMap<String, String> reactomeIdByName;
-  Map<String, Boolean> reactomeHasDiagramByName;
+  Map<String, Boolean> reactomeHasDiagramById;
   Multimap<String, Pathway> pathwaysByUniprot;
 
   public void update() {
@@ -78,11 +76,6 @@ public class PathwayModel {
     createSummationPathways();
     log.info("Creating uniprot pathways...");
     createUniprotPathways();
-
-    log.info("Indexing reactome ids...");
-    indexReactomeNameReactomeId();
-    log.info("Updating reactome ids...");
-    updateReactomeIds();
 
     log.info("Indexing reactome names...");
     indexReactomeNameDiagrammed();
@@ -102,35 +95,20 @@ public class PathwayModel {
     return pathwaysByUniprot.get(uniprot);
   }
 
-  public Collection<List<PathwaySegment>> getHierarchy(String reactomeName) {
-    return hierarchies.get(reactomeName);
+  public Collection<List<PathwaySegment>> getHierarchy(String reactomeId) {
+    return hierarchies.get(reactomeId);
   }
 
-  public boolean hasDiagram(String reactomeName) {
-    return firstNonNull(reactomeHasDiagramByName.get(reactomeName), false);
-  }
-
-  public String getReactomeName(String reactomeId) {
-    return reactomeIdByName.inverse().get(reactomeId);
-  }
-
-  public String getReactomeId(String reactomeName) {
-    return reactomeIdByName.get(reactomeName);
-  }
-
-  private void indexReactomeNameReactomeId() {
-    reactomeIdByName = HashBiMap.create();
-    for (val summation : summations) {
-      reactomeIdByName.put(summation.getReactomeName(), summation.getReactomeId());
-    }
+  public boolean hasDiagram(String reactomeId) {
+    return firstNonNull(reactomeHasDiagramById.get(reactomeId), false);
   }
 
   private void indexReactomeNameDiagrammed() {
-    reactomeHasDiagramByName = newHashMap();
+    reactomeHasDiagramById = newHashMap();
     for (val reactomeName : hierarchies.keySet()) {
       for (val path : hierarchies.get(reactomeName)) {
         for (val segment : path) {
-          reactomeHasDiagramByName.put(segment.getReactomeName(), segment.isDiagrammed());
+          reactomeHasDiagramById.put(segment.getReactomeId(), segment.isDiagrammed());
         }
       }
     }
@@ -172,24 +150,12 @@ public class PathwayModel {
       pathway.setEvidenceCode(uniprot.getEvidenceCode());
       pathway.getUniprots().add(uniprot.getUniprot());
 
-      pathways.put(pathway.getReactomeId(), pathway);
-    }
-  }
-
-  private void updateReactomeIds() {
-    // Identify Reactome names with Reactome ids
-    for (val reactomeName : hierarchies.keySet()) {
-      val pathwayHierarchy = getHierarchy(reactomeName);
-      for (val path : pathwayHierarchy) {
-        for (val pathwaySegment : path) {
-          val reactomeId = getReactomeId(pathwaySegment.getReactomeName());
-          checkNotNull(reactomeId,
-              "Cannot find reactome id for pathway segment with reactome name '%s' and segment '%s'",
-              pathwaySegment.getReactomeName(), pathwaySegment);
-
-          pathwaySegment.setReactomeId(reactomeId);
-        }
+      // If name wasn't in summation, use the name from uniprot file
+      if (pathway.getReactomeName() == null) {
+        pathway.setReactomeName(uniprot.getName());
       }
+
+      pathways.put(pathway.getReactomeId(), pathway);
     }
   }
 

@@ -17,8 +17,8 @@
  */
 package org.icgc.dcc.etl.db.importer.pathway.model;
 
-import lombok.Data;
 import lombok.Builder;
+import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -62,11 +62,13 @@ public class PathwayUniprotReader extends AbstractTsvMapReader {
       val uniprot = record.get(FieldNames.PATHWAY_UNIPROT_ID);
       val reactomeId = record.get(FieldNames.PATHWAY_REACTOME_ID);
       val evidenceCode = record.get(FieldNames.PATHWAY_EVIDENCE_CODE);
+      val name = record.get(FieldNames.PATHWAY_NAME);
 
       val pathwyUniprot = PathwayUniprot.builder()
           .uniprot(uniprot)
           .reactomeId(reactomeId)
           .evidenceCode(evidenceCode)
+          .name(name)
           .build();
 
       uniprots.add(pathwyUniprot);

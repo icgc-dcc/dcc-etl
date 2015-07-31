@@ -17,8 +17,6 @@
  */
 package org.icgc.dcc.etl.db.importer.diagram.reader;
 
-import static java.lang.String.format;
-import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.db.importer.diagram.reader.DiagramReader.REACTOME_BASE_URL;
 
 import java.io.IOException;
@@ -83,11 +81,13 @@ public class DiagramListReader {
   }
 
   public String getReactId(@NonNull String dbId) throws IOException {
-    val querlUrl = new URL(format(DIAGRAMS_ID_CONVERT_URL, dbId));
-    val id = DEFAULT.readTree(querlUrl).path("stableIdentifier").path("displayName").asText();
+    return "R-HSA-" + dbId;
 
-    val versionlessId = id.indexOf(".");
-    return id.substring(0, versionlessId);
+    // val querlUrl = new URL(format(DIAGRAMS_ID_CONVERT_URL, dbId));
+    // val id = DEFAULT.readTree(querlUrl).path("stableIdentifier").path("displayName").asText();
+
+    // val versionlessId = id.indexOf(".");
+    // return id.substring(0, versionlessId);
   }
 
 }

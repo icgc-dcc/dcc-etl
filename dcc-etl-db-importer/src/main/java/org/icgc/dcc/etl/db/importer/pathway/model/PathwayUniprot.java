@@ -17,8 +17,8 @@
  */
 package org.icgc.dcc.etl.db.importer.pathway.model;
 
-import lombok.Value;
 import lombok.Builder;
+import lombok.Value;
 
 @Value
 @Builder
@@ -26,6 +26,7 @@ public class PathwayUniprot {
 
   String reactomeId;
   String uniprot;
+  String name;
 
   String evidenceCode;
 

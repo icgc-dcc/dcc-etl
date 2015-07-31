@@ -28,6 +28,7 @@ import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.db.importer.gene.model.GeneGeneSet;
 import org.icgc.dcc.etl.db.importer.pathway.core.PathwayModel;
@@ -36,6 +37,7 @@ import org.icgc.dcc.etl.db.importer.pathway.model.Pathway;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Sets;
 
+@Slf4j
 @RequiredArgsConstructor
 public class PathwayGeneGeneSetsBuilder {
 
@@ -49,7 +51,7 @@ public class PathwayGeneGeneSetsBuilder {
     val inferredPathways = getInferredPathways(geneUniprotIds);
     for (val inferredPathway : inferredPathways) {
       val direct = isDirect(geneUniprotIds, inferredPathway);
-
+      log.info(" {} " + inferredPathway);
       val geneSet = GeneGeneSet.builder()
           .id(inferredPathway.getReactomeId())
           .name(inferredPathway.getReactomeName())
@@ -72,7 +74,7 @@ public class PathwayGeneGeneSetsBuilder {
         uniqueInferredPathways.add(uniprotPathway);
 
         // These are strictly non-"self"
-        val uniprotHierarchy = model.getHierarchy(uniprotPathway.getReactomeName());
+        val uniprotHierarchy = model.getHierarchy(uniprotPathway.getReactomeId());
         for (val path : uniprotHierarchy) {
           for (val pathSegment : path) {
             val inferredPathway = model.getPathway(pathSegment.getReactomeId());
