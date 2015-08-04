@@ -51,7 +51,7 @@ public class PathwayGeneGeneSetsBuilder {
     val inferredPathways = getInferredPathways(geneUniprotIds);
     for (val inferredPathway : inferredPathways) {
       val direct = isDirect(geneUniprotIds, inferredPathway);
-      log.info(" {} " + inferredPathway);
+      log.debug("{} ", inferredPathway);
       val geneSet = GeneGeneSet.builder()
           .id(inferredPathway.getReactomeId())
           .name(inferredPathway.getReactomeName())
