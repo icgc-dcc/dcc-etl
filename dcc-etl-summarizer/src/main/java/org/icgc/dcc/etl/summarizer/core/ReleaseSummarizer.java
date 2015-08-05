@@ -22,6 +22,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_DONOR_COUNT;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_PRIMARY_SITE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_PROJECT_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_MUTATED_GENE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_NAME;
@@ -64,7 +65,11 @@ public class ReleaseSummarizer extends AbstractSummarizer {
 
     log.info("Finding release unique primary site count...");
     long uniquePrimarySiteCount = repository.getReleaseUniquePrimarySiteCount();
-    log.info("Found {} release projects", uniquePrimarySiteCount);
+    log.info("Found {} release unique primary site count", uniquePrimarySiteCount);
+
+    log.info("Finding release unique live primary site count...");
+    long uniqueLivePrimarySiteCount = repository.getReleaseUniqueLivePrimarySiteCount();
+    log.info("Found {} release unique live primary site count", uniqueLivePrimarySiteCount);
 
     log.info("Finding release donor count...");
     long donorCount = repository.getReleaseDonorCount();
@@ -103,6 +108,7 @@ public class ReleaseSummarizer extends AbstractSummarizer {
     release.put(RELEASE_PROJECT_COUNT, projectCount);
     release.put(RELEASE_LIVE_PROJECT_COUNT, liveProjectCount);
     release.put(RELEASE_PRIMARY_SITE_COUNT, uniquePrimarySiteCount);
+    release.put(RELEASE_LIVE_PRIMARY_SITE_COUNT, uniqueLivePrimarySiteCount);
 
     // Donor counts
     release.put(RELEASE_DONOR_COUNT, donorCount);

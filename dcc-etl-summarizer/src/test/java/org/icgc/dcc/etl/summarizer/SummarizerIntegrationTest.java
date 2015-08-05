@@ -80,6 +80,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DATE;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_DONOR_COUNT;
+import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_PRIMARY_SITE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_LIVE_PROJECT_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_MUTATED_GENE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.RELEASE_NAME;
@@ -580,6 +581,7 @@ public class SummarizerIntegrationTest {
         RELEASE_PROJECT_COUNT + ":1," + 
         RELEASE_LIVE_PROJECT_COUNT + ":1," + 
         RELEASE_PRIMARY_SITE_COUNT + ":1," + 
+        RELEASE_LIVE_PRIMARY_SITE_COUNT + ":1," + 
         RELEASE_DONOR_COUNT + ":3," + 
         RELEASE_LIVE_DONOR_COUNT + ":2," + 
         RELEASE_SPECIMEN_COUNT + ":2," + 

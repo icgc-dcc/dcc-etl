@@ -554,6 +554,13 @@ public class ReleaseRepository {
     return projects.distinct(PROJECT_PRIMARY_SITE).as(String.class).size();
   }
 
+  public long getReleaseUniqueLivePrimarySiteCount() {
+    return projects.distinct(PROJECT_PRIMARY_SITE)
+        .query("{ '" + PROJECT_SUMMARY + "." + PROJECT_SUMMARY_STATE + "': 'live' }")
+        .as(String.class)
+        .size();
+  }
+
   public long getReleaseDonorCount() {
     return donors.count();
   }
