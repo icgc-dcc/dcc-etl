@@ -74,11 +74,12 @@ public class PathwayHierarchyReader {
       if (isPathwayElement(child)) {
         val segment = convertPathwayNode(child);
 
+        // Recurse
+        segments.push(segment);
+
         // Keep track of path from root
         hierarchies.put(segment.getReactomeId(), ImmutableList.copyOf(segments));
 
-        // Recurse
-        segments.push(segment);
         readNode(child, segments, hierarchies);
         segments.pop();
       }

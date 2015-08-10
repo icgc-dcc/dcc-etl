@@ -78,7 +78,7 @@ public class PathwayModel {
     createUniprotPathways();
 
     log.info("Indexing reactome names...");
-    indexReactomeNameDiagrammed();
+    indexReactomeIdDiagrammed();
     log.info("Indexing pathway uniprots...");
     indexPathwayUniprots();
   }
@@ -103,10 +103,11 @@ public class PathwayModel {
     return firstNonNull(reactomeHasDiagramById.get(reactomeId), false);
   }
 
-  private void indexReactomeNameDiagrammed() {
+  private void indexReactomeIdDiagrammed() {
     reactomeHasDiagramById = newHashMap();
-    for (val reactomeName : hierarchies.keySet()) {
-      for (val path : hierarchies.get(reactomeName)) {
+
+    for (val reactomeId : hierarchies.keySet()) {
+      for (val path : hierarchies.get(reactomeId)) {
         for (val segment : path) {
           reactomeHasDiagramById.put(segment.getReactomeId(), segment.isDiagrammed());
         }
