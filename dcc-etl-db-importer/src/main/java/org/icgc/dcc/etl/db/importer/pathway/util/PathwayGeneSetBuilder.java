@@ -40,8 +40,8 @@ public class PathwayGeneSetBuilder {
 
   public GeneSet build(@NonNull String reactomeId) {
     val pathway = model.getPathway(reactomeId);
-    val diagrammed = model.hasDiagram(pathway.getReactomeName());
-    val hierarchy = model.getHierarchy(pathway.getReactomeName());
+    val diagrammed = model.hasDiagram(pathway.getReactomeId());
+    val hierarchy = model.getHierarchy(pathway.getReactomeId());
 
     return GeneSet.builder()
         .id(pathway.getReactomeId())

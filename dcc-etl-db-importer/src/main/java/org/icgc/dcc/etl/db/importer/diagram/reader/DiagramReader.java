@@ -102,8 +102,10 @@ public class DiagramReader {
       count++;
     }
 
-    log.info("Failed to read highlights of {} pathways...", getFailedPathways().size());
-    printFailed();
+    if (getFailedPathways().isEmpty() == false) {
+      log.info("Failed to read highlights of {} pathways...", getFailedPathways().size());
+      printFailed();
+    }
 
     val updatedModel = new DiagramModel();
 
