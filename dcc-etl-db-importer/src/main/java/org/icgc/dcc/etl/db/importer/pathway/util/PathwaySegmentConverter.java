@@ -34,17 +34,21 @@ public final class PathwaySegmentConverter {
   /**
    * Reactome XML name constants.
    */
+  private static final String REACTOME_DB_ID = "dbId";
   private static final String REACTOME_DISPLAY_NAME_ATTRIBUTE_NAME = "displayName";
   private static final String REACTOME_HAS_DIAGRAM_ATTRIBUTE_NAME = "hasDiagram";
+
+  private static final String REACTOME_PREFIX = "R-HSA-";
 
   public static PathwaySegment convertPathwayNode(@NonNull Node pathwayNode) {
     // Extract
     val name = unescapeHtml4(getAttributeValue(pathwayNode, REACTOME_DISPLAY_NAME_ATTRIBUTE_NAME));
     val hasDiagram =
         parseBoolean(firstNonNull(getAttributeValue(pathwayNode, REACTOME_HAS_DIAGRAM_ATTRIBUTE_NAME), "false"));
+    val reactomeId = REACTOME_PREFIX + getAttributeValue(pathwayNode, REACTOME_DB_ID);
 
     return PathwaySegment.builder()
-        .reactomeId(null)
+        .reactomeId(reactomeId)
         .reactomeName(name)
         .diagrammed(hasDiagram)
         .build();

@@ -49,7 +49,7 @@ public final class Importers {
    */
   private static final String IMPORT_ARTIFACT_ID = "dcc-heliotrope";
   private static final String IMPORT_ARTIFACT_GROUP_ID = "org/icgc/dcc";
-  private static final String IMPORT_ARTIFACT_VERSION = "13";
+  private static final String IMPORT_ARTIFACT_VERSION = "14";
   private static final String IMPORT_ARTIFACT_TYPE = "jar";
   private static final String IMPORT_ARTIFACT_PATH = "" +
       IMPORT_ARTIFACT_GROUP_ID + "/" + IMPORT_ARTIFACT_ID + "/" + IMPORT_ARTIFACT_VERSION + "/" +
