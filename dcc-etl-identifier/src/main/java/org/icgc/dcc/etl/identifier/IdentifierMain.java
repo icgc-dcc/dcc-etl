@@ -26,6 +26,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.icgc.dcc.etl.identifier.config.IdentifierConfig;
 import org.icgc.dcc.etl.identifier.mapper.BadRequestExceptionMapper;
@@ -48,6 +49,7 @@ import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.jdbi.DBIFactory;
 import com.yammer.dropwizard.jdbi.bundles.DBIExceptionsBundle;
+import com.yammer.metrics.reporting.ConsoleReporter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,6 +82,8 @@ public class IdentifierMain extends Service<IdentifierConfig> {
 
     environment.addProvider(BadRequestExceptionMapper.class);
     environment.addProvider(NotFoundExceptionMapper.class);
+
+    ConsoleReporter.enable(30, TimeUnit.MINUTES);
 
     logInfo(config, args);
   }
