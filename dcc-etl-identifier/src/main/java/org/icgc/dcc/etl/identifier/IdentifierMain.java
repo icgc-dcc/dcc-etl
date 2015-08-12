@@ -27,10 +27,9 @@ import java.lang.management.RuntimeMXBean;
 import java.util.List;
 import java.util.Properties;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.etl.identifier.config.IdentifierConfig;
 import org.icgc.dcc.etl.identifier.mapper.BadRequestExceptionMapper;
+import org.icgc.dcc.etl.identifier.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.etl.identifier.repository.DonorRepository;
 import org.icgc.dcc.etl.identifier.repository.MutationRepository;
 import org.icgc.dcc.etl.identifier.repository.ProjectRepository;
@@ -49,6 +48,8 @@ import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.jdbi.DBIFactory;
 import com.yammer.dropwizard.jdbi.bundles.DBIExceptionsBundle;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class IdentifierMain extends Service<IdentifierConfig> {
@@ -76,7 +77,9 @@ public class IdentifierMain extends Service<IdentifierConfig> {
     environment.addResource(new SpecimenResource(jdbi.onDemand(SpecimenRepository.class)));
     environment.addResource(new SampleResource(jdbi.onDemand(SampleRepository.class)));
     environment.addResource(new MutationResource(jdbi.onDemand(MutationRepository.class)));
+
     environment.addProvider(BadRequestExceptionMapper.class);
+    environment.addProvider(NotFoundExceptionMapper.class);
 
     logInfo(config, args);
   }
