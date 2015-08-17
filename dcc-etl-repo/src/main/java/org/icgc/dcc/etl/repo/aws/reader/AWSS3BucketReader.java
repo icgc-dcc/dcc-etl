@@ -23,9 +23,6 @@ import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -35,13 +32,16 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.google.common.collect.ImmutableList;
 
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class AWSS3BucketReader {
 
   /**
    * Constants.
    */
-  private static final String DEFAULT_BUCKET_NAME = "oicr.icgc.collaboratory";
+  private static final String DEFAULT_BUCKET_NAME = "oicr.icgc";
 
   public List<RepositoryFile> read() {
     val bucketName = DEFAULT_BUCKET_NAME;

@@ -15,37 +15,27 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.tcga;
+package org.icgc.dcc.etl.repo.aws.reader;
 
-import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
-
-import org.icgc.dcc.etl.repo.core.GenericRepositorySourceFileImporter;
-import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.tcga.core.TCGAClinicalFileProcessor;
+import org.junit.Test;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
- */
 @Slf4j
-public class TCGAImporter extends GenericRepositorySourceFileImporter {
+public class AWSS3TransferJobReaderTest {
 
-  public TCGAImporter(RepositoryFileContext context) {
-    super(TCGA, context);
-  }
+  @Test
+  public void testRead() {
+    val reader = new AWSS3TransferJobReader();
 
-  @Override
-  protected Iterable<RepositoryFile> readFiles() {
-    val processor = new TCGAClinicalFileProcessor(context);
-
-    log.info("Processining clinical files...");
-    val files = processor.processClinicalFiles();
-    log.info("Finished processing clinical files");
-
-    return files;
+    for (val job : reader.read()) {
+      log.info("Job: {}", job);
+      for (val file : job.withArray("files")) {
+        val objectId = file.get("object_id").textValue();
+        log.info("  objectId: {}", objectId);
+      }
+    }
   }
 
 }

@@ -18,22 +18,23 @@
 package org.icgc.dcc.etl.repo.cghub;
 
 import static org.icgc.dcc.etl.repo.model.RepositorySource.CGHUB;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.repo.cghub.core.CGHubAnalysisDetailProcessor;
 import org.icgc.dcc.etl.repo.cghub.reader.CGHubAnalysisDetailReader;
+import org.icgc.dcc.etl.repo.core.GenericRepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @see https://tcga-data.nci.nih.gov/datareports/codeTablesReport.htm
  */
 @Slf4j
-public class CGHubImporter extends RepositorySourceFileImporter {
+public class CGHubImporter extends GenericRepositorySourceFileImporter {
 
   public CGHubImporter(RepositoryFileContext context) {
     super(CGHUB, context);

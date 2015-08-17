@@ -15,37 +15,28 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.tcga;
+package org.icgc.dcc.etl.repo.core;
 
-import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
+import org.icgc.dcc.etl.repo.model.RepositorySource;
 
-import org.icgc.dcc.etl.repo.core.GenericRepositorySourceFileImporter;
-import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.tcga.core.TCGAClinicalFileProcessor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+@RequiredArgsConstructor
+public abstract class AbstractRepositorySourceFileImporter implements RepositorySourceFileImporter {
 
-/**
- * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
- */
-@Slf4j
-public class TCGAImporter extends GenericRepositorySourceFileImporter {
+  /**
+   * Metadata.
+   */
+  @NonNull
+  @Getter
+  protected RepositorySource source;
 
-  public TCGAImporter(RepositoryFileContext context) {
-    super(TCGA, context);
-  }
-
-  @Override
-  protected Iterable<RepositoryFile> readFiles() {
-    val processor = new TCGAClinicalFileProcessor(context);
-
-    log.info("Processining clinical files...");
-    val files = processor.processClinicalFiles();
-    log.info("Finished processing clinical files");
-
-    return files;
-  }
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  protected RepositoryFileContext context;
 
 }

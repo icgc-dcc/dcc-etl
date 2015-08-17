@@ -44,12 +44,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkProcessor.Listener;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -66,6 +60,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.mongodb.MongoClientURI;
+
+import lombok.Cleanup;
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class RepositoryFileIndexer extends AbstractJongoComponent implements Closeable {
@@ -167,12 +167,12 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
       String id = file.get("id").textValue();
 
       // Need to remove this as to not conflict with Elasticsearch
-        file.remove("_id");
-        processor.add(indexRequest(indexName).type(INDEX_TYPE_FILE_NAME).id(id).source(file.toString()));
+      file.remove("_id");
+      processor.add(indexRequest(indexName).type(INDEX_TYPE_FILE_NAME).id(id).source(file.toString()));
 
-        JsonNode fileText = createFileText(file, id);
-        processor.add(indexRequest(indexName).type(INDEX_TYPE_FILE_TEXT_NAME).id(id).source(fileText.toString()));
-      });
+      JsonNode fileText = createFileText(file, id);
+      processor.add(indexRequest(indexName).type(INDEX_TYPE_FILE_TEXT_NAME).id(id).source(fileText.toString()));
+    });
   }
 
   @SneakyThrows
@@ -217,7 +217,6 @@ public class RepositoryFileIndexer extends AbstractJongoComponent implements Clo
       val fileDonor = DEFAULT.createObjectNode();
 
       // By convention this is called id
-      fileDonor.put("id", donorId);
       fileDonor.put("id", donorId);
       fileDonor.put("donor_id", donorId);
 

@@ -15,37 +15,55 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.tcga;
+package org.icgc.dcc.etl.repo.core;
 
-import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
+import static com.google.common.base.Stopwatch.createStarted;
+import static com.google.common.collect.Iterables.isEmpty;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 
-import org.icgc.dcc.etl.repo.core.GenericRepositorySourceFileImporter;
-import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.tcga.core.TCGAClinicalFileProcessor;
+import org.icgc.dcc.etl.repo.model.RepositorySource;
 
+import lombok.Cleanup;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
- */
 @Slf4j
-public class TCGAImporter extends GenericRepositorySourceFileImporter {
+public abstract class GenericRepositorySourceFileImporter extends AbstractRepositorySourceFileImporter {
 
-  public TCGAImporter(RepositoryFileContext context) {
-    super(TCGA, context);
+  public GenericRepositorySourceFileImporter(RepositorySource source, RepositoryFileContext context) {
+    super(source, context);
   }
 
   @Override
-  protected Iterable<RepositoryFile> readFiles() {
-    val processor = new TCGAClinicalFileProcessor(context);
+  @SneakyThrows
+  public void execute() {
+    val watch = createStarted();
 
-    log.info("Processining clinical files...");
-    val files = processor.processClinicalFiles();
-    log.info("Finished processing clinical files");
+    log.info("Reading files...");
+    val files = readFiles();
+    log.info("Finished reading files");
 
-    return files;
+    if (isEmpty(files)) {
+      log.error("**** Files are empty! Reusing previous imported files");
+      return;
+    }
+
+    log.info("Writing files...");
+    writeFiles(files);
+    log.info("Finished writing files");
+
+    log.info("Imported {} files in {}.", formatCount(files), watch);
+  }
+
+  protected abstract Iterable<RepositoryFile> readFiles();
+
+  @SneakyThrows
+  protected void writeFiles(Iterable<RepositoryFile> files) {
+    @Cleanup
+    val writer = new RepositorySourceFileWriter(context.getMongoUri(), source);
+    writer.write(files);
   }
 
 }

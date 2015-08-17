@@ -15,37 +15,60 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.tcga;
+package org.icgc.dcc.etl.repo.aws.writer;
 
-import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
+import static com.google.common.base.Preconditions.checkState;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 
-import org.icgc.dcc.etl.repo.core.GenericRepositorySourceFileImporter;
-import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.model.RepositoryFile;
-import org.icgc.dcc.etl.repo.tcga.core.TCGAClinicalFileProcessor;
+import java.util.Set;
 
+import org.icgc.dcc.etl.repo.util.AbstractJongoWriter;
+import org.jongo.MongoCollection;
+
+import com.google.common.collect.ImmutableMap;
+import com.mongodb.MongoClientURI;
+
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
- */
 @Slf4j
-public class TCGAImporter extends GenericRepositorySourceFileImporter {
+public class AWSS3ObjectIdWriter extends AbstractJongoWriter<Set<String>> {
 
-  public TCGAImporter(RepositoryFileContext context) {
-    super(TCGA, context);
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  protected final MongoCollection awsCollection;
+
+  public AWSS3ObjectIdWriter(MongoClientURI mongoUri) {
+    super(mongoUri);
+    this.awsCollection = jongo.getCollection("AWS");
   }
 
   @Override
-  protected Iterable<RepositoryFile> readFiles() {
-    val processor = new TCGAClinicalFileProcessor(context);
+  public void write(Set<String> objectIds) {
+    log.info("Clearing object id documents...");
+    clearObjectIds();
 
-    log.info("Processining clinical files...");
-    val files = processor.processClinicalFiles();
-    log.info("Finished processing clinical files");
+    log.info("Writing object id documents...");
+    saveObjectIds(objectIds);
+  }
 
-    return files;
+  private void clearObjectIds() {
+    log.info("Clearing '{}' documents in collection '{}'", awsCollection.getName());
+    val result = awsCollection.remove("{}");
+    checkState(result.getLastError().ok(), "Error clearing mongo: %s", result);
+
+    log.info("Finished clearing {} documents in collection '{}'",
+        formatCount(result.getN()), awsCollection.getName());
+  }
+
+  private void saveObjectIds(Set<String> objectIds) {
+    for (val objectId : objectIds) {
+      val document = ImmutableMap.of("objectId", objectId);
+      awsCollection.save(document);
+    }
   }
 
 }
