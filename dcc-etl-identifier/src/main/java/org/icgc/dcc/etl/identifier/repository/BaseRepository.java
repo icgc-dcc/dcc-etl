@@ -23,6 +23,8 @@ import java.util.Arrays;
 
 import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 
+import lombok.val;
+
 public abstract class BaseRepository {
 
   /**
@@ -44,7 +46,11 @@ public abstract class BaseRepository {
     }
 
     // Resolve the "internal" representation of the id
-    Long id = resolveId(create, keys);
+    val id = resolveId(create, keys);
+    val missing = id == null;
+    if (missing) {
+      throw new NotFoundException("No id found for business key: " + formatKeys(keys));
+    }
 
     // Format for public consumption
     return formatId(id);
