@@ -21,11 +21,12 @@ import static com.google.common.base.Joiner.on;
 import static com.google.common.hash.Hashing.md5;
 
 import java.io.IOException;
-
-import lombok.NoArgsConstructor;
+import java.util.Optional;
 
 import com.google.common.base.Joiner;
 import com.google.common.hash.HashFunction;
+
+import lombok.NoArgsConstructor;
 
 /**
  * Stateless hash based {@link IdentifierClient} implementation that returns a stable id based on it it's inputs.
@@ -47,57 +48,57 @@ public class HashIdentifierClient implements IdentifierClient {
   }
 
   @Override
-  public String getDonorId(String submittedDonorId, String submittedProjectId) {
-    return "DO" + generateId(
+  public Optional<String> getDonorId(String submittedDonorId, String submittedProjectId) {
+    return Optional.of("DO" + generateId(
         submittedDonorId,
-        submittedProjectId);
+        submittedProjectId));
   }
 
   @Override
-  public String getSampleId(String submittedSampleId, String submittedProjectId) {
-    return "SA" + generateId(
+  public Optional<String> getSampleId(String submittedSampleId, String submittedProjectId) {
+    return Optional.of("SA" + generateId(
         submittedSampleId,
-        submittedProjectId);
+        submittedProjectId));
   }
 
   @Override
-  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    return "SP" + generateId(
+  public Optional<String> getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    return Optional.of("SP" + generateId(
         submittedSpecimenId,
-        submittedProjectId);
+        submittedProjectId));
   }
 
   @Override
-  public String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
-      String mutationType, String assemblyVersion) {
-    return "MU" + generateId(
+  public Optional<String> getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
+      String mutation, String mutationType, String assemblyVersion) {
+    return Optional.of("MU" + generateId(
         chromosome,
         chromosomeStart,
         chromosomeEnd,
         mutation,
         mutationType,
-        assemblyVersion);
+        assemblyVersion));
   }
 
   @Override
   public String createDonorId(String submittedDonorId, String submittedProjectId) {
-    return getDonorId(submittedDonorId, submittedProjectId);
+    return getDonorId(submittedDonorId, submittedProjectId).get();
   }
 
   @Override
   public String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
       String mutationType, String assemblyVersion) {
-    return getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
+    return getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion).get();
   }
 
   @Override
   public String createSampleId(String submittedSampleId, String submittedProjectId) {
-    return getSampleId(submittedSampleId, submittedProjectId);
+    return getSampleId(submittedSampleId, submittedProjectId).get();
   }
 
   @Override
   public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    return getSpecimenId(submittedSpecimenId, submittedProjectId);
+    return getSpecimenId(submittedSpecimenId, submittedProjectId).get();
   }
 
   @Override

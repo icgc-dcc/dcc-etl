@@ -1,100 +1,149 @@
-/*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
- *                                                                                                               
- * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
- * You should have received a copy of the GNU General Public License along with                                  
- * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
- *                                                                                                               
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package org.icgc.dcc.etl.core.id;
 
-import static com.google.common.collect.Lists.newArrayListWithCapacity;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.icgc.dcc.etl.core.id.HttpIdentifierClient.DONOR_ID_PATH;
+import static org.icgc.dcc.etl.core.id.HttpIdentifierClient.MUTATION_ID_PATH;
+import static org.icgc.dcc.etl.core.id.HttpIdentifierClient.SAMPLE_ID_PATH;
+import static org.icgc.dcc.etl.core.id.HttpIdentifierClient.SPECIMEN_ID_PATH;
 
-import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.icgc.dcc.etl.core.id.HttpIdentifierClient.Config;
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.google.common.base.Stopwatch;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+
+import lombok.val;
 
 public class HttpIdentifierClientTest {
 
-  private static HttpIdentifierClient idClient;
+  private static final int SERVER_PORT = 22223;
+  private static final String RESPONSE_ID = "valid response id";
 
-  @BeforeClass
-  public static void startup() throws Exception {
-    idClient = new HttpIdentifierClient("http://localhost:8080", "test-release");
-  }
+  @Rule
+  public WireMockRule wireMockRule = new WireMockRule(SERVER_PORT);
 
-  @AfterClass
-  public static void shutdown() {
-    idClient.close();
+  HttpIdentifierClient client = new HttpIdentifierClient(createClientConfig());
+
+  @Test
+  public void testGetDonorId() {
+    val requestUrl = format("%s?submittedDonorId=%s&submittedProjectId=%s&create=false", DONOR_ID_PATH, "s1",
+        "p1");
+    configureSuccessfulResponse(requestUrl);
+
+    val response = client.getDonorId("s1", "p1");
+    assertThat(response.get()).isEqualTo(RESPONSE_ID);
   }
 
   @Test
-  @Ignore
-  public void basicPerfTest() throws InterruptedException, BrokenBarrierException, ExecutionException {
-    int nClients = 5;
-    final int nReqs = 10 * 1000;
+  public void testCreateDonorId() {
+    val requestUrl = format("%s?submittedDonorId=%s&submittedProjectId=%s&create=true", DONOR_ID_PATH, "s1",
+        "p1");
+    configureSuccessfulResponse(requestUrl);
 
-    final CyclicBarrier barrier = new CyclicBarrier(nClients + 1);
-    final ListeningExecutorService pool =
-        MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(nClients));
+    val response = client.createDonorId("s1", "p1");
+    assertThat(response).isEqualTo(RESPONSE_ID);
+  }
 
-    class client implements Callable<List<String>> {
+  @Test
+  public void testGetMutationId() {
+    val requestUrl = format("%s?chromosome=%s&chromosomeStart=%s&chromosomeEnd=%s&mutation=%s&mutationType=%s&"
+        + "assemblyVersion=%s&create=false", MUTATION_ID_PATH, "x", "1", "2", "a_b", "ssm", "1");
+    configureSuccessfulResponse(requestUrl);
 
-      private final int id;
+    val response = client.getMutationId("x", "1", "2", "a_b", "ssm", "1");
+    assertThat(response.get()).isEqualTo(RESPONSE_ID);
+  }
 
-      public client(int id) {
-        this.id = id;
-      }
+  @Test
+  public void testCreateMutationId() {
+    val requestUrl = format("%s?chromosome=%s&chromosomeStart=%s&chromosomeEnd=%s&mutation=%s&mutationType=%s&"
+        + "assemblyVersion=%s&create=true", MUTATION_ID_PATH, "x", "1", "2", "a_b", "ssm", "1");
+    configureSuccessfulResponse(requestUrl);
 
-      @Override
-      public List<String> call() throws Exception {
-        List<String> ids = newArrayListWithCapacity(nReqs);
-        int start = id * nReqs;
-        int end = start + nReqs;
-        barrier.await();
-        for (int i = start; i < end; ++i) {
-          ids.add(idClient.createDonorId(String.valueOf(i), String.valueOf(i)));
-        }
-        return ids;
-      }
-    }
+    val response = client.createMutationId("x", "1", "2", "a_b", "ssm", "1");
+    assertThat(response).isEqualTo(RESPONSE_ID);
+  }
 
-    List<ListenableFuture<List<String>>> futures = newArrayListWithCapacity(nClients);
-    for (int j = 0; j < nClients; ++j) {
-      futures.add(pool.submit(new client(j)));
-    }
-    // Wait for all threads to get ready
-    final ListenableFuture<List<List<String>>> futureOfIds = Futures.allAsList(futures);
-    barrier.await();
-    Stopwatch watch = Stopwatch.createStarted();
-    futureOfIds.get();
-    watch.stop();
-    System.out.println("# Client :" + nClients + ", #Req/sec :" + (nReqs * nClients)
-        / watch.elapsed(SECONDS));
+  @Test
+  public void testGetSampleId() {
+    val requestUrl = format("%s?submittedSampleId=%s&submittedProjectId=%s&create=false", SAMPLE_ID_PATH, "s1",
+        "p1");
+    configureSuccessfulResponse(requestUrl);
+
+    val response = client.getSampleId("s1", "p1");
+    assertThat(response.get()).isEqualTo(RESPONSE_ID);
+  }
+
+  @Test
+  public void testCreateSampleId() {
+    val requestUrl = format("%s?submittedSampleId=%s&submittedProjectId=%s&create=true", SAMPLE_ID_PATH, "s1",
+        "p1");
+    configureSuccessfulResponse(requestUrl);
+
+    val response = client.createSampleId("s1", "p1");
+    assertThat(response).isEqualTo(RESPONSE_ID);
+  }
+
+  @Test
+  public void testGetSpecimenId() {
+    val requestUrl = format("%s?submittedSpecimenId=%s&submittedProjectId=%s&create=false", SPECIMEN_ID_PATH, "s1",
+        "p1");
+    configureSuccessfulResponse(requestUrl);
+
+    val response = client.getSpecimenId("s1", "p1");
+    assertThat(response.get()).isEqualTo(RESPONSE_ID);
+  }
+
+  @Test
+  public void testCreateSpecimenId() {
+    val requestUrl = format("%s?submittedSpecimenId=%s&submittedProjectId=%s&create=true", SPECIMEN_ID_PATH, "s1",
+        "p1");
+    configureSuccessfulResponse(requestUrl);
+
+    val response = client.createSpecimenId("s1", "p1");
+    assertThat(response).isEqualTo(RESPONSE_ID);
+  }
+
+  private void configureSuccessfulResponse(String requestUrl) {
+    stubFor(get(urlEqualTo(requestUrl))
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withHeader("Content-Type", "text/plain")
+            .withBody(RESPONSE_ID)));
+  }
+
+  @Test
+  public void test_404() {
+    val response = client.getDonorId("123", "ALL-US");
+    assertThat(response.isPresent()).isFalse();
+  }
+
+  @Test
+  public void test_503() {
+    val requestUrl = format("%s?submittedDonorId=%s&submittedProjectId=%s&create=false", DONOR_ID_PATH, "s2", "p2");
+    stubFor(get(urlEqualTo(requestUrl))
+        .willReturn(aResponse()
+            .withStatus(503)));
+
+    client.getDonorId("s2", "p2");
+    verify(4, getRequestedFor(urlEqualTo(requestUrl)));
+  }
+
+  private static Config createClientConfig() {
+    return Config.builder()
+        .serviceUrl("http://localhost:" + SERVER_PORT)
+        .requestLoggingEnabled(true)
+        .maxRetries(3)
+        .retryMultiplier(1f)
+        .waitBeforeRetrySeconds(1)
+        .build();
   }
 
 }

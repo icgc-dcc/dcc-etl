@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.core.id;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -32,22 +33,23 @@ public abstract class ForwardingIdentifierClient implements IdentifierClient {
   protected final IdentifierClient delegate;
 
   @Override
-  public String getDonorId(String submittedDonorId, String submittedProjectId) {
+  public Optional<String> getDonorId(String submittedDonorId, String submittedProjectId) {
     return delegate.getDonorId(submittedDonorId, submittedProjectId);
   }
 
   @Override
-  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+  public Optional<String> getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
     return delegate.getSpecimenId(submittedSpecimenId, submittedProjectId);
   }
 
   @Override
-  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+  public Optional<String> getSampleId(String submittedSampleId, String submittedProjectId) {
     return delegate.getSampleId(submittedSampleId, submittedProjectId);
   }
 
   @Override
-  public String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
+  public Optional<String> getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
+      String mutation,
       String mutationType, String assemblyVersion) {
     return delegate.getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion);
   }

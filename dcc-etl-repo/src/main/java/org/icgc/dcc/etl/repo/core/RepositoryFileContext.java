@@ -24,15 +24,15 @@ import static org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorIndentifier.qualifyDono
 import java.util.Map;
 import java.util.Set;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorIndentifier;
 
 import com.mongodb.MongoClientURI;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = PACKAGE)
 public class RepositoryFileContext {
@@ -79,32 +79,32 @@ public class RepositoryFileContext {
 
   @NonNull
   public String getDonorId(String submittedDonorId, String submittedProjectId) {
-    return filter(identifierClient.getDonorId(submittedDonorId, submittedProjectId));
+    return identifierClient.getDonorId(submittedDonorId, submittedProjectId).orElse(null);
   }
 
   @NonNull
   public String ensureDonorId(String submittedDonorId, String submittedProjectId) {
-    return filter(identifierClient.createDonorId(submittedDonorId, submittedProjectId));
+    return identifierClient.createDonorId(submittedDonorId, submittedProjectId);
   }
 
   @NonNull
   public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    return filter(identifierClient.getSpecimenId(submittedSpecimenId, submittedProjectId));
+    return identifierClient.getSpecimenId(submittedSpecimenId, submittedProjectId).orElse(null);
   }
 
   @NonNull
   public String ensureSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    return filter(identifierClient.createSpecimenId(submittedSpecimenId, submittedProjectId));
+    return identifierClient.createSpecimenId(submittedSpecimenId, submittedProjectId);
   }
 
   @NonNull
   public String getSampleId(String submittedSampleId, String submittedProjectId) {
-    return filter(identifierClient.getSampleId(submittedSampleId, submittedProjectId));
+    return identifierClient.getSampleId(submittedSampleId, submittedProjectId).orElse(null);
   }
 
   @NonNull
   public String ensureSampleId(String submittedSampleId, String submittedProjectId) {
-    return filter(identifierClient.createSampleId(submittedSampleId, submittedProjectId));
+    return identifierClient.createSampleId(submittedSampleId, submittedProjectId);
   }
 
   @NonNull
@@ -115,17 +115,6 @@ public class RepositoryFileContext {
   @NonNull
   public Map<String, String> getTCGABarcodes(Set<String> tcgaUuids) {
     return tcgaClient.getBarcodes(tcgaUuids);
-  }
-
-  //
-  // TODO: Remove after identifier return 404s instead of "<id-prefix>null"
-  //
-  private static String filter(String id) {
-    if (id.endsWith("null")) {
-      return null;
-    }
-
-    return id;
   }
 
 }

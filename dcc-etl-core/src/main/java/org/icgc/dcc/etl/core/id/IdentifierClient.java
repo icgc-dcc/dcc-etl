@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.core.id;
 
 import java.io.Closeable;
+import java.util.Optional;
 
 public interface IdentifierClient extends Closeable {
 
@@ -25,13 +26,13 @@ public interface IdentifierClient extends Closeable {
    * Read-only
    */
 
-  String getDonorId(String submittedDonorId, String submittedProjectId);
+  Optional<String> getDonorId(String submittedDonorId, String submittedProjectId);
 
-  String getSampleId(String submittedSampleId, String submittedProjectId);
+  Optional<String> getSampleId(String submittedSampleId, String submittedProjectId);
 
-  String getSpecimenId(String submittedSpecimenId, String submittedProjectId);
+  Optional<String> getSpecimenId(String submittedSpecimenId, String submittedProjectId);
 
-  String getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
+  Optional<String> getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
       String mutation, String mutationType, String assemblyVersion);
 
   /**
