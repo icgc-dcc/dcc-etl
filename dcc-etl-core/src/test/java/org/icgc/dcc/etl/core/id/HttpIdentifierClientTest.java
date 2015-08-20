@@ -33,8 +33,9 @@ public class HttpIdentifierClientTest {
 
   @Test
   public void testGetDonorId() {
-    val requestUrl = format("%s?submittedDonorId=%s&submittedProjectId=%s&create=false", DONOR_ID_PATH, "s1",
-        "p1");
+    val requestUrl =
+        format("%s?submittedDonorId=%s&submittedProjectId=%s&release=ICGC19&create=false", DONOR_ID_PATH, "s1",
+            "p1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.getDonorId("s1", "p1");
@@ -43,8 +44,9 @@ public class HttpIdentifierClientTest {
 
   @Test
   public void testCreateDonorId() {
-    val requestUrl = format("%s?submittedDonorId=%s&submittedProjectId=%s&create=true", DONOR_ID_PATH, "s1",
-        "p1");
+    val requestUrl =
+        format("%s?submittedDonorId=%s&submittedProjectId=%s&release=ICGC19&create=true", DONOR_ID_PATH, "s1",
+            "p1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.createDonorId("s1", "p1");
@@ -54,7 +56,7 @@ public class HttpIdentifierClientTest {
   @Test
   public void testGetMutationId() {
     val requestUrl = format("%s?chromosome=%s&chromosomeStart=%s&chromosomeEnd=%s&mutation=%s&mutationType=%s&"
-        + "assemblyVersion=%s&create=false", MUTATION_ID_PATH, "x", "1", "2", "a_b", "ssm", "1");
+        + "assemblyVersion=%s&release=ICGC19&create=false", MUTATION_ID_PATH, "x", "1", "2", "a_b", "ssm", "1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.getMutationId("x", "1", "2", "a_b", "ssm", "1");
@@ -64,7 +66,7 @@ public class HttpIdentifierClientTest {
   @Test
   public void testCreateMutationId() {
     val requestUrl = format("%s?chromosome=%s&chromosomeStart=%s&chromosomeEnd=%s&mutation=%s&mutationType=%s&"
-        + "assemblyVersion=%s&create=true", MUTATION_ID_PATH, "x", "1", "2", "a_b", "ssm", "1");
+        + "assemblyVersion=%s&release=ICGC19&create=true", MUTATION_ID_PATH, "x", "1", "2", "a_b", "ssm", "1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.createMutationId("x", "1", "2", "a_b", "ssm", "1");
@@ -73,8 +75,9 @@ public class HttpIdentifierClientTest {
 
   @Test
   public void testGetSampleId() {
-    val requestUrl = format("%s?submittedSampleId=%s&submittedProjectId=%s&create=false", SAMPLE_ID_PATH, "s1",
-        "p1");
+    val requestUrl =
+        format("%s?submittedSampleId=%s&submittedProjectId=%s&release=ICGC19&create=false", SAMPLE_ID_PATH, "s1",
+            "p1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.getSampleId("s1", "p1");
@@ -83,8 +86,9 @@ public class HttpIdentifierClientTest {
 
   @Test
   public void testCreateSampleId() {
-    val requestUrl = format("%s?submittedSampleId=%s&submittedProjectId=%s&create=true", SAMPLE_ID_PATH, "s1",
-        "p1");
+    val requestUrl =
+        format("%s?submittedSampleId=%s&submittedProjectId=%s&release=ICGC19&create=true", SAMPLE_ID_PATH, "s1",
+            "p1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.createSampleId("s1", "p1");
@@ -93,8 +97,9 @@ public class HttpIdentifierClientTest {
 
   @Test
   public void testGetSpecimenId() {
-    val requestUrl = format("%s?submittedSpecimenId=%s&submittedProjectId=%s&create=false", SPECIMEN_ID_PATH, "s1",
-        "p1");
+    val requestUrl =
+        format("%s?submittedSpecimenId=%s&submittedProjectId=%s&release=ICGC19&create=false", SPECIMEN_ID_PATH, "s1",
+            "p1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.getSpecimenId("s1", "p1");
@@ -103,8 +108,9 @@ public class HttpIdentifierClientTest {
 
   @Test
   public void testCreateSpecimenId() {
-    val requestUrl = format("%s?submittedSpecimenId=%s&submittedProjectId=%s&create=true", SPECIMEN_ID_PATH, "s1",
-        "p1");
+    val requestUrl =
+        format("%s?submittedSpecimenId=%s&submittedProjectId=%s&release=ICGC19&create=true", SPECIMEN_ID_PATH, "s1",
+            "p1");
     configureSuccessfulResponse(requestUrl);
 
     val response = client.createSpecimenId("s1", "p1");
@@ -127,7 +133,8 @@ public class HttpIdentifierClientTest {
 
   @Test
   public void test_503() {
-    val requestUrl = format("%s?submittedDonorId=%s&submittedProjectId=%s&create=false", DONOR_ID_PATH, "s2", "p2");
+    val requestUrl =
+        format("%s?submittedDonorId=%s&submittedProjectId=%s&release=ICGC19&create=false", DONOR_ID_PATH, "s2", "p2");
     stubFor(get(urlEqualTo(requestUrl))
         .willReturn(aResponse()
             .withStatus(503)));
@@ -139,6 +146,7 @@ public class HttpIdentifierClientTest {
   private static Config createClientConfig() {
     return Config.builder()
         .serviceUrl("http://localhost:" + SERVER_PORT)
+        .release("ICGC19")
         .requestLoggingEnabled(true)
         .maxRetries(3)
         .retryMultiplier(1f)
