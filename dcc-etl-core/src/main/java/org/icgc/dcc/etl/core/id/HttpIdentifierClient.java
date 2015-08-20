@@ -67,7 +67,7 @@ public class HttpIdentifierClient implements IdentifierClient {
   /**
    * Required for reflection in Loader
    */
-  public HttpIdentifierClient(String serviceUri, String release) {
+  public HttpIdentifierClient(@NonNull String serviceUri, String release) {
     this(Config.builder()
         .serviceUrl(serviceUri)
         .release(release)
@@ -75,8 +75,7 @@ public class HttpIdentifierClient implements IdentifierClient {
   }
 
   @Override
-  @NonNull
-  public Optional<String> getDonorId(String submittedDonorId, String submittedProjectId) {
+  public Optional<String> getDonorId(@NonNull String submittedDonorId, @NonNull String submittedProjectId) {
     return getDonorId(submittedDonorId, submittedProjectId, false);
   }
 
@@ -86,7 +85,8 @@ public class HttpIdentifierClient implements IdentifierClient {
     return getDonorId(submittedDonorId, submittedProjectId, true).get();
   }
 
-  private Optional<String> getDonorId(String submittedDonorId, String submittedProjectId, boolean create) {
+  private Optional<String> getDonorId(@NonNull String submittedDonorId, @NonNull String submittedProjectId,
+      boolean create) {
     val request = resource
         .path(DONOR_ID_PATH)
         .queryParam("submittedDonorId", submittedDonorId)
@@ -98,14 +98,12 @@ public class HttpIdentifierClient implements IdentifierClient {
   }
 
   @Override
-  @NonNull
-  public Optional<String> getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+  public Optional<String> getSpecimenId(@NonNull String submittedSpecimenId, @NonNull String submittedProjectId) {
     return getSpecimenId(submittedSpecimenId, submittedProjectId, false);
   }
 
   @Override
-  @NonNull
-  public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+  public String createSpecimenId(@NonNull String submittedSpecimenId, @NonNull String submittedProjectId) {
     return getSpecimenId(submittedSpecimenId, submittedProjectId, true).get();
   }
 
@@ -121,14 +119,12 @@ public class HttpIdentifierClient implements IdentifierClient {
   }
 
   @Override
-  @NonNull
-  public Optional<String> getSampleId(String submittedSampleId, String submittedProjectId) {
+  public Optional<String> getSampleId(@NonNull String submittedSampleId, @NonNull String submittedProjectId) {
     return getSampleId(submittedSampleId, submittedProjectId, false);
   }
 
   @Override
-  @NonNull
-  public String createSampleId(String submittedSampleId, String submittedProjectId) {
+  public String createSampleId(@NonNull String submittedSampleId, @NonNull String submittedProjectId) {
     return getSampleId(submittedSampleId, submittedProjectId, true).get();
   }
 
@@ -144,16 +140,16 @@ public class HttpIdentifierClient implements IdentifierClient {
   }
 
   @Override
-  @NonNull
-  public Optional<String> getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
-      String mutation, String mutationType, String assemblyVersion) {
+  public Optional<String> getMutationId(@NonNull String chromosome, @NonNull String chromosomeStart,
+      @NonNull String chromosomeEnd,
+      @NonNull String mutation, @NonNull String mutationType, @NonNull String assemblyVersion) {
     return getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion, false);
   }
 
   @Override
-  @NonNull
-  public String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd, String mutation,
-      String mutationType, String assemblyVersion) {
+  public String createMutationId(@NonNull String chromosome, @NonNull String chromosomeStart,
+      @NonNull String chromosomeEnd, @NonNull String mutation,
+      @NonNull String mutationType, @NonNull String assemblyVersion) {
     return getMutationId(chromosome, chromosomeStart, chromosomeEnd, mutation, mutationType, assemblyVersion, true)
         .get();
   }
