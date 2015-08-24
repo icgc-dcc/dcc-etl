@@ -25,17 +25,18 @@ import java.net.URL;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
 
-import lombok.NonNull;
-import lombok.val;
-
 import org.icgc.dcc.etl.db.importer.diagram.model.Pathways;
 import org.w3c.dom.Node;
 
 import com.google.common.collect.ImmutableSet;
 
+import lombok.NonNull;
+import lombok.val;
+
 public class DiagramListReader {
 
   private final static String DIAGRAMS_LIST_URL = REACTOME_BASE_URL + "pathwayHierarchy/homo+sapiens";
+  @SuppressWarnings("unused")
   private final static String DIAGRAMS_ID_CONVERT_URL = REACTOME_BASE_URL + "queryById/Pathway/%s";
 
   public Pathways readPathwayList() throws IOException, TransformerException {

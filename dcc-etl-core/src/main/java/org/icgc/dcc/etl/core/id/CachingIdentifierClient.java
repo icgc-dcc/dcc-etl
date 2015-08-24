@@ -17,14 +17,16 @@
  */
 package org.icgc.dcc.etl.core.id;
 
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.Value;
+import java.util.Optional;
 
 import com.google.common.base.Function;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.Value;
 
 public class CachingIdentifierClient extends ForwardingIdentifierClient {
 
@@ -32,64 +34,64 @@ public class CachingIdentifierClient extends ForwardingIdentifierClient {
    * Caches.
    */
   @NonNull
-  private final LoadingCache<Key, String> donorIdCache;
-  private final LoadingCache<Key, String> specimenIdCache;
-  private final LoadingCache<Key, String> sampleIdCache;
+  private final LoadingCache<Key, Optional<String>> donorIdCache;
+  private final LoadingCache<Key, Optional<String>> specimenIdCache;
+  private final LoadingCache<Key, Optional<String>> sampleIdCache;
 
   public CachingIdentifierClient(IdentifierClient delegate) {
     super(delegate);
 
     this.donorIdCache =
-        createCache(key -> key.isCreate() ?
-            delegate.createDonorId(key.getSubmittedId(), key.getSubmittedProjectId()) :
-            delegate.getDonorId(key.getSubmittedId(), key.getSubmittedProjectId()));
+        createCache(key -> key.isCreate() ? Optional
+            .of(delegate.createDonorId(key.getSubmittedId(), key.getSubmittedProjectId())) : delegate
+                .getDonorId(key.getSubmittedId(), key.getSubmittedProjectId()));
     this.specimenIdCache =
-        createCache(key -> key.isCreate() ?
-            delegate.createSpecimenId(key.getSubmittedId(), key.getSubmittedProjectId()) :
-            delegate.getSpecimenId(key.getSubmittedId(), key.getSubmittedProjectId()));
+        createCache(key -> key.isCreate() ? Optional
+            .of(delegate.createSpecimenId(key.getSubmittedId(), key.getSubmittedProjectId())) : delegate
+                .getSpecimenId(key.getSubmittedId(), key.getSubmittedProjectId()));
     this.sampleIdCache =
-        createCache(key -> key.isCreate() ?
-            delegate.createSampleId(key.getSubmittedId(), key.getSubmittedProjectId()) :
-            delegate.getSampleId(key.getSubmittedId(), key.getSubmittedProjectId()));
+        createCache(key -> key.isCreate() ? Optional
+            .of(delegate.createSampleId(key.getSubmittedId(), key.getSubmittedProjectId())) : delegate
+                .getSampleId(key.getSubmittedId(), key.getSubmittedProjectId()));
   }
 
   @Override
   @SneakyThrows
-  public String getDonorId(String submittedDonorId, String submittedProjectId) {
+  public Optional<String> getDonorId(String submittedDonorId, String submittedProjectId) {
     return donorIdCache.get(new Key(submittedDonorId, submittedProjectId, false));
   }
 
   @Override
   @SneakyThrows
-  public String getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+  public Optional<String> getSpecimenId(String submittedSpecimenId, String submittedProjectId) {
     return specimenIdCache.get(new Key(submittedSpecimenId, submittedProjectId, false));
   }
 
   @Override
   @SneakyThrows
-  public String getSampleId(String submittedSampleId, String submittedProjectId) {
+  public Optional<String> getSampleId(String submittedSampleId, String submittedProjectId) {
     return sampleIdCache.get(new Key(submittedSampleId, submittedProjectId, false));
   }
 
   @Override
   @SneakyThrows
   public String createDonorId(String submittedDonorId, String submittedProjectId) {
-    return donorIdCache.get(new Key(submittedDonorId, submittedProjectId, true));
+    return donorIdCache.get(new Key(submittedDonorId, submittedProjectId, true)).get();
   }
 
   @Override
   @SneakyThrows
   public String createSpecimenId(String submittedSpecimenId, String submittedProjectId) {
-    return specimenIdCache.get(new Key(submittedSpecimenId, submittedProjectId, true));
+    return specimenIdCache.get(new Key(submittedSpecimenId, submittedProjectId, true)).get();
   }
 
   @Override
   @SneakyThrows
   public String createSampleId(String submittedSampleId, String submittedProjectId) {
-    return sampleIdCache.get(new Key(submittedSampleId, submittedProjectId, true));
+    return sampleIdCache.get(new Key(submittedSampleId, submittedProjectId, true)).get();
   }
 
-  private static LoadingCache<Key, String> createCache(Function<Key, String> loader) {
+  private static LoadingCache<Key, Optional<String>> createCache(Function<Key, Optional<String>> loader) {
     return CacheBuilder.newBuilder().build(CacheLoader.from(loader));
   }
 

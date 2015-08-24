@@ -56,10 +56,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
@@ -69,6 +65,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PCAWGDonorProcessor extends RepositoryFileProcessor {
@@ -127,9 +127,12 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
 
       // Get IDs or create if they don't exist. This is different than the other repos.
       donor
-          .setDonorId(context.ensureDonorId(submittedDonorId, projectCode))
-          .setSpecimenId(context.ensureSpecimenId(submittedSpecimenId, projectCode))
-          .setSampleId(context.ensureSampleId(submittedSampleId, projectCode));
+          .setDonorId(
+              submittedDonorId == null ? null : context.ensureDonorId(submittedDonorId, projectCode))
+          .setSpecimenId(
+              submittedSpecimenId == null ? null : context.ensureSpecimenId(submittedSpecimenId, projectCode))
+          .setSampleId(
+              submittedSampleId == null ? null : context.ensureSampleId(submittedSampleId, projectCode));
     }
   }
 
@@ -204,16 +207,16 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
         .setProjectCode(projectCode)
         .setStudy(PCAWG_STUDY_VALUE)
 
-        .setDonorId(null) // Set downstream
+    .setDonorId(null) // Set downstream
         .setSpecimenId(null) // Set downstream
         .setSpecimenType(specimenType)
         .setSampleId(null) // Set downstream
 
-        .setSubmittedDonorId(submittedDonorId)
+    .setSubmittedDonorId(submittedDonorId)
         .setSubmittedSpecimenId(submitterSpecimenId)
         .setSubmittedSampleId(submitterSampleId)
 
-        .setTcgaParticipantBarcode(null) // Set downstream
+    .setTcgaParticipantBarcode(null) // Set downstream
         .setTcgaSampleBarcode(null) // Set downstream
         .setTcgaAliquotBarcode(null); // Set downstream
 
