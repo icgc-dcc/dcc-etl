@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.icgc.dcc.common.core.tcga.TCGAClient;
 import org.icgc.dcc.etl.core.id.IdentifierClient;
+import org.icgc.dcc.etl.repo.aws.reader.AWSS3TransferJobReader;
 import org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorIndentifier;
 
 import com.mongodb.MongoClientURI;
@@ -67,6 +68,8 @@ public class RepositoryFileContext {
    */
   @Getter(lazy = true, value = PRIVATE)
   private final Set<String> pcawgSubmittedDonorIds = new PCAWGDonorIndentifier().identifyDonorIds();
+  @Getter(lazy = true, value = PRIVATE)
+  private final Set<String> awsS3ObjectIds = new AWSS3TransferJobReader().readObjectIds();
 
   @NonNull
   public String getPrimarySite(String projectCode) {
@@ -76,6 +79,10 @@ public class RepositoryFileContext {
   @NonNull
   public boolean isPCAWGSubmittedDonorId(String projectCode, String submittedDonorId) {
     return getPcawgSubmittedDonorIds().contains(qualifyDonorId(projectCode, submittedDonorId));
+  }
+
+  public boolean isAWSS3ObjectId(String objectId) {
+    return getAwsS3ObjectIds().contains(objectId);
   }
 
   @NonNull

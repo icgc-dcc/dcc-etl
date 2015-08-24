@@ -29,14 +29,12 @@ import static org.icgc.dcc.etl.repo.model.RepositoryType.WEB_ARCHIVE;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
-
-import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer.RepositoryServerBuilder;
-
-import com.google.common.collect.ImmutableList;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class RepositoryServers {
@@ -53,7 +51,7 @@ public final class RepositoryServers {
       server().source(PCAWG).type(GNOS)       .name("PCAWG - Heidelberg")    .code("pcawg-heidelberg")  .country("DE").baseUrl("https://gtrepo-dkfz.annailabs.com/").build(),
       server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (ICGC)").code("pcawg-chicago-icgc").country("US").baseUrl("https://gtrepo-osdc-icgc.annailabs.com/").build(),
       server().source(PCAWG).type(GNOS)       .name("PCAWG - Chicago (TCGA)").code("pcawg-chicago-tcga").country("US").baseUrl("https://gtrepo-osdc-tcga.annailabs.com/").build(),
-      server().source(AWS)  .type(S3)         .name("PCAWG - AWS S3")        .code("pcawg-aws-s3")      .country("US").baseUrl(null).build()
+      server().source(AWS)  .type(S3)         .name("ICGC - AWS S3")         .code("icgc-aws-s3")       .country("US").baseUrl(null).build()
       );
   // @formatter:on
 
@@ -93,7 +91,7 @@ public final class RepositoryServers {
 
   }
 
-  private static RepositoryServerBuilder server() {
+  private static RepositoryServer.RepositoryServerBuilder server() {
     return RepositoryServer.builder();
   }
 

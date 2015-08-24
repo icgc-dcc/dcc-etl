@@ -17,9 +17,15 @@
  */
 package org.icgc.dcc.etl.repo.aws.reader;
 
+import static com.google.common.io.Files.createTempDir;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -30,7 +36,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Files;
+import com.google.common.collect.ImmutableSet;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -44,49 +50,61 @@ public class AWSS3TransferJobReader {
 
   @SneakyThrows
   public List<ObjectNode> read() {
-    val repoDir = Files.createTempDir();
-    clone(repoDir);
+    val repoDir = cloneRepo();
     val completedDir = getCompletedDir(repoDir);
 
-    val jobFiles = getJobFiles(completedDir);
-    log.info("Reading {} completed jobs from {}...", jobFiles.size(), completedDir);
+    log.info("Resolving job files from completed dir '{}'...", completedDir.getCanonicalPath());
+    val jobFiles = resolveJobFiles(completedDir);
 
+    log.info("Reading {} completed jobs from {}...", formatCount(jobFiles.size()), completedDir);
     return readFiles(jobFiles);
   }
 
-  private List<ObjectNode> readFiles(List<File> files) throws IOException, JsonProcessingException {
-    val jobs = ImmutableList.<ObjectNode> builder();
-
-    for (val file : files) {
-      log.info("Reading {}...", file);
-      val job = readFile(file);
-
-      jobs.add(job);
+  public Set<String> readObjectIds() {
+    val objectIds = ImmutableSet.<String> builder();
+    for (val job : read()) {
+      for (val file : job.withArray("files")) {
+        val objectId = file.get("object_id").textValue();
+        objectIds.add(objectId);
+      }
     }
 
-    return jobs.build();
+    return objectIds.build();
+  }
+
+  private List<ObjectNode> readFiles(List<File> files) throws IOException, JsonProcessingException {
+    return files.stream().map(this::readFile).collect(toImmutableList());
   }
 
   private File getCompletedDir(File repoDir) {
-    // val completedDir = new File(new File(repoDir, "s3-transfer-jobs"), "completed-jobs");
-    return new File(new File(repoDir, "pre-production"), "completed-jobs");
+    return new File(new File(repoDir, "s3-transfer-jobs"), "completed-jobs");
   }
 
-  private List<File> getJobFiles(File completedDir) {
-    return ImmutableList.copyOf(completedDir.listFiles(fileName -> fileName.getName().endsWith(".json")));
+  private List<File> resolveJobFiles(File completedDir) {
+    File[] jobFiles = completedDir.listFiles(fileName -> fileName.getName().endsWith(".json"));
+    if (jobFiles == null) {
+      return Collections.emptyList();
+    }
+
+    return ImmutableList.copyOf(jobFiles);
   }
 
-  private ObjectNode readFile(File jsonFile) throws IOException, JsonProcessingException {
+  @SneakyThrows
+  private ObjectNode readFile(File jsonFile) {
+    log.info("Reading {}...", jsonFile);
     return (ObjectNode) MAPPER.readTree(jsonFile);
   }
 
-  private void clone(File directory) throws GitAPIException, InvalidRemoteException, TransportException {
-    log.info("Cloning {} to {}...", GIT_REPO_URL, directory);
+  private File cloneRepo() throws GitAPIException, InvalidRemoteException, TransportException {
+    val repoDir = createTempDir();
+    log.info("Cloning {} to {}...", GIT_REPO_URL, repoDir);
     Git
         .cloneRepository()
         .setURI(GIT_REPO_URL)
-        .setDirectory(directory)
+        .setDirectory(repoDir)
         .call();
+
+    return repoDir;
   }
 
 }
