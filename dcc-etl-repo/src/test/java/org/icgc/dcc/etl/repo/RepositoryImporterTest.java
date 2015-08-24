@@ -21,10 +21,10 @@ import static org.icgc.dcc.etl.repo.util.Tests.createLocalRepositoryFileContext;
 
 import java.io.IOException;
 
-import lombok.val;
-
 import org.junit.Ignore;
 import org.junit.Test;
+
+import lombok.val;
 
 @Ignore("For development only")
 public class RepositoryImporterTest {

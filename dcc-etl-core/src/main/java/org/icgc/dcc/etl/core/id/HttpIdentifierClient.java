@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -178,6 +178,7 @@ public class HttpIdentifierClient implements IdentifierClient {
       }
 
       if (response.getStatus() == 503 && retryContext.isRetry()) {
+        log.warn("Could not get {}", request);
         return getResponse(request, waitBeforeRetry(retryContext));
       }
 
@@ -200,10 +201,9 @@ public class HttpIdentifierClient implements IdentifierClient {
   }
 
   private static Client createClient(Config config) {
-    val connectionManager = new MultiThreadedHttpConnectionManager();
+    val connectionManager = new SimpleHttpConnectionManager();
     connectionManager.getParams().setConnectionTimeout(5000);
     connectionManager.getParams().setSoTimeout(1000);
-    connectionManager.getParams().setDefaultMaxConnectionsPerHost(10);
 
     val httpClient = new HttpClient(connectionManager);
     val clientHandler = new ApacheHttpClientHandler(httpClient);

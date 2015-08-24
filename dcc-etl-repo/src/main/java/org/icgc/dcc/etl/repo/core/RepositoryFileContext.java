@@ -46,6 +46,7 @@ public class RepositoryFileContext {
   @Getter
   @NonNull
   private final String esUri;
+  private final boolean readOnly = false;
 
   /**
    * Metadata.
@@ -84,6 +85,10 @@ public class RepositoryFileContext {
 
   @NonNull
   public String ensureDonorId(String submittedDonorId, String submittedProjectId) {
+    if (readOnly) {
+      return getDonorId(submittedDonorId, submittedProjectId);
+    }
+
     return identifierClient.createDonorId(submittedDonorId, submittedProjectId);
   }
 
@@ -94,6 +99,10 @@ public class RepositoryFileContext {
 
   @NonNull
   public String ensureSpecimenId(String submittedSpecimenId, String submittedProjectId) {
+    if (readOnly) {
+      return getSpecimenId(submittedSpecimenId, submittedProjectId);
+    }
+
     return identifierClient.createSpecimenId(submittedSpecimenId, submittedProjectId);
   }
 
@@ -104,6 +113,10 @@ public class RepositoryFileContext {
 
   @NonNull
   public String ensureSampleId(String submittedSampleId, String submittedProjectId) {
+    if (readOnly) {
+      return getSampleId(submittedSampleId, submittedProjectId);
+    }
+
     return identifierClient.createSampleId(submittedSampleId, submittedProjectId);
   }
 
