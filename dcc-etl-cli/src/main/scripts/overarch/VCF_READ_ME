@@ -1,1 +1,12 @@
-Only the "open" version is available at the moment.
+Summary
+---
+
+This directory contains data files aggregating information across all projects.
+
+- Clinical data: `donor*`
+- Biospecimen data: `specimen.all_projects.tsv.gz`, `sample.all_projects.tsv.gz`
+- Simple somatic mutation (VCF): `simple_somatic_mutation.aggregated.vcf.gz`
+
+For the VCF files, only the "[open](http://docs.icgc.org/methods#masking)" version is currently available.
+
+
