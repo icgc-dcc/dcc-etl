@@ -180,11 +180,11 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     List<RepositoryServer> pcawgServers = resolvePCAWGServers(workflow);
 
     // TODO: PoC. Revisit after data model change
-    if (context.isAWSS3ObjectId(fileId)) {
-      RepositoryServer awsServer = RepositoryServers.getAWSServer();
-
-      pcawgServers = ImmutableList.<RepositoryServer> builder().addAll(pcawgServers).add(awsServer).build();
-    }
+    // if (context.isAWSS3ObjectId(fileId)) {
+    // RepositoryServer awsServer = RepositoryServers.getAWSServer();
+    //
+    // pcawgServers = ImmutableList.<RepositoryServer> builder().addAll(pcawgServers).add(awsServer).build();
+    // }
 
     val donorFile = new RepositoryFile()
         .setId(fileId)
