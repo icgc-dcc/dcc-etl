@@ -23,21 +23,21 @@ import static org.icgc.dcc.etl.repo.pcawg.reader.PCAWGDonorArchiveReader.DEFAULT
 
 import java.net.URL;
 
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
+import org.icgc.dcc.etl.repo.core.GenericRepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.repo.pcawg.core.PCAWGDonorProcessor;
 import org.icgc.dcc.etl.repo.pcawg.reader.PCAWGDonorArchiveReader;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
-public class PCAWGImporter extends RepositorySourceFileImporter {
+public class PCAWGImporter extends GenericRepositorySourceFileImporter {
 
   /**
    * Configuration.

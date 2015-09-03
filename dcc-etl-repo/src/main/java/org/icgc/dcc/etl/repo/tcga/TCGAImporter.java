@@ -18,19 +18,20 @@
 package org.icgc.dcc.etl.repo.tcga;
 
 import static org.icgc.dcc.etl.repo.model.RepositorySource.TCGA;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.repo.core.GenericRepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
-import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.repo.tcga.core.TCGAClinicalFileProcessor;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @see http://tcga-data.nci.nih.gov/datareports/resources/latestarchive
  */
 @Slf4j
-public class TCGAImporter extends RepositorySourceFileImporter {
+public class TCGAImporter extends GenericRepositorySourceFileImporter {
 
   public TCGAImporter(RepositoryFileContext context) {
     super(TCGA, context);

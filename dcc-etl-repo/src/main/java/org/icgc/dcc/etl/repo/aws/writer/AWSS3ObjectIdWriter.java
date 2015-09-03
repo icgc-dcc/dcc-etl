@@ -15,28 +15,60 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.model;
+package org.icgc.dcc.etl.repo.aws.writer;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.Getter;
+import static com.google.common.base.Preconditions.checkState;
+import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+
+import java.util.Set;
+
+import org.icgc.dcc.etl.repo.util.AbstractJongoWriter;
+import org.jongo.MongoCollection;
+
+import com.google.common.collect.ImmutableMap;
+import com.mongodb.MongoClientURI;
+
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+@Slf4j
+public class AWSS3ObjectIdWriter extends AbstractJongoWriter<Set<String>> {
 
-@Getter
-@RequiredArgsConstructor(access = PRIVATE)
-public enum RepositoryType implements Identifiable {
-
-  S3("S3", null, null),
-  GNOS("GNOS", "/cghub/metadata/analysisFull/", "/cghub/data/analysis/download/"),
-  WEB_ARCHIVE("Web Archive", null, "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
-
+  /**
+   * Dependencies.
+   */
   @NonNull
-  private final String id;
+  protected final MongoCollection awsCollection;
 
-  // Optional
-  private final String metadataPath;
-  private final String dataPath;
+  public AWSS3ObjectIdWriter(MongoClientURI mongoUri) {
+    super(mongoUri);
+    this.awsCollection = jongo.getCollection("AWS");
+  }
+
+  @Override
+  public void write(Set<String> objectIds) {
+    log.info("Clearing object id documents...");
+    clearObjectIds();
+
+    log.info("Writing object id documents...");
+    saveObjectIds(objectIds);
+  }
+
+  private void clearObjectIds() {
+    log.info("Clearing '{}' documents in collection '{}'", awsCollection.getName());
+    val result = awsCollection.remove("{}");
+    checkState(result.getLastError().ok(), "Error clearing mongo: %s", result);
+
+    log.info("Finished clearing {} documents in collection '{}'",
+        formatCount(result.getN()), awsCollection.getName());
+  }
+
+  private void saveObjectIds(Set<String> objectIds) {
+    for (val objectId : objectIds) {
+      val document = ImmutableMap.of("objectId", objectId);
+      awsCollection.save(document);
+    }
+  }
 
 }

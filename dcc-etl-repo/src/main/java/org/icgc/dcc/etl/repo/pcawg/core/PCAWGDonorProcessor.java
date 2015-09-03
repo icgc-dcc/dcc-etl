@@ -60,6 +60,7 @@ import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositoryFileProcessor;
 import org.icgc.dcc.etl.repo.model.RepositoryFile;
 import org.icgc.dcc.etl.repo.model.RepositoryServers;
+import org.icgc.dcc.etl.repo.model.RepositoryServers.RepositoryServer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -166,8 +167,6 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
     val project = getProjectCodeProject(projectCode).orNull();
     checkState(project != null, "No project found for project code '%s'", projectCode);
 
-    val pcawgServers = resolvePCAWGServers(workflow);
-
     val gnosId = getGnosId(workflow);
     val specimenType = getSpecimenType(workflow);
     val submitterSpecimenId = getSubmitterSpecimenId(workflow);
@@ -175,10 +174,20 @@ public class PCAWGDonorProcessor extends RepositoryFileProcessor {
 
     val fileName = resolveFileName(workflowFile);
     val fileSize = resolveFileSize(workflowFile);
+    val fileId = resolveFileId(gnosId, fileName);
     val dataType = resolveFileDataType(analysisType, fileName);
 
+    List<RepositoryServer> pcawgServers = resolvePCAWGServers(workflow);
+
+    // TODO: PoC. Revisit after data model change
+    if (context.isAWSS3ObjectId(fileId)) {
+      RepositoryServer awsServer = RepositoryServers.getAWSServer();
+
+      pcawgServers = ImmutableList.<RepositoryServer> builder().addAll(pcawgServers).add(awsServer).build();
+    }
+
     val donorFile = new RepositoryFile()
-        .setId(resolveFileId(gnosId, fileName))
+        .setId(fileId)
         .setStudy(PCAWG_STUDY_VALUE)
         .setAccess("controlled");
 

@@ -51,10 +51,10 @@ public class RepositorySourceFileWriter extends AbstractJongoWriter<Iterable<Rep
   @NonNull
   protected final MongoCollection fileCollection;
 
-  public RepositorySourceFileWriter(@NonNull MongoClientURI mongoUri, @NonNull RepositorySource organization) {
+  public RepositorySourceFileWriter(@NonNull MongoClientURI mongoUri, @NonNull RepositorySource source) {
     super(mongoUri);
     this.fileCollection = getCollection(FILE_COLLECTION);
-    this.source = organization;
+    this.source = source;
   }
 
   @Override

@@ -34,6 +34,36 @@
       <artifactId>dcc-common-resources</artifactId>
     </dependency>
 
+    <!-- AWS -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-s3</artifactId>
+      <version>${aws-java-sdk.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>httpclient</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Git -->
+    <dependency>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit</artifactId>
+      <version>4.0.1.201506240215-r</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>httpclient</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jsch</artifactId>
+          <groupId>com.jcraft</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
     <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -145,9 +175,11 @@
   </build>
 
   <properties>
+    <!-- Versions - Clients -->
+    <aws-java-sdk.version>1.10.2</aws-java-sdk.version>
+
     <!-- Versions - Utilities -->
     <jsoup.version>1.8.2</jsoup.version>
-
     <commons-lang3.version>3.3.2</commons-lang3.version>
   </properties>
 

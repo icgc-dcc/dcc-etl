@@ -15,28 +15,62 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.model;
+package org.icgc.dcc.etl.repo.aws;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.Getter;
+import static org.icgc.dcc.etl.repo.model.RepositorySource.AWS;
+
+import java.util.Set;
+
+import org.icgc.dcc.etl.repo.aws.reader.AWSS3TransferJobReader;
+import org.icgc.dcc.etl.repo.aws.writer.AWSS3ObjectIdWriter;
+import org.icgc.dcc.etl.repo.core.AbstractRepositorySourceFileImporter;
+import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
+
+import com.google.common.collect.ImmutableSet;
+
+import lombok.Cleanup;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+@Slf4j
+public class AWSImporter extends AbstractRepositorySourceFileImporter {
 
-@Getter
-@RequiredArgsConstructor(access = PRIVATE)
-public enum RepositoryType implements Identifiable {
+  public AWSImporter(@NonNull RepositoryFileContext context) {
+    super(AWS, context);
+  }
 
-  S3("S3", null, null),
-  GNOS("GNOS", "/cghub/metadata/analysisFull/", "/cghub/data/analysis/download/"),
-  WEB_ARCHIVE("Web Archive", null, "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
+  @Override
+  public void execute() {
+    log.info("Reading object ids...");
+    val objectIds = readObjectIds();
+    log.info("Read {} object ids", objectIds.size());
 
-  @NonNull
-  private final String id;
+    log.info("Writing object ids...");
+    writeObjectIds(objectIds);
+  }
 
-  // Optional
-  private final String metadataPath;
-  private final String dataPath;
+  private Set<String> readObjectIds() {
+    val reader = new AWSS3TransferJobReader();
+
+    val objectIds = ImmutableSet.<String> builder();
+    for (val job : reader.read()) {
+      for (val file : job.withArray("files")) {
+        val objectId = file.get("object_id").textValue();
+
+        objectIds.add(objectId);
+      }
+    }
+
+    return objectIds.build();
+  }
+
+  @SneakyThrows
+  private void writeObjectIds(Set<String> objectIds) {
+    @Cleanup
+    val writer = new AWSS3ObjectIdWriter(context.getMongoUri());
+    writer.write(objectIds);
+  }
 
 }

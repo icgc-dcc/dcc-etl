@@ -25,14 +25,8 @@ import static org.icgc.dcc.common.core.util.Joiners.NEWLINE;
 
 import java.util.List;
 
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.common.core.mail.Mailer;
+import org.icgc.dcc.etl.repo.aws.AWSImporter;
 import org.icgc.dcc.etl.repo.cghub.CGHubImporter;
 import org.icgc.dcc.etl.repo.core.RepositoryFileContext;
 import org.icgc.dcc.etl.repo.core.RepositorySourceFileImporter;
@@ -43,6 +37,13 @@ import org.icgc.dcc.etl.repo.tcga.TCGAImporter;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
+
+import lombok.Cleanup;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Importer for the ICGC "Data Repository" feature which imports file metadata from various external data sources.
@@ -137,7 +138,8 @@ public class RepositoryImporter {
     return ImmutableList.of(
         new PCAWGImporter(context),
         new TCGAImporter(context),
-        new CGHubImporter(context));
+        new CGHubImporter(context),
+        new AWSImporter(context));
   }
 
   private static void logBanner(String message) {

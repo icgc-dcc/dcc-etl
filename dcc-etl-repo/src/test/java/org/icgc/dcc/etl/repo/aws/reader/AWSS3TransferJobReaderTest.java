@@ -15,28 +15,27 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.model;
+package org.icgc.dcc.etl.repo.aws.reader;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.junit.Test;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-@Getter
-@RequiredArgsConstructor(access = PRIVATE)
-public enum RepositoryType implements Identifiable {
+@Slf4j
+public class AWSS3TransferJobReaderTest {
 
-  S3("S3", null, null),
-  GNOS("GNOS", "/cghub/metadata/analysisFull/", "/cghub/data/analysis/download/"),
-  WEB_ARCHIVE("Web Archive", null, "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
+  @Test
+  public void testRead() {
+    val reader = new AWSS3TransferJobReader();
 
-  @NonNull
-  private final String id;
-
-  // Optional
-  private final String metadataPath;
-  private final String dataPath;
+    for (val job : reader.read()) {
+      log.info("Job: {}", job);
+      for (val file : job.withArray("files")) {
+        val objectId = file.get("object_id").textValue();
+        log.info("  objectId: {}", objectId);
+      }
+    }
+  }
 
 }

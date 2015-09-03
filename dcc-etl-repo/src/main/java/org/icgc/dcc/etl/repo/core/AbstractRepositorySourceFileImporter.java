@@ -15,28 +15,28 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.repo.model;
+package org.icgc.dcc.etl.repo.core;
 
-import static lombok.AccessLevel.PRIVATE;
+import org.icgc.dcc.etl.repo.model.RepositorySource;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.common.core.model.Identifiable;
+@RequiredArgsConstructor
+public abstract class AbstractRepositorySourceFileImporter implements RepositorySourceFileImporter {
 
-@Getter
-@RequiredArgsConstructor(access = PRIVATE)
-public enum RepositoryType implements Identifiable {
-
-  S3("S3", null, null),
-  GNOS("GNOS", "/cghub/metadata/analysisFull/", "/cghub/data/analysis/download/"),
-  WEB_ARCHIVE("Web Archive", null, "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/");
-
+  /**
+   * Metadata.
+   */
   @NonNull
-  private final String id;
+  @Getter
+  protected RepositorySource source;
 
-  // Optional
-  private final String metadataPath;
-  private final String dataPath;
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  protected RepositoryFileContext context;
 
 }
