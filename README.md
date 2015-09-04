@@ -25,7 +25,7 @@ Sub-system modules:
 - [Summarizer](dcc-etl-summarizer/README.md)
 - [Indexer](dcc-etl-indexer/README.md)
 
-Additional Info:
+Additional Info
 ---
 - [Running ETL](ETL.md)
-- [Updating Heliotrope Resources](Heliotrope.md)
+- [Fathmm](Fathmm.md)
