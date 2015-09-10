@@ -21,9 +21,9 @@ package org.icgc.dcc.etl.core.config;
 import java.io.File;
 import java.util.Map;
 
-import lombok.Data;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -101,5 +101,10 @@ public class EtlConfig {
    * ICGC client configuration
    */
   Map<String, String> icgc;
+
+  /**
+   * ICGC OAuth2 authorization token for use with {@code dcc-auth}.
+   */
+  String authToken;
 
 }
