@@ -181,6 +181,7 @@
     <!-- Versions - DCC -->
     <dcc-common.version>3.8.13.0</dcc-common.version>
     <dcc-submission-core.version>3.8.5.9</dcc-submission-core.version>
+    <dcc-import.version>0.0.1-SNAPSHOT</dcc-import.version>
 
     <!-- Versions - JSON -->
     <json-path.version>1.2</json-path.version>

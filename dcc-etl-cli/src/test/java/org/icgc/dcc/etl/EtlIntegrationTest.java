@@ -68,11 +68,10 @@ import org.icgc.dcc.common.test.es.ElasticSearchExporter;
 import org.icgc.dcc.etl.cli.Main;
 import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
-import org.icgc.dcc.etl.db.importer.DBImporter;
-import org.icgc.dcc.etl.db.importer.cli.CollectionName;
-import org.icgc.dcc.etl.db.importer.diagram.DiagramImporter;
 import org.icgc.dcc.etl.identifier.IdentifierMain;
 import org.icgc.dcc.etl.importer.Importer;
+import org.icgc.dcc.imports.core.CollectionName;
+import org.icgc.dcc.imports.diagram.DiagramImporter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -207,7 +206,7 @@ public class EtlIntegrationTest {
   private void seedGenomeDB() {
 
     EtlConfig config = EtlConfigFile.read(new File(TEST_CONFIG_FILE));
-    val dbImporter = new DBImporter(
+    val dbImporter = new org.icgc.dcc.imports.client.core.Importer(
         getGenomeUri().getURI(),
         createICGCConfig(config));
 

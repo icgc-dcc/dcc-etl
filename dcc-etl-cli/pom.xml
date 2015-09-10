@@ -70,8 +70,8 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-etl-db-importer</artifactId>
-      <version>${project.version}</version>
+      <artifactId>dcc-import-client</artifactId>
+      <version>${dcc-import.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
