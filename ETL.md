@@ -21,7 +21,7 @@ tmux new -s etl | tmux attach -t etl
 ```
 #### 1.0. Update Dependencies.
 
-There is a [shell script](https://github.com/icgc-dcc/dcc-etl/blob/develop/dcc-etl-cli/src/main/scripts/overarch/helpers/prepare_release.sh) that encapsulates most of the process for updating the dependencies to ETL run. However, there are manual steps involved that could not be automated at the time. It is also recommended to run the commands from the mentioned script individually, instead of running the shell script, to allow for verification of steps, which are described in more detail below.
+There is a [shell script](https://github.com/icgc-dcc/dcc-etl/blob/develop/dcc-etl-client/src/main/scripts/overarch/helpers/prepare_release.sh) that encapsulates most of the process for updating the dependencies to ETL run. However, there are manual steps involved that could not be automated at the time. It is also recommended to run the commands from the mentioned script individually, instead of running the shell script, to allow for verification of steps, which are described in more detail below.
 
 #### 1.0.1 Define variables.
 
@@ -32,7 +32,7 @@ release_number='19'
 dictionary_version='0.11c'
 artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-release/org/icgc/dcc/'
 
-dcc_etl_cli_name='dcc-etl-cli'
+dcc_etl_cli_name='dcc-etl-client'
 dcc_etl_annotator_name='dcc-etl-annotator'
 dcc_etl_exporter_name='dcc-etl-exporter'
 dcc_etl_db_importer_name='dcc-etl-db-importer'
@@ -93,7 +93,7 @@ git pull
 #### 1.5. Update release number and dictionary version in shell scripts.
 
 ```bash
-run_helper=***REMOVED***/dcc-etl/git/dcc-etl/dcc-etl-cli/src/main/scripts/overarch/helpers/run.sh
+run_helper=***REMOVED***/dcc-etl/git/dcc-etl/dcc-etl-client/src/main/scripts/overarch/helpers/run.sh
 sed -i "s/^release_number=.*/release_number=${release_number}/" ${run_helper}
 sed -i "s/^dictionary_version=.*/dictionary_version=\"${dictionary_version}\"/" ${run_helper}
 git add ${run_helper}
@@ -150,7 +150,7 @@ bin/db-importer.sh
 Change to the directory containing the overarching shell script.
 
 ```bash
-cd ***REMOVED***/dcc-etl/git/dcc-etl/dcc-etl-cli/src/main/scripts/overarch
+cd ***REMOVED***/dcc-etl/git/dcc-etl/dcc-etl-client/src/main/scripts/overarch
 ```
 
 Use the following command to run the ETL
@@ -159,7 +159,7 @@ Use the following command to run the ETL
 helpers/run.sh ***REMOVED***/dcc-etl/git/dcc-etl dcc-etl.jar <project>.json <test|ICGC> <component_name>-<component_name>
 ```
 
-where `<project>.json` is the file indicating the project to be included in the run, `<test|ICGC>` indicates if the run is a test or release and `<component_name>-<component_name>` specifies the starting and ending components in the run. To run all, use `-`. For more advanced settings see the [shell script.](https://github.com/icgc-dcc/dcc-etl/blob/develop/dcc-etl-cli/src/main/scripts/overarch/overarch.sh#L43)
+where `<project>.json` is the file indicating the project to be included in the run, `<test|ICGC>` indicates if the run is a test or release and `<component_name>-<component_name>` specifies the starting and ending components in the run. To run all, use `-`. For more advanced settings see the [shell script.](https://github.com/icgc-dcc/dcc-etl/blob/develop/dcc-etl-client/src/main/scripts/overarch/overarch.sh#L43)
 
 For example, the following command will execute ETL in test mode, using two_tcga.json project file, and will run the components including and after loader.
 
@@ -180,7 +180,7 @@ Build dcc-etl distribution modules and upload them.
 # dcc-etl project
 cd dcc-etl 
 mvn clean package
-scp dcc-etl-cli/target/dcc-etl-cli-3.8.5.5-SNAPSHOT.jar ***REMOVED***:~
+scp dcc-etl-client/target/dcc-etl-client-3.8.5.5-SNAPSHOT.jar ***REMOVED***:~
 scp dcc-etl-annotator/target/dcc-etl-annotator-3.8.5.5-SNAPSHOT.jar ***REMOVED***:~
 scp dcc-etl-db-importer/target/dcc-etl-db-importer-3.8.5.5-SNAPSHOT-dist.tar.gz ***REMOVED***:~
 scp dcc-etl-exporter/target/dcc-etl-exporter-3.8.5.5-SNAPSHOT-dist.tar.gz ***REMOVED***:~
@@ -200,9 +200,9 @@ Follow the procedure similar to steps 1.2 and 1.3 to get the files in their prop
 ```bash
 ssh hproxy-dcc
 sudo -u dcc_dev -i
-cp /u/user_name/dcc-etl-cli-3.8.5.5-SNAPSHOT.jar ***REMOVED***/dcc-etl/lib/
+cp /u/user_name/dcc-etl-client-3.8.5.5-SNAPSHOT.jar ***REMOVED***/dcc-etl/lib/
 cd ***REMOVED***/dcc-etl/lib/
-ln -sfn dcc-etl-cli-3.8.5.5-SNAPSHOT.jar dcc-etl.jar
+ln -sfn dcc-etl-client-3.8.5.5-SNAPSHOT.jar dcc-etl.jar
 ```
 And so on for the rest of the uploaded files.
 

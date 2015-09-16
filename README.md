@@ -15,7 +15,7 @@ Modules
 
 Sub-system modules:
 
-- [CLI](dcc-etl-cli/README.md)
+- [Client](dcc-etl-client/README.md)
 - [Core](dcc-etl-core/README.md)
 - [Annotator](dcc-etl-annotator/README.md)
 - [Loader](dcc-etl-loader/README.md)
