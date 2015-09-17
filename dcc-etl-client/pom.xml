@@ -68,12 +68,6 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-etl-identifier</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>dcc-import-client</artifactId>
       <version>${dcc-import.version}</version>
       <scope>test</scope>
