@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,32 +15,52 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.loader.core;
+package org.icgc.dcc.etl.loader.identification;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.lang.String.format;
 
 import java.io.Serializable;
 
-import lombok.Value;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.common.core.model.SubmissionModel;
+import org.icgc.dcc.id.client.core.IdClient;
+import org.icgc.dcc.id.client.http.HttpIdClient;
+import org.icgc.dcc.id.client.util.HashIdClient;
 
-/**
- * "Encapsulated Context Object" class that insulates and decouples the loader subsystem from validator abstractions.
- * This is very similar in purpose to Hadoop's new API "Context Object for Mapper and Reducer".
- * <p>
- * Note that there still remain some accessors that should be removed as they violate the "Law of Demeter". In this
- * sense, this should be considered a "Parameter Object" transitioning to a "Encapsulated Context Object".
- * 
- * @see http://www.two-sdg.demon.co.uk/curbralan/papers/europlop/ContextEncapsulation.pdf
- * @see http://www.allankelly.net/static/patterns/encapsulatecontext.pdf
- */
-@Value
-public class LoaderContext implements Serializable {
+@RequiredArgsConstructor
+public class IdClientFactory implements Serializable {
 
-  SubmissionModel submissionModel;
-  String identifierClientClassName;
-  String identifierUri;
-  String releaseName;
-  String identifierAuthToken;
-  boolean filterAllControlled;
+  private static final String HASH_ID_CLIENT_CLASSNAME = HashIdClient.class.getName();
+  private static final String HTTP_ID_CLIENT_CLASSNAME = HttpIdClient.class.getName();
+
+  @NonNull
+  private final String className;
+  @NonNull
+  private final String serviceUri;
+  @NonNull
+  private final String release;
+  private final String authToken;
+
+  public IdClient create() {
+    if (className.equals(HTTP_ID_CLIENT_CLASSNAME)) {
+      return createHttpIdClient();
+    } else if (className.equals(HASH_ID_CLIENT_CLASSNAME)) {
+      return createHashIdClient();
+    } else {
+      throw new IllegalArgumentException(format("%s client is not supported", className));
+    }
+  }
+
+  private IdClient createHashIdClient() {
+    return new HashIdClient(serviceUri, release);
+  }
+
+  private IdClient createHttpIdClient() {
+    checkArgument(!isNullOrEmpty(authToken), "Identifier Auth Token is not defined");
+    return new HttpIdClient(serviceUri, release, authToken);
+  }
 
 }
