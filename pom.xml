@@ -18,7 +18,6 @@
   <modules>
     <module>dcc-etl-core</module>
     <module>dcc-etl-exporter</module>
-    <module>dcc-etl-identifier</module>
     <module>dcc-etl-importer</module>
     <module>dcc-etl-indexer</module>
     <module>dcc-etl-loader</module>
