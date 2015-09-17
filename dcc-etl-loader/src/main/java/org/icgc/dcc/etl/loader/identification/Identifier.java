@@ -38,21 +38,18 @@ import static org.icgc.dcc.common.core.model.FileTypes.FileType.SSM_P_TYPE;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.generatedFields;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
 
-import java.lang.reflect.Constructor;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.cascading.operation.BaseFunction;
 import org.icgc.dcc.common.core.model.FieldNames.IdentifierFieldNames;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
-import org.icgc.dcc.etl.core.id.HttpIdentifierClient;
-import org.icgc.dcc.etl.core.id.IdentifierClient;
 import org.icgc.dcc.etl.loader.flow.RecordLoaderFlowPlanner;
+import org.icgc.dcc.id.client.core.IdClient;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;
@@ -78,11 +75,11 @@ public final class Identifier {
       SSM_P_TYPE, // Because ssm_p drives the ssm_p/ssm_m combination (meta being handled in a specific matter)
       DONOR_TYPE, SPECIMEN_TYPE, SAMPLE_TYPE);
 
-  public static Pipe identify(String identifierClientClassName, String serviceUri, String releaseName, Pipe pipe,
-      String submission, FileType fileType, Optional<FileType> metaFileType) {
+  public static Pipe identify(String identifierClientClassName, String serviceUri, String releaseName,
+      String identifierAuthToken, Pipe pipe, String submission, FileType fileType, Optional<FileType> metaFileType) {
 
     return identify(
-        identifierClientClassName, serviceUri, releaseName, pipe, submission,
+        identifierClientClassName, serviceUri, releaseName, identifierAuthToken, pipe, submission,
         fileType, metaFileType,
         IdResolver.fromFileSchemaName(fileType));
   }
@@ -90,15 +87,15 @@ public final class Identifier {
   /**
    * Only for the clinical hack (DCC-753), remove once addressed.
    */
-  public static Pipe identify(String identifierClientClassName, String serviceUri, String releaseName, Pipe pipe,
-      String submission, FileType fileType, Optional<FileType> metaFileType,
+  public static Pipe identify(String identifierClientClassName, String serviceUri, String releaseName,
+      String identifierAuthToken, Pipe pipe, String submission, FileType fileType, Optional<FileType> metaFileType,
       IdResolver idResolver) {
 
     return new Each(
         pipe,
         ALL,
-        new Identify<String>(identifierClientClassName, serviceUri, releaseName, idResolver, submission,
-            fileType,
+        new Identify<String>(identifierClientClassName, serviceUri, releaseName, identifierAuthToken, idResolver,
+            submission, fileType,
             metaFileType.isPresent() ?
                 metaFileType.get() :
                 null),
@@ -123,6 +120,7 @@ public final class Identifier {
     private final String releaseName;
 
     private final String identifierClientClassName;
+    private final String identifierAuthToken;
 
     /**
      * The helper for resolving IDs, see {@link IdResolver}.
@@ -141,13 +139,15 @@ public final class Identifier {
     /**
      * The client able to retrieve the ID from the service.
      */
-    private IdentifierClient idClient;
+    private IdClient idClient;
 
-    public Identify(String identifierClientClassName, String serviceUri, String releaseName, IdResolver idResolver,
+    public Identify(String identifierClientClassName, String serviceUri, String releaseName,
+        String identifierAuthToken, IdResolver idResolver,
         String projectId, FileType fileType, FileType metaFileType) {
       super(generatedFields(idResolver.getIdFieldName()));
 
       this.identifierClientClassName = checkNotNull(identifierClientClassName);
+      this.identifierAuthToken = identifierAuthToken;
       this.serviceUri = checkNotNull(serviceUri);
       this.idResolver = checkNotNull(idResolver);
       this.projectId = checkNotNull(projectId);
@@ -178,14 +178,9 @@ public final class Identifier {
       functionCall.getOutputCollector().add(new Tuple(id));
     }
 
-    @SneakyThrows
-    private IdentifierClient createIdentifierClient() {
-      // Needs to have a constructor with a single String argument
-      Class<?> identifierClientClass = Class.forName(identifierClientClassName);
-      Constructor<?> constructor = identifierClientClass.getConstructor(String.class, String.class);
-
+    private IdClient createIdentifierClient() {
       log.info("Creating client using {}", serviceUri);
-      return (IdentifierClient) constructor.newInstance(serviceUri, releaseName);
+      return new IdClientFactory(identifierClientClassName, serviceUri, releaseName, identifierAuthToken).create();
     }
   }
 
@@ -198,7 +193,7 @@ public final class Identifier {
     DONOR(DONOR_TYPE, IdentifierFieldNames.SURROGATE_DONOR_ID) {
 
       @Override
-      public String getId(String projectId, TupleEntry entry, IdentifierClient idClient,
+      public String getId(String projectId, TupleEntry entry, IdClient idClient,
           FileType fileSchemaType,
           FileType metaFileSchemaType) {
         String originalDonorId = entry.getString(
@@ -211,7 +206,7 @@ public final class Identifier {
     SPECIMEN(SPECIMEN_TYPE, IdentifierFieldNames.SURROGATE_SPECIMEN_ID) {
 
       @Override
-      public String getId(String projectId, TupleEntry entry, IdentifierClient idClient,
+      public String getId(String projectId, TupleEntry entry, IdClient idClient,
           FileType fileSchemaType,
           FileType metaFileSchemaType) {
         String originalSpecimenId = entry.getString(
@@ -228,7 +223,7 @@ public final class Identifier {
     SPECIMEN_DONOR(SPECIMEN_TYPE, IdentifierFieldNames.SURROGATE_DONOR_ID) {
 
       @Override
-      public String getId(String projectId, TupleEntry entry, IdentifierClient idClient,
+      public String getId(String projectId, TupleEntry entry, IdClient idClient,
           FileType fileSchemaType,
           FileType metaFileSchemaType) {
         String originalSpecimenId = entry.getString(
@@ -241,7 +236,7 @@ public final class Identifier {
     SAMPLE(SAMPLE_TYPE, IdentifierFieldNames.SURROGATE_SAMPLE_ID) {
 
       @Override
-      public String getId(String projectId, TupleEntry entry, IdentifierClient idClient,
+      public String getId(String projectId, TupleEntry entry, IdClient idClient,
           FileType fileSchemaType,
           FileType metaFileSchemaType) {
         String originalSampleId = entry.getString(
@@ -254,7 +249,7 @@ public final class Identifier {
     MUTATION(SSM_P_TYPE, IdentifierFieldNames.SURROGATE_MUTATION_ID) {
 
       @Override
-      public String getId(String projectId, TupleEntry entry, IdentifierClient idClient,
+      public String getId(String projectId, TupleEntry entry, IdClient idClient,
           FileType fileSchemaType,
           FileType metaFileSchemaType) {
         checkState(metaFileSchemaType != null, "Expected to find a meta file schema name for %s", fileSchemaType);
@@ -292,7 +287,7 @@ public final class Identifier {
      * in order to query the service via the {@link HttpIdentifierClient}. The file schema name(s) are used to build
      * properly prefixed fields, as they are prefixed in the {@link TupleEntry}.
      */
-    abstract String getId(String projectId, TupleEntry entry, IdentifierClient idClient,
+    abstract String getId(String projectId, TupleEntry entry, IdClient idClient,
         FileType fileSchemaType, FileType metaFileSchemaType);
 
     /**

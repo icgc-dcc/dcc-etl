@@ -168,6 +168,7 @@ public class EtlService {
         config.getReleaseMongoUri(),
         config.getLoaderHadoop(),
         config.getIdentifierServiceUri(),
+        config.getAuthToken(),
         config.isFilterAllControlled(),
         config.getLoaderMaxConcurrentFlows());
 

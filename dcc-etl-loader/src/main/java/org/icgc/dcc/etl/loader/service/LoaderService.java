@@ -63,6 +63,9 @@ import com.mongodb.MongoClientURI;
 @Slf4j
 public class LoaderService {
 
+  // TODO: Move to Configurations
+  public static final String IDENTIFIER_AUTH_TOKEN_PARAM = "identifierAuthToken";
+
   @NonNull
   private final String releaseMongoUri;
 
@@ -79,6 +82,7 @@ public class LoaderService {
   private final String identifierClientClassName;
   @NonNull
   private final String identifierUri;
+  private final String identifierAuthToken;
   private final boolean filterAllControlled;
   private final int maxConcurrentFlows;
 
@@ -90,6 +94,7 @@ public class LoaderService {
 
       @Named(IDENTIFIER_CLIENT_CLASS_NAME_KEY) String identifierClientClassName,
       @Named(IDENTIFIER_KEY) String identifierUri,
+      @Named(IDENTIFIER_AUTH_TOKEN_PARAM) String identifierAuthToken,
 
       @Named(FILTER_ALL_CONTROLLED) boolean filterAllControlled,
       @Named(LOADER_MAX_CONCURRENT_FLOWS) int maxConcurrentFlows,
@@ -104,6 +109,7 @@ public class LoaderService {
 
     this.identifierClientClassName = checkNotNull(identifierClientClassName);
     this.identifierUri = checkNotNull(identifierUri);
+    this.identifierAuthToken = identifierAuthToken;
 
     this.filterAllControlled = filterAllControlled;
     this.maxConcurrentFlows = maxConcurrentFlows;
@@ -198,6 +204,7 @@ public class LoaderService {
         identifierClientClassName,
         identifierUri,
         releaseName,
+        identifierAuthToken,
         filterAllControlled);
   }
 

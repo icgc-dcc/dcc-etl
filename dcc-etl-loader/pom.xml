@@ -28,6 +28,10 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-cascading</artifactId>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-id-client</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>

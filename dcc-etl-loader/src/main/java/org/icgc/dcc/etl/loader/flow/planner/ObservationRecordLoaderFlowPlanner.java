@@ -245,7 +245,8 @@ public class ObservationRecordLoaderFlowPlanner extends BaseRecordLoaderFlowPlan
           context.getReleaseName(),
           getIdentifiableProjectKey(),
           context.getIdentifierUri(),
-          context.getIdentifierClientClassName());
+          context.getIdentifierClientClassName(),
+          context.getIdentifierAuthToken());
     }
 
     private Pipe getClinicalHackStartPipe(@NonNull final FileType fileType) {

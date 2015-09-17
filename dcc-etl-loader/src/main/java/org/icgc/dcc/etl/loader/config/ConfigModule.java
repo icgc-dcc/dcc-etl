@@ -24,6 +24,8 @@ import static org.icgc.dcc.common.core.model.Configurations.IDENTIFIER_CLIENT_CL
 import static org.icgc.dcc.common.core.model.Configurations.IDENTIFIER_KEY;
 import static org.icgc.dcc.common.core.model.Configurations.LOADER_MAX_CONCURRENT_FLOWS;
 import static org.icgc.dcc.common.core.model.Configurations.RELEASE_MONGO_URI_KEY;
+import static org.icgc.dcc.common.core.util.Strings2.EMPTY_STRING;
+import static org.icgc.dcc.etl.loader.service.LoaderService.IDENTIFIER_AUTH_TOKEN_PARAM;
 
 import java.util.Map;
 
@@ -52,6 +54,7 @@ public class ConfigModule extends AbstractModule {
   private final Map<String, String> hadoopProperties;
   private final String identifierClientClassName;
   private final String identifierServiceUri;
+  private final String identifierAuthToken;
   private final Boolean filterAllControlled;
   private final int maxConcurrentFlows;
 
@@ -75,6 +78,9 @@ public class ConfigModule extends AbstractModule {
     bind(String.class)
         .annotatedWith(named(IDENTIFIER_KEY))
         .toInstance(identifierServiceUri);
+    bind(String.class)
+        .annotatedWith(named(IDENTIFIER_AUTH_TOKEN_PARAM))
+        .toInstance(identifierAuthToken == null ? EMPTY_STRING : identifierAuthToken);
 
     bind(Boolean.class)
         .annotatedWith(named(FILTER_ALL_CONTROLLED))
