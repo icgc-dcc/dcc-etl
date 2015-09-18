@@ -50,6 +50,7 @@ import org.icgc.dcc.common.core.model.FieldNames.IdentifierFieldNames;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.etl.loader.flow.RecordLoaderFlowPlanner;
 import org.icgc.dcc.id.client.core.IdClient;
+import org.icgc.dcc.id.client.core.IdClientFactory;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;
