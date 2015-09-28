@@ -66,7 +66,7 @@ import org.icgc.dcc.common.core.util.URIs;
 import org.icgc.dcc.common.core.util.URLs;
 import org.icgc.dcc.common.hadoop.fs.FileSystems;
 import org.icgc.dcc.common.test.es.ElasticSearchExporter;
-import org.icgc.dcc.etl.client.Main;
+import org.icgc.dcc.etl.client.ClientMain;
 import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.importer.Importer;
@@ -161,7 +161,7 @@ public class EtlIntegrationTest {
 
   @Test
   public void testEtl() {
-    Main.main(
+    ClientMain.main(
         "--config", TEST_CONFIG_FILE,
         "--job-id", TEST_JOB_ID,
         "--release-prefix", TEST_RELEASE_PREFIX,
@@ -191,7 +191,7 @@ public class EtlIntegrationTest {
   @Test
   @Ignore
   public void testEtlSpecific() {
-    Main.main(
+    ClientMain.main(
         "-c", TEST_CONFIG_FILE,
         "-r", TEST_RELEASE_PREFIX,
         "-i", DONOR_TYPE.getName() + "," + DONOR_CENTRIC_TYPE.getName(),

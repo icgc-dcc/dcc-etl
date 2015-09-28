@@ -132,7 +132,7 @@
 
   <properties>
     <!-- Entry point -->
-    <main.class>org.icgc.dcc.etl.cli.Main</main.class>
+    <main.class>org.icgc.dcc.etl.client.ClientMain</main.class>
 
     <test.exclude>Nothing.java</test.exclude>
   </properties>
