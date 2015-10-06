@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dcc-etl</artifactId>
-  <version>3.8.14.2-SNAPSHOT</version>
+  <version>3.8.14.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -18,7 +18,6 @@
   <modules>
     <module>dcc-etl-core</module>
     <module>dcc-etl-exporter</module>
-    <module>dcc-etl-identifier</module>
     <module>dcc-etl-importer</module>
     <module>dcc-etl-indexer</module>
     <module>dcc-etl-loader</module>
@@ -99,9 +98,8 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-identifier</artifactId>
-        <version>${dcc-identifier.version}</version>
-        <scope>test</scope>
+        <artifactId>dcc-id-client</artifactId>
+        <version>${dcc-id.version}</version>
       </dependency>
 
       <!-- JSON -->
@@ -182,6 +180,7 @@
     <dcc-common.version>3.8.13.0</dcc-common.version>
     <dcc-submission-core.version>3.8.5.9</dcc-submission-core.version>
     <dcc-import.version>0.0.1-SNAPSHOT</dcc-import.version>
+    <dcc-id.version>0.0.15</dcc-id.version>
 
     <!-- Versions - JSON -->
     <json-path.version>1.2</json-path.version>

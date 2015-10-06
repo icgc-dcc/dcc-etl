@@ -15,37 +15,17 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.etl.core.id;
+package org.icgc.dcc.etl.client.cli;
 
-import java.io.Closeable;
-import java.util.Optional;
+import org.icgc.dcc.etl.indexer.model.DocumentType;
 
-public interface IdentifierClient extends Closeable {
+import com.beust.jcommander.IStringConverter;
 
-  /**
-   * Read-only
-   */
+public class DocumentTypeConverter implements IStringConverter<DocumentType> {
 
-  Optional<String> getDonorId(String submittedDonorId, String submittedProjectId);
-
-  Optional<String> getSampleId(String submittedSampleId, String submittedProjectId);
-
-  Optional<String> getSpecimenId(String submittedSpecimenId, String submittedProjectId);
-
-  Optional<String> getMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
-      String mutation, String mutationType, String assemblyVersion);
-
-  /**
-   * Create if it doesn't exist
-   */
-
-  String createDonorId(String submittedDonorId, String submittedProjectId);
-
-  String createSpecimenId(String submittedSpecimenId, String submittedProjectId);
-
-  String createSampleId(String submittedSampleId, String submittedProjectId);
-
-  String createMutationId(String chromosome, String chromosomeStart, String chromosomeEnd,
-      String mutation, String mutationType, String assemblyVersion);
+  @Override
+  public DocumentType convert(String value) {
+    return DocumentType.byName(value);
+  }
 
 }

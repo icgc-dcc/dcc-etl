@@ -40,6 +40,7 @@ public class LoaderContext implements Serializable {
   String identifierClientClassName;
   String identifierUri;
   String releaseName;
+  String identifierAuthToken;
   boolean filterAllControlled;
 
 }

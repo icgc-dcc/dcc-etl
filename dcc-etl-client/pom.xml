@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-etl</artifactId>
-    <version>3.8.14.2-SNAPSHOT</version>
+    <version>3.8.14.5-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -49,6 +49,10 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-submission-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-id-client</artifactId>
+    </dependency>
 
     <!-- Command line -->
     <dependency>
@@ -60,12 +64,6 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-etl-identifier</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -134,7 +132,7 @@
 
   <properties>
     <!-- Entry point -->
-    <main.class>org.icgc.dcc.etl.cli.Main</main.class>
+    <main.class>org.icgc.dcc.etl.client.ClientMain</main.class>
 
     <test.exclude>Nothing.java</test.exclude>
   </properties>

@@ -424,6 +424,7 @@ public abstract class BaseRecordLoaderFlowPlanner implements RecordLoaderFlowPla
         context.getIdentifierClientClassName(),
         context.getIdentifierUri(),
         context.getReleaseName(),
+        context.getIdentifierAuthToken(),
         pipe,
         getSubmission(),
         currentFileType,

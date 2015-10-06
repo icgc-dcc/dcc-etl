@@ -41,6 +41,7 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import org.icgc.dcc.etl.client.cli.Options;
 import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.indexer.model.DocumentType;
@@ -54,7 +55,7 @@ import com.google.common.collect.ImmutableSet;
 
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class Main {
+public class ClientMain {
 
   /**
    * Return code to indicate to the OS that a fatal application error occurred.
@@ -79,7 +80,7 @@ public class Main {
    * @param args command line arguments
    */
   public static void main(String... args) {
-    new Main().run(args);
+    new ClientMain().run(args);
   }
 
   @SneakyThrows

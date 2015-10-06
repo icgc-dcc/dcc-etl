@@ -54,11 +54,12 @@ public class ClinicalHack extends SubAssembly {
       @NonNull final String releaseName,
       @NonNull final Identifiable projectKey,
       @NonNull final String identifierUri,
-      @NonNull final String identifierClientClassName) {
+      @NonNull final String identifierClientClassName,
+      final String identifierAuthToken) {
     setTails(process(
         samplePipe, specimenPipe,
         releaseName, projectKey,
-        identifierUri, identifierClientClassName));
+        identifierUri, identifierClientClassName, identifierAuthToken));
   }
 
   private static Pipe process(
@@ -67,7 +68,8 @@ public class ClinicalHack extends SubAssembly {
       @NonNull final String releaseName,
       @NonNull final Identifiable projectKey,
       @NonNull final String identifierUri,
-      @NonNull final String identifierClientClassName) {
+      @NonNull final String identifierClientClassName,
+      final String identifierAuthToken) {
 
     // Retain only fields of interest
     Pipe samplePipe = new Retain(preProcessedSamplePipe,
@@ -79,15 +81,15 @@ public class ClinicalHack extends SubAssembly {
 
     // Fetch ID for sample
     samplePipe = identify(
-        identifierClientClassName, identifierUri, releaseName, samplePipe, projectKey.getId(),
+        identifierClientClassName, identifierUri, releaseName, identifierAuthToken, samplePipe, projectKey.getId(),
         SAMPLE_TYPE, ABSENT_FILE_TYPE, Identifier.IdResolver.SAMPLE);
 
     // Fetch ID for donor and specimen
     specimenPipe = identify( // We use donor_id from specimen rather than from donor (to save a join)
-        identifierClientClassName, identifierUri, releaseName, specimenPipe, projectKey.getId(),
+        identifierClientClassName, identifierUri, releaseName, identifierAuthToken, specimenPipe, projectKey.getId(),
         SPECIMEN_TYPE, ABSENT_FILE_TYPE, Identifier.IdResolver.SPECIMEN_DONOR);
     specimenPipe = identify(
-        identifierClientClassName, identifierUri, releaseName, specimenPipe, projectKey.getId(),
+        identifierClientClassName, identifierUri, releaseName, identifierAuthToken, specimenPipe, projectKey.getId(),
         SPECIMEN_TYPE, ABSENT_FILE_TYPE, Identifier.IdResolver.SPECIMEN);
 
     // Perform join for tumour sample ID

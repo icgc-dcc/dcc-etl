@@ -47,6 +47,7 @@ import static org.icgc.dcc.common.test.Tests.getTestJobId;
 import static org.icgc.dcc.common.test.Tests.getTestReleasePrefix;
 import static org.icgc.dcc.common.test.Tests.getTestWorkingDir;
 import static org.icgc.dcc.etl.core.config.ICGCClientConfigs.createICGCConfig;
+import static org.icgc.dcc.etl.loader.factory.LoaderServiceFactory.IDENTIFIER_CLIENT_CLASSNAME_PROPERTY;
 import static org.icgc.dcc.etl.service.EtlService.EtlAction.IMPORT;
 
 import java.io.File;
@@ -65,11 +66,11 @@ import org.icgc.dcc.common.core.util.URIs;
 import org.icgc.dcc.common.core.util.URLs;
 import org.icgc.dcc.common.hadoop.fs.FileSystems;
 import org.icgc.dcc.common.test.es.ElasticSearchExporter;
-import org.icgc.dcc.etl.client.Main;
+import org.icgc.dcc.etl.client.ClientMain;
 import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
-import org.icgc.dcc.etl.identifier.IdentifierMain;
 import org.icgc.dcc.etl.importer.Importer;
+import org.icgc.dcc.id.client.util.HashIdClient;
 import org.icgc.dcc.imports.core.CollectionName;
 import org.icgc.dcc.imports.diagram.DiagramImporter;
 import org.junit.After;
@@ -146,8 +147,8 @@ public class EtlIntegrationTest {
     // Only import some test gene and diagram ids to significantly speedup processing during testing
     System.setProperty(Importer.INCLUDED_GENE_IDS_SYSTEM_PROPERTY_NAME, TEST_GENES_IDS);
     System.setProperty(DiagramImporter.INCLUDED_REACTOME_DIAGRAMS, TEST_DIAGRAMS);
+    System.setProperty(IDENTIFIER_CLIENT_CLASSNAME_PROPERTY, HashIdClient.class.getName());
 
-    startIdentifier();
     seedFathmmDB();
     seedGenomeDB();
 
@@ -160,7 +161,7 @@ public class EtlIntegrationTest {
 
   @Test
   public void testEtl() {
-    Main.main(
+    ClientMain.main(
         "--config", TEST_CONFIG_FILE,
         "--job-id", TEST_JOB_ID,
         "--release-prefix", TEST_RELEASE_PREFIX,
@@ -190,7 +191,7 @@ public class EtlIntegrationTest {
   @Test
   @Ignore
   public void testEtlSpecific() {
-    Main.main(
+    ClientMain.main(
         "-c", TEST_CONFIG_FILE,
         "-r", TEST_RELEASE_PREFIX,
         "-i", DONOR_TYPE.getName() + "," + DONOR_CENTRIC_TYPE.getName(),
@@ -225,19 +226,6 @@ public class EtlIntegrationTest {
     DBI dbi = new DBI(jdbcURI);
     Handle handle = dbi.open();
     handle.close();
-  }
-
-  @SneakyThrows
-  private void startIdentifier() {
-    // Override the jdbc url in the configuration file with the following value
-    String configPath = "src/test/resources/dcc-identifier";
-    String schemaPath = format("%s//schema.sql", configPath);
-    String jdbcUrl = format("jdbc:h2:mem;MODE=PostgreSQL;INIT=runscript from '%s'", schemaPath);
-    System.setProperty("dw.database.url", jdbcUrl);
-
-    // Start the identifier web service asynchronously
-    String configFilePath = format("%s/settings.yml", configPath);
-    IdentifierMain.main("server", configFilePath);
   }
 
   /**

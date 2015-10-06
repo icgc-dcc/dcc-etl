@@ -17,27 +17,31 @@
  */
 package org.icgc.dcc.etl.loader.factory;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Map;
 
 import lombok.NoArgsConstructor;
+import lombok.val;
 
 import org.icgc.dcc.common.hadoop.util.HadoopCompression;
-import org.icgc.dcc.etl.core.id.HttpIdentifierClient;
 import org.icgc.dcc.etl.loader.config.ConfigModule;
 import org.icgc.dcc.etl.loader.config.LoaderModule;
 import org.icgc.dcc.etl.loader.service.LoaderService;
+import org.icgc.dcc.id.client.http.HttpIdClient;
 
 import com.google.inject.Guice;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class LoaderServiceFactory {
 
+  public static final String IDENTIFIER_CLIENT_CLASSNAME_PROPERTY = "dcc.identifier.client.class.name";
+
   /**
    * Production identifier client.
    */
-  private static final String DEFAULT_IDENTIFIER_CLIENT_CLASS_NAME = HttpIdentifierClient.class.getName();
+  private static final String DEFAULT_IDENTIFIER_CLIENT_CLASS_NAME = HttpIdClient.class.getName();
 
   public static LoaderService createService(
       String fsUrl,
@@ -46,6 +50,7 @@ public final class LoaderServiceFactory {
       Map<String, String> hadoop,
       String identifierClientClassName,
       String identifierServiceUri,
+      String identifierAuthToken,
       boolean filterAllControlled,
       int maxConcurrentFlows) {
 
@@ -57,6 +62,7 @@ public final class LoaderServiceFactory {
             hadoop,
             identifierClientClassName,
             identifierServiceUri,
+            identifierAuthToken,
             filterAllControlled,
             maxConcurrentFlows),
         new LoaderModule())
@@ -69,13 +75,20 @@ public final class LoaderServiceFactory {
       String releaseMongoUri,
       Map<String, String> hadoop,
       String identifierServiceUri,
+      String identifierAuthToken,
       boolean filterAllControlled,
       int maxConcurrentFlows) {
 
     return createService(
         fsUrl, fileSystemOutputCompression, releaseMongoUri, hadoop,
-        DEFAULT_IDENTIFIER_CLIENT_CLASS_NAME, identifierServiceUri,
+        resolveClassName(), identifierServiceUri, identifierAuthToken,
         filterAllControlled, maxConcurrentFlows);
+  }
+
+  private static String resolveClassName() {
+    val className = System.getProperty(IDENTIFIER_CLIENT_CLASSNAME_PROPERTY);
+
+    return isNullOrEmpty(className) ? DEFAULT_IDENTIFIER_CLIENT_CLASS_NAME : className;
   }
 
 }

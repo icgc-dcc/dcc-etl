@@ -26,6 +26,7 @@ import static org.icgc.dcc.common.core.DccResources.getCodeListsDccResource;
 import static org.icgc.dcc.common.core.DccResources.getDictionaryDccResource;
 import static org.icgc.dcc.common.core.util.Joiners.PATH;
 import static org.icgc.dcc.common.core.util.Optionals.ABSENT_STRING;
+import static org.icgc.dcc.common.core.util.Strings2.EMPTY_STRING;
 import static org.icgc.dcc.common.core.util.Strings2.NOT_APPLICABLE;
 import static org.icgc.dcc.common.hadoop.fs.HadoopUtils.recursivelyDeleteDirectoryIfExists;
 import static org.icgc.dcc.common.test.Tests.FS_DIR_NAME;
@@ -51,6 +52,7 @@ import java.util.Set;
 
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.conf.Configuration;
@@ -63,9 +65,9 @@ import org.icgc.dcc.common.core.util.URIs;
 import org.icgc.dcc.common.hadoop.fs.DccFileSystem2;
 import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 import org.icgc.dcc.common.test.mongodb.JsonUtils;
-import org.icgc.dcc.etl.core.id.HashIdentifierClient;
 import org.icgc.dcc.etl.loader.factory.LoaderServiceFactory;
 import org.icgc.dcc.etl.loader.service.LoaderService;
+import org.icgc.dcc.id.client.util.HashIdClient;
 
 import com.google.common.base.Optional;
 import com.mongodb.MongoClient;
@@ -165,15 +167,16 @@ public class LoaderIntegrationTestHelper {
     // Update with additional runtime values
     releaseMongoUri = getMongoUri();
     identifierServiceUri = NOT_APPLICABLE;
-    identifierClientClassName = HashIdentifierClient.class.getName();
+    identifierClientClassName = HashIdClient.class.getName();
     filterAllControlled = false;
     maxConcurrentFlows = 10;
+    val identifierAuthToken = EMPTY_STRING;
 
     // Create class under test; specify 'Lists.newArrayList("project2")' for instance to only process 'project2'
     service = LoaderServiceFactory.createService(
         fsUrl, HadoopCompression.NONE.name(),
         releaseMongoUri, hadoop,
-        identifierClientClassName, identifierServiceUri,
+        identifierClientClassName, identifierServiceUri, identifierAuthToken,
         filterAllControlled, maxConcurrentFlows);
 
     // Configure the filesystem
