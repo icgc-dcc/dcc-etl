@@ -31,7 +31,7 @@ echo "parent_cluster_output_dir=\"${parent_cluster_output_dir?}\""
 # constants:
 
 main_class="org.icgc.dcc.etl.pruner.PrunerMain"
-logback_file="/etl/conf/logback.xml" # in git
+logback_file="$HOME/dcc-etl/conf/logback.xml" # in git
 
 concatenator_cluster_output_dir="${parent_cluster_output_dir?}/${concatenator_component?}"
 

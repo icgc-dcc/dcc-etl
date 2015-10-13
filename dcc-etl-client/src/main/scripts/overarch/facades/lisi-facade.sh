@@ -30,7 +30,7 @@ config_file=${1?} && shift
 action=${1?} && shift # see further down for all options
 index_type=$1 # optional
 
-logback_file="/etl/conf/logback.xml" # in git
+logback_file="$HOME/dcc-etl/conf/logback.xml" # in git
 
 # ---------------------------------------------------------------------------
 # actions (verbs based on component names):
