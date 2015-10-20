@@ -1,6 +1,6 @@
 #!/bin/bash
-release_number='19'
-dictionary_version='0.11c'
+release_number='20'
+dictionary_version='0.12e'
 artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-release/org/icgc/dcc/'
 
 dcc_etl_cli_name='dcc-etl-client'
@@ -9,10 +9,10 @@ dcc_etl_exporter_name='dcc-etl-exporter'
 dcc_etl_db_importer_name='dcc-etl-db-importer'
 dcc_submission_server_name='dcc-submission-server'
 
-dcc_etl_cli_version='3.8.14.5'
-dcc_etl_annotator_version='3.8.14.5'
-dcc_etl_exporter_version='3.8.14.5'
-dcc_etl_db_importer_version='3.8.14.5'
+dcc_etl_cli_version='3.8.14.6'
+dcc_etl_annotator_version='3.8.14.6'
+dcc_etl_exporter_version='3.8.14.6'
+dcc_etl_db_importer_version='3.8.14.6'
 dcc_submission_server_version='3.8.6.4'
 
 dcc_etl_cli_dist_file_name=${dcc_etl_cli_name}-${dcc_etl_cli_version}.jar
