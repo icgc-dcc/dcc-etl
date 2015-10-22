@@ -181,7 +181,6 @@ public class EsStats {
   // TODO: Duplicated code:
 
   @SneakyThrows
-  @SuppressWarnings("resource")
   private TransportClient transportClient() {
     URI esUri = new URI(uri);
     String host = esUri.getHost();
