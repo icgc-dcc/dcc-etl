@@ -25,12 +25,12 @@ import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
 
 import org.bson.types.ObjectId;
-import org.elasticsearch.common.collect.Sets;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.POJONode;
+import com.google.common.collect.Sets;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class ObservationSummarizer extends AbstractSummarizer {
 
       val consequenceTypes = Sets.<String> newHashSet();
       for (val observationConsequence : observationConsequences) {
-        val consequenceType = getConsequenceType(observationConsequence);
+        String consequenceType = getConsequenceType(observationConsequence);
 
         consequenceTypes.add(consequenceType);
       }
