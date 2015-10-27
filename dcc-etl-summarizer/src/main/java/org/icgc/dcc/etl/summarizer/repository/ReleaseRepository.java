@@ -55,6 +55,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_LIBRARY_ST
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_REPOSITORY;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
+import static org.icgc.dcc.common.core.util.Jackson.asArrayNode;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.extractStudies;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapLongValues;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapMultipleTextValues;
@@ -71,7 +72,9 @@ import org.icgc.dcc.etl.summarizer.util.LongBatchQueryModifier;
 import org.jongo.MongoCollection;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableList;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -250,10 +253,11 @@ public class ReleaseRepository {
             affectedGeneCount);
   }
 
-  public void pushDonorGeneSummary(String donorId, ObjectNode donoGeneSummary) {
+  public void setDonorGeneSummary(String donorId, ObjectNode donoGeneSummary) {
+    val genes = donoGeneSummary.get(DONOR_GENES);
     donors
         .update("{ " + DONOR_ID + ": # }", donorId)
-        .with("{ $push: { " + DONOR_GENES + ": # } }", donoGeneSummary);
+        .with("{ $set: { " + DONOR_GENES + ": # } }", jsonNodes(asArrayNode(genes)));
   }
 
   public void unsetDonorGenes() {
@@ -261,32 +265,6 @@ public class ReleaseRepository {
         .update("{}")
         .multi()
         .with("{ $unset: { " + DONOR_GENES + ": # } }", "");
-  }
-
-  public List<String> getAffectedGeneIds() {
-    // @formatter:off
-    // Use Observation collection as the basis for the pipeline
-    return textValues("geneId", observations
-        // Retain only the required fields to reduce memory footprint and rename to internal field names: 
-        //  {geneIds: ["g1", "g2"]}
-        .aggregate("{ $project: { _id: 0, geneIds: '$" + OBSERVATION_CONSEQUENCES + "." + OBSERVATION_CONSEQUENCES_GENE_ID + "' } }")
-              
-        // Unwind all geneId(s): 
-        //  {geneId: "g1"}
-        //  {geneId: "g2"}
-        .and("{ $unwind: '$geneIds' }")
-        
-        // Determine unique geneIds:
-        //  {geneId, "g1"}
-        .and("{ $group: { _id: '$geneIds' } }")
-        
-        // Remove _id
-        //  {geneId: "g1"}
-        .and("{ $project: { _id: 0, geneId: '$_id' } }")
-        
-        // Return list of previous objects
-        .as(JsonNode.class));
-    // @formatter:on
   }
 
   public int setGeneSummary(String geneId, ObjectNode geneSummary) {
@@ -570,6 +548,15 @@ public class ReleaseRepository {
             "{ $project: { _id: 0, sampleCount: '$sampleCount' } }")
         .as(JsonNode.class)
         .get(0).get("sampleCount").asLong();
+  }
+
+  private static List<JsonNode> jsonNodes(ArrayNode array) {
+    val nodesList = ImmutableList.<JsonNode> builder();
+    for (val element : array) {
+      nodesList.add(element);
+    }
+
+    return nodesList.build();
   }
 
 }

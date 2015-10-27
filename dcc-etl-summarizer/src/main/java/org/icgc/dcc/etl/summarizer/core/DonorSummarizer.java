@@ -20,6 +20,7 @@ package org.icgc.dcc.etl.summarizer.core;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.nullToEmpty;
 import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.SSM_TYPE;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENES;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENE_GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENE_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
@@ -27,6 +28,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.summarizer.util.Donors.getAgeGroup;
 
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
@@ -187,6 +189,7 @@ public class DonorSummarizer extends AbstractSummarizer {
     val genes = result.get("genes");
 
     val uniqueGeneIds = Sets.<String> newTreeSet();
+    val totalDonorGeneSummary = createTotalDonorGeneSummary();
     for (val gene : genes) {
       val geneId = nullToEmpty(gene.path("geneId").textValue());
       uniqueGeneIds.add(geneId);
@@ -203,11 +206,24 @@ public class DonorSummarizer extends AbstractSummarizer {
         }
       }
 
-      repository.pushDonorGeneSummary(donorId, donorGeneSummary);
+      appendDonorGeneSummary(totalDonorGeneSummary, donorGeneSummary);
     }
 
+    repository.setDonorGeneSummary(donorId, totalDonorGeneSummary);
     int affectedGeneCount = uniqueGeneIds.size();
     repository.setDonorAffectedGeneCount(donorId, affectedGeneCount);
+  }
+
+  private static ObjectNode createTotalDonorGeneSummary() {
+    val summary = DEFAULT.createObjectNode();
+    summary.withArray(DONOR_GENES);
+
+    return summary;
+  }
+
+  private static void appendDonorGeneSummary(ObjectNode totalDonorGeneSummary, ObjectNode donorGeneSummary) {
+    val genes = totalDonorGeneSummary.withArray(DONOR_GENES);
+    genes.add(donorGeneSummary);
   }
 
   private void summarizeDonorRepositories() {
