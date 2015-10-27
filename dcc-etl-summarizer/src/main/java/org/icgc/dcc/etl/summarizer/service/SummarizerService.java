@@ -40,7 +40,6 @@ import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.icgc.dcc.etl.summarizer.core.DonorSummarizer;
 import org.icgc.dcc.etl.summarizer.core.GeneSetSummarizer;
 import org.icgc.dcc.etl.summarizer.core.GeneSummarizer;
-import org.icgc.dcc.etl.summarizer.core.ObservationSummarizer;
 import org.icgc.dcc.etl.summarizer.core.ProjectSummarizer;
 import org.icgc.dcc.etl.summarizer.core.ReleaseSummarizer;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
@@ -92,7 +91,7 @@ public class SummarizerService {
     val donorSummarizer = new DonorSummarizer(repository);
     val projectSummarizer = new ProjectSummarizer(repository);
     val geneSummarizer = new GeneSummarizer(repository);
-    val observationSummarizer = new ObservationSummarizer(repository);
+    // val observationSummarizer = new ObservationSummarizer(repository);
     val releaseSummarizer = new ReleaseSummarizer(jobId, releaseName, repository);
 
     // For correctness, the aggregation order below must be respected:
@@ -115,9 +114,10 @@ public class SummarizerService {
     geneSummarizer.summarize();
     log.info("Summarizing 'gene' took.......... {}", formatDuration(delta));
 
-    delta.reset().start();
-    observationSummarizer.summarize();
-    log.info("Summarizing 'observation' took... {}", formatDuration(delta));
+    // ObservationSummarizer produces observation.consequence_type field which is not used anymore
+    // delta.reset().start();
+    // observationSummarizer.summarize();
+    // log.info("Summarizing 'observation' took... {}", formatDuration(delta));
 
     delta.reset().start();
     releaseSummarizer.summarize();
