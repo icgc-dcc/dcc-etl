@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.etl.summarizer.repository;
 
+import static java.lang.String.format;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_AGE_AT_DIAGNOSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENES;
@@ -68,6 +69,7 @@ import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
+import org.icgc.dcc.common.core.util.Separators;
 import org.icgc.dcc.etl.summarizer.util.LongBatchQueryModifier;
 import org.jongo.MongoCollection;
 
@@ -285,9 +287,15 @@ public class ReleaseRepository {
     geneSets.save(geneSet);
   }
 
-  public long getGeneSetGeneCount(String geneSetId, String geneSetType) {
-    return genes.count("{ " + GENE_SETS + ": { $elemMatch: { " + GENE_SET_ID + ": #, " + GENE_SETS_TYPE + ": # } } }",
-        geneSetId, geneSetType);
+  public List<ObjectNode> getGeneSetIdTypeCounts() {
+    return genes
+        .aggregate(format("{ '$project' : { _id: 0, sets: '$%s' } }", GENE_SETS))
+        .and(format("{ $unwind: '$%s' }", GENE_SETS))
+        .and(format("{ '$project' : { idType: { $concat:['$%s', '%s', '$%s'] } } }",
+            getFieldName(GENE_SETS, GENE_SET_ID), Separators.DASH, getFieldName(GENE_SETS, GENE_SETS_TYPE)))
+        .and("{ $group: { _id: '$idType', count: { $sum: 1 } } }")
+        .and("{ '$project' : { _id: 0, idType: '$_id', count: 1 } }")
+        .as(ObjectNode.class);
   }
 
   public Iterable<ObjectNode> getObservationConsequenceTypes() {
@@ -557,6 +565,10 @@ public class ReleaseRepository {
     }
 
     return nodesList.build();
+  }
+
+  private static String getFieldName(String parent, String child) {
+    return parent + Separators.DOT + child;
   }
 
 }

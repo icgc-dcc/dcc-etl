@@ -17,18 +17,25 @@
  */
 package org.icgc.dcc.etl.summarizer.core;
 
+import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Stopwatch.createStarted;
+import static java.util.stream.Collectors.toMap;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SETS_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SET_ID;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.Map;
+
+import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code GeneSet} collection information.
@@ -54,12 +61,14 @@ public class GeneSetSummarizer extends AbstractSummarizer {
 
     log.info("Getting gene sets...");
     val geneSets = repository.getGeneSets();
+    log.info("Resolving Id-Type counts...");
+    val idTypeCount = map(repository.getGeneSetIdTypeCounts());
     for (val geneSet : geneSets) {
       val id = geneSet.get(GENE_SET_ID).textValue();
       val type = geneSet.get(GENE_SETS_TYPE).textValue();
 
       // Count
-      val geneCount = repository.getGeneSetGeneCount(id, type);
+      val geneCount = getGeneSetGeneCount(idTypeCount, id, type);
 
       // Update
       addSummary(geneSet, geneCount);
@@ -72,6 +81,17 @@ public class GeneSetSummarizer extends AbstractSummarizer {
             formatCount(count), formatRate(rate(COUNTER_THRESHOLD, watch)));
       }
     }
+  }
+
+  private static long getGeneSetGeneCount(Map<String, Long> idTypeCount, String id, String type) {
+    val key = Joiners.DASH.join(id, type);
+
+    return firstNonNull(idTypeCount.get(key), 0L);
+  }
+
+  private static Map<String, Long> map(List<ObjectNode> idTypeCounts) {
+    return idTypeCounts.stream()
+        .collect(toMap(on -> on.get("idType").textValue(), on -> on.get("count").asLong()));
   }
 
   private static void addSummary(ObjectNode geneSet, long geneCount) {
