@@ -67,7 +67,6 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID;
-import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCE_TYPES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_MUTATION_ID;
@@ -548,10 +547,10 @@ public class SummarizerIntegrationTest {
             OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID + ":'transcript2'," +
             OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE + ":'consequence_type1'" +
           "}" +
-        "]," +
+        "]" +
           
         // Observation-consequence types summaries
-        OBSERVATION_CONSEQUENCE_TYPES + ":['consequence_type1']" +
+//        "," + OBSERVATION_CONSEQUENCE_TYPES + ":['consequence_type1']" +
       "}"
     );
     // @formatter:on
