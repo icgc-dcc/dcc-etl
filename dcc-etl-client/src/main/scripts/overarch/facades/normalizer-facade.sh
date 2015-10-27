@@ -27,7 +27,7 @@ parent_cluster_output_dir=${1?} && shift
 # constants:
 
 main_class="org.icgc.dcc.submission.validation.norm.cli.Main"
-logback_file="/etl/conf/logback.xml" # in git
+logback_file="$HOME/dcc-etl/conf/logback.xml" # in git
 fuse_mount_point="/hdfs/dcc"
 
 concatenator_cluster_output_dir="${parent_cluster_output_dir?}/${concatenator_component?}"
