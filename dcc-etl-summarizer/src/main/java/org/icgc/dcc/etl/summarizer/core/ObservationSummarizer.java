@@ -17,19 +17,23 @@
  */
 package org.icgc.dcc.etl.summarizer.core;
 
+import static com.google.common.base.Stopwatch.createStarted;
+import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
 import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
 
-import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
-
 import org.bson.types.ObjectId;
+import org.elasticsearch.common.collect.Sets;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.POJONode;
-import com.google.common.base.Stopwatch;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code Observation} collection information.
@@ -47,8 +51,6 @@ import com.google.common.base.Stopwatch;
 @Slf4j
 public class ObservationSummarizer extends AbstractSummarizer {
 
-  private static final int BATCH_SIZE = 100000;
-
   private static final int COUNTER_THRESHOLD = 10000;
 
   public ObservationSummarizer(ReleaseRepository repository) {
@@ -57,33 +59,40 @@ public class ObservationSummarizer extends AbstractSummarizer {
 
   @Override
   public void summarize() {
-    // DCC-1039: Batch query results to avoid MongoDB's 16MB document limit
-    int count = 0, offset = 0;
-    List<JsonNode> batch;
-    Stopwatch watch = Stopwatch.createStarted();
-    do {
-      batch = repository.getObservationConsequenceTypes(offset, BATCH_SIZE);
+    val watch = createStarted();
 
-      for (JsonNode result : batch) {
-        ObjectId observationId = getObservationId(result);
-        JsonNode consequenceTypes = result.withArray("consequenceTypes");
+    int count = 0;
+    for (val result : repository.getObservationConsequenceTypes()) {
+      val observationId = getObservationId(result);
+      val observationConsequences = getObservationConsequences(result);
 
-        repository.setObservationSummary(observationId, consequenceTypes);
+      val consequenceTypes = Sets.<String> newHashSet();
+      for (val observationConsequence : observationConsequences) {
+        val consequenceType = getConsequenceType(observationConsequence);
 
-        if (++count % COUNTER_THRESHOLD == 0) {
-          log.info("Summarized {} observation(s) ({} docs/s)", //
-              formatCount(count), formatRate(rate(COUNTER_THRESHOLD, watch)));
-        }
+        consequenceTypes.add(consequenceType);
       }
 
-      offset += BATCH_SIZE;
-    } while (batch.size() == BATCH_SIZE);
+      repository.setObservationSummary(observationId, consequenceTypes);
+
+      if (++count % COUNTER_THRESHOLD == 0) {
+        log.info("Summarized {} observation(s) ({} docs/s)",
+            formatCount(count), formatRate(rate(COUNTER_THRESHOLD, watch)));
+      }
+    }
   }
 
-  private ObjectId getObservationId(JsonNode result) {
-    POJONode pojoNode = (POJONode) result.get("observationId");
-
+  private static ObjectId getObservationId(JsonNode result) {
+    val pojoNode = (POJONode) result.get(MONGO_INTERNAL_ID);
     return (ObjectId) pojoNode.getPojo();
+  }
+
+  private static ArrayNode getObservationConsequences(JsonNode result) {
+    return (ArrayNode) result.get(OBSERVATION_CONSEQUENCES);
+  }
+
+  private static String getConsequenceType(JsonNode observationConsequence) {
+    return observationConsequence.path(OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE).textValue();
   }
 
 }
