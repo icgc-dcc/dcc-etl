@@ -64,6 +64,7 @@ import static org.icgc.dcc.etl.summarizer.util.JsonNodes.textValues;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
@@ -289,43 +290,17 @@ public class ReleaseRepository {
         geneSetId, geneSetType);
   }
 
-  public List<JsonNode> getObservationConsequenceTypes(int offset, int limit) {
-    // @formatter:off
-    // Use Observations collection as the basis for the pipeline
+  public Iterable<ObjectNode> getObservationConsequenceTypes() {
     return observations
-        // Retain only the required fields to reduce memory footprint and rename to internal field names: 
-        //  {observationId: "o1", consequenceTypes: [{...},{...}]}               
-        .aggregate("{ '$project' : { _id: 0, observationId: '$" + OBSERVATION_ID + "', consequenceTypes: '$" + OBSERVATION_CONSEQUENCES + "." + OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE + "' } }")
-        
-        // Create repeating (observationId, consequenceType) combinations since they are not unique across donors
-        //  {observationId: "o1", consequenceTypes: "t1"}           
-        //  {observationId: "o1", consequenceTypes: "t1"}           
-        .and("{ $unwind: '$consequenceTypes' }")
-
-        // Generate unique observation-consequence type combinations          
-        .and("{ $group: { _id: { observationId: '$observationId', consequenceType: '$consequenceTypes'} } }")
-        
-        // Pivot
-        //  {observationId: "o1", consequenceTypes: ["t1"]}
-        .and("{ $group: { _id: '$_id.observationId', consequenceTypes: { $push : '$_id.consequenceType' } } }")
-        
-        // Remove unused fields
-        .and("{ $project: { _id: 0, observationId: '$_id', consequenceTypes: 1 } } ")
-        
-        // Page through results to avoid 16MB document limit
-        .and("{ $sort : { observationId : 1 } }")
-        .and("{ $skip : " + offset + " }")
-        .and("{ $limit : " + limit + " }")           
-        
-        // Return list of previous objects
-        .as(JsonNode.class);
-    // @formatter:on
+        .find()
+        .projection("{ '" + OBSERVATION_CONSEQUENCES + "." + OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE + "':1 }")
+        .as(ObjectNode.class);
   }
 
-  public int setObservationSummary(ObjectId observationId, JsonNode observationSummary) {
+  public int setObservationSummary(ObjectId observationId, Set<String> consequenceTypes) {
     return observations
         .update("{ " + OBSERVATION_ID + ": # }", observationId)
-        .with("{ $set: { " + OBSERVATION_CONSEQUENCE_TYPES + ": # } }", textValues(observationSummary))
+        .with("{ $set: { " + OBSERVATION_CONSEQUENCE_TYPES + ": # } }", consequenceTypes)
         .getN();
   }
 
