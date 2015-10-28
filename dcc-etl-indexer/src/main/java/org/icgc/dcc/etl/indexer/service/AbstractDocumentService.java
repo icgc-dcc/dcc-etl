@@ -74,7 +74,7 @@ public abstract class AbstractDocumentService implements DocumentService {
 
     // Prepare
     log.info("Initializing index...");
-    getIndexService().initializeIndex(indexName);
+    getIndexService().initializeIndex(indexName, types);
 
     // Populate
     log.info("Populating index...");

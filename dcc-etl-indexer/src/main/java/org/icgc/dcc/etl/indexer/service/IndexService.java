@@ -45,7 +45,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.IndicesAdminClient;
+import org.elasticsearch.common.collect.Iterables;
 import org.icgc.dcc.common.core.model.IndexType;
+import org.icgc.dcc.etl.indexer.model.DocumentType;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -72,7 +74,7 @@ public class IndexService implements Closeable {
   @Getter(lazy = true, value = PRIVATE)
   private final ClusterAdminClient clusterClient = client.admin().cluster();
 
-  public void initializeIndex(@NonNull String indexName) {
+  public void initializeIndex(@NonNull String indexName, @NonNull Iterable<DocumentType> types) {
     val client = getIndexClient();
 
     log.info("Checking index '{}' for existence...", indexName);
@@ -82,12 +84,17 @@ public class IndexService implements Closeable {
         .isExists();
 
     if (exists) {
-      log.info("Deleting index '{}'...", indexName);
-      checkState(client.prepareDelete(indexName)
-          .execute()
-          .actionGet()
-          .isAcknowledged(),
-          "Index '%s' deletion was not acknowledged", indexName);
+      if (isLoadAll(types)) {
+        log.info("Deleting index '{}'...", indexName);
+        checkState(client.prepareDelete(indexName)
+            .execute()
+            .actionGet()
+            .isAcknowledged(),
+            "Index '%s' deletion was not acknowledged", indexName);
+      } else {
+        log.info("Index exists but resume indexing is requested. Skipping index initialization...");
+        return;
+      }
     }
 
     try {
@@ -117,6 +124,10 @@ public class IndexService implements Closeable {
     } catch (Throwable t) {
       propagate(t);
     }
+  }
+
+  private static boolean isLoadAll(Iterable<DocumentType> types) {
+    return Iterables.size(types) == DocumentType.values().length;
   }
 
   public void aliasIndex(@NonNull String indexName, @NonNull String alias) {
