@@ -92,7 +92,10 @@ public class IndexService implements Closeable {
             .isAcknowledged(),
             "Index '%s' deletion was not acknowledged", indexName);
       } else {
+        log.info("Unfreezing index...");
+        unfreezeIndex(indexName);
         log.info("Index exists but resume indexing is requested. Skipping index initialization...");
+
         return;
       }
     }
@@ -167,6 +170,14 @@ public class IndexService implements Closeable {
     getIndexClient()
         .prepareUpdateSettings(indexName)
         .setSettings(of("index.blocks.write", (Object) true))
+        .execute()
+        .actionGet();
+  }
+
+  public void unfreezeIndex(@NonNull String indexName) {
+    getIndexClient()
+        .prepareUpdateSettings(indexName)
+        .setSettings(of("index.blocks.write", (Object) false))
         .execute()
         .actionGet();
   }
