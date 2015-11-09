@@ -21,6 +21,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames.GENE_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.LoaderFieldNames.PROJECT_ID;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.DIAGRAM_COLLECTION;
+import static org.icgc.dcc.common.core.model.ReleaseCollection.DRUG_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.GENE_SET_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
@@ -28,11 +29,6 @@ import static org.icgc.dcc.common.core.util.Splitters.COMMA;
 
 import java.io.File;
 import java.util.Set;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
 import org.icgc.dcc.etl.importer.fathmm.FathmmImporter;
@@ -44,6 +40,11 @@ import com.google.common.base.Optional;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.mongodb.MongoClientURI;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -104,6 +105,13 @@ public class Importer {
         getCollectionImporter(releaseUri, Optional.<DocumentFilter> absent(), Optional.<DocumentFilter> absent());
     diagramCollectionImporter.import_(DIAGRAM_COLLECTION.getId());
     log.info("Finished importing diagrams in {} ...", watch);
+
+    watch.reset().start();
+    log.info("Importing drugs...");
+    val drugCollectionImporter =
+        getCollectionImporter(releaseUri, Optional.<DocumentFilter> absent(), Optional.<DocumentFilter> absent());
+    drugCollectionImporter.import_(DRUG_COLLECTION.getId());
+    log.info("Finished importing drugs in {} ...", watch);
 
     watch.reset().start();
     log.info("Importing Fathmm predictions...");
