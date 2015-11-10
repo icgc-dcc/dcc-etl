@@ -17,14 +17,10 @@
  */
 package org.icgc.dcc.etl.concatenator;
 
-import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
+import static org.icgc.dcc.common.json.Jackson.DEFAULT;
 
 import java.io.File;
 import java.util.Map;
-
-import lombok.SneakyThrows;
-import lombok.ToString;
-import lombok.val;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
@@ -34,6 +30,10 @@ import org.icgc.dcc.submission.dictionary.model.Dictionary;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+
+import lombok.SneakyThrows;
+import lombok.ToString;
+import lombok.val;
 
 /**
  * Entry point for the {@link Concatenator}.
@@ -50,7 +50,7 @@ public class Main {
         options.defaultParentDataDir,
         options.projectsJsonFilePath,
         options.outputDirPath)
-        .process();
+            .process();
   }
 
   private static FileSystem getFileSystem(String configFilePath) {
