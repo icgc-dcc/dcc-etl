@@ -59,7 +59,9 @@ import org.apache.hadoop.fs.Path;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.icgc.dcc.common.client.api.ICGCClient;
 import org.icgc.dcc.common.core.Component;
+import org.icgc.dcc.common.core.mail.Mailer;
 import org.icgc.dcc.common.core.model.IndexType;
 import org.icgc.dcc.common.core.util.Protocol;
 import org.icgc.dcc.common.core.util.URIs;
@@ -71,7 +73,7 @@ import org.icgc.dcc.etl.core.config.EtlConfig;
 import org.icgc.dcc.etl.core.config.EtlConfigFile;
 import org.icgc.dcc.etl.importer.Importer;
 import org.icgc.dcc.id.client.util.HashIdClient;
-import org.icgc.dcc.imports.core.CollectionName;
+import org.icgc.dcc.imports.core.model.ImportSource;
 import org.icgc.dcc.imports.diagram.DiagramImporter;
 import org.junit.After;
 import org.junit.Before;
@@ -196,7 +198,7 @@ public class EtlIntegrationTest {
         "-r", TEST_RELEASE_PREFIX,
         "-i", DONOR_TYPE.getName() + "," + DONOR_CENTRIC_TYPE.getName(),
 
-    IMPORT.getId());
+        IMPORT.getId());
   }
 
   @After
@@ -207,11 +209,16 @@ public class EtlIntegrationTest {
   private void seedGenomeDB() {
 
     EtlConfig config = EtlConfigFile.read(new File(TEST_CONFIG_FILE));
-    val dbImporter = new org.icgc.dcc.imports.client.core.Importer(
-        getGenomeUri().getURI(),
-        createICGCConfig(config));
+    val cgpClient = ICGCClient.create(createICGCConfig(config)).cgp();
 
-    val collections = Arrays.asList(CollectionName.values());
+    Mailer mailer = Mailer.builder().build();
+
+    val dbImporter = new org.icgc.dcc.imports.client.core.Importer(
+        getGenomeUri(),
+        mailer,
+        cgpClient);
+
+    val collections = Arrays.asList(ImportSource.values());
     dbImporter.execute(collections);
 
   }

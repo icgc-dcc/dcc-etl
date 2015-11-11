@@ -41,10 +41,6 @@ import static org.icgc.dcc.etl.indexer.transform.GeneGeneSetPivoter.pivotGenesGe
 import java.io.IOException;
 import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.icgc.dcc.etl.indexer.core.CollectionReader;
 import org.icgc.dcc.etl.indexer.model.CollectionFields;
@@ -56,6 +52,10 @@ import org.jongo.QueryModifier;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.DBCursor;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Data access layer for document collection sources.
@@ -72,6 +72,11 @@ public class MongoDBCollectionReader implements CollectionReader {
   @Override
   public Iterable<ObjectNode> readDiagrams(@NonNull CollectionFields fields) {
     return read(DIAGRAM_COLLECTION, fields);
+  }
+
+  @Override
+  public Iterable<ObjectNode> readDrugs(@NonNull CollectionFields fields) {
+    return read(ReleaseCollection.DRUG_COLLECTION, fields);
   }
 
   @Override
