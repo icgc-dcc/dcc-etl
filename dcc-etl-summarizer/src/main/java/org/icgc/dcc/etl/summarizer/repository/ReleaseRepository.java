@@ -56,7 +56,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_LIBRARY_ST
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_REPOSITORY;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
-import static org.icgc.dcc.common.core.util.Jackson.asArrayNode;
+import static org.icgc.dcc.common.json.Jackson.asArrayNode;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.extractStudies;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapLongValues;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapMultipleTextValues;

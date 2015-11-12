@@ -35,12 +35,6 @@ import static org.icgc.dcc.common.hadoop.util.HadoopConstants.MAPRED_OUTPUT_COMP
 import java.util.Map;
 import java.util.Set;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.icgc.dcc.common.cascading.CascadingContext;
@@ -50,11 +44,14 @@ import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.common.core.model.FileTypes.FileType;
 import org.icgc.dcc.common.core.util.DccConstants;
 import org.icgc.dcc.common.core.util.Extensions;
-import org.icgc.dcc.common.core.util.Jackson;
 import org.icgc.dcc.common.hadoop.fs.HadoopUtils;
+import org.icgc.dcc.common.json.Jackson;
 import org.icgc.dcc.etl.loader.core.ProvidedDataReleaseDigest;
 import org.icgc.dcc.etl.loader.flow.SummaryCollector;
 import org.icgc.dcc.etl.loader.mongodb.LoaderMongoDbScheme;
+
+import com.google.common.collect.ImmutableList;
+import com.mongodb.MongoClientURI;
 
 import cascading.flow.Flow;
 import cascading.flow.FlowConnector;
@@ -62,9 +59,11 @@ import cascading.property.ConfigDef;
 import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
-
-import com.google.common.collect.ImmutableList;
-import com.mongodb.MongoClientURI;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * {@link LoaderPlatformStrategy} implementation that provides suitable defaults for common members.
@@ -209,8 +208,8 @@ public abstract class BaseLoaderPlatformStrategy implements LoaderPlatformStrate
         new Path(
             getProjectWorkingDir(projectKey),
             fileName)
-            .toUri()
-            .getPath(),
+                .toUri()
+                .getPath(),
         LOADER_INTERMEDIATE_FILES_EXTENSION);
   }
 
@@ -275,7 +274,7 @@ public abstract class BaseLoaderPlatformStrategy implements LoaderPlatformStrate
     return new Path(
         getDataTypeOutputDir(dataType),
         projectKey)
-        .toUri().toString();
+            .toUri().toString();
   }
 
   /**
@@ -323,9 +322,7 @@ public abstract class BaseLoaderPlatformStrategy implements LoaderPlatformStrate
   private static String getHeaderContainingFilePath(FileSystem fileSystem, String inputFilePath) {
     return isDirectory(
         fileSystem,
-        new Path(inputFilePath)) ?
-        addMRFirstPartSuffix(inputFilePath) :
-        inputFilePath;
+        new Path(inputFilePath)) ? addMRFirstPartSuffix(inputFilePath) : inputFilePath;
   }
 
   private Iterable<Path> getDataTypeDirs(@NonNull final Set<FeatureType> featureTypes) {

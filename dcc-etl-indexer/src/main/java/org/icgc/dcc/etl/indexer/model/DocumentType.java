@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.indexer.model;
 
 import static org.icgc.dcc.common.core.model.Entity.DONOR;
+import static org.icgc.dcc.common.core.model.Entity.DRUG;
 import static org.icgc.dcc.common.core.model.Entity.GENE;
 import static org.icgc.dcc.common.core.model.Entity.GENE_SET;
 import static org.icgc.dcc.common.core.model.Entity.MUTATION;
@@ -74,6 +75,16 @@ public enum DocumentType {
           .batchSize(100)
           .statusInterval(100)
   ),
+  
+  /**
+   * Drug type(s).
+   */
+  DRUG_TYPE(attributes()
+      .name("drug")
+      .entity(DRUG)
+      .collection(ReleaseCollection.DRUG_COLLECTION)
+      .batchSize(100)
+      .statusInterval(100)),
 
   /**
    * Release type(s).

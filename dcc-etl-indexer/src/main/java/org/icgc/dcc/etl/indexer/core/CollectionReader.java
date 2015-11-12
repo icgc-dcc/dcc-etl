@@ -54,6 +54,8 @@ public interface CollectionReader extends Closeable {
 
   Iterable<ObjectNode> readDiagrams(CollectionFields fields);
 
+  Iterable<ObjectNode> readDrugs(CollectionFields fields);
+
   Iterable<ObjectNode> read(ReleaseCollection collection, CollectionFields fields);
 
   @Override

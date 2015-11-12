@@ -24,8 +24,8 @@ import static org.icgc.dcc.common.core.model.Configurations.IDENTIFIER_CLIENT_CL
 import static org.icgc.dcc.common.core.model.Configurations.IDENTIFIER_KEY;
 import static org.icgc.dcc.common.core.model.Configurations.LOADER_MAX_CONCURRENT_FLOWS;
 import static org.icgc.dcc.common.core.model.Configurations.RELEASE_MONGO_URI_KEY;
-import static org.icgc.dcc.common.core.util.Jackson.formatPrettyJson;
 import static org.icgc.dcc.common.core.util.Joiners.INDENT;
+import static org.icgc.dcc.common.json.Jackson.formatPrettyJson;
 import static org.icgc.dcc.etl.loader.mongodb.MongoDbProcessing.postProcessMongoDb;
 import static org.icgc.dcc.submission.dictionary.util.Dictionaries.readCodeList;
 import static org.icgc.dcc.submission.dictionary.util.Dictionaries.readDictionary;
@@ -34,13 +34,9 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.Set;
 
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.core.model.SubmissionModel;
+import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 import org.icgc.dcc.etl.loader.core.LoaderContext;
 import org.icgc.dcc.etl.loader.core.LoaderJob;
 import org.icgc.dcc.etl.loader.core.LoaderPlan;
@@ -51,11 +47,15 @@ import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategy;
 import org.icgc.dcc.etl.loader.platform.LoaderPlatformStrategyFactory;
 import org.icgc.dcc.etl.loader.platform.PlatformData;
 import org.icgc.dcc.etl.loader.service.LoaderModel.Submission;
-import org.icgc.dcc.common.hadoop.util.HadoopCompression;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mongodb.MongoClientURI;
+
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Loads a release.

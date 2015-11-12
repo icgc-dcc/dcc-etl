@@ -21,9 +21,9 @@ import static java.lang.Boolean.valueOf;
 
 import java.io.File;
 
-import lombok.NonNull;
-
 import org.icgc.dcc.common.client.api.ICGCClientConfig;
+
+import lombok.NonNull;
 
 public class ICGCClientConfigs {
 

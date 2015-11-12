@@ -17,14 +17,10 @@
  */
 package org.icgc.dcc.etl.pruner;
 
-import static org.icgc.dcc.common.core.util.Jackson.DEFAULT;
+import static org.icgc.dcc.common.json.Jackson.DEFAULT;
 
 import java.io.File;
 import java.io.IOException;
-
-import lombok.SneakyThrows;
-import lombok.ToString;
-import lombok.val;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.hadoop.fs.FileSystems;
@@ -33,6 +29,10 @@ import org.icgc.dcc.submission.dictionary.model.Dictionary;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+
+import lombok.SneakyThrows;
+import lombok.ToString;
+import lombok.val;
 
 public class PrunerMain {
 
@@ -44,12 +44,12 @@ public class PrunerMain {
       new Pruner(
           getFileSystem(options.configFilePath),
           getDictionary(options.dictionaryFilePath))
-          .prune(options.inputDirectory, options.projectsJsonFilePath);
+              .prune(options.inputDirectory, options.projectsJsonFilePath);
     } else {
       new Reporter(
           getFileSystem(options.configFilePath),
           getDictionary(options.dictionaryFilePath))
-          .report(options.inputDirectory, options.projectsJsonFilePath);
+              .report(options.inputDirectory, options.projectsJsonFilePath);
     }
 
   }

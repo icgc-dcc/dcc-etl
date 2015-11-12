@@ -19,12 +19,13 @@ package org.icgc.dcc.etl.indexer.model;
 
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.etl.indexer.model.CollectionFields.DEFAULT_COLLECTION_FIELDS;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.icgc.dcc.etl.indexer.core.DocumentTransform;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Metadata container for describing which collection fields to include and exclude as inputs to
@@ -52,6 +53,8 @@ public class DocumentFields {
   private final CollectionFields geneSetFields;
   @NonNull
   private final CollectionFields diagramFields;
+  @NonNull
+  private final CollectionFields drugFields;
 
   public CollectionFields getFields(ReleaseCollection collection) {
     switch (collection) {
@@ -71,6 +74,8 @@ public class DocumentFields {
       return geneSetFields;
     case DIAGRAM_COLLECTION:
       return diagramFields;
+    case DRUG_COLLECTION:
+      return drugFields;
     }
 
     throw new IllegalArgumentException("Unexpected release collection: " + collection);
@@ -90,6 +95,7 @@ public class DocumentFields {
     private CollectionFields mutationFields = DEFAULT_COLLECTION_FIELDS;
     private CollectionFields geneSetFields = DEFAULT_COLLECTION_FIELDS;
     private CollectionFields diagramFields = DEFAULT_COLLECTION_FIELDS;
+    private CollectionFields drugFields = DEFAULT_COLLECTION_FIELDS;
 
     private Builder() {
     }
@@ -164,6 +170,11 @@ public class DocumentFields {
       return this;
     }
 
+    public Builder drugFields(@NonNull CollectionFields.Builder builder) {
+      this.drugFields = builder.build();
+      return this;
+    }
+
     public DocumentFields build() {
       return new DocumentFields(
           releaseFields,
@@ -173,7 +184,8 @@ public class DocumentFields {
           observationFields,
           mutationFields,
           geneSetFields,
-          diagramFields);
+          diagramFields,
+          drugFields);
     }
 
   }
