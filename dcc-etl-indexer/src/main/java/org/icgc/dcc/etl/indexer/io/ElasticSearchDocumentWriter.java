@@ -37,6 +37,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkProcessor.Listener;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -64,6 +65,10 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
   private static final ByteSizeValue BULK_SIZE = new ByteSizeValue(75, MB);
   private static final int SHUTDOWN_PERIOD_MINUTES = 60;
   private static final ObjectWriter BINARY_WRITER = newSmileWriter();
+  private static final double TIMEOUT_MUTLIPLIPER = 1.3;
+  private static final long DEFAULT_SLEEP_TIMEOUT = 5000L;
+  private static final long DEFAULT_FAILED_EXECUTION_ID = -1L;
+  private static final int MAX_FAILED_RETRIES = 5;
 
   /**
    * Meta data.
@@ -82,6 +87,13 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
   private final BulkProcessor processor;
   private final AtomicInteger batchErrorCount = new AtomicInteger(0);
   private final Semaphore semaphore; // See https://github.com/elasticsearch/elasticsearch/issues/6314
+  private long sleepTimeout = DEFAULT_SLEEP_TIMEOUT;
+  private long failedExecutionId = DEFAULT_FAILED_EXECUTION_ID;
+
+  /**
+   * Dependencies.
+   */
+  private final Client client;
 
   /**
    * Status.
@@ -94,6 +106,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
     this.concurrentRequests = concurrentRequests;
     this.processor = createProcessor(client);
     this.semaphore = new Semaphore(concurrentRequests);
+    this.client = client;
   }
 
   @Override
@@ -156,6 +169,43 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
         .build();
   }
 
+  private void checkIfClusterGreen() {
+    log.info("Checking for cluster state before loading.");
+    boolean isGreen = false;
+    while (!isGreen) {
+      val health = client.admin().cluster().prepareHealth(indexName).execute().actionGet();
+
+      if (health.getStatus() == ClusterHealthStatus.GREEN) {
+        isGreen = true;
+        sleepTimeout = DEFAULT_SLEEP_TIMEOUT;
+      } else {
+        log.warn("Cluster is {}. Sleeping", health.getStatus());
+        sleep();
+      }
+    }
+  }
+
+  @SneakyThrows
+  private void sleep() {
+    Thread.sleep(sleepTimeout);
+    sleepTimeout = Math.round(sleepTimeout * TIMEOUT_MUTLIPLIPER);
+  }
+
+  private boolean canRetryFailed() {
+    return batchErrorCount.get() < MAX_FAILED_RETRIES;
+  }
+
+  /**
+   * Blindly relies on the fact that this loader is single threaded.
+   */
+  private void resetFailedCount(long executionId) {
+    if (executionId == failedExecutionId) {
+      log.info("Successfully load failed index request '{}'", executionId);
+      failedExecutionId = DEFAULT_FAILED_EXECUTION_ID;
+      batchErrorCount.set(0);
+    }
+  }
+
   private Listener createListener() {
     return new BulkProcessor.Listener() {
 
@@ -163,6 +213,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
       @SneakyThrows
       public void beforeBulk(long executionId, BulkRequest request) {
         semaphore.acquire();
+        checkIfClusterGreen();
 
         val count = request.numberOfActions();
         val bytes = request.estimatedSizeInBytes();
@@ -175,6 +226,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
         semaphore.release();
 
         checkState(!response.hasFailures(), "Failed to index: %s", response.buildFailureMessage());
+        resetFailedCount(executionId);
       }
 
       @Override
@@ -183,6 +235,14 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
         batchErrorCount.incrementAndGet();
 
         semaphore.release();
+
+        if (canRetryFailed()) {
+          log.info("Retrying failed index request '{}'", executionId);
+          processor.add(request);
+          failedExecutionId = executionId;
+
+          return;
+        }
 
         log.error("Error performing bulk: ", failure);
         propagate(failure);
