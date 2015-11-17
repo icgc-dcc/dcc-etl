@@ -135,7 +135,7 @@ public class MutationCentricFeatureConverter {
   }
 
   private static String text(JsonNode jsonNode) {
-    return nullToEmpty(jsonNode.textValue());
+    return nullToEmpty(jsonNode.asText());
   }
 
 }
