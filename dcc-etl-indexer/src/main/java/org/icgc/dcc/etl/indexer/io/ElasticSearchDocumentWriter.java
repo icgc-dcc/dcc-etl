@@ -33,10 +33,6 @@ import java.io.IOException;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkProcessor.Listener;
@@ -51,6 +47,11 @@ import org.icgc.dcc.etl.indexer.model.DocumentType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
+import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Output destination for {@link DefaultDocument} instances to be written.
@@ -73,6 +74,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
   /**
    * Meta data.
    */
+  @Getter
   private final String indexName;
   private final DocumentType type;
 
@@ -99,6 +101,8 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
    * Status.
    */
   private int documentCount;
+  @Getter
+  private final AtomicInteger totalRetries = new AtomicInteger(0);
 
   public ElasticSearchDocumentWriter(Client client, String indexName, DocumentType type, int concurrentRequests) {
     this.indexName = indexName;
@@ -191,7 +195,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
     sleepTimeout = Math.round(sleepTimeout * TIMEOUT_MUTLIPLIPER);
   }
 
-  private boolean canRetryFailed() {
+  private boolean isRetryFailed() {
     return batchErrorCount.get() < MAX_FAILED_RETRIES;
   }
 
@@ -233,10 +237,11 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
       public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
         // Record errors for enclosing class
         batchErrorCount.incrementAndGet();
+        totalRetries.incrementAndGet();
 
         semaphore.release();
 
-        if (canRetryFailed()) {
+        if (isRetryFailed()) {
           log.info("Retrying failed index request '{}'", executionId);
           processor.add(request);
           failedExecutionId = executionId;
