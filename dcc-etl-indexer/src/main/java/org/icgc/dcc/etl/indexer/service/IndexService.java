@@ -163,7 +163,11 @@ public class IndexService implements Closeable {
 
   public void optimizeIndex(@NonNull String indexName) {
     // Optimize the the index for faster search operations by reducing the number of segments by merging
-    getIndexClient().prepareOptimize(indexName).execute().actionGet();
+    getIndexClient()
+        .prepareOptimize(indexName)
+        .setMaxNumSegments(1)
+        .execute()
+        .actionGet();
   }
 
   public void freezeIndex(@NonNull String indexName) {
