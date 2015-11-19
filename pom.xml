@@ -24,6 +24,7 @@
     <module>dcc-etl-summarizer</module>
     <module>dcc-etl-client</module>
     <module>dcc-etl-annotator</module>
+    <module>dcc-etl-resources</module>
   </modules>
 
   <repositories>
