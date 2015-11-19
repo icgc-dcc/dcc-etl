@@ -35,13 +35,12 @@ artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-r
 dcc_etl_cli_name='dcc-etl-client'
 dcc_etl_annotator_name='dcc-etl-annotator'
 dcc_etl_exporter_name='dcc-etl-exporter'
-dcc_etl_db_importer_name='dcc-etl-db-importer'
 dcc_submission_server_name='dcc-submission-server'
 
-dcc_etl_cli_version='3.8.5.4'
-dcc_etl_annotator_version='3.8.5.4'
-dcc_etl_exporter_version='3.8.5.4'
-dcc_etl_db_importer_version='3.8.5.4'
+dcc_etl_version='3.8.5.4'
+dcc_etl_cli_version=${dcc_etl_version}
+dcc_etl_annotator_version=${dcc_etl_version}
+dcc_etl_exporter_version=${dcc_etl_version}
 dcc_submission_server_version='3.8.6.2'
 
 dcc_etl_cli_dist_file_name=${dcc_etl_cli_name}-${dcc_etl_cli_version}.jar
@@ -49,7 +48,6 @@ dcc_etl_annotator_dist_file_name=${dcc_etl_annotator_name}-${dcc_etl_annotator_v
 dcc_submission_server_dist_file_name=${dcc_submission_server_name}-${dcc_submission_server_version}.jar
 
 dcc_etl_exporter_dist_file_name=${dcc_etl_exporter_name}-${dcc_etl_exporter_version}-dist.tar.gz
-dcc_etl_db_importer_dist_file_name=${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version}-dist.tar.gz
 ```
 
 #### 1.2. Update libraries and their symbolic links
@@ -66,17 +64,12 @@ wget ${artifactory_release_url}dcc-submission-server/${dcc_submission_server_ver
 ln -sfn ${dcc_submission_server_dist_file_name} dcc-validator.jar
 ```
 
-#### 1.3. Update db-importer and exporter distribution
+#### 1.3. Update db-importer(and run if required) and exporter distribution
 
 ```bash
+~/dcc-import/bin/install -l
+
 cd ***REMOVED***
-
-wget ${artifactory_release_url}${dcc_etl_db_importer_name}/${dcc_etl_db_importer_version}/${dcc_etl_db_importer_dist_file_name}
-tar -xzf ${dcc_etl_db_importer_dist_file_name}
-rm ${dcc_etl_db_importer_dist_file_name}
-cp dcc-etl-db-importer/conf/* ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version}/conf
-ln -sfn ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version} dcc-etl-db-importer
-
 wget ${artifactory_release_url}dcc-etl-exporter/${dcc_etl_exporter_version}/${dcc_etl_exporter_dist_file_name}
 tar -xzf ${dcc_etl_exporter_dist_file_name}
 rm ${dcc_etl_exporter_dist_file_name}
@@ -182,7 +175,6 @@ cd dcc-etl
 mvn clean package
 scp dcc-etl-client/target/dcc-etl-client-3.8.5.5-SNAPSHOT.jar ***REMOVED***:~
 scp dcc-etl-annotator/target/dcc-etl-annotator-3.8.5.5-SNAPSHOT.jar ***REMOVED***:~
-scp dcc-etl-db-importer/target/dcc-etl-db-importer-3.8.5.5-SNAPSHOT-dist.tar.gz ***REMOVED***:~
 scp dcc-etl-exporter/target/dcc-etl-exporter-3.8.5.5-SNAPSHOT-dist.tar.gz ***REMOVED***:~
 ```
 

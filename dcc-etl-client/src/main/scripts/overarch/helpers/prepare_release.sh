@@ -6,13 +6,12 @@ artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-r
 dcc_etl_cli_name='dcc-etl-client'
 dcc_etl_annotator_name='dcc-etl-annotator'
 dcc_etl_exporter_name='dcc-etl-exporter'
-dcc_etl_db_importer_name='dcc-etl-db-importer'
 dcc_submission_server_name='dcc-submission-server'
 
-dcc_etl_cli_version='3.8.17.4'
-dcc_etl_annotator_version='3.8.17.4'
-dcc_etl_exporter_version='3.8.17.4'
-dcc_etl_db_importer_version='3.8.17.4'
+dcc_etl_version='3.8.17.4'
+dcc_etl_cli_version=${dcc_etl_version}
+dcc_etl_annotator_version=${dcc_etl_version}
+dcc_etl_exporter_version=${dcc_etl_version}
 dcc_submission_server_version='3.8.6.4'
 
 dcc_etl_cli_dist_file_name=${dcc_etl_cli_name}-${dcc_etl_cli_version}.jar
@@ -20,7 +19,6 @@ dcc_etl_annotator_dist_file_name=${dcc_etl_annotator_name}-${dcc_etl_annotator_v
 dcc_submission_server_dist_file_name=${dcc_submission_server_name}-${dcc_submission_server_version}.jar
 
 dcc_etl_exporter_dist_file_name=${dcc_etl_exporter_name}-${dcc_etl_exporter_version}-dist.tar.gz
-dcc_etl_db_importer_dist_file_name=${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version}-dist.tar.gz
 
 # update libraries and their symbolic links
 cd ***REMOVED***/dcc-etl/lib
@@ -33,15 +31,10 @@ ln -sfn ${dcc_etl_annotator_dist_file_name} dcc-annotator.jar
 wget ${artifactory_release_url}dcc-submission-server/${dcc_submission_server_version}/${dcc_submission_server_dist_file_name}
 ln -sfn ${dcc_submission_server_dist_file_name} dcc-validator.jar
 
-# update db-importer and exporter distribution
+# update db-importer(and run if required) and exporter distribution
+~/dcc-import/bin/install -l
+
 cd ***REMOVED***
-
-wget ${artifactory_release_url}${dcc_etl_db_importer_name}/${dcc_etl_db_importer_version}/${dcc_etl_db_importer_dist_file_name}
-tar -xzf ${dcc_etl_db_importer_dist_file_name}
-rm ${dcc_etl_db_importer_dist_file_name}
-cp dcc-etl-db-importer/conf/* ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version}/conf
-ln -sfn ${dcc_etl_db_importer_name}-${dcc_etl_db_importer_version} dcc-etl-db-importer
-
 wget ${artifactory_release_url}dcc-etl-exporter/${dcc_etl_exporter_version}/${dcc_etl_exporter_dist_file_name}
 tar -xzf ${dcc_etl_exporter_dist_file_name}
 rm ${dcc_etl_exporter_dist_file_name}
