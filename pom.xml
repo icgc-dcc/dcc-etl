@@ -128,33 +128,6 @@
   </dependencyManagement>
 
   <dependencies>
-    <!-- Utilities -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-    </dependency>
-
-    <!-- Mail -->
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-    </dependency>
-
-    <!-- Testing - DCC -->
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-cghub</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-resources</artifactId>
