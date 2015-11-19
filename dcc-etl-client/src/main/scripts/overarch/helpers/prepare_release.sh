@@ -8,7 +8,7 @@ dcc_etl_annotator_name='dcc-etl-annotator'
 dcc_etl_exporter_name='dcc-etl-exporter'
 dcc_submission_server_name='dcc-submission-server'
 
-dcc_etl_version='3.8.17.4'
+dcc_etl_version='3.8.17.7'
 dcc_etl_cli_version=${dcc_etl_version}
 dcc_etl_annotator_version=${dcc_etl_version}
 dcc_etl_exporter_version=${dcc_etl_version}
