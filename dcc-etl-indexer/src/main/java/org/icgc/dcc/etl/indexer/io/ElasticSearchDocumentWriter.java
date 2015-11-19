@@ -91,6 +91,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
   private final Semaphore semaphore; // See https://github.com/elasticsearch/elasticsearch/issues/6314
   private long sleepTimeout = DEFAULT_SLEEP_TIMEOUT;
   private long failedExecutionId = DEFAULT_FAILED_EXECUTION_ID;
+  private final boolean isCheckClusterState;
 
   /**
    * Dependencies.
@@ -104,13 +105,15 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
   @Getter
   private final AtomicInteger totalRetries = new AtomicInteger(0);
 
-  public ElasticSearchDocumentWriter(Client client, String indexName, DocumentType type, int concurrentRequests) {
+  public ElasticSearchDocumentWriter(Client client, String indexName, DocumentType type, int concurrentRequests,
+      boolean isCheckClusterState) {
     this.indexName = indexName;
     this.type = type;
     this.concurrentRequests = concurrentRequests;
     this.processor = createProcessor(client);
     this.semaphore = new Semaphore(concurrentRequests);
     this.client = client;
+    this.isCheckClusterState = isCheckClusterState;
   }
 
   @Override
@@ -217,7 +220,9 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
       @SneakyThrows
       public void beforeBulk(long executionId, BulkRequest request) {
         semaphore.acquire();
-        checkIfClusterGreen();
+        if (isCheckClusterState) {
+          checkIfClusterGreen();
+        }
 
         val count = request.numberOfActions();
         val bytes = request.estimatedSizeInBytes();

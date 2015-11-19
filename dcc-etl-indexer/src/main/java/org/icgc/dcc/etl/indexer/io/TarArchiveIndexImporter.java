@@ -127,7 +127,7 @@ public class TarArchiveIndexImporter {
     val indexClient = client.admin().indices();
 
     @Cleanup
-    val writer = new ElasticSearchDocumentWriter(client, indexName, type, 10);
+    val writer = new ElasticSearchDocumentWriter(client, indexName, type, 10, true);
 
     log.info("Checking index '{}' for existence...", indexName);
     val exists = indexClient.prepareExists(indexName)

@@ -72,7 +72,7 @@ public class LocalDocumentTask extends AbstractDocumentTask {
 
   @Override
   protected DocumentWriter createElasticSearchWriter(DocumentType type) {
-    return new ElasticSearchDocumentWriter(outputClient, config.getIndexName(), type, 10);
+    return new ElasticSearchDocumentWriter(outputClient, config.getIndexName(), type, 10, false);
   }
 
   private SchemaWriter createSchemaWriter(DocumentType type) {

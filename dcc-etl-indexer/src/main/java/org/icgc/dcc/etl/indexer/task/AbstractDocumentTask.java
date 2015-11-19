@@ -177,7 +177,7 @@ public abstract class AbstractDocumentTask implements DocumentTask {
     // new bulk requests.
     val concurrentRequests = 1; // 2014-08-26: Changed from 10 to 1 to reduce chance for OOM
     return new ElasticSearchDocumentWriter(newTransportClient(config.getEsUri()), config.getIndexName(), type,
-        concurrentRequests);
+        concurrentRequests, true);
   }
 
   protected DocumentProcessor createProcessor(DocumentType type, CollectionReader reader,

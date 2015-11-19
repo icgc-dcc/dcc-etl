@@ -89,11 +89,6 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-common-resources</artifactId>
-        <version>${dcc-common.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>dcc-submission-core</artifactId>
         <version>${dcc-submission-core.version}</version>
       </dependency>
