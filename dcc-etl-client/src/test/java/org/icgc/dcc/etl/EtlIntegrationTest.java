@@ -211,7 +211,7 @@ public class EtlIntegrationTest {
     EtlConfig config = EtlConfigFile.read(new File(TEST_CONFIG_FILE));
     val cgpClient = ICGCClient.create(createICGCConfig(config)).cgp();
 
-    Mailer mailer = Mailer.builder().build();
+    Mailer mailer = Mailer.builder().enabled(false).build();
 
     val dbImporter = new org.icgc.dcc.imports.client.core.Importer(
         getGenomeUri(),

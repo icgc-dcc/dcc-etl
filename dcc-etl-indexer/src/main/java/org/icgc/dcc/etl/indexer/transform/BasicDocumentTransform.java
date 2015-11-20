@@ -20,10 +20,10 @@ package org.icgc.dcc.etl.indexer.transform;
 import lombok.NonNull;
 import lombok.val;
 
+import org.icgc.dcc.common.core.model.IndexType.Classifier;
 import org.icgc.dcc.etl.indexer.core.Document;
 import org.icgc.dcc.etl.indexer.core.DocumentContext;
 import org.icgc.dcc.etl.indexer.core.DocumentTransform;
-import org.icgc.dcc.etl.indexer.model.DocumentClassifier;
 import org.icgc.dcc.etl.indexer.model.DocumentType;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * {@link DocumentTransform} implementation that simply creates a resulting document consisting of the supplied
  * {@code root}.
  * <p>
- * Intended to be used with {@link DocumentClassifier#BASIC} document types.
+ * Intended to be used with {@link Classifier#BASIC} document types.
  */
 public class BasicDocumentTransform implements DocumentTransform {
 

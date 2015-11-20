@@ -23,6 +23,8 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import org.icgc.dcc.common.core.model.Entity;
+import org.icgc.dcc.common.core.model.IndexType;
+import org.icgc.dcc.common.core.model.IndexType.Classifier;
 import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.icgc.dcc.etl.indexer.core.DocumentTransform;
 import org.icgc.dcc.etl.indexer.transform.BasicDocumentTransform;
@@ -31,7 +33,6 @@ import org.icgc.dcc.etl.indexer.transform.BasicDocumentTransform;
 @Accessors(fluent = true, chain = true)
 class DocumentTypeAttributes {
 
-  private final static DocumentClassifier DEFAULT_CLASSIFIER = DocumentClassifier.BASIC;
   private final static DocumentTransform DEFAULT_TRANSFORM = new BasicDocumentTransform();
   private final static int DEFAULT_BATCH_SIZE = 1;
   private final static int DEFAULT_STATUS_INTERVAL = 1000;
@@ -43,7 +44,9 @@ class DocumentTypeAttributes {
   @NonNull
   ReleaseCollection collection;
   @NonNull
-  DocumentClassifier classifier = DEFAULT_CLASSIFIER;
+  Classifier classifier;
+  @NonNull
+  IndexType indexType;
   @NonNull
   DocumentTransform transform = DEFAULT_TRANSFORM;
   @NonNull
