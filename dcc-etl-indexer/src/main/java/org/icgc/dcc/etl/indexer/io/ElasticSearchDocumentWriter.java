@@ -177,9 +177,9 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
   }
 
   private void checkIfClusterGreen() {
-    log.info("Checking for cluster state before loading.");
     boolean isGreen = false;
     while (!isGreen) {
+      log.info("Checking for cluster state before loading.");
       val health = client.admin().cluster().prepareHealth(indexName).execute().actionGet();
 
       if (health.getStatus() == ClusterHealthStatus.GREEN) {
@@ -219,10 +219,10 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
       @Override
       @SneakyThrows
       public void beforeBulk(long executionId, BulkRequest request) {
-        semaphore.acquire();
         if (isCheckClusterState) {
           checkIfClusterGreen();
         }
+        semaphore.acquire();
 
         val count = request.numberOfActions();
         val bytes = request.estimatedSizeInBytes();
@@ -240,6 +240,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
 
       @Override
       public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
+        log.info("Encountered exception during bulk load: ", failure);
         // Record errors for enclosing class
         batchErrorCount.incrementAndGet();
         totalRetries.incrementAndGet();
@@ -247,7 +248,9 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
         semaphore.release();
 
         if (isRetryFailed()) {
-          log.info("Retrying failed index request '{}'", executionId);
+          log.info("Flushing pending requests before retry...");
+          processor.flush();
+          log.info("Flushing finished. Retrying failed index request '{}'", executionId);
           processor.add(request);
           failedExecutionId = executionId;
 
