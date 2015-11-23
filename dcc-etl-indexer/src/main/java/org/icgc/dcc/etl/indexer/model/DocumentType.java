@@ -36,6 +36,7 @@ import org.icgc.dcc.etl.indexer.core.DocumentTransform;
 import org.icgc.dcc.etl.indexer.transform.DonorCentricDocumentTransform;
 import org.icgc.dcc.etl.indexer.transform.DonorDocumentTransform;
 import org.icgc.dcc.etl.indexer.transform.DonorTextDocumentTransform;
+import org.icgc.dcc.etl.indexer.transform.DrugTextDocumentTransform;
 import org.icgc.dcc.etl.indexer.transform.GeneCentricDocumentTransform;
 import org.icgc.dcc.etl.indexer.transform.GeneSetDocumentTransform;
 import org.icgc.dcc.etl.indexer.transform.GeneSetTextDocumentTransform;
@@ -71,8 +72,21 @@ public enum DocumentType {
   DRUG_TEXT_TYPE(attributes()
       .indexType(IndexType.DRUG_TEXT_TYPE)
       .collection(ReleaseCollection.DRUG_COLLECTION)
+      .transform(new DrugTextDocumentTransform())
       .batchSize(100)
-      .statusInterval(100)),
+      .statusInterval(100)
+      .fields(
+          fields()
+              .drugFields(
+                  drugFields()
+                      .excludedFields(
+                          "cancer_trial_count",
+                          "drug_class",
+                          "genes",
+                          "image_url",
+                          "_id")
+              )
+      )),
 
   DRUG_CENTRIC_TYPE(attributes()
       .indexType(IndexType.DRUG_CENTRIC_TYPE)
@@ -585,6 +599,10 @@ public enum DocumentType {
   }
 
   private static CollectionFields.Builder geneSetFields() {
+    return CollectionFields.collectionFields();
+  }
+
+  private static CollectionFields.Builder drugFields() {
     return CollectionFields.collectionFields();
   }
 
