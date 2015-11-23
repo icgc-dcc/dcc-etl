@@ -56,7 +56,7 @@
           }
         }
       },
-      "synonynms": {
+      "synonyms": {
         "type": "multi_field",
         "fields": {
           "raw": {
