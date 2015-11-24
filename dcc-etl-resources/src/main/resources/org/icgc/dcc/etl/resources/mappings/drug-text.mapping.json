@@ -31,7 +31,7 @@
       }
     ],
     "properties": {
-      "compound_class": {
+      "drug_class": {
         "index": "not_analyzed",
         "type": "string"
       },

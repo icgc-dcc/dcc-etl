@@ -81,7 +81,6 @@ public enum DocumentType {
                   drugFields()
                       .excludedFields(
                           "cancer_trial_count",
-                          "drug_class",
                           "genes",
                           "image_url",
                           "_id")
