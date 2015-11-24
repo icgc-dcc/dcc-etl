@@ -40,7 +40,9 @@ public class DrugTextDocumentTransform implements DocumentTransform {
 
   @Override
   public Document transformDocument(@NonNull ObjectNode drug, @NonNull DocumentContext context) {
-    val id = drug.get("zinc_id").textValue();
+    val id = drug.remove("zinc_id").textValue();
+    enrichDrug(id, drug);
+
     log.debug("[{}] Processsing drug: {}", id, drug);
     transformAtcCodes(drug);
     log.debug("[{}] Transformed atc_codes: {}", id, drug);
@@ -50,6 +52,11 @@ public class DrugTextDocumentTransform implements DocumentTransform {
     log.debug("[{}] Transformed external references. Final document: {}", id, drug);
 
     return new Document(DocumentType.DRUG_TEXT_TYPE, id, drug);
+  }
+
+  private static void enrichDrug(String id, ObjectNode drug) {
+    drug.put("id", id);
+    drug.put("type", DocumentType.DRUG_TEXT_TYPE.getEntity().getId());
   }
 
   private static void transformAtcCodes(ObjectNode drug) {
