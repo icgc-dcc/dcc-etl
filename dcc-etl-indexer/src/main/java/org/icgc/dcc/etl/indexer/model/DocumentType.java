@@ -82,7 +82,8 @@ public enum DocumentType {
                       .excludedFields(
                           "cancer_trial_count",
                           "genes",
-                          "image_url",
+                          "large_image_url",
+                          "small_image_url",
                           "_id")
               )
       )),

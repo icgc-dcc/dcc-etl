@@ -56,7 +56,7 @@ public class DrugTextDocumentTransform implements DocumentTransform {
 
   private static void enrichDrug(String id, ObjectNode drug) {
     drug.put("id", id);
-    drug.put("type", DocumentType.DRUG_TEXT_TYPE.getEntity().getId());
+    drug.put("type", "compound");
   }
 
   private static void transformAtcCodes(ObjectNode drug) {
