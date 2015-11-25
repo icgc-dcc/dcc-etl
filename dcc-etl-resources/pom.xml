@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc-etl-resources</artifactId>
-  <version>3.8.23</version>
+  <version>3.8.24</version>
 
   <name>${project.artifactId}</name>
   <description>${project.name}</description>
