@@ -85,8 +85,10 @@ public abstract class AbstractDocumentService implements DocumentService {
     getIndexService().reportIndex(indexName);
 
     // Compact
-    log.info("Optimizing index...");
-    getIndexService().optimizeIndex(indexName);
+    if (config.isOptimize()) {
+      log.info("Optimizing index...");
+      getIndexService().optimizeIndex(indexName);
+    }
 
     // Freeze
     log.info("Freezing index...");

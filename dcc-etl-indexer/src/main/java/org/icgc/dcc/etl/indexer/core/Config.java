@@ -77,6 +77,11 @@ public class Config implements Serializable {
   boolean exportVCF;
 
   /**
+   * Whether to optimize the index.
+   */
+  boolean optimize;
+
+  /**
    * Hadoop properties.
    */
   Map<String, String> hadoop;

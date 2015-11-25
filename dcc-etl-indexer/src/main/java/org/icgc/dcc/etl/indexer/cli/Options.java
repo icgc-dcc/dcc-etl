@@ -80,6 +80,8 @@ public class Options {
   public List<DocumentType> types = newArrayList(DocumentType.values());
   @Parameter(names = { "--export-vcf" }, description = "Export VCF to 'outputDir'?")
   public boolean exportVCF = true;
+  @Parameter(names = { "--optimize" }, arity = 1, description = "Optimize the index after creation?")
+  public boolean optimize = true;
 
   /**
    * Hadoop

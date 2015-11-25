@@ -142,6 +142,7 @@ public class IndexerMain {
     log.info("         types        - {}", options.types);
     log.info("         fastaFile    - {}", options.fastaFile);
     log.info("         outputDir    - {}", options.outputDir);
+    log.info("         optimize     - {}", options.optimize);
     log.info("         hadoop       - {}", options.hadoop);
     log.info("         {}\n", options);
   }
@@ -157,6 +158,7 @@ public class IndexerMain {
         .fastaFile(options.fastaFile)
         .outputDir(options.outputDir)
         .exportVCF(options.exportVCF)
+        .optimize(options.optimize)
         .hadoop(options.hadoop)
         .build();
 
