@@ -128,14 +128,18 @@ public class MutationCentricFeatureConverter {
     if (text.equals("1")) {
       return "+";
     } else if (text.equals("-1")) {
-      return "1";
+      return "-";
     } else {
       return "";
     }
   }
 
   private static String text(JsonNode jsonNode) {
-    return nullToEmpty(jsonNode.asText());
+    if (jsonNode.canConvertToInt()) {
+      return jsonNode.asText();
+    }
+
+    return nullToEmpty(jsonNode.textValue());
   }
 
 }
