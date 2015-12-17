@@ -173,7 +173,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.19</dcc-common.version>
+    <dcc-common.version>3.9.1</dcc-common.version>
     <dcc-submission-core.version>3.8.16.1</dcc-submission-core.version>
     <dcc-import.version>0.0.7</dcc-import.version>
     <dcc-id.version>0.0.18</dcc-id.version>
