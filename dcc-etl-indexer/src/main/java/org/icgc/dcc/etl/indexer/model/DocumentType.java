@@ -244,8 +244,7 @@ public enum DocumentType {
                           "_project_id",
 
                           // Data
-                          "primary_site",
-                          "project_name")
+                          "primary_site")
               )
               .donorFields(
                   donorFields()
@@ -258,24 +257,15 @@ public enum DocumentType {
 
                           // Summary
                           "gene._gene_id",
-                          "gene._summary._ssm_count",
                           "_summary",
 
                           // Data
-                          "donor_id",
                           "disease_status_last_followup",
                           "donor_age_at_diagnosis",
-                          "donor_age_at_enrollment",
-                          "donor_age_at_last_followup",
-                          "donor_diagnosis_icd10",
-                          "donor_interval_of_last_followup",
-                          "donor_relapse_interval",
                           "donor_relapse_type",
                           "donor_sex",
                           "donor_survival_time",
                           "donor_tumour_stage_at_diagnosis",
-                          "donor_tumour_stage_at_diagnosis_supplemental",
-                          "donor_tumour_staging_system_at_diagnosis",
                           "donor_vital_status")
               )
               .geneFields(
@@ -300,20 +290,20 @@ public enum DocumentType {
                       .includedFields(
                           // Foreign keys
                           "_mutation_id",
-                          "consequence._gene_id",
+                          "consequence._gene_id", // Don't index
 
                           // Data
                           "consequence.consequence_type",
                           "consequence.functional_impact_prediction_summary",
                           "_type",
                           "mutation_type",
-                          "platform",
-                          "validation_status",
-                          "verification_status",
                           "chromosome",
                           "chromosome_end",
                           "chromosome_start",
-                          "observation")
+                          "observation.platform",
+                          "observation.sequencing_strategy",
+                          "observation.verification_status"
+                      )
               )
       )
   ),
