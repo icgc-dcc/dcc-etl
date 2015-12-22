@@ -368,19 +368,61 @@ public enum DocumentType {
       .statusInterval(1000)
       .fields(
           fields()
+              .projectFields(
+                  projectFields()
+                      .includedFields(
+                          "_project_id",
+                          "primary_site"
+                      )
+              )
               .donorFields(
                   donorFields()
-                      .excludedFields(
-                          "_id",
-                          "gene",
-                          "specimen")
+                      .includedFields(
+                          "_donor_id",
+                          "_project_id",
+                          "_summary._age_at_diagnosis_group",
+                          "_summary._available_data_type",
+                          "_summary._state",
+                          "_summary._studies",
+                          "_summary.experimental_analysis_performed",
+                          "disease_status_last_followup",
+                          "donor_relapse_type",
+                          "donor_sex",
+                          "donor_tumour_stage_at_diagnosis",
+                          "donor_vital_status"
+                      )
               )
               .observationFields(
                   observationFields()
+                      .includedFields(
+                          "_mutation_id",
+                          "_donor_id", // Don't index
+                          "_type", // Don't index
+                          "chromosome",
+                          "chromosome_end",
+                          "chromosome_start",
+                          "consequence._gene_id", // Don't index
+                          "consequence.consequence_type",
+                          "consequence.functional_impact_prediction_summary",
+                          "mutation_type",
+                          "observation.platform",
+                          "observation.sequencing_strategy",
+                          "observation.verification_status"
+                      )
+              )
+              .geneFields(
+                  geneFields()
                       .excludedFields(
                           "_id",
-                          "functional_impact_prediction_summary",
-                          "consequence.functional_impact_prediction")
+                          "canonical_transcript_id",
+                          "description",
+                          "external_db_ids",
+                          "project",
+                          "sets",
+                          "strand",
+                          "synonyms",
+                          "transcripts"
+                      )
               )
       )
   ),
