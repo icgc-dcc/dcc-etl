@@ -432,31 +432,66 @@ public enum DocumentType {
                   projectFields()
                       .includedFields(
                           "_project_id",
-                          "project_name",
                           "primary_site")
               )
               .donorFields(
                   donorFields()
-                      .excludedFields(
-                          "_id",
-                          "gene",
-                          "specimen")
+                      .includedFields(
+                          "_donor_id",
+                          "_project_id", // FK. Don't index
+
+                          // Data
+                          "donor_sex",
+                          "donor_tumour_stage_at_diagnosis",
+                          "donor_vital_status",
+                          "disease_status_last_followup",
+                          "donor_relapse_type",
+                          "_summary._age_at_diagnosis_group",
+                          "_summary._available_data_type",
+                          "_summary._studies",
+                          "_summary.experimental_analysis_performed",
+                          "_summary._state")
               )
               .geneFields(
                   geneFields()
-                      .excludedFields(
-                          "_id",
-                          "project",
-                          "donor",
-                          "transcripts")
+                      .includedFields(
+                          "_gene_id",
+                          "biotype",
+                          "go_term.cellular_component",
+                          "go_term.biological_process",
+                          "go_term.molecular_function",
+                          "curated_set",
+                          "chromosome",
+                          "start",
+                          "end",
+                          "pathway")
 
               )
               .observationFields(
                   observationFields()
                       .excludedFields(
                           "_id",
+                          "assembly_version",
+                          "mutated_to_allele",
+                          "mutated_from_allele",
+                          "reference_genome_allele",
+                          "chromosome_strand",
                           "functional_impact_prediction_summary",
-                          "consequence.functional_impact_prediction")
+
+                          // Consequence
+                          "consequence.gene_build_version",
+                          "consequence.transcript_affected",
+                          "consequence.gene_affected",
+                          "consequence._transcript_id",
+                          "consequence.functional_impact_prediction",
+
+                          // Observation
+                          "observation.analysis_id",
+                          "observation.quality_score",
+                          "observation.verification_platform",
+                          "observation.marking",
+                          "observation.observation_id",
+                          "observation.seq_coverage")
               )
       )
   ),
