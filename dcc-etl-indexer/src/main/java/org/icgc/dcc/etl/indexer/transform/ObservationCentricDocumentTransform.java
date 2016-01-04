@@ -68,7 +68,7 @@ public class ObservationCentricDocumentTransform implements DocumentTransform {
     observation.setAll(observationPartition);
 
     // Embed donor
-    val observationDonor = context.getDonor(observationDonorId);
+    val observationDonor = context.getDonor(observationDonorId).deepCopy();
     setObservationDonor(observation, observationDonor);
 
     // Embed project
