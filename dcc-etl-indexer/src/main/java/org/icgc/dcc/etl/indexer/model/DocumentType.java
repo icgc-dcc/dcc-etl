@@ -391,8 +391,9 @@ public enum DocumentType {
                           "chromosome",
                           "chromosome_end",
                           "chromosome_start",
-                          "consequence._gene_id", // Don't index
+                          "consequence._gene_id",
                           "consequence.consequence_type",
+                          "consequence.transcript_affected",
                           "consequence.functional_impact_prediction_summary",
                           "mutation_type",
                           "observation.platform",
@@ -601,9 +602,7 @@ public enum DocumentType {
               .mutationFields(
                   mutationFields()
                       .excludedFields(
-                          "_id",
-                          "assembly_version",
-                          "reference_genome_allele"
+                          "_id"
                       )
               )
       )
