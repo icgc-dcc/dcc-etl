@@ -256,7 +256,7 @@ public enum DocumentType {
                           "_project_id",
 
                           // Summary
-                          "gene._gene_id",
+                          "gene",
                           "_summary",
 
                           // Data
@@ -409,7 +409,6 @@ public enum DocumentType {
                           "description",
                           "external_db_ids",
                           "project",
-                          "sets",
                           "strand",
                           "synonyms",
                           "transcripts"
@@ -458,14 +457,10 @@ public enum DocumentType {
                       .includedFields(
                           "_gene_id",
                           "biotype",
-                          "go_term.cellular_component",
-                          "go_term.biological_process",
-                          "go_term.molecular_function",
-                          "curated_set",
                           "chromosome",
                           "start",
                           "end",
-                          "pathway")
+                          "sets")
 
               )
               .observationFields(
@@ -571,12 +566,8 @@ public enum DocumentType {
                           "_gene_id",
                           "biotype",
                           "chromosome",
-                          "curated_set",
                           "end",
-                          "go_term.biological_process",
-                          "go_term.cellular_component",
-                          "go_term.molecular_function",
-                          "pathway",
+                          "sets",
                           "start",
                           "symbol",
                           "transcripts.id",

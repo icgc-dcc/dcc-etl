@@ -1,7 +1,13 @@
 {
   "observation-centric":{
     "_source":{
-      "compress":"true"
+      "compress":"true",
+      "excludes": [
+        "project", 
+        "donor", 
+        "ssm.consequence",
+        "ssm.mutation_type"
+      ]
     },
     "_all":{
       "enabled":"false"
