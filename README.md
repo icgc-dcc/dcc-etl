@@ -1,7 +1,7 @@
 ICGC DCC - ETL
 ===
 
-Parent project of the ETL pipeline modules.
+Parent project of the ETL pipeline modules. Note that this project is soon to be replaced with [`dcc-release`](../dcc-release)
 
 Build
 ---
