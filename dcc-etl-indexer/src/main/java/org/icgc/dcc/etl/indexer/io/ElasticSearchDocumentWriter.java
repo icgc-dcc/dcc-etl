@@ -219,9 +219,7 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
       @Override
       @SneakyThrows
       public void beforeBulk(long executionId, BulkRequest request) {
-        if (isCheckClusterState) {
-          checkIfClusterGreen();
-        }
+
         semaphore.acquire();
 
         val count = request.numberOfActions();
@@ -248,6 +246,9 @@ public class ElasticSearchDocumentWriter implements DocumentWriter {
         semaphore.release();
 
         if (isRetryFailed()) {
+          if (isCheckClusterState) {
+            checkIfClusterGreen();
+          }
           log.info("Flushing pending requests before retry...");
           processor.flush();
           log.info("Flushing finished. Retrying failed index request '{}'", executionId);

@@ -17,67 +17,36 @@
  */
 package org.icgc.dcc.etl.indexer.transform;
 
-import static com.google.common.collect.ImmutableList.of;
-import static com.google.common.collect.Iterables.size;
-import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.SSM_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_DONORS;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_DONOR_PROJECT;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_DONOR_SUMMARY;
-import static org.icgc.dcc.common.core.model.FieldNames.GENE_PROJECTS;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SUMMARY_AFFECTED_DONOR_COUNT;
-import static org.icgc.dcc.common.core.model.FieldNames.GENE_SUMMARY_AFFECTED_PROJECT_COUNT;
-import static org.icgc.dcc.common.core.model.FieldNames.GENE_SUMMARY_AFFECTED_TRANSCRIPT_IDS;
-import static org.icgc.dcc.common.core.model.FieldNames.GENE_SUMMARY_TOTAL_MUTATION_COUNT;
-import static org.icgc.dcc.common.core.model.FieldNames.GENE_SUMMARY_UNIQUE_MUTATION_COUNT;
-import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
-import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID;
-import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_DISPLAY_NAME;
-import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
-import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_PRIMARY_SITE;
-import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY;
-import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_DONOR_COUNT;
-import static org.icgc.dcc.common.core.model.FieldNames.getTestedTypeCountFieldName;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getDonorProjectId;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getGeneDonorId;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getGeneDonors;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getGeneId;
-import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getGeneProjectId;
-import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getGeneProjects;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObservationDonorId;
-import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObservationMutationId;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObservationType;
-import static org.icgc.dcc.etl.indexer.util.JsonNodes.addAll;
 import static org.icgc.dcc.etl.indexer.util.JsonNodes.isEmpty;
-import static org.icgc.dcc.etl.indexer.util.JsonNodes.normalizeTextValue;
-
-import java.util.List;
-import java.util.Set;
-
 import lombok.NonNull;
 import lombok.val;
 
-import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.etl.indexer.core.Document;
 import org.icgc.dcc.etl.indexer.core.DocumentContext;
 import org.icgc.dcc.etl.indexer.core.DocumentTransform;
 import org.icgc.dcc.etl.indexer.util.Fakes;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 
 /**
  * {@link DocumentTransform} implementation that creates a nested gene-centric document.
  */
 public class GeneCentricDocumentTransform extends AbstractCentricDocumentTransform {
-
-  private static final List<String> DONOR_PROJECT_FIELD_NAMES =
-      of(PROJECT_ID, PROJECT_DISPLAY_NAME, PROJECT_PRIMARY_SITE);
 
   @Override
   public Document transformDocument(@NonNull ObjectNode gene, @NonNull DocumentContext context) {
@@ -94,32 +63,23 @@ public class GeneCentricDocumentTransform extends AbstractCentricDocumentTransfo
     val geneDonors = getGeneDonors(gene);
     for (val geneDonorId : geneDonorsObservations.keySet()) {
       val donor = context.getDonor(geneDonorId).deepCopy();
-      val donorProjectId = getDonorProjectId(donor);
-      val donorProject = createDonorProject(context.getProject(donorProjectId).deepCopy());
 
       // Extract donor non-feature type summary values for merging
-      ObjectNode donorSummary = (ObjectNode) donor.remove(DONOR_SUMMARY);
-      if (donorSummary != null) {
-        for (val featureType : FeatureType.values()) {
-          donorSummary.remove(featureType.getSummaryFieldName());
-        }
-      } else {
-        donorSummary = donor.objectNode();
-      }
+      val donorSummary = donor.has(DONOR_SUMMARY) ? (ObjectNode) donor.remove(DONOR_SUMMARY) : donor.objectNode();
 
       // Find gene donor and remove summary for merging
       val geneDonor = findGeneDonor(gene, geneDonors, geneDonorId);
-      ObjectNode geneDonorSummary = (ObjectNode) geneDonor.remove(GENE_DONOR_SUMMARY);
-      if (geneDonorSummary == null) {
-        geneDonorSummary = geneDonor.objectNode();
-      }
+      val geneDonorSummary = geneDonor.has(GENE_DONOR_SUMMARY) ?
+          (ObjectNode) geneDonor.remove(GENE_DONOR_SUMMARY) : geneDonor.objectNode();
 
-      // Merge
+      // Merge (add donor's summary to donor summary of the gene's donor)
       geneDonorSummary.putAll(donorSummary);
       geneDonor.putAll(donor);
       geneDonor.put(GENE_DONOR_SUMMARY, geneDonorSummary);
 
       // Add donor-project info
+      val donorProjectId = getDonorProjectId(donor);
+      val donorProject = context.getProject(donorProjectId).deepCopy();
       geneDonor.put(GENE_DONOR_PROJECT, donorProject);
 
       // Merge
@@ -134,31 +94,6 @@ public class GeneCentricDocumentTransform extends AbstractCentricDocumentTransfo
     }
 
     /**
-     * Projects: {@code gene.projects}(s).
-     */
-
-    val geneProjects = getGeneProjects(gene);
-    for (val value : geneProjects) {
-      val geneProject = (ObjectNode) value;
-      val geneProjectId = getGeneProjectId(geneProject);
-      val project = context.getProject(geneProjectId).deepCopy();
-
-      // Book keeping
-      String totalSsmTestedDonorCountFieldName = getTestedTypeCountFieldName(SSM_TYPE);
-
-      // Filter and cache
-      val projectSummary = project.remove(PROJECT_SUMMARY);
-      int totalDonorCount = projectSummary.path(TOTAL_DONOR_COUNT).intValue();
-      int totalSsmTestedDonorCount = projectSummary.path(totalSsmTestedDonorCountFieldName).intValue();
-
-      // Merge
-      geneProject.putAll(project);
-      geneProject.with(PROJECT_SUMMARY)
-          .put(TOTAL_DONOR_COUNT, totalDonorCount)
-          .put(totalSsmTestedDonorCountFieldName, totalSsmTestedDonorCount);
-    }
-
-    /**
      * Summary: {@code gene._summary}.
      */
 
@@ -166,15 +101,6 @@ public class GeneCentricDocumentTransform extends AbstractCentricDocumentTransfo
 
     val affectedDonorCount = getAffectedDonorCount(gene);
     summary.put(GENE_SUMMARY_AFFECTED_DONOR_COUNT, affectedDonorCount);
-
-    val affectedProjectCount = getAffectedProjectCount(gene);
-    summary.put(GENE_SUMMARY_AFFECTED_PROJECT_COUNT, affectedProjectCount);
-
-    addAll(summary.withArray(GENE_SUMMARY_AFFECTED_TRANSCRIPT_IDS),
-        getAffectedTranscriptIds(geneDonorsObservations.values()));
-
-    summary.put(GENE_SUMMARY_UNIQUE_MUTATION_COUNT, getUniqueMutationCount(geneDonorsObservations.values()));
-    summary.put(GENE_SUMMARY_TOTAL_MUTATION_COUNT, getTotalMutationCount(geneDonorsObservations.values()));
 
     return new Document(context.getType(), geneId, gene);
   }
@@ -227,56 +153,6 @@ public class GeneCentricDocumentTransform extends AbstractCentricDocumentTransfo
     val realAffectedDonorCount = rawAffectedDonorCount - placeholderDonorCount;
 
     return realAffectedDonorCount;
-  }
-
-  private static int getAffectedProjectCount(ObjectNode gene) {
-    ArrayNode projects = gene.withArray(GENE_PROJECTS);
-    int affectedProjectCount = projects.size();
-
-    return affectedProjectCount;
-  }
-
-  private static Set<String> getAffectedTranscriptIds(@NonNull Iterable<ObjectNode> geneObservations) {
-    val transcriptIds = Sets.<String> newLinkedHashSet();
-
-    for (val geneObservation : geneObservations) {
-      // Add affected transcripts
-      ArrayNode consequences = (ArrayNode) geneObservation.get(OBSERVATION_CONSEQUENCES);
-      if (consequences != null) {
-        for (JsonNode consequence : consequences) {
-          val transcriptId = normalizeTextValue(consequence, OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID);
-          if (transcriptId != null) {
-            transcriptIds.add(transcriptId);
-          }
-        }
-      }
-    }
-
-    return transcriptIds;
-  }
-
-  private static int getTotalMutationCount(@NonNull Iterable<ObjectNode> geneObservations) {
-    return size(geneObservations);
-  }
-
-  private static int getUniqueMutationCount(@NonNull Iterable<ObjectNode> geneObservations) {
-    val mutationIds = Sets.<String> newHashSet();
-    for (val geneObservation : geneObservations) {
-      mutationIds.add(getObservationMutationId(geneObservation));
-    }
-
-    return mutationIds.size();
-  }
-
-  private static ObjectNode createDonorProject(@NonNull ObjectNode project) {
-    // Create light-weight project information for donor sub-document
-    ObjectNode donorProject = project.objectNode();
-
-    for (String fieldName : DONOR_PROJECT_FIELD_NAMES) {
-      donorProject.put(fieldName, project.get(fieldName));
-    }
-
-    return donorProject;
   }
 
   private static Multimap<String, ObjectNode> indexGeneDonorsObservations(@NonNull Iterable<ObjectNode> observations) {

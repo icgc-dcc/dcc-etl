@@ -18,11 +18,12 @@
 package org.icgc.dcc.etl.indexer.transform;
 
 import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.base.Strings.nullToEmpty;
-import static org.icgc.dcc.common.core.model.FieldNames.GENE_CANONICAL_TRANSCRIPT_ID;
-import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_CANONICAL;
-import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE;
-import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.DONOR_PROJECT_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_GENE;
+import static org.icgc.dcc.common.json.Jackson.asObjectNode;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getDonorProjectId;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObservationConsequenceGeneId;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObservationConsequences;
@@ -43,6 +44,7 @@ import org.icgc.dcc.etl.indexer.core.Document;
 import org.icgc.dcc.etl.indexer.core.DocumentContext;
 import org.icgc.dcc.etl.indexer.core.DocumentTransform;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Maps;
 
@@ -62,6 +64,10 @@ public class ObservationCentricDocumentTransform implements DocumentTransform {
     val observationType = getObservationType(observation);
     val observationConsequences = getObservationConsequences(observation);
 
+    // Remove foreign keys
+    trimObservation(observation);
+    observation.remove(OBSERVATION_CONSEQUENCES);
+
     // Partition observations by type
     val observationPartition = observation.objectNode();
     observationPartition.with(observationType);
@@ -70,11 +76,12 @@ public class ObservationCentricDocumentTransform implements DocumentTransform {
     observation.setAll(observationPartition);
 
     // Embed donor
-    val observationDonor = context.getDonor(observationDonorId);
+    val observationDonor = context.getDonor(observationDonorId).deepCopy();
     setObservationDonor(observation, observationDonor);
 
     // Embed project
     val observationProjectId = getDonorProjectId(observationDonor);
+    trimObservationDonor(observationDonor);
     val observationProject = context.getProject(observationProjectId);
     setObservationProject(observation, observationProject);
 
@@ -92,17 +99,34 @@ public class ObservationCentricDocumentTransform implements DocumentTransform {
       }
 
       if (!isFakeGeneId(geneId)) {
-        observationConsequence.set(OBSERVATION_CONSEQUENCES_GENE, gene);
-
-        // Tag if it is canonical for efficient lookups downstream
-        String canonicalTranscriptId = nullToEmpty(gene.path(GENE_CANONICAL_TRANSCRIPT_ID).textValue());
-        String transcriptId = observationConsequence.path(OBSERVATION_CONSEQUENCES_TRANSCRIPT_ID).textValue();
-        boolean canonical = transcriptId != null && transcriptId.equals(canonicalTranscriptId);
-        observationConsequence.put(OBSERVATION_CONSEQUENCES_CONSEQUENCE_CANONICAL, canonical);
+        trimObservationConsequence(observationConsequence);
+        val consequences = gene.withArray(OBSERVATION_CONSEQUENCES);
+        consequences.add(observationConsequence);
       }
     }
 
+    val observationGenes = createGenesArray(observation, observationType);
+    for (val gene : observationGeneMap.values()) {
+      observationGenes.add(gene);
+    }
+
     return new Document(context.getType(), UUID.randomUUID().toString(), observation);
+  }
+
+  private static ArrayNode createGenesArray(ObjectNode observation, String observationType) {
+    return asObjectNode(observation.get(observationType)).withArray(OBSERVATION_GENE);
+  }
+
+  private static void trimObservation(ObjectNode observation) {
+    observation.remove(OBSERVATION_DONOR_ID);
+  }
+
+  private static void trimObservationDonor(ObjectNode observationDonor) {
+    observationDonor.remove(DONOR_PROJECT_ID);
+  }
+
+  private static void trimObservationConsequence(ObjectNode observationConsequence) {
+    observationConsequence.remove(OBSERVATION_CONSEQUENCES_GENE_ID);
   }
 
   private static TreeMap<String, ObjectNode> newTreeMap() {
