@@ -6,14 +6,16 @@
     "_source": {
       "compress": "true",
       "includes": [
+          "_gene_id",
+          "_summary._affected_donor_count",
+          "biotype",
+          "chromosome",
           "donor.ssm.consequence.transcript_affected",
-          "donor.ssm.consequence._gene_id"
-      ],
-      "excludes": [
-        "donor", 
-        "go_term",
-        "curated_set",
-        "pathway"
+          "donor.ssm.consequence._gene_id",
+          "end",
+          "name",
+          "start",
+          "symbol"
       ]
     },
     "date_detection": "false",

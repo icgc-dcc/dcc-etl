@@ -473,6 +473,7 @@ public enum DocumentType {
                           "reference_genome_allele",
                           "chromosome_strand",
                           "functional_impact_prediction_summary",
+                          "_project_id",
 
                           // Consequence
                           "consequence.gene_build_version",

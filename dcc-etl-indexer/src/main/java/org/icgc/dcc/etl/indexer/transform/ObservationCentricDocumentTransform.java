@@ -19,8 +19,11 @@ package org.icgc.dcc.etl.indexer.transform;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_PROJECT_ID;
-import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_GENE_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
+import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_GENE;
+import static org.icgc.dcc.common.json.Jackson.asObjectNode;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getDonorProjectId;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObservationConsequenceGeneId;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObservationConsequences;
@@ -41,6 +44,7 @@ import org.icgc.dcc.etl.indexer.core.Document;
 import org.icgc.dcc.etl.indexer.core.DocumentContext;
 import org.icgc.dcc.etl.indexer.core.DocumentTransform;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Maps;
 
@@ -59,6 +63,10 @@ public class ObservationCentricDocumentTransform implements DocumentTransform {
     val observationDonorId = getObservationDonorId(observation);
     val observationType = getObservationType(observation);
     val observationConsequences = getObservationConsequences(observation);
+
+    // Remove foreign keys
+    trimObservation(observation);
+    observation.remove(OBSERVATION_CONSEQUENCES);
 
     // Partition observations by type
     val observationPartition = observation.objectNode();
@@ -91,12 +99,26 @@ public class ObservationCentricDocumentTransform implements DocumentTransform {
       }
 
       if (!isFakeGeneId(geneId)) {
-        observationConsequence.set(OBSERVATION_CONSEQUENCES_GENE, gene);
         trimObservationConsequence(observationConsequence);
+        val consequences = gene.withArray(OBSERVATION_CONSEQUENCES);
+        consequences.add(observationConsequence);
       }
     }
 
+    val observationGenes = createGenesArray(observation, observationType);
+    for (val gene : observationGeneMap.values()) {
+      observationGenes.add(gene);
+    }
+
     return new Document(context.getType(), UUID.randomUUID().toString(), observation);
+  }
+
+  private static ArrayNode createGenesArray(ObjectNode observation, String observationType) {
+    return asObjectNode(observation.get(observationType)).withArray(OBSERVATION_GENE);
+  }
+
+  private static void trimObservation(ObjectNode observation) {
+    observation.remove(OBSERVATION_DONOR_ID);
   }
 
   private static void trimObservationDonor(ObjectNode observationDonor) {
