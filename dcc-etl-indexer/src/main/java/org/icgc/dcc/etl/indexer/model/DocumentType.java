@@ -476,6 +476,10 @@ public enum DocumentType {
                           "_project_id",
 
                           // Consequence
+                          "consequence.aa_change",
+                          "consequence.cds_change",
+                          "consequence.note",
+                          "consequence.protein_domain_affected",
                           "consequence.gene_build_version",
                           "consequence.transcript_affected",
                           "consequence.gene_affected",
