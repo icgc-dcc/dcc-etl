@@ -32,6 +32,7 @@ import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getObserva
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.setObservationDonor;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.setObservationProject;
 import static org.icgc.dcc.etl.indexer.util.Fakes.FAKE_GENE_ID;
+import static org.icgc.dcc.etl.indexer.util.Fakes.createFakeGene;
 import static org.icgc.dcc.etl.indexer.util.Fakes.isFakeGeneId;
 
 import java.util.TreeMap;
@@ -93,16 +94,14 @@ public class ObservationCentricDocumentTransform implements DocumentTransform {
       ObjectNode gene = observationGeneMap.get(geneId);
       if (gene == null) {
         // Book-keeping
-        gene = isFakeGeneId(geneId) ? null : context.getGene(geneId).deepCopy();
+        gene = isFakeGeneId(geneId) ? createFakeGene() : context.getGene(geneId).deepCopy();
 
         observationGeneMap.put(geneId, gene);
       }
 
-      if (!isFakeGeneId(geneId)) {
-        trimObservationConsequence(observationConsequence);
-        val consequences = gene.withArray(OBSERVATION_CONSEQUENCES);
-        consequences.add(observationConsequence);
-      }
+      trimObservationConsequence(observationConsequence);
+      val consequences = gene.withArray(OBSERVATION_CONSEQUENCES);
+      consequences.add(observationConsequence);
     }
 
     val observationGenes = createGenesArray(observation, observationType);
