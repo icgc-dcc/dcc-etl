@@ -548,9 +548,6 @@ public class SummarizerIntegrationTest {
             OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE + ":'consequence_type1'" +
           "}" +
         "]" +
-          
-        // Observation-consequence types summaries
-//        "," + OBSERVATION_CONSEQUENCE_TYPES + ":['consequence_type1']" +
       "}"
     );
     // @formatter:on

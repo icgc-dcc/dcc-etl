@@ -91,7 +91,6 @@ public class SummarizerService {
     val donorSummarizer = new DonorSummarizer(repository);
     val projectSummarizer = new ProjectSummarizer(repository);
     val geneSummarizer = new GeneSummarizer(repository);
-    // val observationSummarizer = new ObservationSummarizer(repository);
     val releaseSummarizer = new ReleaseSummarizer(jobId, releaseName, repository);
 
     // For correctness, the aggregation order below must be respected:
@@ -113,11 +112,6 @@ public class SummarizerService {
     delta.reset().start();
     geneSummarizer.summarize();
     log.info("Summarizing 'gene' took.......... {}", formatDuration(delta));
-
-    // ObservationSummarizer produces observation.consequence_type field which is not used anymore
-    // delta.reset().start();
-    // observationSummarizer.summarize();
-    // log.info("Summarizing 'observation' took... {}", formatDuration(delta));
 
     delta.reset().start();
     releaseSummarizer.summarize();

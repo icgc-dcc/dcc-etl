@@ -45,7 +45,6 @@ public class SnpEffVCFToICGCConverterTest {
         .start(1)
         .stop(1)
         .id("MU00001")
-        // .genotypes(Genotypes)
         .attributes(ImmutableMap.<String, Object> of(SnpEffVCFToICGCConverter.INFO_EFF_FIELD, ""))
         .alleles(Alleles.createAlleles("A", of("T")))
         .make();

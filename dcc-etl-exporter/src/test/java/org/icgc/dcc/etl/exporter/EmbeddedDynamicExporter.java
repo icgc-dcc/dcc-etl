@@ -101,7 +101,6 @@ public class EmbeddedDynamicExporter {
   protected void exportToHBase(String exporter, String observation) {
     Configuration conf = hbase.getConfiguration();
     LoadIncrementalHFiles loader = new LoadIncrementalHFiles(conf);
-    // PigServer pigServer = new PigServer(ExecType.LOCAL );
     System.out.println(conf.get("hbase.zookeeper.property.clientPort"));
     PigServer pigServer = new PigServer(ExecType.LOCAL, conf);
     try {
@@ -122,7 +121,6 @@ public class EmbeddedDynamicExporter {
 
       Properties pigProperty = pigServer.getPigContext().getProperties();
       pigProperty.setProperty("pig.import.search.path", LIB_PATH + "/" + exporter);
-      // ScriptState.start("", pigServer.getPigContext());
       ScriptState.get().setPigContext(pigServer.getPigContext());
       SchemaUtil.createDataTable(exporter, conf, false);
       pigServer.registerScript(LIB_PATH + "/" + exporter + "/dynamic.pig", params);

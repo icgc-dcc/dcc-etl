@@ -80,7 +80,6 @@ public abstract class BaseLoaderPlatformStrategy implements LoaderPlatformStrate
   protected final PlatformData platformData;
 
   @Getter
-  // @Override
   private final Map<String, Map<FileType, String>> inputFiles;
 
   protected BaseLoaderPlatformStrategy(

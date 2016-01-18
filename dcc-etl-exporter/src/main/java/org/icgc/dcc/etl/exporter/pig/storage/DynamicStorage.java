@@ -105,7 +105,6 @@ public class DynamicStorage extends StoreFunc {
   @Override
   public void checkSchema(ResourceSchema s) throws IOException {
     log.info("Resource Schema: " + s.toString());
-    // (donor_id:int, ranking:long, content:bag)
     Preconditions.checkArgument(s.getFields().length == 2);
 
     UDFContext udfc = UDFContext.getUDFContext();
