@@ -18,7 +18,7 @@
 // Do not use directly, use its .sh counterpart
 
 // Connect
-dbHost = "***REMOVED***";
+dbHost = "<host>";
 db = connect(dbHost + "/" + dbName); // dbName passed as parameter
 db.auth(dccusername, dccpasswd); // passed as parameters
 

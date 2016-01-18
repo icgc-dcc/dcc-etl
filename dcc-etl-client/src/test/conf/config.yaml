@@ -20,7 +20,7 @@ fsUrl: "file:///"
 
 # URI to the submission system web app
 # TODO: this should not point to our production system!!!
-submissionWebAppUri: http://***REMOVED***
+submissionWebAppUri: http://<host>:<port>
 
 # Whether to filter out CONTROLLED field for all outputs of the loader or simply for mongodb
 #filterAllControlled: true
@@ -84,13 +84,13 @@ indexerHadoop:
 
 # ICGC Client configuration
 icgc:
-  cgpServiceUrl: "https://***REMOVED***/ud_oauth/1/search"
+  cgpServiceUrl: "https://<host>/ud_oauth/1/search"
   cudServiceUrl: ""
   shortServiceUrl: ""
-  consumerKey: "***REMOVED***"
-  consumerSecret: "***REMOVED***"
-  accessToken: "***REMOVED***"
-  accessSecret: "***REMOVED***"
+  consumerKey: ""
+  consumerSecret: ""
+  accessToken: ""
+  accessSecret: ""
   cudAppId: ""
   strictSSLCertificates: false
   requestLoggingEnabled: false

@@ -36,9 +36,6 @@ hadoop:
       fs.defaultFS: file:///
       mapred.min.split.size: 104857600
       
-      # fs.defaultFS: hdfs://***REMOVED***
-      # mapred.job.tracker: ***REMOVED***:8021
-      
       # dfs.client.use.legacy.blockreader: true
       # hadoop.socks.server: localhost:1080
       # hadoop.rpc.socket.factory.class.default: org.apache.hadoop.net.SocksSocketFactory

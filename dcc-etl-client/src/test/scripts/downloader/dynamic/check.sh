@@ -35,11 +35,8 @@ static_dir=/hdfs/dcc/icgc/download/static/release_14
 projects=$(ls ${static_dir?})
 
 protocol="http"
-host="***REMOVED***" # private instance without upper limit
+host="<proxy-prod>" # private instance without upper limit
 port="5381"
-#protocol="https"
-#host="***REMOVED***"
-#port="80"
 
 mkdir -p ${destination_dir?}
 for project in ${projects?}; do

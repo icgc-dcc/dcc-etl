@@ -60,6 +60,7 @@ public class ElasticSearchReverseSchemaGenerator {
   private static final int BATCH_SIZE = 10;
   private static final int TIME_OUT = 60000;
   private static final TimeValue KEEP_ALIVE = new TimeValue(TIME_OUT);
+  private static final String ES_URL = "es://<host>:9300";
 
   /**
    * Configuration.
@@ -141,7 +142,7 @@ public class ElasticSearchReverseSchemaGenerator {
     // Config
     int i = 0;
     val schemaDir = new File(args.length < ++i ? "target" : args[i - 1]);
-    val esUri = args.length < ++i ? "es://***REMOVED***.oicr.on.ca:9300" : args[i - 1];
+    val esUri = args.length < ++i ? ES_URL : args[i - 1];
     val indexName = args.length < ++i ? "test17-trim" : args[i - 1];
     val limit = args.length < ++i ? 100 : Integer.valueOf(args[i - 1]);
 

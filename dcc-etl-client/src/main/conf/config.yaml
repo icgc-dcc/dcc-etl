@@ -43,7 +43,7 @@ releaseMongoUri: "mongodb://localhost"
 etlAdminMongoUri: "mongodb://localhost"
 
 # DCC Identifier Service
-identifierServiceUri: "http://***REMOVED***"
+identifierServiceUri: "http://<host>:<port>"
 
 # Project MongoDB URI
 projectMongoUri: "mongodb://localhost/dcc-project"
@@ -78,7 +78,6 @@ loaderHadoop:
   #mapred.reduce.tasks=1
 indexerHadoop:
   fs.defaultFS: "file:///"
-  #mapred.job.tracker: "***REMOVED***:8021"
   #mapred.map.child.java.opts: "-Xmx31g -XX:MaxDirectMemorySize=31g"
  
 # ICGC Client configuration

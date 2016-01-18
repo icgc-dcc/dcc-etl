@@ -18,7 +18,7 @@
 
 # Helps cleaning up leftovers from ETL temporary runs
 # usage: ./cleanup.sh mode intermediate_dir homogenized_hdfs_dir mongo_server es_server
-# example: args="/nfs/dcc_secure/dcc/etl/intermediate /nfs/backups/elasticsearch /icgc/etl /tmp/download/static ***REMOVED*** dcc-etl $PASSWD ***REMOVED***" && ./cleanup.sh list ${args?} | ./cleanup.sh translate ${args?}
+# example: args="/nfs/dcc_secure/dcc/etl/intermediate /nfs/backups/elasticsearch /icgc/etl /tmp/download/static mongodb_host dcc-etl $PASSWD elasticsearch_host" && ./cleanup.sh list ${args?} | ./cleanup.sh translate ${args?}
 # TODO: add hbase equivalent for dynamic download file (Jerry says it's not easy)
 
 # ===========================================================================

@@ -55,7 +55,7 @@ function send_overarch_email() {
 	overarch_parent_output_dir=${1?}
 	subject="Overarch: ETL run '${run_name?}' has finished"
 	body="$(tree --charset iso-8859 ${overarch_parent_output_dir?})"
-	recipients="***REMOVED***" # TODO: to dcc-softeng once stable
+	recipients="<comma_separated_emails>" # TODO: Set valid email
 	echo "Sending email '${subject?}' to '${recipients?}':\\n${body?}"
 	echo -e "${body?}" | mail -s "${subject?}" "${recipients?}"
 }
@@ -142,8 +142,7 @@ function email() {
   subject="ETL run '${job_id?}' on '${HOSTNAME?}' ${status?}"
   body="$(cat ${attempt_manifest_file?})"
   #sendemail -f ${sender?} -t ${recipients?} -u ${subject?} -m ${body?} -s ${smtp_server?}
-  #echo -e "${body?}" | mail -s "${subject?}" "${recipients?}" -aFrom:${sender?}
-  echo -e "${body?}" | mail -s "${subject?}" "***REMOVED***,***REMOVED***" -aFrom:${sender?}
+  echo -e "${body?}" | mail -s "${subject?}" "${recipients?}" -aFrom:${sender?}
 }
 
 # Determines whether the component is to be run or not

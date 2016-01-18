@@ -37,7 +37,7 @@ readonly base=$1
 readonly execute=$2
 readonly image=icgcdcc/cdh
 readonly mount=$base:/app
-readonly command="hadoop-fuse-dfs ro dfs://***REMOVED***:8020 /hdfs/dcc &> /dev/null ; cd /app ; $execute" # TODO: get NN from config
+readonly command="hadoop-fuse-dfs ro dfs://<host>:8020 /hdfs/dcc &> /dev/null ; cd /app ; $execute" # TODO: get NN from config
 readonly etl_dir=***REMOVED***/dcc-etl
 
 # Pull/ Update Docker image

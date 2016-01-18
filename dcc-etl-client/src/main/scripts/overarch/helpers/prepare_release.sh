@@ -76,10 +76,10 @@ cd ***REMOVED***/dcc-etl/conf/
 
 # update dictionary.json from production server
 dictionary_file=dictionaries/${dictionary_version}.json
-curl -v -XGET http://***REMOVED***/ws/nextRelease/dictionary -H "Accept: application/json" > ${dictionary_file}
+curl -v -XGET http://<host>:<port>/ws/nextRelease/dictionary -H "Accept: application/json" > ${dictionary_file}
 
 # update codelists.json from production server
-curl -v -XGET http://***REMOVED***/ws/codeLists -H "Accept: application/json" > codelists.json
+curl -v -XGET http://<host>:<port>/ws/codeLists -H "Accept: application/json" > codelists.json
 
 git add codelists.json
 git add ${dictionary_file}

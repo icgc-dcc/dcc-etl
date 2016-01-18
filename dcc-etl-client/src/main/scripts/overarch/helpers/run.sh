@@ -33,25 +33,25 @@ components_to_run=${1?} && shift
 host=$(hostname -f)
 valid_host=false
 
-if [ "$host" == "***REMOVED***" ]; then
+if [ "$host" == "<etl1-host>" ]; then
  cluster="prod"
  use_docker=false
  valid_host=true
 fi
 
-if [ "$host" == "hcn-135.res.oicr.on.ca" ]; then
+if [ "$host" == "<etl2-host>" ]; then
  cluster="prod"
  use_docker=true
  valid_host=true
 fi
 
-if [ "$host" == "***REMOVED***" ]; then
+if [ "$host" == "<proxy-prod-host>" ]; then
  cluster="prod"
  use_docker=false
  valid_host=true
 fi
 
-if [ "$host" == "***REMOVED***" ]; then
+if [ "$host" == "<proxy-dev-host>" ]; then
  cluster="dev"
  use_docker=false
  valid_host=true
