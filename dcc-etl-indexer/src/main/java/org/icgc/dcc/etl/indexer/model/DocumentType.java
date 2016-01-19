@@ -403,15 +403,21 @@ public enum DocumentType {
               )
               .geneFields(
                   geneFields()
-                      .excludedFields(
-                          "_id",
-                          "canonical_transcript_id",
-                          "description",
+                      .includedFields(
+                          "_gene_id",
+                          "biotype",
+                          "chromosome",
+                          "donor",
+                          "end",
                           "external_db_ids",
-                          "project",
+                          "name",
+                          "sets",
+                          "start",
                           "strand",
-                          "synonyms",
-                          "transcripts"
+                          "symbol",
+                          "transcripts.id",
+                          "transcripts.length_amino_acid",
+                          "transcripts.domains"
                       )
               )
       )
@@ -545,7 +551,12 @@ public enum DocumentType {
                   projectFields()
                       .includedFields(
                           "_project_id",
-                          "primary_site"
+                          "_summary._affected_donor_count",
+                          "_summary._ssm_tested_donor_count",
+                          "primary_site",
+                          "project_name",
+                          "tumour_type",
+                          "tumour_subtype"
                       )
               )
               .donorFields(
@@ -574,7 +585,9 @@ public enum DocumentType {
                           "end",
                           "sets",
                           "start",
+                          "strand",
                           "symbol",
+                          "transcripts.biotype",
                           "transcripts.id",
                           "transcripts.name"
                       )
@@ -588,6 +601,7 @@ public enum DocumentType {
                           "consequence._transcript_id", // Don't index
                           "consequence.consequence_type",
                           "consequence.aa_mutation",
+                          "consequence.cds_mutation",
                           "consequence.gene_affected",
                           "consequence.functional_impact_prediction_summary",
                           "observation.platform",
