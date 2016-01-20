@@ -60,8 +60,7 @@ package org.icgc.dcc;import java.util.List;
 
 ###### <a name="anti_patterns"></a> Anti Patterns
 
-**Do not commit commented code.** The only exception to this rule is for code that **will** eventually be uncommented. For example, if something is
-￼￼￼￼￼￼￼implemented correctly, but depends on something not yet implemented, you could commit this code commented. Otherwise, always remove commented code from the source. Source control is used to keep track of old code.
+**Do not commit commented code.** The only exception to this rule is for code that **will** eventually be uncommented. For example, if something is implemented correctly, but depends on something not yet implemented, you could commit this code commented. Otherwise, always remove commented code from the source. Source control is used to keep track of old code.
 
 ```java
 public void myMethod() {  // TODO: uncomment when TheOtherClass is implemented correctly  // theOtherClassInstance.callMe();  // Do nothing for now.}
@@ -251,8 +250,10 @@ Furthermore, you can compose `Function` instances, see the `Functions` class.
     });
 }
 ```
-￼Again, this is using the `Iterables` class, but this time for finding a single element in an `Iterable`. The benefit of this is that a `Predicate` can actually be written once and reused in multiple places. Think of a `Predicate` as a reusable condition within the brakets of an `if()` statement.
-As [Guava's Wiki](https://code.google.com/p/guava-libraries/wiki/GuavaExplained) mentions, don't be function simply to be functional. Do it when there's a net saving (improved readability or efficiency).
+
+Again, this is using the `Iterables` class, but this time for finding a single element in an `Iterable`. The benefit of this is that a `Predicate` can actually be written once and reused in multiple places. Think of a `Predicate` as a reusable condition within the brakets of an `if()` statement.
+
+As [Guava's Wiki](https://code.google.com/p/guava-libraries/wiki/GuavaExplained) mentions, don't be function simply to be functional. Do it when there's a net saving (improved readability or efficiency).
 ## <a name="coffee"></a> CoffeeScript Conventions
 Influenced by [Polar's CoffeeScript Conventions](https://github.com/polarmobile/coffeescript-style-guide)
 #### <a name="coffee_imports"></a> Module Imports
@@ -277,7 +278,7 @@ require 'lib/setup'Backbone = require 'backbone'
 ###### <a name="coffe_whitespace_2"></a> Always surround these binary operators with a single space on either side
 - assignment: `=`- augmented assignment: `+=`, `-=`, etc. 
 - comparisons: `==`, `<`, `>`, `<=`, `>=`, unless, etc.
-- ￼arithmetic operators: `+`, `-`, `*`, `/`, etc.
+- arithmetic operators: `+`, `-`, `*`, `/`, etc.
 *(Do not use more than one space around these operators)*
 
 ```js# Yes  x = 1  y = 1  fooBar = 3
@@ -318,7 +319,9 @@ Use `CamelCase` (with a leading uppercase character) to name all classes.
 Prefer single quoted strings (`''`) instead of double quoted (`""`) strings, unless features like string interpolation are being used for the given string.
 #### <a name="coffe_conditionals"></a> Conditionals
 
-￼Favor unless over if for negative conditions.Instead of using `unless...else`, use `if...else`: 
+Favor unless over if for negative conditions.
+
+Instead of using `unless...else`, use `if...else`: 
 
 ```js
 # Yes  if true ...  else ...
@@ -359,13 +362,18 @@ For example:
     @Test  public void test_doSomething_throwsWhenArgumentIsNull() {    new ClassUnderTest().doSomething(null)  }
     @Test  public void test_doSomething_throwsWhenArgumentIsInvalid() {    new ClassUnderTest().doSomething("invalid string")  }}
 ```
-#### ￼<a name="bp_injections"></a> Injection1. Use constructor injection and reduce visibility of injected class as much as possible.2. Use Guava's Preconditions (`checkArgument`, `checkState`, etc.) When checking arguments for not-nullness, use checkArgument instead of `checkNull`. The later throws an `NullPointerException` which is a bit confusing.
+
+#### <a name="bp_injections"></a> Injection
+
+1. Use constructor injection and reduce visibility of injected class as much as possible.2. Use Guava's Preconditions (`checkArgument`, `checkState`, etc.) When checking arguments for not-nullness, use checkArgument instead of `checkNull`. The later throws an `NullPointerException` which is a bit confusing.
 
 ```java￼￼￼class TheClass {
   private final Dependency dependency;
     @Inject  public TheClass(Dependency dependency) {    checkArgument(dependency != null);    this.dependency = dependency;  }}
 ```
-#### ￼<a name="bp_null"></a> Using `null`Avoid returning `null` in a method. Methods should be written in a way that they either succeed (return an actual value) or fail (throw an exception). Returning null creates a third execution path that is prone to causing problems. 
+
+#### <a name="bp_null"></a> Using `null`
+Avoid returning `null` in a method. Methods should be written in a way that they either succeed (return an actual value) or fail (throw an exception). Returning null creates a third execution path that is prone to causing problems. 
 
 To avoid returning `null`, you have a few options:
 1. create 2 methods, one for testing, one for executing 
