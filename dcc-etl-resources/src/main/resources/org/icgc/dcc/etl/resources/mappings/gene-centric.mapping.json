@@ -12,6 +12,7 @@
           "chromosome",
           "donor.ssm.consequence.transcript_affected",
           "donor.ssm.consequence._gene_id",
+          "external_db_ids",
           "end",
           "name",
           "start",
