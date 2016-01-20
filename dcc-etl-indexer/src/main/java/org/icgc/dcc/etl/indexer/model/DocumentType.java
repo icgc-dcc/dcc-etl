@@ -415,9 +415,23 @@ public enum DocumentType {
                           "start",
                           "strand",
                           "symbol",
+                          "transcripts.biotype",
+                          "transcripts.cdna_coding_end",
+                          "transcripts.cdna_coding_start",
+                          "transcripts.coding_region_end",
+                          "transcripts.coding_region_start",
+                          "transcripts.exons.cdna_coding_end",
+                          "transcripts.exons.cdna_coding_start",
+                          "transcripts.exons.cdna_end",
+                          "transcripts.exons.cdna_start",
+                          "transcripts.exons.genomic_coding_end",
+                          "transcripts.exons.genomic_coding_start",
+                          "transcripts.exons.end",
+                          "transcripts.exons.start",
+                          "transcripts.domains",
                           "transcripts.id",
                           "transcripts.length_amino_acid",
-                          "transcripts.domains"
+                          "transcripts.name"
                       )
               )
       )

@@ -15,7 +15,9 @@
           "end",
           "name",
           "start",
-          "symbol"
+          "strand",
+          "symbol",
+          "transcripts"
       ]
     },
     "date_detection": "false",
