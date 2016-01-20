@@ -10,6 +10,7 @@
           "_summary._affected_donor_count",
           "biotype",
           "chromosome",
+          "description",
           "donor.ssm.consequence.transcript_affected",
           "donor.ssm.consequence._gene_id",
           "external_db_ids",

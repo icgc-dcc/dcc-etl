@@ -407,6 +407,7 @@ public enum DocumentType {
                           "_gene_id",
                           "biotype",
                           "chromosome",
+                          "description",
                           "donor",
                           "end",
                           "external_db_ids",
