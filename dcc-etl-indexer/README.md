@@ -1,7 +1,7 @@
 ICGC DCC - ETL Indexer
 ===
 
-DCC indexer that reads a DCC release MongoDB database, transforms the normalized documents into ElasticSearch documents for indexing and indexes them into an ElasticSearch cluster.
+DCC indexer reads a DCC release MongoDB database, transforms the normalized documents into ElasticSearch documents for indexing and indexes them into an ElasticSearch cluster.
 
 Build
 ---

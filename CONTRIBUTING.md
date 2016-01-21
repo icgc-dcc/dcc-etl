@@ -1,4 +1,4 @@
-# Contributing to DCC ICGC ETL
+# Contributing to DCC ICGC
 
 ## Getting Started
 
@@ -36,7 +36,7 @@ git hf hotfix start 3d-gene-renderer
 
 ## Coding Conventions ##
 Normalizing your code by following established conventions can help developers understand one another by
-reducing the complexity introduced by different coding styles. We have established some [code conventions](DEVELOPMENT_CONVENTIONS.md). Please
+reducing the complexity introduced by different coding styles. We have established some [code conventions](http://docs.icgc.org/software/development/). Please
 review them to ensure you are doing your part in keeping this project maintainable.
 
 
