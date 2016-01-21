@@ -3,18 +3,19 @@ ICGC DCC - ETL Command Line Interface
 
 Executes the ETL processing pipeline including the following:
 
-*	Load
-*	Indentify
-*	Import
-*	Summarize
-*	Index
+*	[Load](../dcc-etl-loader/README.md)
+*	[Indentify](https://github.com/icgc-dcc/dcc-id)
+*	[Import](../dcc-etl-importer/README.md)
+*	[Summarize](../dcc-etl-summarizer/README.md)
+*	[Index](../dcc-etl-indexer/README.md)
 
 Build
 ---
 
-From the command line:
+In the repository's root execute from the command line:
 
-`mvn package`
+	mvn -am -pl dcc-etl-client package
+
 
 Run
 ---

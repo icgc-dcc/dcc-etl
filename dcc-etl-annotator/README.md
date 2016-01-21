@@ -9,11 +9,10 @@ This is the ETL annotation service. It is responsible for:
 Build
 ---
 
-From the command line:
+In the repository's root execute from the command line:
 
-```bash
-mvn package
-```
+	mvn -am -pl dcc-etl-annotator package
+
 
 Run
 ---
