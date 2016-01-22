@@ -1,4 +1,21 @@
 #!/bin/bash -e
+#
+# Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.
+#
+# This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 # TODO: split utils and dcc-utils
 
 function ensure_user() {
@@ -38,7 +55,7 @@ function send_overarch_email() {
 	overarch_parent_output_dir=${1?}
 	subject="Overarch: ETL run '${run_name?}' has finished"
 	body="$(tree --charset iso-8859 ${overarch_parent_output_dir?})"
-	recipients="***REMOVED***" # TODO: to dcc-softeng once stable
+	recipients="<comma_separated_emails>" # TODO: Set valid email
 	echo "Sending email '${subject?}' to '${recipients?}':\\n${body?}"
 	echo -e "${body?}" | mail -s "${subject?}" "${recipients?}"
 }
@@ -125,8 +142,7 @@ function email() {
   subject="ETL run '${job_id?}' on '${HOSTNAME?}' ${status?}"
   body="$(cat ${attempt_manifest_file?})"
   #sendemail -f ${sender?} -t ${recipients?} -u ${subject?} -m ${body?} -s ${smtp_server?}
-  #echo -e "${body?}" | mail -s "${subject?}" "${recipients?}" -aFrom:${sender?}
-  echo -e "${body?}" | mail -s "${subject?}" "***REMOVED***,***REMOVED***" -aFrom:${sender?}
+  echo -e "${body?}" | mail -s "${subject?}" "${recipients?}" -aFrom:${sender?}
 }
 
 # Determines whether the component is to be run or not

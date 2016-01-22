@@ -1,12 +1,13 @@
 ICGC DCC - ETL Summarizer
 ===
 
-Summarizes data loaded by `dcc-loader` so that it can be easily indexed by `dcc-indexer`
+Summarizes data loaded by [DCC Loader](../dcc-etl/loader/README.md) so that it can be easily indexed by [DCC Indexer](../dcc-etl/indexer/README.md)
 
 Build
 ---
 
-From the command line:
+In the repository's root execute from the command line:
 
-	mvn package
+	mvn -am -pl dcc-etl-summarizer package
+
 

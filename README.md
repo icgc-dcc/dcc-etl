@@ -5,6 +5,8 @@ Parent project of the ETL pipeline modules.
 
 *Note:* This project is soon to be replaced with [`dcc-release`](https://github.com/icgc-dcc/dcc-release) which greatly simplifies the required infrastructure and implementation.
 
+The ETL project consumes clinical data submited by the users and prepares it to be consumed by the [DCC Portal application.](https://github.com/icgc-dcc/dcc-portal)
+
 Build
 ---
 
@@ -30,3 +32,9 @@ Additional Info
 ---
 - [Running ETL](ETL.md)
 - [Fathmm](Fathmm.md)
+
+Copyright and license
+---
+
+ - [License](LICENSE.md)
+ 

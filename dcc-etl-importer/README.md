@@ -6,7 +6,7 @@ Imports collections from persistent MongoDB databases to transient release datab
 Build
 ---
 
-From the command line:
+In the repository's root execute from the command line:
 
-	mvn package
+	mvn -am -pl dcc-etl-importer package
 

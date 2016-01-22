@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.etl;
 
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.common.core.Component.ETL;
@@ -101,7 +103,9 @@ public class EtlIntegrationTest {
   /**
    * Test configuration file.
    */
-  public static final String TEST_CONFIG_FILE = "src/test/conf/config.yaml";
+  private static final String CONFIG_FILE_ENV_NAME = "dcc.etltest.config";
+  private static final String CONFIG_PATH = "git/dcc-config/dcc-etl/etl_integration_test_config.yaml";
+  public static final String TEST_CONFIG_FILE = getConfigFile();
   private static final String TEST_GENES_IDS = "ENSG00000176105,ENSG00000156976,ENSG00000215529,ENSG00000204099";
   private static final String TEST_DIAGRAMS = "453279,1187000";
 
@@ -329,6 +333,28 @@ public class EtlIntegrationTest {
 
   private URI getEsUri() {
     return URIs.getUri(Protocol.ES, TEST_HOST, ELASTIC_SEARCH_PORT, ABSENT_STRING);
+  }
+
+  private static String getConfigFile() {
+    val configFile = isConfigFileSet() ? getConfigFileEnvValue() : resolveDefaultConfigFileLocation();
+    log.info("Configuration file: {}", configFile);
+
+    return configFile;
+  }
+
+  private static String resolveDefaultConfigFileLocation() {
+    val userHome = System.getenv("HOME");
+    checkState(!isNullOrEmpty(userHome), "Failed to resolve current user's home directory");
+
+    return userHome + File.separator + CONFIG_PATH;
+  }
+
+  private static boolean isConfigFileSet() {
+    return !isNullOrEmpty(getConfigFileEnvValue());
+  }
+
+  private static String getConfigFileEnvValue() {
+    return System.getenv(CONFIG_FILE_ENV_NAME);
   }
 
 }
