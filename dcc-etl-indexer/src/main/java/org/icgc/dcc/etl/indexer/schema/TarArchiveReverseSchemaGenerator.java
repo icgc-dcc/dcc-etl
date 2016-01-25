@@ -66,7 +66,7 @@ public class TarArchiveReverseSchemaGenerator {
      * Input - Archive
      */
     @Parameter(names = { "--archive-dir" }, description = "Input local or HDFS archive and VCF directory (e.g. /tmp)")
-    public String archiveDir = "/***REMOVED***";
+    public String archiveDir = "/tmp";
 
     /**
      * Output - Schema
