@@ -18,7 +18,7 @@
 
 
 export run_type="prod"
-export config_file="***REMOVED***/dcc-etl/conf/etl_prod.yaml"
+export config_file="$HOME/dcc-etl/conf/etl_prod.yaml"
 
 unset input_projects && declare -A input_projects
 input_projects[14]="ALL-US BOCA-UK BRCA-UK EOPC-DE ESAD-UK LAML-KR LINC-JP LIRI-JP MALY-DE ORCA-IN PACA-AU PACA-CA PBCA-DE" # PBCA-DE is by far the biggest (12GB)

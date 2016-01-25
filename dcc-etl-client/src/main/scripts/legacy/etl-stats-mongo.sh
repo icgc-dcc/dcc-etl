@@ -24,7 +24,7 @@ if [ -z "$1" ]
 fi
 
 db_name=${1?}
-passwd_file="***REMOVED***"
-dcc_username="***REMOVED***"
+passwd_file="<path_to_file>"
+dcc_username="<username>"
 dcc_passwd=$(cat ${passwd_file?} | awk -F'=' '/dev\.'${dcc_username?}'/{print $2}')
 mongo hmongodb-dev.res --eval "var dbName='${db_name?}', dccusername='${dcc_username?}', dccpasswd='${dcc_passwd?}'"  etl-stats-mongo.js

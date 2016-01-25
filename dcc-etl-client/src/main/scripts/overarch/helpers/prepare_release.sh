@@ -38,7 +38,7 @@ dcc_submission_server_dist_file_name=${dcc_submission_server_name}-${dcc_submiss
 dcc_etl_exporter_dist_file_name=${dcc_etl_exporter_name}-${dcc_etl_exporter_version}-dist.tar.gz
 
 # update libraries and their symbolic links
-cd ***REMOVED***/dcc-etl/lib
+cd ~/dcc-etl/lib
 wget ${artifactory_release_url}${dcc_etl_cli_name}/${dcc_etl_cli_version}/${dcc_etl_cli_dist_file_name}
 ln -sfn ${dcc_etl_cli_dist_file_name} dcc-etl.jar
 
@@ -51,18 +51,18 @@ ln -sfn ${dcc_submission_server_dist_file_name} dcc-validator.jar
 # update db-importer(and run if required) and exporter distribution
 ~/dcc-import/bin/install -l
 
-cd ***REMOVED***
+cd ~
 wget ${artifactory_release_url}dcc-etl-exporter/${dcc_etl_exporter_version}/${dcc_etl_exporter_dist_file_name}
 tar -xzf ${dcc_etl_exporter_dist_file_name}
 rm ${dcc_etl_exporter_dist_file_name}
 ln -sfn ${dcc_etl_exporter_name}-${dcc_etl_exporter_version} dcc-exporter
 
 # update sources
-cd ***REMOVED***/dcc-etl/git/dcc-etl
+cd ~/dcc-etl/git/dcc-etl
 git pull
 
 # update release number and dictionary version in shell scripts.
-run_helper=***REMOVED***/dcc-etl/git/dcc-etl/dcc-etl-client/src/main/scripts/overarch/helpers/run.sh
+run_helper=~/dcc-etl/git/dcc-etl/dcc-etl-client/src/main/scripts/overarch/helpers/run.sh
 sed -i "s/^release_number=.*/release_number=${release_number}/" ${run_helper}
 sed -i "s/^dictionary_version=.*/dictionary_version=\"${dictionary_version}\"/" ${run_helper}
 git add ${run_helper}
@@ -70,7 +70,7 @@ git commit -m "Updated release number and dictionary version."
 git push
 
 # update config files
-cd ***REMOVED***/dcc-etl/conf/
+cd ~/dcc-etl/conf/
 
 # update etl_prod.yml if needed
 
@@ -88,8 +88,8 @@ git push
 
 # create projects.json for release, currently there is no reliable way to automate this step.
 # get the formal list of projects to be included in and ensure each project exists in ICGC.org (https://icgc.org/icgc)
-# use the pre-existing project.json in ***REMOVED***/dcc-etl/conf/projects as a template 
+# use the pre-existing project.json in ~/dcc-etl/conf/projects as a template 
 # to create a new one with the project names and commit the new file.
-# cd ***REMOVED***/dcc-etl/conf/projects
+# cd ~/dcc-etl/conf/projects
 # touch icgc${release_number}.json 
 # git add . && git commit -m "Added project.json configuration file." && git push

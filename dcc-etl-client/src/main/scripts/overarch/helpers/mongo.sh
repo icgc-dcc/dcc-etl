@@ -17,7 +17,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Re-creates a database that contains the specified user
-# usage: ./mongo.sh hmongodb-dev.res admin admin XXX ***REMOVED*** YYY
+# usage: ./mongo.sh hmongodb-dev.res admin admin XXX <username> YYY
 
 # ===========================================================================
 

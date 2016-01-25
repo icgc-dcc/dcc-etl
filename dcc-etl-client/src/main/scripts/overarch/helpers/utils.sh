@@ -43,7 +43,7 @@ function download_dictionary() {
 	create_dir_if_doesnt_exist ${parent_output_dir?}
 
 	echo "DEPRECATED... This points to the public facing app"
-	curl -s -H "Accept: application/json" ***REMOVED*** > ${dictionary_output_file?}
+	curl -s -H "Accept: application/json" <dictionary_host> > ${dictionary_output_file?}
 
 
 	dictionary_version=$(get_dictionary_version ${dictionary_output_file?})
@@ -141,7 +141,6 @@ function email() {
 	recipients=$(get_config_value ${config_file?} ${RECIPIENTS_CONFIG_KEY?})
   subject="ETL run '${job_id?}' on '${HOSTNAME?}' ${status?}"
   body="$(cat ${attempt_manifest_file?})"
-  #sendemail -f ${sender?} -t ${recipients?} -u ${subject?} -m ${body?} -s ${smtp_server?}
   echo -e "${body?}" | mail -s "${subject?}" "${recipients?}" -aFrom:${sender?}
 }
 

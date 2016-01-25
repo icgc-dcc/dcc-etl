@@ -51,9 +51,9 @@ docker run \
  -v $etl_dir:/etl \
  -v /tmp:/tmp \
  \
- -v ***REMOVED***/dcc-exporter/:/dcc-exporter \
- -v ***REMOVED***/dcc-exporter/hadoop/conf:/etc/hadoop/conf \
- -v ***REMOVED***/dcc-exporter/hbase/conf:/etc/hbase/conf \
+ -v $HOME/dcc-exporter/:/dcc-exporter \
+ -v $HOME/dcc-exporter/hadoop/conf:/etc/hadoop/conf \
+ -v $HOME/dcc-exporter/hbase/conf:/etc/hbase/conf \
  \
  -v /nfs/hadoop/workspace/backups/dcc-etl/dcc-etl-indexer/:/nfs/hadoop/workspace/backups/dcc-etl/dcc-etl-indexer/ \
  \

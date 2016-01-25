@@ -1,6 +1,0 @@
-altIds.$: STRING
-altIds: ARRAY
-id: STRING
-name: STRING
-source: STRING
-type: STRING

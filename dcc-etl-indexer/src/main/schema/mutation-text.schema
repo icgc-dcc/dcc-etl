@@ -1,6 +1,0 @@
-geneMutations.$: STRING
-geneMutations: ARRAY
-id: STRING
-mutation: STRING
-start: STRING
-type: STRING
