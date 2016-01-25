@@ -157,7 +157,7 @@ public class DonorCentricTarArchiveReport {
      * Input - Archive
      */
     @Parameter(names = { "--archive-dir" }, description = "Input local or HDFS archive and VCF directory (e.g. /tmp, /icgc/releases)")
-    public String archiveDir = "/***REMOVED***";
+    public String archiveDir = "/Users/btiernay";
 
     /**
      * Hadoop

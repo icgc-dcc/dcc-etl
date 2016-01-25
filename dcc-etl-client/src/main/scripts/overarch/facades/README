@@ -7,7 +7,7 @@ To run the ETL:
 
 - scp resulting jar to 
 
-  hproxy-{dev,dcc}:***REMOVED***/dcc-etl/lib
+  hproxy-{dev,dcc}:$HOME/dcc-etl/lib
 
 - create two links in that directory (for now):
 

@@ -42,7 +42,7 @@ COUNTS = [
 
 # ===========================================================================
 
-index_dump_file = sys.argv[1] # curl http://***REMOVED***:9200/dcc-release-load-prod-08d-49-icgc16-3/project/_search?pretty=1 -d '{size:1000}'
+index_dump_file = sys.argv[1] # curl http://<es_host>:9200/dcc-release-load-prod-08d-49-icgc16-3/project/_search?pretty=1 -d '{size:1000}'
 projects_json_file = sys.argv[2] # in git: dcc-etl/dcc-etl-client/src/main/scripts/overarch/conf/icgc16.json
 
 # ===========================================================================

@@ -22,7 +22,7 @@ set -o nounset
 
 # ===========================================================================
 
-git_dir=${1?} && shift # ***REMOVED***/dcc-etl/git/dcc-etl
+git_dir=${1?} && shift # ~/dcc-etl/git/dcc-etl
 jar_file_name=${1?} && shift
 projects_file_name=${1?} && shift
 release_prefix=${1?} && shift
@@ -71,7 +71,7 @@ fi
 # ===========================================================================
 
 overarch_dir=dcc-etl-client/src/main/scripts/overarch
-real_etl_dir=***REMOVED***/dcc-etl
+real_etl_dir=~/dcc-etl
 
 if $use_docker; then
  etl_dir="/etl"

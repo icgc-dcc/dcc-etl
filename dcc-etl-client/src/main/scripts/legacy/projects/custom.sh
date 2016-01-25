@@ -18,7 +18,7 @@
 
 
 export run_type="custom"
-export config_file="***REMOVED***/dcc-etl/conf/etl_dev.yaml"
+export config_file="$HOME/dcc-etl/conf/etl_dev.yaml"
 
 unset input_projects && declare -A input_projects
 input_projects[14]=""

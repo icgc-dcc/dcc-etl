@@ -17,7 +17,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Helps generating the JSON file that describes where to find data to the overarch ETL script, mostly meant to be a starting point
-# One can get the list of signed off projects with something like: mongo <mongo_url>/icgc -u***REMOVED*** -p$REPLY --quiet --eval "db.Release.find({name:'ICGC16'}, {name:1, 'submissions.projectKey': 1, 'submissions.state': 1}).forEach(printjson)" | grep -B1 '"SIGNED_OFF"' | awk -v RS=ignoreme '{gsub(/,\n/,"\t")}1' | awk -F'"' '{print $4}' | awk '!/^ #/ && !/^[ \t]$/ && !/^$/' | sort
+# One can get the list of signed off projects with something like: mongo <mongo_url>/icgc -udcc-submitter -p$REPLY --quiet --eval "db.Release.find({name:'ICGC16'}, {name:1, 'submissions.projectKey': 1, 'submissions.state': 1}).forEach(printjson)" | grep -B1 '"SIGNED_OFF"' | awk -v RS=ignoreme '{gsub(/,\n/,"\t")}1' | awk -F'"' '{print $4}' | awk '!/^ #/ && !/^[ \t]$/ && !/^$/' | sort
 # ===========================================================================
 import json,re,os
 

@@ -38,7 +38,7 @@ readonly execute=$2
 readonly image=icgcdcc/cdh
 readonly mount=$base:/app
 readonly command="hadoop-fuse-dfs ro dfs://<host>:8020 /hdfs/dcc &> /dev/null ; cd /app ; $execute" # TODO: get NN from config
-readonly etl_dir=***REMOVED***/dcc-etl
+readonly etl_dir=/u/dcc_dev/dcc-etl
 
 # Pull/ Update Docker image
 docker pull $image
@@ -51,9 +51,9 @@ docker run \
  -v $etl_dir:/etl \
  -v /tmp:/tmp \
  \
- -v ***REMOVED***/dcc-exporter/:/dcc-exporter \
- -v ***REMOVED***/dcc-exporter/hadoop/conf:/etc/hadoop/conf \
- -v ***REMOVED***/dcc-exporter/hbase/conf:/etc/hbase/conf \
+ -v $HOME/dcc-exporter/:/dcc-exporter \
+ -v $HOME/dcc-exporter/hadoop/conf:/etc/hadoop/conf \
+ -v $HOME/dcc-exporter/hbase/conf:/etc/hbase/conf \
  \
  -v /nfs/hadoop/workspace/backups/dcc-etl/dcc-etl-indexer/:/nfs/hadoop/workspace/backups/dcc-etl/dcc-etl-indexer/ \
  \

@@ -20,7 +20,7 @@
 #
 # Runs the full ETL component with pre-processing
 # usage: ./overarch.sh /path/to/etl/dir my_release_prefix my_release_number /local/path/to/default/data /path/to/projects/file/to/source /path/to/jar/file /path/to/config/file /path/to/dictionary/file components_to_run
-# example: ./overarch.sh ***REMOVED***/dcc-etl ICGC 16 /hdfs/dcc/icgc/submission/ICGC16 ***REMOVED***/dcc-etl/lib/dcc-etl.jar ./conf/small.json conf/etl_prod.yaml conf/0.8d.json concatenator-annotator
+# example: ./overarch.sh $HOME/dcc-etl ICGC 16 /hdfs/dcc/icgc/submission/ICGC16 $HOME/dcc-etl/lib/dcc-etl.jar ./conf/small.json conf/etl_prod.yaml conf/0.8d.json concatenator-annotator
 
 # ===========================================================================
 cd $(dirname "$0")

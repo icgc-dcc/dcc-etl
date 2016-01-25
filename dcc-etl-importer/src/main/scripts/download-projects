@@ -27,9 +27,9 @@ if [ "$(basename $PWD)" != "dcc-import" ]; then
 fi
 
 github_username=<username>
-data_dir="***REMOVED***/dcc-import/data"
+data_dir="/u/dcc_dev/dcc-import/data"
 
-passwd_file="***REMOVED***"
+passwd_file="/nfs/dcc_secure/dcc/passwd"
 github_passwd=$(cat ${passwd_file?} | awk -F'=' '/github\.'${github_username?}'/{print $2}')
 mv ${data_dir?}/Project.json ${data_dir?}/Project.json.bak || :
 curl -u ${github_username?}:${github_passwd?} -L -o ${data_dir?}/Projects.json https://raw.github.com/icgc-dcc/dcc/develop/dcc-etl/dcc-etl-client/src/test/resources/dcc-project/Project.json?login=$1&token=<token_id>
