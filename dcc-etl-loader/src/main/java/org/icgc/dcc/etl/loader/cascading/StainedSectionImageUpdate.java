@@ -22,7 +22,6 @@ import static cascading.tuple.Fields.REPLACE;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_DIGITAL_IMAGE_OF_STAINED_SECTION;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_SPECIMEN_ID;
 import static org.icgc.dcc.common.core.model.FileTypes.FileType.SPECIMEN_TYPE;
-import static org.icgc.dcc.common.core.util.URLs.isUrl;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixedFields;
 
 import java.util.Properties;
@@ -74,7 +73,7 @@ public class StainedSectionImageUpdate extends SubAssembly {
       public void operate(@SuppressWarnings("rawtypes") FlowProcess flowProcess, FunctionCall<Void> call) {
         val specimenId = call.getArguments().getString(SPECIMEN_ID_FIELD);
         val imageUrl = call.getArguments().getString(DIGITAL_IMAGE_OF_STAINED_SECTION_FIELD);
-        val specimenUrl = isReplaceImageUrl(imageUrl) ? SPECIMEN_URLS.get(specimenId) : imageUrl;
+        val specimenUrl = isReplaceImageUrl(specimenId) ? SPECIMEN_URLS.get(specimenId) : imageUrl;
 
         // Append field
         call.getOutputCollector().add(new Tuple(specimenId, specimenUrl));
@@ -92,12 +91,8 @@ public class StainedSectionImageUpdate extends SubAssembly {
     return specimenUrls;
   }
 
-  private static boolean isReplaceImageUrl(String imageUrl) {
-    if (imageUrl != null && isUrl(imageUrl.trim())) {
-      return false;
-    }
-
-    return true;
+  private static boolean isReplaceImageUrl(String specimenId) {
+    return specimenId.startsWith("TCGA-");
   }
 
 }
