@@ -319,6 +319,7 @@ public class EtlIntegrationTest {
   }
 
   @SneakyThrows
+  @SuppressWarnings("resource")
   private TransportClient getIndexClient() {
     URI esUri = getEsUri();
     return new TransportClient().addTransportAddress(
