@@ -50,7 +50,7 @@ special_component="lisi"
 # Dirs
 
 fuse_mount_point="/hdfs/dcc"
-overarch_cluster_output_dir="/icgc/overarch"
+overarch_cluster_output_dir="/icgc/release"
 
 jobs_dir_name="jobs"
 releases_dir_name="releases"
