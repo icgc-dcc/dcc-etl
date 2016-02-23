@@ -598,6 +598,7 @@ public enum DocumentType {
                           "biotype",
                           "chromosome",
                           "end",
+                          "external_db_ids.uniprotkb_swissprot",
                           "sets",
                           "start",
                           "strand",

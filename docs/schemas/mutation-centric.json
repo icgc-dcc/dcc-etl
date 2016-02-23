@@ -285,6 +285,21 @@
                 "id": "https://dcc.icgc.org/mutation-centric/transcript/0/gene/end",
                 "type": "integer"
               },
+              "external_db_ids": {
+                "id": "https://dcc.icgc.org/mutation-centric/transcript/0/gene/external_db_ids",
+                "type": "object",
+                "properties": {
+                  "uniprotkb_swissprot": {
+                    "id": "https://dcc.icgc.org/mutation-centric/transcript/0/gene/external_db_ids/uniprotkb_swissprot",
+                    "type": "array",
+                    "items": {
+                      "id": "https://dcc.icgc.org/mutation-centric/transcript/0/gene/external_db_ids/uniprotkb_swissprot/0",
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
               "start": {
                 "id": "https://dcc.icgc.org/mutation-centric/transcript/0/gene/start",
                 "type": "integer"
