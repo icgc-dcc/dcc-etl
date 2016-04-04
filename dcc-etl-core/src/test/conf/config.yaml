@@ -50,7 +50,7 @@ identifierServiceUri: "http://localhost:6381"
 projectMongoUri: "mongodb://localhost/dcc-project"
 
 # Gene MongoDB URI
-geneMongoUri: "mongodb://localhost/dcc-genome"
+geneMongoUri: "mongodb://localhost/dcc-import"
 
 # CGHub BSON dump
 cghubFile: "target/cghub.bson"

@@ -109,7 +109,7 @@ if [ "${mode?}" == "list" ]; then
  location="mongo"
  mongo ${mongo_server?}/admin -u${mongo_user?} -p${mongo_passwd?} --quiet --eval "printjson(db.adminCommand('listDatabases'))" \
   | python -c 'import json,sys; keys = json.loads(sys.stdin.read())["databases"]; print "\n".join([str(x["name"]) for x in keys]);' \
-  | awk '!/^dcc-project$/ && !/^local$/ && !/^dcc-genome$/ && !/^admin$/ && !/^seq-meta$/ && !/^test$/ && !/^icgc/' \
+  | awk '!/^dcc-project$/ && !/^local$/ && !/^dcc-import$/ && !/^admin$/ && !/^seq-meta$/ && !/^test$/ && !/^icgc/' \
   | exclude_protected \
   | sort | awk -F$'\t' -v LOCATION=${location?} '{print LOCATION "\t" $0}'
  echo
