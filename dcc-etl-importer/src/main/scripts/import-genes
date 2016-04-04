@@ -26,4 +26,4 @@ if [ "$(basename $PWD)" != "dcc-import" ]; then
  echo "Must be in dcc-import directory"
  exit 1
 fi
-java -jar lib/dcc-genes-1.6-SNAPSHOT.jar -d mongodb://${dcc_username?}:${dcc_passwd?}@${mongodb_server?}/dcc-genome.Gene -f data/genes.bson
+java -jar lib/dcc-genes-1.6-SNAPSHOT.jar -d mongodb://${dcc_username?}:${dcc_passwd?}@${mongodb_server?}/dcc-import.Gene -f data/genes.bson
