@@ -31,7 +31,7 @@ Sub-system modules:
 Additional Info
 ---
 - [Running ETL](ETL.md)
-- [Fathmm](Fathmm.md)
+- [Fathmm](FATHMM.md)
 
 Copyright and license
 ---
