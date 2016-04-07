@@ -10,7 +10,9 @@
         "donor.disease_status_last_followup",
         "donor.donor_relapse_type",
         "donor._summary",
-        "ssm.gene",
+        "ssm.gene.end",
+        "ssm.gene.start",
+        "ssm.gene.go_term",
         "ssm.mutation_type"
       ]
     },
