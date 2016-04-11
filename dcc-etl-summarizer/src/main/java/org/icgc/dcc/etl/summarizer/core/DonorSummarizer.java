@@ -19,6 +19,7 @@ package org.icgc.dcc.etl.summarizer.core;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.nullToEmpty;
+import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.SSM_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENES;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENE_GENE_ID;
@@ -26,10 +27,11 @@ import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENE_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
-import static org.icgc.dcc.common.json.Jackson.DEFAULT;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
 import static org.icgc.dcc.etl.summarizer.util.Donors.getAgeGroup;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 
@@ -40,9 +42,6 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code Donor} collection information.

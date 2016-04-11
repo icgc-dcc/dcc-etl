@@ -21,8 +21,8 @@ import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Preconditions.checkState;
 import static org.elasticsearch.common.xcontent.XContentType.JSON;
 import static org.elasticsearch.common.xcontent.XContentType.SMILE;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatBytes;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 
 import java.io.IOException;
 

@@ -30,9 +30,8 @@ import static org.icgc.dcc.common.core.model.FieldNames.GENE_PROJECT_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_DONOR_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_TYPE;
-
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
 
 import java.util.HashMap;
 import java.util.Map;

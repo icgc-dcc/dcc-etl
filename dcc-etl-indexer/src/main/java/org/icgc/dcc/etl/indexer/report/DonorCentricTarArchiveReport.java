@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.indexer.report;
 
 import static com.google.common.collect.Maps.newHashMap;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getDonorGenes;
 import static org.icgc.dcc.etl.indexer.model.CollectionFieldAccessors.getGeneGeneSets;
 import static org.icgc.dcc.etl.indexer.model.DocumentType.DONOR_CENTRIC_TYPE;

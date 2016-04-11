@@ -22,20 +22,20 @@ import static com.google.common.base.Stopwatch.createStarted;
 import static java.util.stream.Collectors.toMap;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SETS_TYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_SET_ID;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
 
 import java.util.List;
 import java.util.Map;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code GeneSet} collection information.

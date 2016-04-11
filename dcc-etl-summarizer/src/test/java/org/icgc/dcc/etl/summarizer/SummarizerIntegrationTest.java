@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.summarizer;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.Component.SUMMARIZER;
+import static org.icgc.dcc.common.core.dcc.Component.SUMMARIZER;
 import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.CNGV_TYPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.CNSM_TYPE;
 import static org.icgc.dcc.common.core.model.FeatureTypes.FeatureType.EXP_ARRAY_TYPE;
@@ -111,8 +111,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 import org.bson.types.ObjectId;
-import org.icgc.dcc.common.core.Component;
+import org.icgc.dcc.common.core.dcc.Component;
 import org.icgc.dcc.common.core.model.ReleaseCollection;
 import org.icgc.dcc.common.test.Tests;
 import org.icgc.dcc.common.test.mongodb.EmbeddedMongo;
@@ -131,10 +135,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.DB;
-
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SummarizerIntegrationTest {

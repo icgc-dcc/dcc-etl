@@ -23,7 +23,7 @@ import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_FUNCTIONAL_IMPACT_PREDICTION_SUMMARY;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCE_TYPES;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.etl.importer.fi.core.FunctionalImpactCalculator.calculateImpact;
 

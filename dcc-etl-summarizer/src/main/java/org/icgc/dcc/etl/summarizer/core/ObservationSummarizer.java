@@ -21,8 +21,10 @@ import static com.google.common.base.Stopwatch.createStarted;
 import static org.icgc.dcc.common.core.model.FieldNames.MONGO_INTERNAL_ID;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES;
 import static org.icgc.dcc.common.core.model.FieldNames.OBSERVATION_CONSEQUENCES_CONSEQUENCE_TYPE;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.bson.types.ObjectId;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
@@ -31,9 +33,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.google.common.collect.Sets;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code Observation} collection information.

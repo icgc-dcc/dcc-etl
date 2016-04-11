@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.pruner;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 
 import java.io.IOException;
 

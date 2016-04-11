@@ -21,9 +21,9 @@ import static com.mongodb.Bytes.QUERYOPTION_NOTIMEOUT;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Formats.formatBytes;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
 import static org.icgc.dcc.etl.indexer.factory.JongoFactory.newJongo;
 
 import java.io.IOException;

@@ -29,7 +29,7 @@ import static java.lang.System.out;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang.StringUtils.join;
 import static org.apache.commons.lang.StringUtils.repeat;
-import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
+import static org.icgc.dcc.common.core.dcc.Versions.getScmInfo;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -176,7 +176,8 @@ public class ClientMain {
         options.types.isEmpty() ?
             ImmutableList.copyOf(DocumentType.values()) :
             options.types,
-        fromNullable(options.alias));
+        fromNullable(options.alias),
+        fromNullable(options.indexName));
     log.info("Finished ETL!\n");
   }
 

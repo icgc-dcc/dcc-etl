@@ -73,6 +73,9 @@ public class Options {
   @Parameter(names = { "--alias" }, description = "Alias the produced index with the specified value after first removing the alias from all existing indexes")
   public String alias;
 
+  @Parameter(names = { "--index-name" }, description = "Elasticsearch index name. In case the ETL run is resumed from a different run. E.g. icgc20-0-9")
+  public String indexName;
+
   @Parameter(names = { "-v", "--version" }, help = true, description = "Show version information")
   public boolean version;
 

@@ -19,8 +19,8 @@ package org.icgc.dcc.etl.indexer.core;
 
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
 import static org.icgc.dcc.etl.indexer.model.DocumentType.GENE_TYPE;
 
 import java.util.List;

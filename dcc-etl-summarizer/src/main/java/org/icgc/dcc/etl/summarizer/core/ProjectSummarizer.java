@@ -26,13 +26,16 @@ import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_EXPERIMENTAL_A
 import static org.icgc.dcc.common.core.model.FieldNames.EXPERIMENTAL_ANALYSIS_PERFORMED_DONOR_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.EXPERIMENTAL_ANALYSIS_PERFORMED_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_SUMMARY_REPOSITORY;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
 import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
@@ -40,9 +43,6 @@ import org.icgc.dcc.etl.summarizer.repository.ReleaseRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Stopwatch;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Summarizes {@code Project} collection information.

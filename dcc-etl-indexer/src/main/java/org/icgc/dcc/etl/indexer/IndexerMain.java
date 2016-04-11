@@ -28,8 +28,7 @@ import static java.lang.System.out;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang.StringUtils.join;
 import static org.apache.commons.lang.StringUtils.repeat;
-
-import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
+import static org.icgc.dcc.common.core.dcc.Versions.getScmInfo;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newDistributedService;
 import static org.icgc.dcc.etl.indexer.factory.DocumentServiceFactory.newLocalService;
 import static org.icgc.dcc.etl.indexer.factory.TransportClientFactory.newTransportClient;

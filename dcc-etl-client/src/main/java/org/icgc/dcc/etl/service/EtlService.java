@@ -23,8 +23,8 @@ import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.commons.lang.StringUtils.repeat;
 import static org.apache.hadoop.fs.CommonConfigurationKeysPublic.FS_DEFAULT_NAME_KEY;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatDuration;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatPercent;
+import static org.icgc.dcc.common.core.util.Formats.formatDuration;
+import static org.icgc.dcc.common.core.util.Formats.formatPercent;
 import static org.icgc.dcc.common.core.util.Joiners.PATH;
 import static org.icgc.dcc.common.core.util.Protocol.FILE;
 import static org.icgc.dcc.common.core.util.URIs.LOCAL_ROOT;
@@ -89,7 +89,8 @@ public class EtlService {
       @NonNull final String workingDir,
       @NonNull final List<String> processNames,
       @NonNull final List<DocumentType> documentTypes,
-      @NonNull final Optional<String> alias) {
+      @NonNull final Optional<String> alias,
+      @NonNull final Optional<String> indexName) {
 
     boolean all = processNames.isEmpty();
     boolean imports = all || EtlAction.IMPORT.in(processNames);
@@ -135,7 +136,7 @@ public class EtlService {
     if (index) {
       logBanner("Indexing...");
       Stopwatch watch = Stopwatch.createStarted();
-      index(jobId, releaseName, documentTypes, alias, getIndexerOutputDir(workingDir));
+      index(jobId, releaseName, documentTypes, alias, getIndexerOutputDir(workingDir), indexName);
 
       durations.put(
           EtlAction.INDEX,
@@ -203,8 +204,9 @@ public class EtlService {
       @NonNull final String releaseName,
       @NonNull final List<DocumentType> types,
       @NonNull final Optional<String> alias,
-      @NonNull final String outputDir) {
-    val indexName = getIndexName(jobId);
+      @NonNull final String outputDir,
+      @NonNull final Optional<String> optIndexName) {
+    val indexName = optIndexName.isPresent() ? optIndexName.get() : getIndexName(jobId);
     val databaseName = jobId;
     val mongoUri = getMongoUri(config.getReleaseMongoUri(), databaseName);
 

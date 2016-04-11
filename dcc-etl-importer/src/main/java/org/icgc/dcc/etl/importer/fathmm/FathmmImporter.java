@@ -17,8 +17,8 @@
  */
 package org.icgc.dcc.etl.importer.fathmm;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatRate;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatRate;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

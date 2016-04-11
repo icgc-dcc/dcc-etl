@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.indexer.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
+import static org.icgc.dcc.common.core.util.Formats.formatBytes;
 import static org.icgc.dcc.etl.indexer.util.DirectMemoryUtils.getDirectMemorySize;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
