@@ -27,8 +27,8 @@ import static org.icgc.dcc.common.cascading.TupleEntries.OBJECT_TO_TUPLE_ENTRY_C
 import static org.icgc.dcc.common.cascading.TupleEntries.getFieldNames;
 import static org.icgc.dcc.common.cascading.TupleEntries.getTuple;
 import static org.icgc.dcc.common.cascading.TupleEntries.getTupleEntry;
+import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
-import static org.icgc.dcc.common.json.Jackson.DEFAULT;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.generatedFieldName;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.getPrefix;
 import static org.icgc.dcc.etl.loader.flow.LoaderFields.prefixFieldNames;
@@ -58,6 +58,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
+
 import org.icgc.dcc.common.core.model.ControlFieldsReference;
 import org.icgc.dcc.common.core.model.DataType;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
@@ -73,6 +78,10 @@ import org.icgc.dcc.etl.loader.service.LoaderModel;
 import org.icgc.dcc.etl.loader.service.LoaderModel.Occurence;
 import org.icgc.dcc.etl.loader.service.LoaderModel.Submission;
 
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+import cascading.tuple.TupleEntry;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -84,14 +93,6 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
-
-import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
-import cascading.tuple.TupleEntry;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
 
 /**
  * 
@@ -432,9 +433,9 @@ public class LoaderHandler implements TupleEntryToDBObjectTransformer {
 
     return isSensitive(reference, fileType, unprefixedFieldName, redacting) ?
 
-    LoaderModel.SENSITIVE_VALUE_REPLACEMENT : extractObjectValue(
-        entry,
-        prefixedFieldName(fileType, unprefixedFieldName));
+        LoaderModel.SENSITIVE_VALUE_REPLACEMENT : extractObjectValue(
+            entry,
+            prefixedFieldName(fileType, unprefixedFieldName));
   }
 
   private static Object extractObjectValue(TupleEntry entry, String prefixedLoaderFieldName) {

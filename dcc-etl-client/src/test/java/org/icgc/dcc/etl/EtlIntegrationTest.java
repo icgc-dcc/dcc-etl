@@ -21,11 +21,11 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.common.core.Component.ETL;
-import static org.icgc.dcc.common.core.DccResources.CODELISTS_JSON_FILE_NAME;
-import static org.icgc.dcc.common.core.DccResources.DICTIONARY_JSON_FILE_NAME;
-import static org.icgc.dcc.common.core.DccResources.getCodeListsDccResource;
-import static org.icgc.dcc.common.core.DccResources.getDictionaryDccResource;
+import static org.icgc.dcc.common.core.dcc.Component.ETL;
+import static org.icgc.dcc.common.core.dcc.DccResources.CODELISTS_JSON_FILE_NAME;
+import static org.icgc.dcc.common.core.dcc.DccResources.DICTIONARY_JSON_FILE_NAME;
+import static org.icgc.dcc.common.core.dcc.DccResources.getCodeListsDccResource;
+import static org.icgc.dcc.common.core.dcc.DccResources.getDictionaryDccResource;
 import static org.icgc.dcc.common.core.model.IndexType.DONOR_CENTRIC_TYPE;
 import static org.icgc.dcc.common.core.model.IndexType.DONOR_TYPE;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
@@ -57,12 +57,17 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Set;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.hadoop.fs.Path;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.icgc.dcc.common.client.api.ICGCClient;
-import org.icgc.dcc.common.core.Component;
+import org.icgc.dcc.common.core.dcc.Component;
 import org.icgc.dcc.common.core.mail.Mailer;
 import org.icgc.dcc.common.core.model.IndexType;
 import org.icgc.dcc.common.core.util.Protocol;
@@ -91,11 +96,6 @@ import com.google.common.collect.ImmutableSet;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EtlIntegrationTest {

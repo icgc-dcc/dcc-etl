@@ -112,6 +112,10 @@ public final class LoaderInput {
 
     Path concatenatorProjectDir = new Path(getConcatenatorProjectInputDir(dataParentDir, projectKey));
     for (val fileType : FileType.values()) {
+      if (fileType.isDeprecated()) {
+        continue;
+      }
+
       Path concatenatedFile = new Path(concatenatorProjectDir, fileType.getHarmonizedOutputFileName());
       if (isFile(fileSystem, concatenatedFile)) {
         builder.put(fileType, concatenatedFile.toUri().toString());

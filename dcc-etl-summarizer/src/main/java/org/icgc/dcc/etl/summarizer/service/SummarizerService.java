@@ -25,8 +25,8 @@ import static org.icgc.dcc.common.core.model.ReleaseCollection.MUTATION_COLLECTI
 import static org.icgc.dcc.common.core.model.ReleaseCollection.OBSERVATION_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.PROJECT_COLLECTION;
 import static org.icgc.dcc.common.core.model.ReleaseCollection.RELEASE_COLLECTION;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatDuration;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatDuration;
 
 import java.net.UnknownHostException;
 

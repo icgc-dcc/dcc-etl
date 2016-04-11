@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.core.util;
 
 import static com.google.common.base.Preconditions.checkState;
 import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.common.core.Component.CONCATENATOR;
+import static org.icgc.dcc.etl.core.model.Component.CONCATENATOR;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;

@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.indexer.io;
 
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.AUTO_CLOSE_TARGET;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
+import static org.icgc.dcc.common.core.util.Formats.formatBytes;
 import static org.icgc.dcc.etl.indexer.factory.JacksonFactory.newDefaultMapper;
 
 import java.io.IOException;

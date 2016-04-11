@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.etl.indexer.report;
 
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;

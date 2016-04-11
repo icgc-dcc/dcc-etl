@@ -25,13 +25,18 @@ import static org.elasticsearch.action.bulk.BulkProcessor.builder;
 import static org.elasticsearch.client.Requests.indexRequest;
 import static org.elasticsearch.common.unit.ByteSizeUnit.MB;
 import static org.elasticsearch.common.xcontent.XContentType.SMILE;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatBytes;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import static org.icgc.dcc.etl.indexer.factory.JacksonFactory.newSmileWriter;
 
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.action.bulk.BulkProcessor;
@@ -47,11 +52,6 @@ import org.icgc.dcc.etl.indexer.model.DocumentType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectWriter;
-
-import lombok.Getter;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Output destination for {@link DefaultDocument} instances to be written.

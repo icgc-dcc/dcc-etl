@@ -19,7 +19,7 @@ package org.icgc.dcc.etl.loader.core;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.icgc.dcc.common.core.model.FileTypes.FileSubType.MANDATORY_SUBTYPES;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
+import static org.icgc.dcc.common.core.util.Formats.formatBytes;
 
 import java.util.Set;
 

@@ -18,6 +18,7 @@
 package org.icgc.dcc.etl.summarizer.repository;
 
 import static java.lang.String.format;
+import static org.icgc.dcc.common.core.json.Jackson.asArrayNode;
 import static org.icgc.dcc.common.core.model.FieldNames.AVAILABLE_DATA_TYPES;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_AGE_AT_DIAGNOSIS;
 import static org.icgc.dcc.common.core.model.FieldNames.DONOR_GENES;
@@ -56,7 +57,6 @@ import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_LIBRARY_ST
 import static org.icgc.dcc.common.core.model.FieldNames.SEQUENCE_DATA_REPOSITORY;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SAMPLE_COUNT;
 import static org.icgc.dcc.common.core.model.FieldNames.TOTAL_SPECIMEN_COUNT;
-import static org.icgc.dcc.common.json.Jackson.asArrayNode;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.extractStudies;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapLongValues;
 import static org.icgc.dcc.etl.summarizer.util.JsonNodes.mapMultipleTextValues;
@@ -66,6 +66,10 @@ import static org.icgc.dcc.etl.summarizer.util.JsonNodes.textValues;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import org.bson.types.ObjectId;
 import org.icgc.dcc.common.core.model.FeatureTypes.FeatureType;
@@ -77,10 +81,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 public class ReleaseRepository {

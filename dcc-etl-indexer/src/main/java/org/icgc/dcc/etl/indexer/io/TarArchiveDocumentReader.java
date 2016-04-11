@@ -18,7 +18,7 @@
 package org.icgc.dcc.etl.indexer.io;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.AUTO_CLOSE_SOURCE;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import static org.icgc.dcc.etl.indexer.io.TarArchiveDocumentWriter.MAPPING_FILE_NAME;
 import static org.icgc.dcc.etl.indexer.io.TarArchiveDocumentWriter.SETTINGS_FILE_NAME;
 

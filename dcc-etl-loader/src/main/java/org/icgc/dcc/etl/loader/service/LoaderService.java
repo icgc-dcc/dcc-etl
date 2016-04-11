@@ -19,13 +19,13 @@ package org.icgc.dcc.etl.loader.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang.StringUtils.repeat;
+import static org.icgc.dcc.common.core.json.Jackson.formatPrettyJson;
 import static org.icgc.dcc.common.core.model.Configurations.FILTER_ALL_CONTROLLED;
 import static org.icgc.dcc.common.core.model.Configurations.IDENTIFIER_CLIENT_CLASS_NAME_KEY;
 import static org.icgc.dcc.common.core.model.Configurations.IDENTIFIER_KEY;
 import static org.icgc.dcc.common.core.model.Configurations.LOADER_MAX_CONCURRENT_FLOWS;
 import static org.icgc.dcc.common.core.model.Configurations.RELEASE_MONGO_URI_KEY;
 import static org.icgc.dcc.common.core.util.Joiners.INDENT;
-import static org.icgc.dcc.common.json.Jackson.formatPrettyJson;
 import static org.icgc.dcc.etl.loader.mongodb.MongoDbProcessing.postProcessMongoDb;
 import static org.icgc.dcc.submission.dictionary.util.Dictionaries.readCodeList;
 import static org.icgc.dcc.submission.dictionary.util.Dictionaries.readDictionary;
@@ -33,6 +33,11 @@ import static org.icgc.dcc.submission.dictionary.util.Dictionaries.readDictionar
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.Set;
+
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.icgc.dcc.common.core.model.SubmissionModel;
@@ -51,11 +56,6 @@ import org.icgc.dcc.etl.loader.service.LoaderModel.Submission;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mongodb.MongoClientURI;
-
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Loads a release.

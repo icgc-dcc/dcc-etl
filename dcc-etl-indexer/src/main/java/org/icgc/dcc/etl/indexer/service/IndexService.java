@@ -25,9 +25,9 @@ import static com.google.common.collect.ImmutableMap.of;
 import static com.google.common.io.Resources.getResource;
 import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatBytes;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
-import static org.icgc.dcc.common.core.util.VersionUtils.getScmInfo;
+import static org.icgc.dcc.common.core.dcc.Versions.getScmInfo;
+import static org.icgc.dcc.common.core.util.Formats.formatBytes;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import static org.icgc.dcc.etl.indexer.factory.JacksonFactory.newDefaultMapper;
 
 import java.io.Closeable;
