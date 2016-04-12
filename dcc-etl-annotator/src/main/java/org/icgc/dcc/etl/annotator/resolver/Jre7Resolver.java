@@ -78,9 +78,6 @@ public class Jre7Resolver extends DirectoryResourceResolver<File> {
     init();
 
     val version = JRE_VERSION;
-    val downloadUrl = getDownloadUrl();
-    val http = connect(downloadUrl);
-
     val dataDir = new File(getResourceDir(), "jre");
     val versionDir = new File(dataDir, version);
     if (versionDir.exists()) {
@@ -89,6 +86,8 @@ public class Jre7Resolver extends DirectoryResourceResolver<File> {
 
     checkState(versionDir.mkdirs(), "Could not make data version directory '%s'", versionDir);
 
+    val downloadUrl = getDownloadUrl();
+    val http = connect(downloadUrl);
     log.info("Downloading JRE '{}'...", version);
     download(http.getInputStream(), versionDir);
     log.info("Finished downloading JRE");
