@@ -40,7 +40,7 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
     <module>dcc-etl-summarizer</module>
     <module>dcc-etl-client</module>
     <module>dcc-etl-annotator</module>
-    <module>dcc-etl-resources</module>
+    
   </modules>
 
   <repositories>
@@ -112,6 +112,11 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
         <groupId>${project.groupId}</groupId>
         <artifactId>dcc-id-client</artifactId>
         <version>${dcc-id.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-release-resources</artifactId>
+        <version>${dcc-release.version}</version>
       </dependency>
 
       <!-- JSON -->
@@ -193,6 +198,7 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
     <dcc-submission-core.version>4.0.12</dcc-submission-core.version>
     <dcc-import.version>4.1.0</dcc-import.version>
     <dcc-id.version>4.0.1</dcc-id.version>
+    <dcc-release.version>4.1.4</dcc-release.version>
 
     <!-- Versions - JSON -->
     <json-path.version>1.2</json-path.version>
