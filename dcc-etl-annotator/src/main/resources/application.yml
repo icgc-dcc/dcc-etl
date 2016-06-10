@@ -24,7 +24,7 @@ spring:
 # SnpEff
 snpEff:
    resourceDir: /tmp/dcc-etl-annotator
-   resourceUrl: https://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-dependencies/org/icgc/dcc
+   resourceUrl: https://artifacts.oicr.on.ca/artifactory/simple/dcc-dependencies/org/icgc/dcc
    databaseVersion: 3.6c-GRCh37.75
    referenceGenomeVersion: GRCh37.75.v1
    geneBuildVersion: 75

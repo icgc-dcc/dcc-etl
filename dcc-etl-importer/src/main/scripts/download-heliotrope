@@ -17,7 +17,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Downloads and extracts heliotrope jar
-#  Usage: bin/download-heliotrope <version> # get version from http://seqwaremaven.oicr.on.ca/artifactory/dcc-dependencies/org/icgc/dcc/dcc-heliotrope (highest directory number)
+#  Usage: bin/download-heliotrope <version> # get version from https://artifacts.oicr.on.ca/artifactory/dcc-dependencies/org/icgc/dcc/dcc-heliotrope (highest directory number)
 
 if [ "$(basename $PWD)" != "dcc-import" ]; then
  echo "Must be in dcc-import directory"
@@ -27,6 +27,6 @@ if [ -z "$1" ]
   then echo "No version supplied"; exit 1;
 fi
 
-wget http://seqwaremaven.oicr.on.ca/artifactory/dcc-dependencies/org/icgc/dcc/dcc-heliotrope/$1/dcc-heliotrope-$1.jar;
+wget https://artifacts.oicr.on.ca/artifactory/dcc-dependencies/org/icgc/dcc/dcc-heliotrope/$1/dcc-heliotrope-$1.jar;
 jar xf dcc-heliotrope-$1.jar data/genes.bson;
 rm dcc-heliotrope-$1.jar;

@@ -18,7 +18,7 @@
 
 release_number='20'
 dictionary_version='0.12e'
-artifactory_release_url='http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-release/org/icgc/dcc/'
+artifactory_release_url='https://artifacts.oicr.on.ca/artifactory/simple/dcc-release/org/icgc/dcc/'
 
 dcc_etl_cli_name='dcc-etl-client'
 dcc_etl_annotator_name='dcc-etl-annotator'

@@ -27,7 +27,7 @@
 # Prerequisites:
 #   1. Download snpEff tool. http://snpeff.sourceforge.net/download.html
 #   2. Download reference genome annotations. E.g. ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz
-#   3. Download sequence files. E.g. https://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-dependencies/org/icgc/dcc/dcc-reference-genome/GRCh37.75.v1/dcc-reference-genome-GRCh37.75.v1.tar.gz
+#   3. Download sequence files. E.g. https://artifacts.oicr.on.ca/artifactory/simple/dcc-dependencies/org/icgc/dcc/dcc-reference-genome/GRCh37.75.v1/dcc-reference-genome-GRCh37.75.v1.tar.gz
 
 #
 # Global variables
